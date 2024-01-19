@@ -38,12 +38,10 @@ This app was made from scratch using for the MiyooMini devices. The goal is to d
 
 The project has the following directory structure:
 ```
-- HelloMiyoo
+- Pokedex
     - App
-      - HelloMiyoo
+      - Pokedex
     - Source
-        - VisualStudio
-            - HelloMiyoo
         - Union-miyoomini-toolchain
             - workspace
 ```
