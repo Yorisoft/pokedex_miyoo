@@ -1,10 +1,10 @@
 #!/bin/sh
-export RetroDex=/mnt/SDCARD/App/RetroDex/
+export Pokedex=/mnt/SDCARD/App/Pokedex/
 export sysdir=/mnt/SDCARD/.tmp_update
 export miyoodir=/mnt/SDCARD/miyoo
-cd $RetroDex
+cd $Pokedex
 export PATH=$PATH:$PWD/bin
-export HOME=$RetroDex
+export HOME=$Pokedex
 
 get_curvol() {
     awk '/LineOut/ {if (!printed) {gsub(",", "", $8); print $8; printed=1}}' /proc/mi_modules/mi_ao/mi_ao0
@@ -72,12 +72,12 @@ set_snd_level() {
 
 start_retroDex() {
     #
-    export LD_LIBRARY_PATH=$RetroDex/lib:/lib:/config/lib:/mnt/SDCARD/miyoo/lib:/mnt/SDCARD/.tmp_update/lib:/mnt/SDCARD/.tmp_update/lib/parasyte:/sbin:/usr/sbin:/bin:/usr/bin
+    export LD_LIBRARY_PATH=$Pokedex/lib:/lib:/config/lib:/mnt/SDCARD/miyoo/lib:/mnt/SDCARD/.tmp_update/lib:/mnt/SDCARD/.tmp_update/lib/parasyte:/sbin:/usr/sbin:/bin:/usr/bin
     export SDL_VIDEODRIVER=mmiyoo
     export SDL_AUDIODRIVER=mmiyoo
     export EGL_VIDEODRIVER=mmiyoo
     
-    #purge_devil
+    purge_devil
     kill_audio_servers
     set_snd_level "${curvol}" &
     # bin/cpuclock 1700
