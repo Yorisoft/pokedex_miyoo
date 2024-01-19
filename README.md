@@ -6,7 +6,15 @@ This app was made from scratch using for the MiyooMini devices. The goal is to d
 
 ![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/3c8ad2e6-37c7-4f3f-a6b3-8c95c34a1c12)
 
-## Instructions
+## Installation and Building
+
+### Transferring the App to the Miyoo Mini Device
+
+1. Connect the Miyoo Mini device to your computer.
+  - Refer to the OnionOS wiki for the various ways to do this, e.i: FTP, Webserver, Samba, etc..
+2. Transfer the `Pokedex` folder found in the `App` directory of this repo to the device. Place the `Pokedex` folder in `/mnt/SDCARD/App` folder of the miyoo mini.
+3. On the miyoo mini device, navigate to your Apps list. Refresh your App list by bringing up and exiting the 'search' function - pressing `x`
+4. Navigate to the HelloMiyoo app and launch it. 
 
 ### Compiling on Union-miyoomini-toolchain
 
@@ -23,13 +31,6 @@ This app was made from scratch using for the MiyooMini devices. The goal is to d
      ```
 4. The binary should be located in `workspace/build/Pokedex`
 
-### Transferring the App to the Miyoo Mini Device
-
-1. Connect the Miyoo Mini device to your computer.
-  - Refer to the OnionOS wiki for the various ways to do this, e.i: FTP, Webserver, Samba, etc..
-2. Transfer the `Pokedex` folder found in the `App` directory of this repo to the device. Place the `Pokedex` folder in `/mnt/SDCARD/App` folder of the miyoo mini.
-3. On the miyoo mini device, navigate to your Apps list. Refresh your App list by bringing up and exiting the 'search' function - pressing `x`
-4. Navigate to the HelloMiyoo app and launch it. 
 
 ## Additional Information
 
@@ -58,10 +59,6 @@ I designed it using CPP, SDL, and SQLite.
 Dataset from Veekun
 
 Artwork from pokemondb.net.
-
-## Installation and Building
-
-For instructions on how to build the app and install it on the Miyoo Mini, please refer to the [HelloMiyoo repository](https://github.com/Yorisoft/HelloMiyoo).
 
 ## Contributing
 
