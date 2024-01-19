@@ -2,6 +2,10 @@
 
 This app was made from scratch using for the MiyooMini devices. The goal is to design it to target gens 1 - 5 to help you track down all your favorite Pokemon and have all their information at your finger tips :) 
 
+# Preview
+
+![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/3c8ad2e6-37c7-4f3f-a6b3-8c95c34a1c12)
+
 ## Instructions
 
 ### Compiling on Union-miyoomini-toolchain
