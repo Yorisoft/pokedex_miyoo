@@ -1,6 +1,8 @@
-# Pokedex for Miyoo Mini!
+# Pokedex for Miyoo Mini! - WIP
 
 This app was made from scratch using for the MiyooMini devices. The goal is to design it to target gens 1 - 5 to help you track down all your favorite Pokemon and have all their information at your finger tips :) 
+
+PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
 # Preview
 
