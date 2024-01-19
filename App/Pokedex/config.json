@@ -1,0 +1,6 @@
+{
+	"label":	"Pokedex",
+	"icon":	"res/icon/Pokedex.png",
+	"launch":	"script/launch.sh",
+	"description":	"Pocket sized Pokedex"
+}
