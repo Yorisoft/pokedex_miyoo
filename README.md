@@ -50,13 +50,15 @@ The project has the following directory structure:
 
 The app is currently in the early stages. At the moment, it only contains the Pokedex list with minimal stats. The next step is to work on the species dex entry.
 
-## Data and Assets
+## Data, Assets, Contributions
 
 I designed it using CPP, SDL, and SQLite.
 
-Dataset from Veekun
+Dataset from [veekun_pokedex](https://github.com/veekun/veekun-pokedex).
 
-Artwork from pokemondb.net.
+Artwork from [pokemondb.net](https://pokemondb.net/).
+
+SDL Library Install Scripts from [XK9274](https://github.com/XK9274).
 
 ## Contributing
 
