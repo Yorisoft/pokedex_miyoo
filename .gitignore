@@ -1,5 +1,5 @@
-Source/union-miyoomini-toolchain/workspace/pokedex/resources/*.png
-Source/union-miyoomini-toolchain/workspace/pokedex/resources/*.gif
+*.png
+*.gif
 Source/union-miyoomini-toolchain/workspace/pokedex/build/*
 Source/windows-visual-studio/Pokedex/Debug/*
 Source/windows-visual-studio/Pokedex/.vs/*
