@@ -2,3 +2,5 @@
 *.gif
 Source/union-miyoomini-toolchain/workspace/pokedex/build/*
 Source/windows-visual-studio/Pokedex/Debug/*
+Source/windows-visual-studio/Pokedex/.vs/*
+Source/windows-visual-studio/Pokedex/x64/*
