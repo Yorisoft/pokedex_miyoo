@@ -1,0 +1,4 @@
+*.png
+*.gif
+Source/union-miyoomini-toolchain/workspace/pokedex/build/*
+Source/windows-visual-studio/Pokedex/Debug/*
