@@ -9,6 +9,7 @@
 #define SW_BTN_DOWN SDLK_DOWN
 #define SW_BTN_LEFT SDLK_LEFT
 #define SW_BTN_RIGHT SDLK_RIGHT
+
 #define SW_BTN_A SDLK_SPACE
 #define SW_BTN_B SDLK_LCTRL
 #define SW_BTN_X SDLK_LSHIFT
@@ -80,7 +81,7 @@ void InitializeSDL(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** t
         exit(EXIT_FAILURE);
     }
 
-    *font = TTF_OpenFont("Pokemon_GB.ttf", 20);
+    *font = TTF_OpenFont("res/font/Pokemon_GB.ttf", 20);
     if (*font == NULL) {
         cout << "TTF_OpenFont: " << TTF_GetError() << endl;
         exit(EXIT_FAILURE);
@@ -142,7 +143,7 @@ vector<vector<string>> executeSQL(const string& sql) {
     sqlite3* db;
     int rc;
     char* zErrMsg = 0;
-    rc = sqlite3_open("pokedex.sqlite", &db);
+    rc = sqlite3_open("res/db/pokedex.sqlite", &db);
 
     if (rc != SQLITE_OK) {
         cout << "SQLite coult not open file! SQLite Error: " << sqlite3_errmsg(db) << endl;
@@ -319,7 +320,7 @@ void RenderPokemonPixelArt(SDL_Surface** pokemonListEntrySurface, TTF_Font** fon
 
     // Load & Blits pokeListArtSurface
     // pixel art path
-    imagePath = "resources/icons/" + pokemon[1] + ".png";
+    imagePath = "res/icons/" + pokemon[1] + ".png";
     pokeListArtSurface = LoadImage(&pokeListArtSurface, imagePath);
 
     SDL_Rect pokemonArtRect;
@@ -363,7 +364,7 @@ void RenderPokemonPixelArt(SDL_Surface** pokemonListEntrySurface, TTF_Font** fon
     cout << "after:SDL_BlitScaled - pokeListNameSurface" << endl;
     // Load & Blits pokeListType1Surface
     // pixel art path
-    typePath1 = "resources/types/" + pokemon[8] + ".png";
+    typePath1 = "res/types/" + pokemon[8] + ".png";
     pokeListType1Surface = LoadImage(&pokeListType1Surface, typePath1);
 
     SDL_Rect pokemonType1Rect;
@@ -378,7 +379,7 @@ void RenderPokemonPixelArt(SDL_Surface** pokemonListEntrySurface, TTF_Font** fon
     if (!pokemon[9].empty()) {
         // Load & Blits pokeListType1Surface
         // pixel art path
-        typePath2 = "resources/types/" + pokemon[9] + ".png";
+        typePath2 = "res/types/" + pokemon[9] + ".png";
         pokeListType2Surface = LoadImage(&pokeListType2Surface, typePath2);
 
         SDL_Rect pokemonType2Rect;
@@ -469,6 +470,7 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
         ostringstream textStream;
         SDL_Color color = { 255, 255, 255 };
         SDL_Color highlightColor = { 255, 0, 0 };
+        string fontPath = "res/font/Pokemon_GB.ttf";
         int pokemonListSurfaceHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
         // Define the map
@@ -502,13 +504,13 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
         */
 
         
-        listFont = OpenFont(&listFont, "Pokemon_GB.ttf", 12);
+        listFont = OpenFont(&listFont, fontPath, 12);
         maxListLabelHight = RenderPokemonMinimalLabel(screen, &pokeListLabelSurface, &listFont);
         TTF_CloseFont(listFont);
 
 
         string maxIdNum = "000";
-        listFont = OpenFont(&listFont, "Pokemon_GB.ttf", 12);
+        listFont = OpenFont(&listFont, fontPath, 12);
         setMaxListIDWidth(maxListIDWidth, maxIdNum, &listFont);
         TTF_CloseFont(listFont);
 
@@ -562,7 +564,7 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
 
             // TODO: Make get pokemonLabel()
             bool isSelected = (i == selectedItem);
-            listFont = OpenFont(&listFont, "Pokemon_GB.ttf", 15);
+            listFont = OpenFont(&listFont, fontPath, 15);
             // TODO: Make get pokemonID()
             RenderPokemonID(&pokemonListEntrySurface, &listFont, pokemon, i);
             TTF_CloseFont(listFont);
@@ -573,7 +575,7 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
             cout << "topItem: " << topItem << endl;
 
             // TODO: Make get pokemonPixelArt()
-            listFont = OpenFont(&listFont, "Pokemon_GB.ttf", 15);
+            listFont = OpenFont(&listFont, fontPath, 15);
             RenderPokemonPixelArt(&pokemonListEntrySurface, &listFont, pokemon, i, maxListIDWidth);
             TTF_CloseFont(listFont);
 
@@ -583,7 +585,7 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
             cout << "topItem: " << topItem << endl;
 
             // TODO: Make get pokemonMinimalStats()
-            listFont = OpenFont(&listFont, "Pokemon_GB.ttf", 12);
+            listFont = OpenFont(&listFont, fontPath, 12);
             RenderPokemonMinimalStats(&pokemonListEntrySurface, &listFont, pokemon, i);
             TTF_CloseFont(listFont);
 
@@ -614,9 +616,7 @@ int main(int argc, char* argv[])
     SDL_Texture* texture = NULL;
     SDL_Renderer* renderer = NULL;
     TTF_Font* font = NULL;
-	vector<int> nextGenID = { 0, 151, 251, 386, 493 };
-    int currentGenIndex = 0; 
-	
+
     // Initialization code
     InitializeSDL(&window, &renderer, &texture, &screen, &font);
 
@@ -651,7 +651,8 @@ int main(int argc, char* argv[])
 
     //cout << "executeSQL(SQL_STRING_GET_POKEMONS) \n";
     vector<vector<string>> results = executeSQL(SQL_STRING_GET_POKEMONS);
-    
+    vector<int> nextGenID = { 0, 151, 251, 386, 493 };
+    int currentGenIndex = 0; // Initialize this to the starting index
 
     // Main loop    
     int topItem = 0; // The index of the top item on the screen

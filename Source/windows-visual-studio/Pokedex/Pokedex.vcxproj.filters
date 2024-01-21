@@ -18,7 +18,7 @@
     <ClCompile Include="sqlite\sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source1.cpp">
+    <ClCompile Include="Pokedex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
