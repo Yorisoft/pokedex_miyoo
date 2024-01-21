@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-        entryPoint = '-it --rm -v Source/union-miyoomini-toolchain/workspace:/root/workspace'
+        entryPoint = '--rm -v Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
         stage('Cleanup and Checkout') {
