@@ -10,8 +10,8 @@ PLEASE READ! This is not yet stable - this is a work in progress - there are bug
 # Preview
 
 <p float="left">
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/885de49c-ab59-470c-b23e-3cd7a26d6fe7" width="500" />
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/d74a1b0f-594f-438d-8516-03a4bc38b667" width="500" /> 
+  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/885de49c-ab59-470c-b23e-3cd7a26d6fe7" width="400" />
+  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/d74a1b0f-594f-438d-8516-03a4bc38b667" width="400" /> 
 </p>
 
 </br>
