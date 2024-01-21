@@ -1,10 +1,9 @@
 pipeline {
     agent any
     environment {
-        dockerImage = ''
+        dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-        WORKSPACE = pwd()
-        entryPoint = '-it --rm -v "${WORKSPACE}":/root/workspace'
+        entryPoint = '-it --rm -v "${env.WORKSPACE}":/root/workspace'
     }
     stages {
         stage('Cleanup and Checkout') {
@@ -18,10 +17,10 @@ pipeline {
 		stage('print working directory') {
             steps {
                 script {
-                    dockerImage.inside("${entryPoint}") {
-                        sh '''
+                    docker.image(env.dockerImage).inside("${entryPoint}") {
+                        sh """
                             ls -al
-                        '''
+                        """
                     }
                 }
             }
@@ -41,7 +40,7 @@ pipeline {
         stage('Build SDL2') {
             steps {
                 script {
-                    dockerImage.inside("${entryPoint}") {
+                    docker.image(env.dockerImage).inside("${entryPoint}") {
                         sh '''
                             cd /root/workspace
                             ./mksdl2.sh
@@ -53,7 +52,7 @@ pipeline {
         stage('Build Pokedex') {
             steps {
                 script {
-                    dockerImage.inside("${entryPoint}") {
+                    docker.image(env.dockerImage).inside("${entryPoint}") {
                         sh '''
                             cd /root/workspace/pokedex
                             mkdir -p build
@@ -68,7 +67,7 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 script {
-                    dockerImage.inside("${entryPoint}") {
+                    docker.image(env.dockerImage).inside("${entryPoint}") {
                         sh '''
                             cd /root/workspace/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
