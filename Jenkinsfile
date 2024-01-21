@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-        entryPoint = '-it --rm -v Source/union-miyoomini-toolchain/workspace:/root/workspace'
+        entryPoint = '--rm -v Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
         stage('Cleanup and Checkout') {
@@ -30,7 +30,7 @@ pipeline {
 		stage('Print working directory') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
                             ls -al
                         '''
@@ -42,7 +42,7 @@ pipeline {
         /*stage('Build SDL2') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
                             cd /root/workspace
                             ./mksdl2.sh
@@ -54,7 +54,7 @@ pipeline {
         stage('Build Pokedex') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
                             cd /root/workspace/pokedex
                             mkdir -p build
@@ -69,7 +69,7 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
                             cd /root/workspace/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
