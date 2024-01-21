@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-		WORKING_DIR = '/Source/union-miyoomini-toolchain/workspace'
+		projectDir = '/Source/union-miyoomini-toolchain/workspace'
         entryPoint = '--rm -v /var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
@@ -18,11 +18,11 @@ pipeline {
         stage('Build union-trimui-toolchain') {
             steps {
                 script {
-                    sh '''
+                    sh """
 					cd "${env.WORKING_DIR}"
 					chmod +x support/setup-toolchain.sh support/setup-env.sh
 					make shell
-					'''
+					"""
                     dockerImage = docker.image('miyoomini-toolchain-pokedex')
                 }
             }
@@ -32,10 +32,10 @@ pipeline {
             steps {
                 script {
                     docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-                        sh '''
-						cd ${env.WORKING_DIR}
+                        sh """
+						cd ${env.projectDir}
                         ls -al
-                        '''
+                        """
                     }
                 }
             }
@@ -45,11 +45,11 @@ pipeline {
             steps {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
-                        sh '''
+                        sh """
                         cd "${env.WORKING_DIR}"
 						ls -al
                         ./mksdl2.sh
-                        '''
+                        """
                     }
                 }
             }
@@ -59,13 +59,13 @@ pipeline {
             steps {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
-                        sh '''
+                        sh """
                             cd "${env.WORKING_DIR}"/pokedex
                             mkdir -p build
                             cd build
                             cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
                             make
-                        '''
+                        """
                     }
                 }
             }
@@ -75,10 +75,10 @@ pipeline {
             steps {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
-                        sh '''
+                        sh """
                             cd "${env.WORKING_DIR}"/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
-                        '''
+                        """
                     }
                 }
             }
