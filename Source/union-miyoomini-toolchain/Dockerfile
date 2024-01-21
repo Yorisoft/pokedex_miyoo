@@ -21,6 +21,10 @@ RUN apt-get -y update && apt-get -y install \
 	unzip \
 	wget \
 	zip \
+	autoconf \
+	libtoolize  \
+	automake  \ 
+	pkg-config
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /root/workspace
@@ -29,6 +33,12 @@ WORKDIR /root
 COPY support .
 RUN ./setup-toolchain.sh
 RUN cat setup-env.sh >> .bashrc
+
+# Add the new code here
+RUN adduser --gecos "" --disabled-password --quiet jenkins
+RUN echo "jenkins:jenkins" | chpasswd
+RUN chown jenkins:jenkins /home/jenkins
+# End of the new code
 
 VOLUME /root/workspace
 WORKDIR /root/workspace
