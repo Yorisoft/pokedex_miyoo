@@ -21,12 +21,6 @@ RUN apt-get -y update && apt-get -y install \
 	unzip \
 	wget \
 	zip \
-	autoconf \
-	libtoolize  \
-	automake  \ 
-	pkg-config \ 
-	autoupdate \
-	m4 \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /root/workspace
