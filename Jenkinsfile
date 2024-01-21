@@ -103,7 +103,7 @@ pipeline {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
 							sh """#!/bin/bash
-								cd "${env.WORKING_DIR}"/workspace/pokedex
+								cd "${env.WORKING_DIR}/workspace/pokedex"
 								mkdir -p build
 								cd build
 								cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
@@ -125,7 +125,7 @@ pipeline {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
 							sh """#!/bin/bash
-								cd "${env.WORKING_DIR}"/workspace/pokedex
+								cd "${env.WORKING_DIR}/workspace/pokedex"
 								rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
 							"""
 						}
