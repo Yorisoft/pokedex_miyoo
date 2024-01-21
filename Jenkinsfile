@@ -26,9 +26,10 @@ pipeline {
 						make shell
 						"""
 						dockerImage = docker.image('miyoomini-toolchain-pokedex')
-					} catch (Exception e) {
+					} catch (e) {
                         echo "Caught exception: ${e}"
                         currentBuild.result = 'FAILURE'
+						throw e
                     }
                 }
             }
@@ -44,9 +45,10 @@ pipeline {
 							ls -al
 							"""
 						}
-					} catch (Exception e) {
+					} catch (e) {
                         echo "Caught exception: ${e}"
                         currentBuild.result = 'FAILURE'
+						throw e
                     }
                 }
             }
@@ -63,9 +65,10 @@ pipeline {
 							./mksdl2.sh
 							"""
 						}
-					} catch (Exception e) {
+					} catch (e) {
                         echo "Caught exception: ${e}"
                         currentBuild.result = 'FAILURE'
+						throw e
                     }
                 }
             }
@@ -84,9 +87,10 @@ pipeline {
 								make
 							"""
 						}
-					} catch (Exception e) {
+					} catch (e) {
                         echo "Caught exception: ${e}"
                         currentBuild.result = 'FAILURE'
+						throw e
                     }
                 }
             }
@@ -102,9 +106,10 @@ pipeline {
 								rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
 							"""
 						}
-					} catch (Exception e) {
+					} catch (e) {
                         echo "Caught exception: ${e}"
                         currentBuild.result = 'FAILURE'
+						throw e
                     }
                 }
             }
