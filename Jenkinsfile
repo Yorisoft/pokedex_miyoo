@@ -19,6 +19,7 @@ pipeline {
                 script {
                     sh '''
 					cd Source/union-miyoomini-toolchain/
+					chmod +x support/setup-toolchain.sh support/setup-env.sh
 					make shell
 					'''
                     dockerImage = docker.image('miyoomini-toolchain-pokedex')
