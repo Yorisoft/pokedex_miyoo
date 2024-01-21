@@ -1,0 +1,413 @@
+libcurl_la-select.lo: select.c \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/stdc-predef.h \
+ curl_setup.h curl_config.h ../include/curl/curl.h \
+ ../include/curl/curlver.h ../include/curl/system.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/types.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/features.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/cdefs.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/wordsize.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/long-double.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/gnu/stubs.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/gnu/stubs-hard.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/typesizes.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/clock_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/clockid_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/time_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/timer_t.h \
+ /opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include/stddef.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdint-intn.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/endian.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/endian.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/byteswap.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/uintn-identity.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/select.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/select.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/sigset_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__sigset_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_timeval.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_timespec.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/pthreadtypes.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/thread-shared-types.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/pthreadtypes-arch.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/socket.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_iovec.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/socket.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/socket_type.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/sockaddr.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm/socket.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/socket.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm/sockios.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/sockios.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_osockaddr.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/stdio.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/libc-header-start.h \
+ /opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include/stdarg.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__fpos_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__mbstate_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__fpos64_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__FILE.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/FILE.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_FILE.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdio_lim.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/sys_errlist.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdio.h \
+ /opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed/limits.h \
+ /opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed/syslimits.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/limits.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/posix1_lim.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/local_lim.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/linux/limits.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/posix2_lim.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/time.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/time.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_tm.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_itimerspec.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/locale_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__locale_t.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/time.h \
+ ../include/curl/easy.h ../include/curl/multi.h ../include/curl/curl.h \
+ ../include/curl/urlapi.h ../include/curl/typecheck-gcc.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/assert.h \
+ curl_setup_once.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/stdlib.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/waitflags.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/waitstatus.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/floatn.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/floatn-common.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/alloca.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdlib-bsearch.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdlib-float.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/string.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/strings.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/ctype.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/errno.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/errno.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/linux/errno.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm/errno.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/errno.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/errno-base.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/stat.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stat.h \
+ /opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include/stdbool.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/unistd.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/posix_opt.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/environments.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/confname.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/getopt_posix.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/getopt_core.h \
+ curl_ctype.h urldata.h cookie.h psl.h formdata.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/netinet/in.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdint-uintn.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/in.h \
+ timeval.h http_chunks.h hostip.h hash.h llist.h curl_addrinfo.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/netdb.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/rpc/netdb.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/netdb.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/arpa/inet.h \
+ asyn.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/setjmp.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/setjmp.h \
+ splay.h mime.h imap.h pingpong.h curl_sasl.h pop3.h smtp.h ftp.h file.h \
+ ssh.h http.h rtsp.h smb.h wildcard.h multihandle.h conncache.h connect.h \
+ nonblock.h sockaddr.h select.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/poll.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/poll.h \
+ /opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/poll.h \
+ warnless.h
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/stdc-predef.h:
+
+curl_setup.h:
+
+curl_config.h:
+
+../include/curl/curl.h:
+
+../include/curl/curlver.h:
+
+../include/curl/system.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/types.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/features.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/cdefs.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/wordsize.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/long-double.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/gnu/stubs.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/gnu/stubs-hard.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/typesizes.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/clock_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/clockid_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/time_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/timer_t.h:
+
+/opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include/stddef.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdint-intn.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/endian.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/endian.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/byteswap.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/uintn-identity.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/select.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/select.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/sigset_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__sigset_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_timeval.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_timespec.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/pthreadtypes.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/thread-shared-types.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/pthreadtypes-arch.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/socket.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_iovec.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/socket.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/socket_type.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/sockaddr.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm/socket.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/socket.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm/sockios.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/sockios.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_osockaddr.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/stdio.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/libc-header-start.h:
+
+/opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include/stdarg.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__fpos_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__mbstate_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__fpos64_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__FILE.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/FILE.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_FILE.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdio_lim.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/sys_errlist.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdio.h:
+
+/opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed/limits.h:
+
+/opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed/syslimits.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/limits.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/posix1_lim.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/local_lim.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/linux/limits.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/posix2_lim.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/time.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/time.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_tm.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/struct_itimerspec.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/locale_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/types/__locale_t.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/time.h:
+
+../include/curl/easy.h:
+
+../include/curl/multi.h:
+
+../include/curl/curl.h:
+
+../include/curl/urlapi.h:
+
+../include/curl/typecheck-gcc.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/assert.h:
+
+curl_setup_once.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/stdlib.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/waitflags.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/waitstatus.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/floatn.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/floatn-common.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/alloca.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdlib-bsearch.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdlib-float.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/string.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/strings.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/ctype.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/errno.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/errno.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/linux/errno.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm/errno.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/errno.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/asm-generic/errno-base.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/stat.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stat.h:
+
+/opt/miyoomini-toolchain/lib/gcc/arm-linux-gnueabihf/8.3.0/include/stdbool.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/unistd.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/posix_opt.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/environments.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/confname.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/getopt_posix.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/getopt_core.h:
+
+curl_ctype.h:
+
+urldata.h:
+
+cookie.h:
+
+psl.h:
+
+formdata.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/netinet/in.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/stdint-uintn.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/in.h:
+
+timeval.h:
+
+http_chunks.h:
+
+hostip.h:
+
+hash.h:
+
+llist.h:
+
+curl_addrinfo.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/netdb.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/rpc/netdb.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/netdb.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/arpa/inet.h:
+
+asyn.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/setjmp.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/setjmp.h:
+
+splay.h:
+
+mime.h:
+
+imap.h:
+
+pingpong.h:
+
+curl_sasl.h:
+
+pop3.h:
+
+smtp.h:
+
+ftp.h:
+
+file.h:
+
+ssh.h:
+
+http.h:
+
+rtsp.h:
+
+smb.h:
+
+wildcard.h:
+
+multihandle.h:
+
+conncache.h:
+
+connect.h:
+
+nonblock.h:
+
+sockaddr.h:
+
+select.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/poll.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/sys/poll.h:
+
+/opt/miyoomini-toolchain/arm-linux-gnueabihf/libc/usr/include/bits/poll.h:
+
+warnless.h:
