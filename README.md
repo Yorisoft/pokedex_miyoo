@@ -1,19 +1,21 @@
 # Pokedex for Miyoo Mini! - WIP
 
+<p align="center">
+ <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1" width="50" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/885de49c-ab59-470c-b23e-3cd7a26d6fe7" width="400" />
+  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/d74a1b0f-594f-438d-8516-03a4bc38b667" width="400" /> 
+</p>
+
+</br>
+
 This app was made from scratch for the MiyooMini devices. The goal is to design it to target gens 1 - 5 to help you track down all your favorite Pokemon and have all their information at your finger tips :) 
 
 PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
 </br>
-</br>
-
-# Preview
-
-<p float="left">
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/885de49c-ab59-470c-b23e-3cd7a26d6fe7" width="400" />
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/d74a1b0f-594f-438d-8516-03a4bc38b667" width="400" /> 
-</p>
-
 </br>
 
 ## Installation
