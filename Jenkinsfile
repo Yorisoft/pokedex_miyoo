@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-        entryPoint = '-it --rm -v "${env.WORKSPACE}":/root/workspace'
+        entryPoint = '-it --rm -v Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
         stage('Cleanup and Checkout') {
@@ -11,6 +11,15 @@ pipeline {
                 echo "Branch_name:${env.BRANCH_NAME}"
                 cleanWs()
                 checkout scm: [$class: 'GitSCM', branches: [[name: "${env.BRANCH_NAME}"]], userRemoteConfigs: [[credentialsId: 'Yorisoft', url: 'https://github.com/Yorisoft/pokedex_miyoo']]]
+            }
+        }		
+		
+        stage('Build union-trimui-toolchain') {
+            steps {
+                script {
+                    sh 'make shell'
+                    dockerImage = docker.image('miyoomini-toolchain-pokedex')
+                }
             }
         }
 		
@@ -26,18 +35,7 @@ pipeline {
             }
         }
 		
-        /*stage('Build union-trimui-toolchain') {
-            steps {
-                script {
-                    sh 'make shell'
-                    dockerImage = docker.image('miyoomini-toolchain-pokedex')
-                }
-            }
-        }
-		
-		
-		
-        stage('Build SDL2') {
+        /*stage('Build SDL2') {
             steps {
                 script {
                     docker.image(env.dockerImage).inside("${entryPoint}") {
