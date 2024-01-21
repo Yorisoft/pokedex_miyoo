@@ -62,6 +62,7 @@ pipeline {
 							sh """
 							cd "${env.WORKING_DIR}/workspace"
 							ls -al
+							chmod +x mksdl2.sh
 							./mksdl2.sh
 							"""
 						}
