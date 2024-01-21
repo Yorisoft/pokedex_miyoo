@@ -14,16 +14,8 @@ pipeline {
                 checkout scm: [$class: 'GitSCM', branches: [[name: "${env.BRANCH_NAME}"]], userRemoteConfigs: [[credentialsId: 'Yorisoft', url: 'https://github.com/Yorisoft/pokedex_miyoo']]]
             }
         }
-        stage('Build union-trimui-toolchain') {
-            steps {
-                script {
-                    sh 'make shell'
-                    dockerImage = docker.image('miyoomini-toolchain-pokedex')
-                }
-            }
-        }
 		
-		stage('Build SDL2') {
+		stage('print working directory') {
             steps {
                 script {
                     dockerImage.inside("${entryPoint}") {
@@ -35,7 +27,18 @@ pipeline {
             }
         }
 		
-        /*stage('Build SDL2') {
+        /*stage('Build union-trimui-toolchain') {
+            steps {
+                script {
+                    sh 'make shell'
+                    dockerImage = docker.image('miyoomini-toolchain-pokedex')
+                }
+            }
+        }
+		
+		
+		
+        stage('Build SDL2') {
             steps {
                 script {
                     dockerImage.inside("${entryPoint}") {
