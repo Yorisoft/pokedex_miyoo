@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-		WORKING_DIR = '/Source/union-miyoomini-toolchain'
+		WORKING_DIR = 'Source/union-miyoomini-toolchain/workspace'
         entryPoint = '--rm -v /var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
@@ -47,7 +47,7 @@ pipeline {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh """
-                        cd "${env.WORKING_DIR}/workspace"
+                        cd "${env.WORKING_DIR}"
 						ls -al
                         ./mksdl2.sh
                         """
@@ -61,7 +61,7 @@ pipeline {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh """
-                            cd "${env.WORKING_DIR}"/workspace/pokedex
+                            cd "${env.WORKING_DIR}"/pokedex
                             mkdir -p build
                             cd build
                             cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
@@ -77,7 +77,7 @@ pipeline {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh """
-                            cd "${env.WORKING_DIR}"/workspace/pokedex
+                            cd "${env.WORKING_DIR}"/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
                         """
                     }
