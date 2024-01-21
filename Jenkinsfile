@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
 					try {
-						docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
 							sh """
 							cd "${env.WORKING_DIR}/workspace"
 							ls -al
@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
 					try {
-						docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
 							sh """
 								cd "${env.WORKING_DIR}"/workspace/pokedex
 								mkdir -p build
@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
 					try {
-						docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
 							sh """
 								cd "${env.WORKING_DIR}"/workspace/pokedex
 								rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
