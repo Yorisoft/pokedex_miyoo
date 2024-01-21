@@ -2,9 +2,9 @@
 *.png
 *.gif
 
-!Source/union-miyoomini-toolchain/workspace/pokedex/resources/types/*.png
-!Source/windows-visual-studio/Pokedex/resources/types/*.png
-!App/Pokedex/resources/types/*.png
+!Source/union-miyoomini-toolchain/workspace/pokedex/res/types/*.png
+!Source/windows-visual-studio/Pokedex/res/types/*.png
+!App/Pokedex/res/types/*.png
 
 #	ignore build files
 Source/union-miyoomini-toolchain/workspace/pokedex/build/*
