@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
 					try{
-						sh """
+						sh """#!/bin/bash
 						ls -a
 						cd "${env.WORKING_DIR}"
 						chmod +x support/setup-toolchain.sh support/setup-env.sh
@@ -40,7 +40,7 @@ pipeline {
                 script {
 					try{
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh """
+							sh """#!/bin/bash
 							cd ${env.projectDir}
 							ls -al
 							"""
@@ -59,7 +59,7 @@ pipeline {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh """
+							sh """#!/bin/bash
 							cd "${env.WORKING_DIR}/workspace"
 							ls -al
 							chmod +x mksdl2.sh
@@ -80,7 +80,7 @@ pipeline {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh """
+							sh """#!/bin/bash
 								cd "${env.WORKING_DIR}"/workspace/pokedex
 								mkdir -p build
 								cd build
@@ -102,7 +102,7 @@ pipeline {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh """
+							sh """#!/bin/bash
 								cd "${env.WORKING_DIR}"/workspace/pokedex
 								rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
 							"""
