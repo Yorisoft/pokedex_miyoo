@@ -40,32 +40,12 @@ pipeline {
                 script {
 					try{
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh """#!/bin/bash
-							cd ${env.projectDir}
-							ls -al
-							"""
-						}
-					} catch (e) {
-                        echo "Caught exception: ${e}"
-                        currentBuild.result = 'FAILURE'
-						throw e
-                    }
-                }
-            }
-        }*/
-		
-		stage('Update union-trimui-toolchain') {
-            steps {
-                script {
-					try {
-						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh """#!/bin/bash
-							cd "${env.WORKING_DIR}/workspace"
-							ls -al
-							whoami
-							chmod +x mksdl2.sh
-							./mksdl2.sh
-							"""
+							sh("cd ${env.projectDir}")
+							sh("ls -al")
+					//		sh """#!/bin/bash
+					//		cd ${env.projectDir}
+					//		ls -al
+					//		"""
 						}
 					} catch (e) {
                         echo "Caught exception: ${e}"
@@ -76,18 +56,51 @@ pipeline {
             }
         }
 		
-        stage('Build SDL2') {
+		stage('Update union-trimui-toolchain') {
             steps {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+							sh("cd ${env.WORKING_DIR}/workspace")
+							sh("ls -al")
+							sh("pwd")
+							sh("chmod +x mksdl2.sh")
+							sh("./mksdl2.sh")
 							sh """#!/bin/bash
 							cd "${env.WORKING_DIR}/workspace"
 							ls -al
 							pwd
 							chmod +x mksdl2.sh
 							./mksdl2.sh
-							"""
+							""" 
+						}
+					} catch (e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
+						throw e
+                    }
+                }
+            }
+        }*/
+		
+        stage('Build SDL2') {
+            steps {
+                script {
+					try {
+						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+							sh("cd ${env.WORKING_DIR}/workspace")
+							sh("ls -al")
+							sh("pwd")
+							sh("chmod +x mksdl2.sh")
+							sh("./mksdl2.sh")
+							
+						/*	sh """#!/bin/bash
+							cd "${env.WORKING_DIR}/workspace"
+							ls -al
+							pwd
+							chmod +x mksdl2.sh
+							./mksdl2.sh
+							"""*/
 						}
 					} catch (e) {
                         echo "Caught exception: ${e}"
@@ -103,6 +116,12 @@ pipeline {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+							sh("cd ${env.WORKING_DIR}/workspace/pokedex")
+							sh("ls -al")
+							sh("pwd")
+							sh("chmod +x mksdl2.sh")
+							sh("./mksdl2.sh")
+							
 							sh """#!/bin/bash
 								cd "${env.WORKING_DIR}/workspace/pokedex"
 								mkdir -p build
