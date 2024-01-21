@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-					cd "${env.WORKING_DIR}"
+					cd ${env.WORKING_DIR}
 					chmod +x support/setup-toolchain.sh support/setup-env.sh
 					make shell
 					'''
@@ -33,7 +33,7 @@ pipeline {
                 script {
                     docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
-						cd "${env.WORKING_DIR}"
+						cd ${env.WORKING_DIR}
                         ls -al
                         '''
                     }
@@ -44,7 +44,7 @@ pipeline {
         stage('Build SDL2') {
             steps {
                 script {
-                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh '''
                         cd "${env.WORKING_DIR}"
 						ls -al
@@ -58,7 +58,7 @@ pipeline {
         stage('Build Pokedex') {
             steps {
                 script {
-                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh '''
                             cd "${env.WORKING_DIR}"/pokedex
                             mkdir -p build
@@ -74,7 +74,7 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 script {
-                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh '''
                             cd "${env.WORKING_DIR}"/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
