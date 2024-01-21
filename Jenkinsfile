@@ -12,24 +12,27 @@ pipeline {
                 cleanWs()
                 checkout scm: [$class: 'GitSCM', branches: [[name: "${env.BRANCH_NAME}"]], userRemoteConfigs: [[credentialsId: 'Yorisoft', url: 'https://github.com/Yorisoft/pokedex_miyoo']]]
             }
-        }		
+        }			
 		
         stage('Build union-trimui-toolchain') {
             steps {
                 script {
-                    sh 'make shell'
+                    sh '''
+					cd Source/union-miyoomini-toolchain/
+					make shell
+					'''
                     dockerImage = docker.image('miyoomini-toolchain-pokedex')
                 }
             }
         }
 		
-		stage('print working directory') {
+		stage('Print working directory') {
             steps {
                 script {
-                    docker.image(env.dockerImage).inside("${entryPoint}") {
-                        sh """
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+                        sh '''
                             ls -al
-                        """
+                        '''
                     }
                 }
             }
@@ -38,7 +41,7 @@ pipeline {
         /*stage('Build SDL2') {
             steps {
                 script {
-                    docker.image(env.dockerImage).inside("${entryPoint}") {
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh '''
                             cd /root/workspace
                             ./mksdl2.sh
@@ -50,7 +53,7 @@ pipeline {
         stage('Build Pokedex') {
             steps {
                 script {
-                    docker.image(env.dockerImage).inside("${entryPoint}") {
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh '''
                             cd /root/workspace/pokedex
                             mkdir -p build
@@ -65,7 +68,7 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 script {
-                    docker.image(env.dockerImage).inside("${entryPoint}") {
+                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh '''
                             cd /root/workspace/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
