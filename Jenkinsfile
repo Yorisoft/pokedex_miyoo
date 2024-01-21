@@ -28,7 +28,7 @@ pipeline {
             }
         }
 		
-		stage('Print working directory') {
+		/*stage('Print working directory') {
             steps {
                 script {
                     docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
@@ -39,26 +39,28 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 		
-        /*stage('Build SDL2') {
+        stage('Build SDL2') {
             steps {
                 script {
                     docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
-                            cd /root/workspace
-                            ./mksdl2.sh
+                        cd "${env.WORKING_DIR}"
+						ls -al
+                        ./mksdl2.sh
                         '''
                     }
                 }
             }
         }
+		
         stage('Build Pokedex') {
             steps {
                 script {
                     docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
-                            cd /root/workspace/pokedex
+                            cd "${env.WORKING_DIR}"/pokedex
                             mkdir -p build
                             cd build
                             cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
@@ -68,24 +70,27 @@ pipeline {
                 }
             }
         }
+		
         stage('Copy Build Files') {
             steps {
                 script {
                     docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
                         sh '''
-                            cd /root/workspace/pokedex
+                            cd "${env.WORKING_DIR}"/pokedex
                             rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
                         '''
                     }
                 }
             }
-        }*/
+        }
+		
         stage('Cleanup') {
             steps {
                 cleanWs()
                 sh 'docker system prune -a -f'
             }
         }
+		
     }
     post {
         always {
