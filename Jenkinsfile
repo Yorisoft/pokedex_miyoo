@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-		projectDir = '/Source/union-miyoomini-toolchain/workspace'
+		WORKING_DIR = '/Source/union-miyoomini-toolchain/workspace'
         entryPoint = '--rm -v /var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
