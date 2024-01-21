@@ -47,7 +47,7 @@ pipeline {
                 script {
                     docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
                         sh """
-                        cd "${env.WORKING_DIR}"/workspace
+                        cd "${env.WORKING_DIR}/workspace"
 						ls -al
                         ./mksdl2.sh
                         """
