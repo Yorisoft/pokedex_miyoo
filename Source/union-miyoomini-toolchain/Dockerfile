@@ -24,7 +24,9 @@ RUN apt-get -y update && apt-get -y install \
 	autoconf \
 	libtoolize  \
 	automake  \ 
-	pkg-config
+	pkg-config \ 
+	autoupdate \
+	m4 \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /root/workspace

@@ -54,6 +54,27 @@ pipeline {
             }
         }*/
 		
+		stage('Update union-trimui-toolchain') {
+            steps {
+                script {
+					try {
+						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+							sh """#!/bin/bash
+							cd "${env.WORKING_DIR}/workspace"
+							ls -al
+							chmod +x mksdl2.sh
+							./mksdl2.sh
+							"""
+						}
+					} catch (e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
+						throw e
+                    }
+                }
+            }
+        }
+		
         stage('Build SDL2') {
             steps {
                 script {
