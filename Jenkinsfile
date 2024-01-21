@@ -18,13 +18,18 @@ pipeline {
         stage('Build union-trimui-toolchain') {
             steps {
                 script {
-                    sh """
-					ls -a
-					cd "${env.WORKING_DIR}"
-					chmod +x support/setup-toolchain.sh support/setup-env.sh
-					make shell
-					"""
-                    dockerImage = docker.image('miyoomini-toolchain-pokedex')
+					try{
+						sh """
+						ls -a
+						cd "${env.WORKING_DIR}"
+						chmod +x support/setup-toolchain.sh support/setup-env.sh
+						make shell
+						"""
+						dockerImage = docker.image('miyoomini-toolchain-pokedex')
+					} catch (Exception e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
             }
         }
@@ -32,11 +37,16 @@ pipeline {
 		/*stage('Print working directory') {
             steps {
                 script {
-                    docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-                        sh """
-						cd ${env.projectDir}
-                        ls -al
-                        """
+					try{
+						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+							sh """
+							cd ${env.projectDir}
+							ls -al
+							"""
+						}
+					} catch (Exception e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
                     }
                 }
             }
@@ -45,12 +55,17 @@ pipeline {
         stage('Build SDL2') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
-                        sh """
-                        cd "${env.WORKING_DIR}/workspace"
-						ls -al
-                        ./mksdl2.sh
-                        """
+					try {
+						docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+							sh """
+							cd "${env.WORKING_DIR}/workspace"
+							ls -al
+							./mksdl2.sh
+							"""
+						}
+					} catch (Exception e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
                     }
                 }
             }
@@ -59,14 +74,19 @@ pipeline {
         stage('Build Pokedex') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
-                        sh """
-                            cd "${env.WORKING_DIR}"/workspace/pokedex
-                            mkdir -p build
-                            cd build
-                            cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
-                            make
-                        """
+					try {
+						docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+							sh """
+								cd "${env.WORKING_DIR}"/workspace/pokedex
+								mkdir -p build
+								cd build
+								cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
+								make
+							"""
+						}
+					} catch (Exception e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
                     }
                 }
             }
@@ -75,11 +95,16 @@ pipeline {
         stage('Copy Build Files') {
             steps {
                 script {
-                    docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
-                        sh """
-                            cd "${env.WORKING_DIR}"/workspace/pokedex
-                            rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
-                        """
+					try {
+						docker.image(${env.dockerImage}).inside("${env.entryPoint}") {
+							sh """
+								cd "${env.WORKING_DIR}"/workspace/pokedex
+								rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .
+							"""
+						}
+					} catch (Exception e) {
+                        echo "Caught exception: ${e}"
+                        currentBuild.result = 'FAILURE'
                     }
                 }
             }
