@@ -88,6 +88,7 @@ pipeline {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+							sh("ls -al")
 							sh("cd ${env.WORKING_DIR}/workspace")
 							sh("ls -al")
 							sh("pwd")
