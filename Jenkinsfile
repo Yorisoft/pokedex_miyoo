@@ -54,7 +54,8 @@ pipeline {
 								ls -al
 								cd "${env.WORKING_DIR}/workspace"
 								pwd
-								ls -al							
+								ls -al			
+								sudo su
 								chmod +x mksdl2.sh
 								./mksdl2.sh
 							""" 
