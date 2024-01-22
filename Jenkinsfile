@@ -22,6 +22,7 @@ pipeline {
 						sh """#!/bin/bash
 						ls -a
 						cd "${env.WORKING_DIR}"
+						ls -a
 						chmod +x support/setup-toolchain.sh support/setup-env.sh
 						make shell
 						"""
