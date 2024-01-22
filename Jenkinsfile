@@ -20,11 +20,11 @@ pipeline {
                 script {
 					try{
 						sh """#!/bin/bash
-						ls -a
-						cd "${env.WORKING_DIR}"
-						ls -a
-						chmod +x support/setup-toolchain.sh support/setup-env.sh
-						make shell
+							ls -a
+							cd "${env.WORKING_DIR}"
+							ls -a
+							chmod +x support/setup-toolchain.sh support/setup-env.sh
+							make shell
 						"""
 						dockerImage = docker.image('miyoomini-toolchain-pokedex')
 					} catch (e) {
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
 					try {
-						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+						dockerImage.inside("${env.entryPoint}") {
 						/*	sh("pwd")
 							sh("ls -al")
 							sh("cd ${env.WORKING_DIR}/workspace")
@@ -50,13 +50,13 @@ pipeline {
 							sh("./mksdl2.sh") */
 							
 							sh """#!/bin/bash
-							pwd
-							ls -al
-							cd "${env.WORKING_DIR}/workspace"
-							pwd
-							ls -al							
-							chmod +x mksdl2.sh
-							./mksdl2.sh
+								pwd
+								ls -al
+								cd "${env.WORKING_DIR}/workspace"
+								pwd
+								ls -al							
+								chmod +x mksdl2.sh
+								./mksdl2.sh
 							""" 
 						}
 					} catch (e) {
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
 					try {
-						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+						dockerImage.inside("${env.entryPoint}") {
 						/*	sh("cd ${env.WORKING_DIR}/workspace/pokedex")
 							sh("ls -al")
 							sh("pwd")
