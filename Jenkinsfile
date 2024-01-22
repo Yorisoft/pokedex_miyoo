@@ -56,7 +56,7 @@ pipeline {
 								pwd
 								ls -al							
 								chmod +x mksdl2.sh
-								./mksdl2.sh
+								sudo ./mksdl2.sh
 							""" 
 						}
 					} catch (e) {

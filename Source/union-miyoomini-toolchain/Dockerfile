@@ -4,7 +4,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=America/New_York
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get -y update && apt-get -y install \
+RUN apt-get -y update && apt-get -y upgrade \
+	apt-get -y install \
 	bc \
 	build-essential \
 	bzip2 \
@@ -21,6 +22,7 @@ RUN apt-get -y update && apt-get -y install \
 	unzip \
 	wget \
 	zip \
+	sudo
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /root/workspace
