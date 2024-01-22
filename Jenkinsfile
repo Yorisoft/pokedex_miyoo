@@ -36,73 +36,28 @@ pipeline {
             }
         }
 		
-		/*stage('Print working directory') {
-            steps {
-                script {
-					try{
-						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh("cd ${env.projectDir}")
-							sh("ls -al")
-					//		sh """#!/bin/bash
-					//		cd ${env.projectDir}
-					//		ls -al
-					//		"""
-						}
-					} catch (e) {
-                        echo "Caught exception: ${e}"
-                        currentBuild.result = 'FAILURE'
-						throw e
-                    }
-                }
-            }
-        }
-		
-		stage('Update union-trimui-toolchain') {
-            steps {
-                script {
-					try {
-						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh("cd ${env.WORKING_DIR}/workspace")
-							sh("ls -al")
-							sh("pwd")
-							sh("chmod +x mksdl2.sh")
-							sh("./mksdl2.sh")
-							sh """#!/bin/bash
-							cd "${env.WORKING_DIR}/workspace"
-							ls -al
-							pwd
-							chmod +x mksdl2.sh
-							./mksdl2.sh
-							""" 
-						}
-					} catch (e) {
-                        echo "Caught exception: ${e}"
-                        currentBuild.result = 'FAILURE'
-						throw e
-                    }
-                }
-            }
-        }*/
-		
         stage('Build SDL2') {
             steps {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+						/*	sh("pwd")
 							sh("ls -al")
 							sh("cd ${env.WORKING_DIR}/workspace")
 							sh("ls -al")
 							sh("pwd")
 							sh("chmod +x mksdl2.sh")
-							sh("./mksdl2.sh")
+							sh("./mksdl2.sh") */
 							
-						/*	sh """#!/bin/bash
-							cd "${env.WORKING_DIR}/workspace"
-							ls -al
+							sh """#!/bin/bash
 							pwd
+							ls -al
+							cd "${env.WORKING_DIR}/workspace"
+							pwd
+							ls -al							
 							chmod +x mksdl2.sh
 							./mksdl2.sh
-							"""*/
+							""" 
 						}
 					} catch (e) {
                         echo "Caught exception: ${e}"
@@ -118,14 +73,18 @@ pipeline {
                 script {
 					try {
 						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
-							sh("cd ${env.WORKING_DIR}/workspace/pokedex")
+						/*	sh("cd ${env.WORKING_DIR}/workspace/pokedex")
 							sh("ls -al")
 							sh("pwd")
 							sh("chmod +x mksdl2.sh")
-							sh("./mksdl2.sh")
+							sh("./mksdl2.sh") 	*/
 							
 							sh """#!/bin/bash
+								pwd
+								ls -a
 								cd "${env.WORKING_DIR}/workspace/pokedex"
+								pwd
+								ls -a
 								mkdir -p build
 								cd build
 								cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
