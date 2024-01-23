@@ -85,8 +85,28 @@ start_retroDex() {
     ./Pokedex
 }
 
+check_and_download() {
+    dir=$1
+    download_command=$2
+    extension=$3
+
+    file_count=$(ls -1 "$dir"/*."$extension" 2>/dev/null | wc -l)
+    if [ "$file_count" -lt 649 ]; then
+        echo "Directory $dir has less than 649 .$extension files. Downloading now..."
+        $download_command
+    else
+        echo "Directory $dir has 649 or more .$extension files."
+    fi
+}
+
 main() {
     curvol=$(get_curvol) # grab current volume
+	
+	# Check directories and download files if necessary
+    check_and_download "res/animated" DownloadAnimatedSprites "gif"
+    check_and_download "res/sprites" DownloadSprites "png"
+    check_and_download "res/icons" DownloadIcons "png"
+	
     start_retroDex # call the function to start the app
 }
 

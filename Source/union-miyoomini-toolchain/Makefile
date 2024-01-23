@@ -1,7 +1,7 @@
 .PHONY: shell
 .PHONY: clean
 	
-TOOLCHAIN_NAME=miyoomini-toolchain-clean
+TOOLCHAIN_NAME=miyoomini-toolchain-pokedex
 WORKSPACE_DIR := $(shell pwd)/workspace
 
 .build: Dockerfile
