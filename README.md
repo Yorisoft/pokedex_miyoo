@@ -7,7 +7,7 @@
 <p align="center">
   <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/885de49c-ab59-470c-b23e-3cd7a26d6fe7" width="400" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/d74a1b0f-594f-438d-8516-03a4bc38b667" width="400" /> 
+  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/01d9a77e-0136-4e2a-ba96-3a01bc3fb4e2" width="400" /> 
 </p>
 
 </br>
