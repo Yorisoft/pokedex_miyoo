@@ -129,14 +129,6 @@ sqlite3* OpenDatabase(const string& dbName) {
 
 static int callback(void* results, int argc, char** argv, char** azColName) {
     vector<string> row;
-    /*for (int i = 0; i < argc; i++) {
-        if (argv[i] != nullptr) {
-            row.push_back(argv[i]);
-        }
-        else {
-            row.push_back("");  // or some other value indicating NULL
-        }
-    }*/
     static_cast<vector<vector<string>>*>(results)->emplace_back(argv, argv + argc);
     return 0;
 };
@@ -465,13 +457,9 @@ void RenderPokemonMinimalStats(SDL_Surface** pokemonListEntrySurface, TTF_Font**
     SDL_Color color = { 255, 255, 255 };
     SDL_Color highlightColor = { 255, 0, 0 };
 
-
     // Create a string stream to build the stats text
     stringstream statsStream;
 
-
-    //int statTotal = stoi(pokemon[2]) + stoi(pokemon[3]) + stoi(pokemon[4]) + stoi(pokemon[5]) + stoi(pokemon[6]) + stoi(pokemon[7]);
-    //statsStream << left << setw(5) << pokemonName << " ";
     statsStream << right << setw(4) << pokemon[2];  //  hp
     statsStream << right << setw(4) << pokemon[3];  //  attack
     statsStream << right << setw(4) << pokemon[4];  //  defense
@@ -485,10 +473,6 @@ void RenderPokemonMinimalStats(SDL_Surface** pokemonListEntrySurface, TTF_Font**
     // Render the text into an SDL_Surface
     SDL_Surface* pokeListStatsSurface = NULL;
 
-    //vector<string> lines = splitLines(statsText);
-    //int lineHeight = 35; // Adjust this to match your font's height
-    //int padding = 50;
-    //for (int i = 0; i < lines.size(); i++) {
     pokeListStatsSurface = TTF_RenderText_Blended(
         *font,
         statsText.c_str(),
@@ -498,12 +482,6 @@ void RenderPokemonMinimalStats(SDL_Surface** pokemonListEntrySurface, TTF_Font**
         cout << "Unable to render text! SDL Error: " << TTF_GetError() << endl;
         exit(EXIT_FAILURE);
     }
-    /*pokeListStatsSurface = RenderText(
-        pokeListStatsSurface,
-        statsText.c_str(),
-        *font,
-        color
-    );*/
 
     SDL_Rect pokemonStatsRect;
     pokemonStatsRect.x = ((*pokemonListEntrySurface)->w - pokeListStatsSurface->w);                 // Align to the right
@@ -559,13 +537,6 @@ void RenderPokedexList(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font**
         color_map["rock"] = { {71,67,63}, {61,58,55} };
         color_map["steel"] = { {99,117,125}, {79,94,100} };          // Silver and LightGray
         color_map["water"] = { {43, 58, 78}, {33, 46, 62} };                // Charcoal, Gunmetal
-        /*
-        SDL_Rect pokeListLabelEntry;
-        pokeListLabelEntry.x = 0;
-        pokeListLabelEntry.y = 0;
-        pokeListLabelEntry.w = pokeListLabelSurface->w;
-        pokeListLabelEntry.h = pokeListLabelSurface->h;
-        */
 
         
         listFont = OpenFont(&listFont, fontPath, 12);
@@ -595,11 +566,6 @@ void RenderPokedexList(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font**
                 static_cast<unsigned char>(color_map.at(pokemonType)[colorIndex][2])
             };
 
-            // Get the number of colors
-            //int numColors = sizeof(rainbowColors) / sizeof(SDL_Color);
-
-            // Use modulo to cycle through the colors
-            //SDL_Color background_color = rainbowColors[i % numColors];
             pokemonListEntrySurface = SDL_CreateRGBSurface(
                 0,
                 WINDOW_WIDTH,
@@ -662,8 +628,6 @@ void RenderPokedexList(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font**
             SDL_FreeSurface(pokemonListEntrySurface);
 
         };
-
-
         needsRendering = false;
     };
 };
@@ -729,11 +693,6 @@ void RenderPokedexStats(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font*
             static_cast<unsigned char>(color_map.at(pokemonType)[colorIndex][2])
         };
 
-        // Get the number of colors
-        //int numColors = sizeof(rainbowColors) / sizeof(SDL_Color);
-
-        // Use modulo to cycle through the colors
-        //SDL_Color background_color = rainbowColors[i % numColors];
         pokeStatsSurface = SDL_CreateRGBSurface(
             0,
             WINDOW_WIDTH,
@@ -811,21 +770,7 @@ void RenderPokedexStats(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font*
 
         //---------------------------------------------------------
 
-
-        // Create a string stream to build the stats text
-        //stringstream statsStream;
-
-
         int statTotal = stoi(pokemon[2]) + stoi(pokemon[3]) + stoi(pokemon[4]) + stoi(pokemon[5]) + stoi(pokemon[6]) + stoi(pokemon[7]);
-        /*/statsStream << left << setw(5) << pokemonName << " ";
-        statsStream << right << setw(4) << pokemon[1];  //  speed special 
-        statsStream << right << setw(4) << pokemon[2];  //  hp
-        statsStream << right << setw(4) << pokemon[3];  //  attack
-        statsStream << right << setw(4) << pokemon[4];  //  defense
-        statsStream << right << setw(4) << pokemon[5];  //  special - attack
-        statsStream << right << setw(4) << pokemon[6];  //  special - defense
-        statsStream << right << setw(4) << pokemon[7];  //  speed special 
-        */
 
         // Create a string stream to build the stats text
         stringstream statsStream;
@@ -856,9 +801,6 @@ void RenderPokedexStats(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font*
             color
         ); 
 
-        // Convert the surface to a texture
-        //SDL_Texture* statsTexture = SDL_CreateTextureFromSurface(renderer, statsSurface);
-
         // Define a rect for the texture
         SDL_Rect statsRect;
         statsRect.x = pokemonStatArtRect.w;    // Adjust the x position according to your needs
@@ -888,12 +830,9 @@ void RenderPokedexStats(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font*
 
         cout << "ending: RenderPokedexStats" << endl;
 
-
         needsRendering = false;
     };
 }
-
-
 
 int main(int argc, char* argv[])
 {
@@ -967,8 +906,6 @@ int main(int argc, char* argv[])
             SDL_RenderClear(renderer);
 
             // Generate Stats for selected Pokemon
-            // call PokemonStatsView function to generate Stats for selected Pokemon 
-            //PokemonStatsView(screen, font, selectedItem, maxListTextWidth);
             RenderPokedexStats(&screen, &renderer, &font, results, topItem, selectedItem, maxListIDWidth, maxListLabelHight, needsRendering);
         }
 
