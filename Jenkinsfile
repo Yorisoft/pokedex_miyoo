@@ -40,15 +40,7 @@ pipeline {
             steps {
                 script {
 					try {
-						dockerImage.inside("${env.entryPoint}") {
-						/*	sh("pwd")
-							sh("ls -al")
-							sh("cd ${env.WORKING_DIR}/workspace")
-							sh("ls -al")
-							sh("pwd")
-							sh("chmod +x mksdl2.sh")
-							sh("./mksdl2.sh") */
-							
+						dockerImage.inside("${env.entryPoint}") {							
 							sh """#!/bin/bash
 								pwd
 								ls -al
@@ -56,8 +48,8 @@ pipeline {
 								pwd
 								ls -al			
 								sudo su
-								chmod +x mksdl2.sh
-								./mksdl2.sh
+								chmod +x mksdl2_pipeline.sh
+								./mksdl2_pipeline.sh
 							""" 
 						}
 					} catch (e) {
@@ -73,13 +65,7 @@ pipeline {
             steps {
                 script {
 					try {
-						dockerImage.inside("${env.entryPoint}") {
-						/*	sh("cd ${env.WORKING_DIR}/workspace/pokedex")
-							sh("ls -al")
-							sh("pwd")
-							sh("chmod +x mksdl2.sh")
-							sh("./mksdl2.sh") 	*/
-							
+						dockerImage.inside("${env.entryPoint}") {							
 							sh """#!/bin/bash
 								pwd
 								ls -a
