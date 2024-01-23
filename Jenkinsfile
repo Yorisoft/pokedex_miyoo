@@ -46,10 +46,9 @@ pipeline {
 								ls -al
 								cd "${env.WORKING_DIR}/workspace"
 								pwd
-								ls -al			
-								sudo su
+								ls -al	
 								chmod +x mksdl2_pipeline.sh
-								./mksdl2_pipeline.sh
+								sudo ./mksdl2_pipeline.sh
 							""" 
 						}
 					} catch (e) {
