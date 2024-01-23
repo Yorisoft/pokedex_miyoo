@@ -159,10 +159,10 @@ echo "*                                        *"
 echo "*                                        *"
 echo "******************************************"
 
-cd ~/workspace
+cd /var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace
 mkdir $FIN_BIN_DIR
 mkdir logs
-export PKG_CONFIG_PATH="$FIN_BIN_DIR/lib/pkgconfig:$PKG_CONFIG_PATH:/root/workspace/SDL2-2.26.5/"
+export PKG_CONFIG_PATH="$FIN_BIN_DIR/lib/pkgconfig:$PKG_CONFIG_PATH:/var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace/SDL2-2.26.5/"
 export SDL2_CONFIG
 
 # CONFIGURE YOUR SDL REQUIREMENTS BELOW
