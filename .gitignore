@@ -16,3 +16,7 @@ Source/windows-visual-studio/Pokedex/.vs/*
 Source/windows-visual-studio/Pokedex/x64/*
 Source/union-miyoomini-toolchain/workspace/curl-7.64.0/out/
 Source/union-miyoomini-toolchain/workspace/pokedex/out/
+.vs
+Source/union-miyoomini-toolchain/.build
+Source/union-miyoomini-toolchain/workspace/pokedex/pokedex-copy.cpp
+Source/union-miyoomini-toolchain/workspace/pokedex/pokedex-copy1.cpp

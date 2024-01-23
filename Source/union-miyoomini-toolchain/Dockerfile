@@ -22,7 +22,6 @@ RUN apt-get -y update && apt-get -y upgrade \
 	unzip \
 	wget \
 	zip \
-	sudo \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /root/workspace

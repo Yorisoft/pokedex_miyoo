@@ -37,6 +37,11 @@
 #include <SDL_ttf.h>
 using namespace std;
 
+enum class View {
+    LIST,
+    STATS
+};
+
 // Function to initialize SDL components
 void InitializeSDL(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** texture, SDL_Surface** screen, TTF_Font** font) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
@@ -162,6 +167,66 @@ vector<vector<string>> executeSQL(const string& sql) {
 // Function to close the SQLite database
 void CloseDatabase(sqlite3* db) {
     sqlite3_close(db);
+}
+
+void HandleInputs(SDL_Event& windowEvent, bool& quit, View& currentView, int& selectedItem, int& topItem, int& currentGenIndex, vector<int>& nextGenID, bool& needsRendering) {
+    while (SDL_PollEvent(&windowEvent))
+    {
+        if (windowEvent.type == SDL_QUIT) {
+            quit = true;
+        }
+        else if (windowEvent.type == SDL_KEYDOWN) {
+            switch (windowEvent.key.keysym.sym) {
+            case SDLK_RIGHT:
+                currentView = View::STATS;
+                needsRendering = true;
+                break;
+            case SDLK_LEFT:
+                currentView = View::LIST;
+                needsRendering = true;
+                break;
+            case SDLK_UP:
+                needsRendering = true;
+                if (selectedItem > 0) selectedItem--;
+                if (selectedItem < topItem) topItem = selectedItem;
+                break;
+            case SDLK_DOWN:
+                needsRendering = true;
+                if (selectedItem < 649 - 1) selectedItem++;
+                if (selectedItem >= topItem) topItem++;
+                break;
+            case SW_BTN_R1:
+                needsRendering = true;
+                if (selectedItem < 649 - 10) selectedItem += 10;
+                if (selectedItem >= topItem) topItem += 10;
+                break;
+            case SW_BTN_L1:
+                needsRendering = true;
+                if (selectedItem > 9) selectedItem -= 10;
+                if (selectedItem < topItem) topItem -= 10;
+                break;
+            case SW_BTN_R2:
+                needsRendering = true;
+                if (currentGenIndex < nextGenID.size() - 1) {
+                    currentGenIndex++;
+                    selectedItem = nextGenID[currentGenIndex];
+                }
+                break;
+            case SW_BTN_L2:
+                needsRendering = true;
+                if (currentGenIndex > 0) {
+                    currentGenIndex--;
+                    selectedItem = nextGenID[currentGenIndex];
+                }
+                break;
+            case SDLK_ESCAPE:
+                quit = true;
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 // Function to load an image
@@ -311,7 +376,7 @@ void RenderPokemonID(SDL_Surface** pokemonListEntrySurface, TTF_Font** font, vec
 }
 
 // Function to render Pokemon pixel art
-void RenderPokemonPixelArt(SDL_Surface** pokemonListEntrySurface, TTF_Font** font, vector<string>& pokemon, int& counter, int& maxListIDWidth) {
+void RenderPokemonListPixelArt(SDL_Surface** pokemonListEntrySurface, TTF_Font** font, vector<string>& pokemon, int& counter, int& maxListIDWidth) {
     cout << "starting: RenderPokemonPixelArt" << endl;
     string imagePath, typePath1, typePath2;
     SDL_Surface* optimizedSurface = NULL, * pokeListArtSurface = NULL,
@@ -337,10 +402,10 @@ void RenderPokemonPixelArt(SDL_Surface** pokemonListEntrySurface, TTF_Font** fon
     SDL_Color highlightColor = { 255, 0, 0 };
 
     string pokemonName = pokemon[1];
-    pokemonName[0] = toupper(pokemon[1][0]);
+    pokemonName[0] = toupper(pokemonName[0]);
     // If an underscore is found, get the substring up to the underscore
     size_t underscorePos = pokemonName.find('-');
-    pokemonName = underscorePos != string::npos ? pokemon[1].substr(0, underscorePos) : pokemon[1];
+    pokemonName = underscorePos != string::npos ? pokemonName.substr(0, underscorePos) : pokemonName;
 
     pokeListNameSurface = TTF_RenderText_Blended(
         *font,
@@ -453,7 +518,7 @@ void RenderPokemonMinimalStats(SDL_Surface** pokemonListEntrySurface, TTF_Font**
 }
 
 // Function to render the entire Pokedex list
-void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** font, vector<vector<string>>& results, int& topItem, int& selectedItem, int& maxListIDWidth, int& maxListLabelHight, bool& needsRendering) {
+void RenderPokedexList(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** font, vector<vector<string>>& results, int& topItem, int& selectedItem, int& maxListIDWidth, int& maxListLabelHight, bool& needsRendering) {
     if (needsRendering) {
         cout << "Next loop" << endl;
         cout << "selectedItem: " + to_string(selectedItem) << endl << endl;
@@ -575,7 +640,7 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
 
             // TODO: Make get pokemonPixelArt()
             listFont = OpenFont(&listFont, fontPath, 15);
-            RenderPokemonPixelArt(&pokemonListEntrySurface, &listFont, pokemon, i, maxListIDWidth);
+            RenderPokemonListPixelArt(&pokemonListEntrySurface, &listFont, pokemon, i, maxListIDWidth);
             TTF_CloseFont(listFont);
 
             cout << "after RenderPokemonPixelArt" << endl;
@@ -603,10 +668,232 @@ void RenderPokedex(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** fon
     };
 };
 
-enum class View {
-    LIST,
-    STATS
-};
+vector<string> splitLines(const string& text) {
+    vector<string> lines;
+    stringstream ss(text);
+    string line;
+    while (getline(ss, line, '\n')) {
+        lines.push_back(line);
+    }
+    return lines;
+}
+
+// Function to render the entire Pokedex list
+void RenderPokedexStats(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font** font, vector<vector<string>>& results, int& topItem, int& selectedItem, int& maxListIDWidth, int& maxListLabelHight, bool& needsRendering) {
+    if (needsRendering) {
+        cout << "starting: RenderPokedexStats" << endl;
+        string imagePath, typePath1, typePath2;
+        SDL_Surface* optimizedSurface = NULL, * pokeStatArtSurface = NULL,
+            * pokeStatsType1Surface = NULL, * pokeStatsType2Surface = NULL, * pokeListNameSurface = NULL;
+
+        SDL_Surface* pokeStatsSurface = NULL;
+        SDL_Color color = { 255, 255, 255 };
+        SDL_Color highlightColor = { 255, 0, 0 };
+        string fontPath = "res/font/Pokemon_GB.ttf";
+        TTF_Font* statsFont = NULL;
+        // Get the selected Pokémon's stats from the results vector
+        vector<string> pokemon = results[selectedItem];
+        string pokemonNme = pokemon[1];
+
+        // Define the map
+        map<string, vector<vector<int>>> color_map;
+
+        // Insert the key-value pair
+        color_map["bug"] = { {103,116,69}, {81,91,52} };                    // Ebony
+        color_map["dark"] = { {55,55,65}, {40,40,50} };           // DimGray and DarkGray
+        color_map["dragon"] = { {76,63,105}, {59,50,81} };                  // SteelBlue and CornflowerBlue
+        color_map["electric"] = { {90, 90, 30}, {70, 70, 20} };                  // Field drab, Dark drab brown
+        color_map["fairy"] = { {121,67,103}, {100,48,74} };          // Pink and LightPink
+        color_map["fighting"] = { {78,45,45}, {57,34,34} };           // Orange and Gold
+        color_map["fire"] = { {111, 53, 17}, {86, 42, 19} };                // Russet, Seal brown
+        color_map["flying"] = { {76,91,87}, {54,71,68} };                   // Feldgrau, Dark slate grey
+        color_map["ghost"] = { {85,70,93}, {66,51,74} };           // SlateBlue and MediumSlateBlue
+        color_map["grass"] = { {44, 61, 43}, {40, 52, 39} };                // Dark green, Black Olive
+        color_map["ground"] = { {89,69,52}, {71,59,46} };                     // Walnut brown, Taupe
+        color_map["ice"] = { {73,84,91}, {55,60,64} };                      // Onyx, Gunmetal
+        color_map["normal"] = { {105,112,95}, {76,83,66} };         // BlanchedAlmond and Cornsilk   {106,102,83}, {94,92,79}
+        color_map["poison"] = { {92,77,89}, {67,54,71} };                   // MediumPurple and Purple
+        color_map["psychic"] = { {91,63,79}, {76,45,63} };        // Plum and Violet
+        color_map["rock"] = { {71,67,63}, {61,58,55} };
+        color_map["steel"] = { {99,117,125}, {79,94,100} };          // Silver and LightGray
+        color_map["water"] = { {43, 58, 78}, {33, 46, 62} };                // Charcoal, Gunmetal
+  
+        //---------------------------------------------------------
+
+        string pokemonType = pokemon[8];
+        int pokemonID = stoi(pokemon[0]);
+        int colorIndex = (pokemonID - 1) % 2; // This will alternate between 0 and 1            
+        SDL_Color rainbowColors = {
+            static_cast<unsigned char>(color_map.at(pokemonType)[colorIndex][0]),
+            static_cast<unsigned char>(color_map.at(pokemonType)[colorIndex][1]),
+            static_cast<unsigned char>(color_map.at(pokemonType)[colorIndex][2])
+        };
+
+        // Get the number of colors
+        //int numColors = sizeof(rainbowColors) / sizeof(SDL_Color);
+
+        // Use modulo to cycle through the colors
+        //SDL_Color background_color = rainbowColors[i % numColors];
+        pokeStatsSurface = SDL_CreateRGBSurface(
+            0,
+            WINDOW_WIDTH,
+            WINDOW_HEIGHT,
+            DEPTH,
+            0, 0, 0, 0
+        );
+        SDL_FillRect(
+            pokeStatsSurface,
+            NULL,
+            SDL_MapRGBA(
+                pokeStatsSurface->format,
+                rainbowColors.r,
+                rainbowColors.g,
+                rainbowColors.b,
+                128
+            )
+        );
+
+        int labelHeight = pokeStatsSurface->h;
+        SDL_Rect pokeStatsRect;
+        pokeStatsRect.x = 0;
+        pokeStatsRect.y = 0;
+        pokeStatsRect.w = pokeStatsSurface->w;
+        pokeStatsRect.h = pokeStatsSurface->h;    
+
+        // Load & Blits pokeListArtSurface
+        // pixel art path
+        imagePath = "res/sprites/" + pokemon[1] + ".png";
+        pokeStatArtSurface = LoadImage(&pokeStatArtSurface, imagePath);
+
+        SDL_Rect pokemonStatArtRect;
+        pokemonStatArtRect.x = 0;
+        pokemonStatArtRect.y = 20;
+        pokemonStatArtRect.w = pokeStatArtSurface->w * 3;
+        pokemonStatArtRect.h = pokeStatArtSurface->h * 3;
+
+        SDL_BlitScaled(pokeStatArtSurface, NULL, pokeStatsSurface, &pokemonStatArtRect);
+        SDL_FreeSurface(pokeStatArtSurface);
+        cout << "after:SDL_BlitScaled - pokeStatArtSurface" << endl;
+    
+        // Load & Blits pokeStatsType1Surface
+        // pixel art path
+        typePath1 = "res/types/" + pokemon[8] + ".png";
+        pokeStatsType1Surface = LoadImage(&pokeStatsType1Surface, typePath1);
+
+        SDL_Rect pokemonType1Rect;
+        pokemonType1Rect.x = (pokemonStatArtRect.w / 2 ) - pokeStatsType1Surface->w * 2 ;
+        pokemonType1Rect.y = pokemonStatArtRect.h;
+        pokemonType1Rect.w = pokeStatsType1Surface->w * 2;
+        pokemonType1Rect.h = pokeStatsType1Surface->h * 2;
+
+        SDL_BlitScaled(pokeStatsType1Surface, NULL, pokeStatsSurface, &pokemonType1Rect);
+        SDL_FreeSurface(pokeStatsType1Surface);
+        cout << "after:SDL_BlitScaled - pokeStatsType1Surface" << endl;
+
+        // Load & Blits pokeListType2Surface
+        // pixel art path
+        if (!pokemon[9].empty()) {
+        
+            typePath2 = "res/types/" + pokemon[9] + ".png";
+            pokeStatsType2Surface = LoadImage(&pokeStatsType2Surface, typePath2);
+
+            SDL_Rect pokemonType2Rect;
+            pokemonType2Rect.x = pokemonStatArtRect.w / 2;
+            pokemonType2Rect.y = pokemonStatArtRect.h;
+            pokemonType2Rect.w = pokeStatsType2Surface->w * 2;
+            pokemonType2Rect.h = pokeStatsType2Surface->h * 2;
+
+            SDL_BlitScaled(pokeStatsType2Surface, NULL, pokeStatsSurface, &pokemonType2Rect);
+            SDL_FreeSurface(pokeStatsType2Surface);
+            cout << "after:SDL_BlitScaled - pokeStatsType2Surface" << endl;
+        }
+    
+
+        //---------------------------------------------------------
+
+
+        // Create a string stream to build the stats text
+        //stringstream statsStream;
+
+
+        int statTotal = stoi(pokemon[2]) + stoi(pokemon[3]) + stoi(pokemon[4]) + stoi(pokemon[5]) + stoi(pokemon[6]) + stoi(pokemon[7]);
+        /*/statsStream << left << setw(5) << pokemonName << " ";
+        statsStream << right << setw(4) << pokemon[1];  //  speed special 
+        statsStream << right << setw(4) << pokemon[2];  //  hp
+        statsStream << right << setw(4) << pokemon[3];  //  attack
+        statsStream << right << setw(4) << pokemon[4];  //  defense
+        statsStream << right << setw(4) << pokemon[5];  //  special - attack
+        statsStream << right << setw(4) << pokemon[6];  //  special - defense
+        statsStream << right << setw(4) << pokemon[7];  //  speed special 
+        */
+
+        // Create a string stream to build the stats text
+        stringstream statsStream;
+
+        string pokemonName = pokemon[1];
+        pokemonName[0] = toupper(pokemonName[0]);
+        // If an underscore is found, get the substring up to the underscore
+        size_t underscorePos = pokemonName.find('-');
+        pokemonName = underscorePos != string::npos ? pokemonName.substr(0, underscorePos) : pokemonName;
+        //// Add the Pokémon's stats to the stream
+        statsStream << "Name: " << pokemonName << "\n";
+        statsStream << "HP: " << pokemon[2] << "\n";
+        statsStream << "Attack: " << pokemon[3] << "\n";
+        statsStream << "Defense: " << pokemon[4] << "\n";
+        statsStream << "Sp. Atk: " << pokemon[5] << "\n";
+        statsStream << "Sp. Def: " << pokemon[6] << "\n";
+        statsStream << "Speed: " << pokemon[7] << "\n";
+        statsStream << "Total: " << statTotal << "\n";
+
+        // Convert the stream to a string
+        string statsText = statsStream.str();
+
+        // Render the text into an SDL_Surface
+        statsFont = OpenFont(&statsFont, fontPath, 20);
+        SDL_Surface* statsSurface = TTF_RenderText_Blended(
+            statsFont, 
+            statsText.c_str(),
+            color
+        ); 
+
+        // Convert the surface to a texture
+        //SDL_Texture* statsTexture = SDL_CreateTextureFromSurface(renderer, statsSurface);
+
+        // Define a rect for the texture
+        SDL_Rect statsRect;
+        statsRect.x = pokemonStatArtRect.w;    // Adjust the x position according to your needs
+        statsRect.y = 50;                       // Adjust the y position according to your needs
+        statsRect.w = statsSurface->w;
+        statsRect.h = statsSurface->h;
+
+        vector<string> lines = splitLines(statsText);
+        int lineHeight = 50; // Adjust this to match your font's height
+        for (int i = 0; i < lines.size(); i++) {
+            SDL_Surface* lineSurface = TTF_RenderText_Blended(statsFont, lines[i].c_str(), color);
+            //SDL_Texture* lineTexture = SDL_CreateTextureFromSurface(renderer, lineSurface);
+            SDL_Rect lineRect;
+            lineRect.x = statsRect.x;
+            lineRect.y = statsRect.y + i * lineHeight;
+            lineRect.w = lineSurface->w;
+            lineRect.h = lineSurface->h;
+
+            SDL_BlitSurface(lineSurface, NULL, pokeStatsSurface, &lineRect);
+            SDL_FreeSurface(lineSurface);
+            //SDL_DestroyTexture(lineTexture);
+        }
+        // Clean up
+        SDL_FreeSurface(statsSurface);
+        SDL_BlitSurface(pokeStatsSurface, NULL, *screen, &pokeStatsRect);
+        SDL_FreeSurface(pokeStatsSurface);
+
+        cout << "ending: RenderPokedexStats" << endl;
+
+
+        needsRendering = false;
+    };
+}
+
+
 
 int main(int argc, char* argv[])
 {
@@ -663,61 +950,7 @@ int main(int argc, char* argv[])
     bool quit = false;
     bool needsRendering = true;
     while (!quit) {
-        while (SDL_PollEvent(&windowEvent))
-        {
-            if (windowEvent.type == SDL_QUIT) {
-                quit = true;
-            }
-            else if (windowEvent.type == SDL_KEYDOWN) {
-                switch (windowEvent.key.keysym.sym) {
-                case SDLK_RIGHT:
-                    currentView = View::STATS;
-                    break;
-                case SDLK_LEFT:
-                    currentView = View::LIST;
-                    break;
-                case SDLK_UP:
-                    needsRendering = true;
-                    if (selectedItem > 0) selectedItem--;
-                    if (selectedItem < topItem) topItem = selectedItem;
-                    break;
-                case SDLK_DOWN:
-                    needsRendering = true;
-                    if (selectedItem < 649 - 1) selectedItem++;                                                             // 649 = number of pokemons up to gen 5.
-                    if (selectedItem >= topItem) topItem++;
-                    break;
-                case SW_BTN_R1:
-                    needsRendering = true;
-                    if (selectedItem < 649 - 10) selectedItem += 10;                                                        // Increase selected item by 10
-                    if (selectedItem >= topItem) topItem += 10;
-                    break;                    
-                case SW_BTN_L1:
-                    needsRendering = true;
-                    if (selectedItem > 9) selectedItem -= 10;                                                               // Decrease selected item by 10
-                    if (selectedItem < topItem) topItem -= 10;
-                    break;
-                case SW_BTN_R2:
-                    needsRendering = true;
-                    if (currentGenIndex < nextGenID.size() - 1) {
-                        currentGenIndex++;
-                        selectedItem = nextGenID[currentGenIndex];
-                    }
-                    break;
-                case SW_BTN_L2:
-                    needsRendering = true;
-                    if (currentGenIndex > 0) {
-                        currentGenIndex--;
-                        selectedItem = nextGenID[currentGenIndex];
-                    }
-                    break;
-                case SDLK_ESCAPE:                                                                                           // Add this case for the ESC key
-                    quit = true;
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
+        HandleInputs(windowEvent, quit, currentView, selectedItem, topItem, currentGenIndex, nextGenID, needsRendering);
 
         if (currentView == View::LIST) {
             // Clear the window and make it all white
@@ -725,7 +958,7 @@ int main(int argc, char* argv[])
 
 
             // Rendering based on the current view
-            RenderPokedex(&screen, &renderer, &font, results, topItem, selectedItem, maxListIDWidth, maxListLabelHight, needsRendering);
+            RenderPokedexList(&screen, &renderer, &font, results, topItem, selectedItem, maxListIDWidth, maxListLabelHight, needsRendering);
 
         }
         else if (currentView == View::STATS) {
@@ -736,7 +969,7 @@ int main(int argc, char* argv[])
             // Generate Stats for selected Pokemon
             // call PokemonStatsView function to generate Stats for selected Pokemon 
             //PokemonStatsView(screen, font, selectedItem, maxListTextWidth);
-
+            RenderPokedexStats(&screen, &renderer, &font, results, topItem, selectedItem, maxListIDWidth, maxListLabelHight, needsRendering);
         }
 
         // Main loop continuation
