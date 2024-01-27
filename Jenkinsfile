@@ -4,7 +4,7 @@ pipeline {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
 		WORKING_DIR = 'Source/union-miyoomini-toolchain'
-        entryPoint = '--rm -v /var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace:/root/workspace'
+        entryPoint = '--rm -v $(pwd)/workspace:/root/workspace'
     }
     stages {
         stage('Cleanup and Checkout') {
@@ -20,13 +20,13 @@ pipeline {
                 script {
 					try{
 						sh """#!/bin/bash
+							pwd
 							ls -a
 							cd "${env.WORKING_DIR}"
 							ls -a
 							chmod +x support/setup-toolchain.sh support/setup-env.sh
 							make shell
 						"""
-						dockerImage = docker.image('miyoomini-toolchain-pokedex')
 					} catch (e) {
                         echo "Caught exception: ${e}"
                         currentBuild.result = 'FAILURE'
@@ -36,28 +36,26 @@ pipeline {
             }
         }
 		
-        stage('Build SDL2') {
-            steps {
-                script {
-					try {
-						dockerImage.inside("--user root ${env.entryPoint}") {							
-							sh """#!/bin/bash
-								pwd
-								ls -al
-								
-								chmod +x mksdl2.sh
-								./mksdl2.sh
-							""" 
-						}
-					} catch (e) {
-                        echo "Caught exception: ${e}"
-                        currentBuild.result = 'FAILURE'
-						throw e
-                    }
-                }
-            }
-        }
-		
+		stage('Build SDL') {
+			steps {
+				try {
+					script {
+						sh '''
+						docker run --rm -v "$(pwd)/workspace":/root/workspace miyoomini-toolchain-pokedex /bin/bash -c "
+						pwd;
+						ls -al;
+						chmod +x mksdl2.sh;
+						./mksdl2.sh"
+						'''					
+					} 
+				}catch (e) {
+					echo "Caught exception: ${e}"
+					currentBuild.result = 'FAILURE'
+					throw e
+				}
+			}
+		}
+	
         stage('Build Pokedex') {
             steps {
                 script {
