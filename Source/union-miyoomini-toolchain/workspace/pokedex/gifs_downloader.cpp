@@ -76,7 +76,7 @@ int main() {
                 cout << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
             }
             else {
-                ofstream outFile("resources/animated/" + pokemon_name + ".gif",  ios::out | ios::binary);
+                ofstream outFile("res/animated/" + pokemon_name + ".gif",  ios::out | ios::binary);
                 outFile.write(&readBuffer[0], readBuffer.size());
             }
             readBuffer.clear();

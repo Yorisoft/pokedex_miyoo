@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
 					try {
-						dockerImage.inside("${env.entryPoint}") {							
+						dockerImage.inside("--user root ${env.entryPoint}") {							
 							sh """#!/bin/bash
 								pwd
 								ls -al
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 script {
 					try {
-						dockerImage.inside("${env.entryPoint}") {							
+						dockerImage.inside("--user root ${env.entryPoint}") {							
 							sh """#!/bin/bash
 								pwd
 								ls -a
@@ -90,7 +90,7 @@ pipeline {
             steps {
                 script {
 					try {
-						docker.image("${env.dockerImage}").inside("${env.entryPoint}") {
+						docker.image("--user root ${env.dockerImage}").inside("${env.entryPoint}") {
 							sh """#!/bin/bash
 								cd "${env.WORKING_DIR}/workspace/pokedex"
 								rsync -av build/Pokedex build/DownloadIconsbuild/DownloadSprites build/DownloadAnimatedSprites .

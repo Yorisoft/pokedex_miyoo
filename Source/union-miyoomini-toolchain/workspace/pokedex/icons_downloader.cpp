@@ -76,7 +76,7 @@ int main() {
                 cout << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
             }
             else {
-                ofstream outFile("resources/icons/" + pokemon_name + ".png",  ios::out | ios::binary);
+                ofstream outFile("res/icons/" + pokemon_name + ".png",  ios::out | ios::binary);
                 outFile.write(&readBuffer[0], readBuffer.size());
             }
             readBuffer.clear();
