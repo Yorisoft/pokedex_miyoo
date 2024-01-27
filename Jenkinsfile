@@ -38,8 +38,8 @@ pipeline {
 		
 		stage('Build SDL') {
 			steps {
-				try {
-					script {
+				script {
+					 try{
 						sh '''
 						docker run --rm -v "$(pwd)/workspace":/root/workspace miyoomini-toolchain-pokedex /bin/bash -c "
 						pwd;
@@ -47,11 +47,11 @@ pipeline {
 						chmod +x mksdl2.sh;
 						./mksdl2.sh"
 						'''					
-					} 
-				}catch (e) {
-					echo "Caught exception: ${e}"
-					currentBuild.result = 'FAILURE'
-					throw e
+					} catch (e) {
+						echo "Caught exception: ${e}"
+						currentBuild.result = 'FAILURE'
+						throw e
+					}
 				}
 			}
 		}
