@@ -4,7 +4,7 @@ pipeline {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
 		WORKING_DIR = 'Source/union-miyoomini-toolchain'
-        entryPoint = '--rm -v $(pwd)Source/union-miyoomini-toolchain/workspace:/root/workspace'
+        entryPoint = '--rm -v $(pwd)/Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
         stage('Cleanup and Checkout') {
@@ -41,7 +41,7 @@ pipeline {
 				script {
 					 try{
 						sh '''
-						docker run --rm -v "$(pwd)/workspace":/root/workspace miyoomini-toolchain-pokedex /bin/bash -c "
+						docker run --rm -v "$(pwd)/Source/union-miyoomini-toolchain/workspace":/root/workspace miyoomini-toolchain-pokedex /bin/bash -c "
 						pwd;
 						ls -al;
 						chmod +x mksdl2.sh;
