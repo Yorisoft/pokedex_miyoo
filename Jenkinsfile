@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerImage = 'miyoomini-toolchain-pokedex' // Set this to your Docker image
         currentStage = ''
-		WORKING_DIR = 'Source/union-miyoomini-toolchain'
+		WORKING_DIR = '/root/workspace'
         entryPoint = '--rm -v /var/lib/jenkins/workspace/Pokedex_Miyoo_jenkins/Source/union-miyoomini-toolchain/workspace:/root/workspace'
     }
     stages {
@@ -48,7 +48,7 @@ pipeline {
 								pwd
 								ls -al	
 								chmod +x mksdl2.sh
-								./mksdl2_pipeline.sh
+								./mksdl2.sh
 							""" 
 						}
 					} catch (e) {
