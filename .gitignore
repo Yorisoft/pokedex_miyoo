@@ -22,7 +22,12 @@
 **SDL2**
 **.sln
 **.vcxproj
+**.vcxproj.**
 **.user
+**/packages
+**packages.config
+**/gtest
+**/src
 # Source/union-miyoomini-toolchain/workspace/pokedex/build/*
 # Source/windows-visual-studio/Pokedex/Debug/*
 # Source/windows-visual-studio/Pokedex/.vs/*
