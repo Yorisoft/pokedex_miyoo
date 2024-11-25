@@ -89,6 +89,13 @@ TEST_F(PokemonFixture, givenSetGenderRates_WhenIntID_ThenCalculatesGenderRates) 
     EXPECT_EQ(currentGenderRates[1], 50);
 }
 
+TEST_F(PokemonFixture, givenGetFlavorText_ReturnFlavorTextAsString) {
+    std::string currentFText = p->getFlavorText();
+
+    EXPECT_EQ(currentFText, "Obviously prefers hot places. When it rains, steamis said to spout from the tip of its tail.");
+}
+
+
 TEST_F(PokemonFixture, givenSetFlavorText_WhenString_ThenSetFlavorTextToString) {
     std::string newFlavorText = "New Flavor Text";
     p->setFlavorText(newFlavorText);
