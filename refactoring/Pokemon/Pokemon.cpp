@@ -42,7 +42,22 @@ Pokemon::Pokemon(std::vector<std::vector<std::string>>* DBresults) {
 }
 
 void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) {
+	//set pokemon name
 	this->setName((*pokemon)[0][1]);
+
+	//set pokemon types
+	//setup vector<string> for types
+	std::vector<std::string> types;
+	if((*pokemon)[0][2] != "NULL" && (*pokemon)[0][2] != "None" )
+		types.push_back((*pokemon)[0][2]);
+	if((*pokemon)[0][3] != "NULL" && (*pokemon)[0][3].find("None") )
+		types.push_back((*pokemon)[0][3]);
+	this->setTypes(types);
+
+	//set pokemon gender rates
+	//pass gender rate ID
+	std::string genderRate = (*pokemon)[0][4];
+	this->setGenderRates(std::stoi(genderRate));
 }
 
 void Pokemon::setName(const std::string& name) {
@@ -53,27 +68,48 @@ std::string Pokemon::getName() {
 	return this->name;
 }
 
-Pokemon::~Pokemon() {
-	
-
-}
-
-void Pokemon::setTypes(const std::string type) {
-	typeA = type;
-}
-
-void Pokemon::setTypes(const std::string type_A, const std::string type_B) {
-	typeA = type_A;
-	typeB = type_B;
+void Pokemon::setTypes(const std::vector<std::string>& types) {
+	if (types.size() != 2) {
+		this->typeA = types[0];
+	}
+	else {
+		this->typeA = types[0];
+		this->typeB = types[1];
+	}
 }
 
 std::vector<std::string> Pokemon::getTypes() {
 	std::vector<std::string> types;
-	types.push_back(typeA);
-	types.push_back(typeB);
+
+	if (typeB.size() < 1 ) {
+		types.push_back(typeA);			
+	}
+	else {
+		types.push_back(typeA);	
+		types.push_back(typeB);
+	}
+
 	return types;
 }
 
+void Pokemon::setGenderRates(const double genderRateID) {
+	// if vector not empty, then empty it
+	if (!this->genderRates.empty())
+		this->genderRates.clear();
+	// Calculate female gender rate = fgenderRate
+	// subtrace fgenderRate from 100 = mgenderRate
+	this->genderRates.push_back((genderRateID / 8.0) * 100.0);
+	this->genderRates.push_back(100.0 - this->genderRates[0]);
+}
+
+std::vector<double> Pokemon::getGenderRates() const {
+	return this->genderRates;
+}
+
+Pokemon::~Pokemon() {
+	
+
+}
 
 
 	/*
@@ -87,4 +123,3 @@ std::vector<std::string> Pokemon::getTypes() {
 	void setSpecialDefence(const int);
 	void setSpeed(const int);
 	*/
-
