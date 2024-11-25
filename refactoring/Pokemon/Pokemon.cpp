@@ -58,6 +58,19 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 	//pass gender rate ID
 	std::string genderRate = (*pokemon)[0][4];
 	this->setGenderRates(std::stoi(genderRate));
+
+	// set flavor text
+	std::string flavorText = (*pokemon)[0][5];
+	this->setFlavorText(flavorText);
+}
+
+void Pokemon::setID(const int ID) {
+	this->id = static_cast<unsigned short>(ID);
+}
+
+
+unsigned short Pokemon::getID() const {
+	return this->id;
 }
 
 void Pokemon::setName(const std::string& name) {
@@ -106,6 +119,15 @@ std::vector<double> Pokemon::getGenderRates() const {
 	return this->genderRates;
 }
 
+void Pokemon::setFlavorText(const std::string& fText) {
+	this->flavorText = fText;
+}
+
+std::string Pokemon::getFlavorText() const {
+	return this->flavorText;
+}
+
+
 Pokemon::~Pokemon() {
 	
 
@@ -113,8 +135,6 @@ Pokemon::~Pokemon() {
 
 
 	/*
-		void setGenders();
-	void setFlavorText(const std::string);
 	void setID(const int);
 	void setHP(const int);
 	void setAttack(const int);

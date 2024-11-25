@@ -21,6 +21,15 @@ public:
     std::vector<std::string> types;
 };
 
+
+// Using Microsoft unittest naming convention while using a Google unittest library..
+// 
+// The name of your test should consist of three parts:
+//
+// The name of the method being tested.
+// The scenario under which it's being tested.
+// The expected behavior when the scenario is invoked.
+
 TEST_F(PokemonFixture, givenSetName_WhenStringName_ThenNameSetToString) {
     p->setName("Bulbasaur");
     EXPECT_EQ(p->getName(), "Bulbasaur");
@@ -31,7 +40,7 @@ TEST_F(PokemonFixture, givenGetName_ReturnNameAsString) {
 }
 
 TEST_F(PokemonFixture, givenSetTypes_WhenStringVectorOneValue_ThenTypeASetToValue) {
-    // change default types value and call s
+    //set new type
     PokemonFixture::types.push_back("water");
     p->setTypes(PokemonFixture::types);
 
@@ -63,7 +72,7 @@ TEST_F(PokemonFixture, givenGetTypes_ReturnTypesAsStringVector) {
     EXPECT_EQ(currentTypes.size(), 1); 
 }
 
-TEST_F(PokemonFixture, givenSetGenderRates_WhenIntID_CalculatesGenderRates) {
+TEST_F(PokemonFixture, givenSetGenderRates_WhenIntID_ThenCalculatesGenderRates) {
     const double newGenderRateID = 4;
     p->setGenderRates(newGenderRateID);
 
@@ -73,18 +82,26 @@ TEST_F(PokemonFixture, givenSetGenderRates_WhenIntID_CalculatesGenderRates) {
     EXPECT_EQ(currentGenderRates[1], 50);
 }
 
+
+TEST_F(PokemonFixture, givenSetFlavorText_WhenString_ThenSetFlavorTextToString) {
+    std::string newFlavorText = "New Flavor Text";
+    p->setFlavorText(newFlavorText);
+
+    std::string currentFText = p->getFlavorText();
+
+    EXPECT_EQ(currentFText, newFlavorText);
+}
+
 // Main function to run all tests and generate XML report
 int main(int argc, char** argv) {
-
     // Set the output to XML format
     // get unique date stamp for each report. 
     auto basePath = std::filesystem::current_path();
     std::string testReportPath = (basePath / "../unittest/reports/pokemon_test_report.xml").string();
     ::testing::GTEST_FLAG(output) = "xml:" + testReportPath;
-    std::cout << "Base Path: " << basePath << std::endl;
-
 
     ::testing::InitGoogleTest(&argc, argv);
 
     return RUN_ALL_TESTS();
 }
+

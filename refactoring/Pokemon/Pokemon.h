@@ -39,11 +39,12 @@ public:
 	~Pokemon();
 	
 	// getters
+
+	unsigned short getID() const;
 	std::string getName();
 	std::vector<std::string> getTypes();
 	std::vector<double> getGenderRates() const;
-	std::string getFlavorText();
-	unsigned short getID();
+	std::string getFlavorText() const;
 	unsigned short getHP();
 	unsigned short getAttack();
 	unsigned short getDefence();
@@ -56,11 +57,12 @@ public:
 
 
 	// setters
+
+	void setID(const int);
 	void setName(const std::string&);
 	void setTypes(const std::vector<std::string>&);
 	void setGenderRates(const double);
-	void setFlavorText(const std::string);
-	void setID(const int);
+	void setFlavorText(const std::string&);
 	void setHP(const int);
 	void setAttack(const int);
 	void setDefence(const int);
