@@ -72,6 +72,13 @@ TEST_F(PokemonFixture, givenSetTypes_WhenStringVectorTwoValues_ThenTypeAAndTypeB
      EXPECT_EQ(currentTypes.size(), 2); 
 }
 
+TEST_F(PokemonFixture, givenGetGenderRates_ReturnsGenderRatesDoubleVector) {
+    std::vector<double> currentGenderRates = p->getGenderRates();
+
+    EXPECT_EQ(currentGenderRates[0], 12.5);
+    EXPECT_EQ(currentGenderRates[1], 87.5);
+} 
+
 TEST_F(PokemonFixture, givenSetGenderRates_WhenIntID_ThenCalculatesGenderRates) {
     const double newGenderRateID = 4;
     p->setGenderRates(newGenderRateID);
