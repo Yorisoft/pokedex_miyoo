@@ -42,6 +42,9 @@ Pokemon::Pokemon(std::vector<std::vector<std::string>>* DBresults) {
 }
 
 void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) {
+	// set id
+	this->setID(std::stoi((*pokemon)[0][0]));
+	
 	//set pokemon name
 	this->setName((*pokemon)[0][1]);
 
