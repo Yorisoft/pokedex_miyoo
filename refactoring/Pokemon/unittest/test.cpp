@@ -30,6 +30,17 @@ public:
 // The scenario under which it's being tested.
 // The expected behavior when the scenario is invoked.
 
+TEST_F(PokemonFixture, givenGetID_Int_SetsIDToInt) {
+    EXPECT_EQ(p->getID(), 4); // charmander is pokemon in fixture. ID should be 4.
+}
+
+TEST_F(PokemonFixture, givenSetID_WhenInt_ThenSetIdToInt) {
+    int newId = 100;
+    p->setID(newId);   
+
+    EXPECT_EQ(p->getID(), 100);
+}
+
 TEST_F(PokemonFixture, givenGetName_ReturnNameAsString) {
   EXPECT_EQ(p->getName(), "charmander");
 }
@@ -38,6 +49,18 @@ TEST_F(PokemonFixture, givenSetName_WhenStringName_ThenNameSetToString) {
     p->setName("Bulbasaur");
     EXPECT_EQ(p->getName(), "Bulbasaur");
 }
+
+TEST_F(PokemonFixture, givenGetGenus_ReturnGenusAsString) {
+    std::string currentGenus = p->getGenus();
+    EXPECT_EQ(p->getGenus(), "Lizard Pok\xC3\xA9mon"); // UTF-8 encoding for 'é'. 'é' can cause test to fail. 
+}                                              
+
+TEST_F(PokemonFixture, givenSetGenus_WhenStringGenus_ThenGenusSetToString) {
+    std::string newGenus = "Test Genus";
+
+    p->setGenus(newGenus);
+    EXPECT_EQ(p->getGenus(), newGenus);
+}                                              
 
 TEST_F(PokemonFixture, givenGetTypes_ReturnTypesAsStringVector) {
     std::vector<std::string> currentTypes = p->getTypes();
@@ -105,14 +128,9 @@ TEST_F(PokemonFixture, givenSetFlavorText_WhenString_ThenSetFlavorTextToString) 
     EXPECT_EQ(currentFText, newFlavorText);
 }
 
-TEST_F(PokemonFixture, givenSetID_WhenInt_ThenSetIdToInt) {
-    int newId = 100;
-    p->setID(newId);
 
-    int currentID = p->getID();
 
-    EXPECT_EQ(currentID, 100);
-}
+
 // Main function to run all tests and generate XML report
 int main(int argc, char** argv) {
     // Set the output to XML format

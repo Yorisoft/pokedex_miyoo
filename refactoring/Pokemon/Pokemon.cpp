@@ -21,9 +21,10 @@ Pokemon::Pokemon(std::string* pokemon) {
 	// find position of string to replace with pokemon name
 	std::string SQLstatement = SQL_getPokemonByName;
 	size_t pos = SQLstatement.find("${pokemon_name}");
-	if (pos != std::string::npos) {
+	while (pos != std::string::npos) {
 		// filter by pokemon name
 		SQLstatement.replace(pos, std::string("${pokemon_name}").length(), *pokemon);
+		pos = SQLstatement.find("${pokemon_name}");
 	}
 	
 	// call databse to pokedex for data
@@ -47,23 +48,26 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 	
 	//set pokemon name
 	this->setName((*pokemon)[0][1]);
+	
+	//set pokemon genus
+	this->setGenus((*pokemon)[0][2]);
 
 	//set pokemon types
 	//setup vector<string> for types
 	std::vector<std::string> types;
-	if((*pokemon)[0][2] != "NULL" && (*pokemon)[0][2] != "None" )
-		types.push_back((*pokemon)[0][2]);
-	if((*pokemon)[0][3] != "NULL" && (*pokemon)[0][3].find("None") )
+	if((*pokemon)[0][2] != "NULL" && (*pokemon)[0][3] != "None" )
 		types.push_back((*pokemon)[0][3]);
+	if((*pokemon)[0][3] != "NULL" && (*pokemon)[0][4].find("None") )
+		types.push_back((*pokemon)[0][4]);
 	this->setTypes(types);
 
 	//set pokemon gender rates
 	//pass gender rate ID
-	std::string genderRate = (*pokemon)[0][4];
+	std::string genderRate = (*pokemon)[0][7];
 	this->setGenderRates(std::stoi(genderRate));
 
 	// set flavor text
-	std::string flavorText = (*pokemon)[0][5];
+	std::string flavorText = (*pokemon)[0][8];
 	this->setFlavorText(flavorText);
 }
 
@@ -80,9 +84,18 @@ void Pokemon::setName(const std::string& name) {
 	this->name = name;
 }
 
-std::string Pokemon::getName() {
+std::string Pokemon::getName() const {
 	return this->name;
 }
+
+void Pokemon::setGenus(const std::string& genus) {
+	this->genus = genus;
+}
+
+std::string Pokemon::getGenus() const {
+	return this->genus;
+}
+
 
 void Pokemon::setTypes(const std::vector<std::string>& types) {
 	if (types.size() != 2) {

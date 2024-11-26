@@ -8,7 +8,7 @@
 class Pokemon {
 private:
 	std::string
-		name,
+		name, genus,
 		typeA, typeB,	
 		flavorText;
 	unsigned short
@@ -41,7 +41,8 @@ public:
 	// getters
 
 	unsigned short getID() const;
-	std::string getName();
+	std::string getName() const;
+	std::string getGenus() const;
 	std::vector<std::string> getTypes();
 	std::vector<double> getGenderRates() const;
 	std::string getFlavorText() const;
@@ -60,6 +61,7 @@ public:
 
 	void setID(const int);
 	void setName(const std::string&);
+	void setGenus(const std::string&);
 	void setTypes(const std::vector<std::string>&);
 	void setGenderRates(const double);
 	void setFlavorText(const std::string&);

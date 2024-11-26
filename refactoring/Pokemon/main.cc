@@ -10,7 +10,7 @@ int main() {
 	std::string pokemonName= "charmander";
 	Pokemon* pokemon = new Pokemon(&pokemonName);
 
-	// for testing. Cn
+	// for testing.
 	//std::cout << "This is pokemon object name member variable: " << pokemon->getName() << std::endl;
 	std::cin.get();
 

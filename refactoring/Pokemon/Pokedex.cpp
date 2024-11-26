@@ -50,15 +50,17 @@ std::vector<std::vector<std::string>>* Pokedex::executeSQL(const std::string* SQ
     std::string SQLstatement = *SQL_STATEMENT;
     size_t pos;
     pos = SQLstatement.find("${language_id}");
-    if (pos != std::string::npos) {
+    while (pos != std::string::npos) {
         SQLstatement.replace(pos, std::string("${language_id}").length(), std::to_string(languageVersion));
+        pos = SQLstatement.find("${language_id}");
     }
     
     // change sql statement to be game version specific
     // find position of string to replace with gameVersion
     pos = SQLstatement.find("${game_version}");
-    if (pos != std::string::npos) {
+    while (pos != std::string::npos) {
         SQLstatement.replace(pos, std::string("${game_version}").length(), gameVersion);
+        pos = SQLstatement.find("${game_version}");
     }
 
     // clear any previous results
