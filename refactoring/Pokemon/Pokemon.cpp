@@ -69,6 +69,16 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 	// set flavor text
 	std::string flavorText = (*pokemon)[0][8];
 	this->setFlavorText(flavorText);
+
+	// index 9 is game versoin
+
+	//set basic stats
+	// index 10 - 15 correspond to HP, Atck, Def, Sp. Atk, Sp. Def, Spd
+	std::vector<std::string>* basicStats = new std::vector<std::string>; 
+	for (int i = 10; i < 16; i++) {
+		(*basicStats).push_back((*pokemon)[0][i]);
+	}
+	this->setBasicStats(basicStats);
 }
 
 void Pokemon::setID(const int ID) {
@@ -141,6 +151,57 @@ void Pokemon::setFlavorText(const std::string& fText) {
 
 std::string Pokemon::getFlavorText() const {
 	return this->flavorText;
+}
+
+void Pokemon::setBasicStats(const std::vector<std::string>* stats) {
+	// set HP
+	if (!(*stats).empty()) {
+		this->setHP(std::stoi((*stats)[0]));
+	}
+	else {
+		std::cout << "HP not set \n";
+	}
+
+	// set Attack
+	if ((*stats)[1] != "NULL" && (*stats)[1] != "None") {
+		this->setAttack(std::stoi((*stats)[1]));
+	}
+	else {
+		std::cout << "Attack not set \n";
+	}
+
+	// set Defense
+	if ((*stats)[2] != "NULL" && (*stats)[2] != "None") {
+		this->setDefense(std::stoi((*stats)[2]));
+	}
+	else {
+		std::cout << "Defense not set \n";
+	}
+
+	// set Special Attack
+	if ((*stats)[3] != "NULL" && (*stats)[3] != "None") {
+		this->setSpecialAttack(std::stoi((*stats)[3]));
+	}
+	else {
+		std::cout << "Special Attack not set \n";
+	}
+
+	// set Special Defense
+	if ((*stats)[4] != "NULL" && (*stats)[4] != "None") {
+		this->setSpecialDefense(std::stoi((*stats)[4]));
+	}
+	else {
+		std::cout << "Special Defense not set \n";
+	}
+
+	// set Speed
+	if ((*stats)[5] != "NULL" && (*stats)[5] != "None") {
+		this->setSpeed(std::stoi((*stats)[5]));
+	}
+	else {
+		std::cout << "Speed not set \n";
+	}
+
 }
 
 
