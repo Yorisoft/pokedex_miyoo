@@ -61,21 +61,28 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 		types.push_back((*pokemon)[0][4]);
 	this->setTypes(types);
 
+	//set hight and weight
+	if ((*pokemon)[0][5] != "NULL" && (*pokemon)[0][5] != "None")
+		this->setWeight((*pokemon)[0][5]);
+	if((*pokemon)[0][6] != "NULL" && (*pokemon)[0][6] != "None" )
+		this->setHeight((*pokemon)[0][6]);
+
+
 	//set pokemon gender rates
 	//pass gender rate ID
-	std::string genderRate = (*pokemon)[0][7];
+	std::string genderRate = (*pokemon)[0][10];
 	this->setGenderRates(std::stoi(genderRate));
 
 	// set flavor text
-	std::string flavorText = (*pokemon)[0][8];
+	std::string flavorText = (*pokemon)[0][11];
 	this->setFlavorText(flavorText);
 
 	// index 9 is game versoin
 
 	//set basic stats
-	// index 10 - 15 correspond to HP, Atck, Def, Sp. Atk, Sp. Def, Spd
+	// index 13 - 18 correspond to HP, Atck, Def, Sp. Atk, Sp. Def, Spd
 	std::vector<unsigned short>* basicStats = new std::vector<unsigned short>; 
-	for (int i = 10; i < 16; i++) {
+	for (int i = 13; i < 19; i++) {
 			
 		if ((*pokemon)[0][i] != "NULL" && (*pokemon)[0][i] != "None") {
 			(*basicStats).push_back(std::stoi((*pokemon)[0][i]));
@@ -87,7 +94,6 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 void Pokemon::setID(const int ID) {
 	this->id = static_cast<unsigned short>(ID);
 }
-
 
 unsigned short Pokemon::getID() const {
 	return this->id;
@@ -108,7 +114,6 @@ void Pokemon::setGenus(const std::string& genus) {
 std::string Pokemon::getGenus() const {
 	return this->genus;
 }
-
 
 void Pokemon::setTypes(const std::vector<std::string>& types) {
 	if (types.size() != 2) {
@@ -134,6 +139,21 @@ std::vector<std::string> Pokemon::getTypes() {
 	return types;
 }
 
+void Pokemon::setWeight(const unsigned short w) {
+	this->weight = w;
+}
+
+unsigned short Pokemon::getWeight() const {
+	return this->weight;
+}
+
+void Pokemon::setHeight(const unsigned short h) {
+	this->height = h;
+}
+
+unsigned short Pokemon::getHeight() const {
+	return this->height;
+}
 void Pokemon::setGenderRates(const double genderRateID) {
 	// if vector not empty, then empty it
 	if (!this->genderRates.empty())
@@ -178,24 +198,49 @@ std::vector<unsigned short> Pokemon::getBasicStats() const {
 	return stats;
 }
 
+//setter and getter for HP
 void Pokemon::setHP(const unsigned short i) {
 	this->healthPoint = i;
 }
+unsigned short Pokemon::getHP() const {
+	return this->healthPoint;
+}
+//setter and getter for Attack
 void Pokemon::setAttack(const unsigned short a){
 	this->attack = a;
 }
+unsigned short Pokemon::getAttack() const {
+	return this->attack;
+}
+//setter and getter for Defense
 void Pokemon::setDefense(const unsigned short d){
 	this->defense = d;
 }
+unsigned short Pokemon::getDefense() const {
+	return this->defense;
+}
+//setter and getter for Special Attack
 void Pokemon::setSpecialAttack(const unsigned short spa){
 	this->specialAttack = spa;
 }
+unsigned short Pokemon::getSpecialAttack() const {
+	return this->specialAttack;
+}
+//setter and getter for Special Defense
 void Pokemon::setSpecialDefense(const unsigned short spd){
 	this->specialDefense = spd;
 }
+unsigned short Pokemon::getSpecialDefense() const {
+	return this->specialDefense;
+}
+//setter and getter for Speed
 void Pokemon::setSpeed(const unsigned short s){
 	this->speed = s;
 }
+unsigned short Pokemon::getSpeed() const{
+	return this->speed;
+}
+
 
 Pokemon::~Pokemon() {
 	

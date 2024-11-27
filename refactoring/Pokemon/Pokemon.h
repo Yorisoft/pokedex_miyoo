@@ -12,22 +12,14 @@ private:
 		typeA, typeB,	
 		flavorText;
 	unsigned short
-		id,
-		evolutionChainID,
-		evolvesFromSpeciesID, 
-		healthPoint,
-		attack,
-		defense,
-		specialAttack,
-		specialDefense,
-		speed;
+		id, 
+		weight, height,
+		healthPoint, attack, defense,
+		specialAttack, specialDefense, speed,
+		evolutionChainID, evolvesFromSpeciesID;
 
-	std::vector<double> genderRates;
-
-	
+	std::vector<double> genderRates;	
 	std::vector<std::string> abilities;
-	std::vector<std::string> natures;
-
 	std::vector<std::string> routes;
 	
 	void setMemberVaribles(std::vector<std::vector<std::string>>*);
@@ -44,15 +36,17 @@ public:
 	std::string getName() const;
 	std::string getGenus() const;
 	std::vector<std::string> getTypes();
+	unsigned short getWeight() const;
+	unsigned short getHeight() const;
 	std::vector<double> getGenderRates() const;
 	std::string getFlavorText() const;
 	std::vector<unsigned short> getBasicStats() const;
-	unsigned short getHP();
-	unsigned short getAttack();
-	unsigned short getDefense();
-	unsigned short getSpecialAttack();
-	unsigned short getSpecialDefense();
-	unsigned short getSpeed();
+	unsigned short getHP() const;
+	unsigned short getAttack() const;
+	unsigned short getDefense() const;
+	unsigned short getSpecialAttack() const;
+	unsigned short getSpecialDefense() const;
+	unsigned short getSpeed() const;
 	std::string getRoutes();
 	std::string getEvolutionLine();
 	std::string getAbilities();
@@ -64,6 +58,8 @@ public:
 	void setName(const std::string&);
 	void setGenus(const std::string&);
 	void setTypes(const std::vector<std::string>&);
+	void setWeight(const unsigned short);
+	void setHeight(const unsigned short);
 	void setGenderRates(const double);
 	void setFlavorText(const std::string&);
 	void setBasicStats(const std::vector<unsigned short>*);
