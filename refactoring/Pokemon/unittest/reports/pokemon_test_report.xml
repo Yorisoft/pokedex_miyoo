@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="17" failures="0" disabled="0" errors="0" timestamp="2024-11-27T00:44:00" time="0.33" name="AllTests">
-  <testsuite name="PokemonFixture" tests="17" failures="0" disabled="0" errors="0" time="0.33">
-    <testcase name="getID_Int_ReturnIdAsInt" status="run" time="0.019" classname="PokemonFixture" />
-    <testcase name="setID_Int_IdSetToInt" status="run" time="0.018" classname="PokemonFixture" />
-    <testcase name="getName_ReturnNameAsString" status="run" time="0.017" classname="PokemonFixture" />
-    <testcase name="setName_String_NameSetToString" status="run" time="0.017" classname="PokemonFixture" />
-    <testcase name="getGenus_ReturnGenusAsString" status="run" time="0.018" classname="PokemonFixture" />
-    <testcase name="setGenus_String_GenusSetToString" status="run" time="0.018" classname="PokemonFixture" />
+<testsuites tests="21" failures="0" disabled="0" errors="0" timestamp="2024-11-27T01:28:11" time="0.372" name="AllTests">
+  <testsuite name="PokemonFixture" tests="21" failures="0" disabled="0" errors="0" time="0.371">
+    <testcase name="getID_Int_ReturnIdAsInt" status="run" time="0.018" classname="PokemonFixture" />
+    <testcase name="setID_Int_IdSetToInt" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="getName_ReturnNameAsString" status="run" time="0.018" classname="PokemonFixture" />
+    <testcase name="setName_String_NameSetToString" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="getGenus_ReturnGenusAsString" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="setGenus_String_GenusSetToString" status="run" time="0.016" classname="PokemonFixture" />
     <testcase name="getTypes_ReturnTypesAsStringVector" status="run" time="0.017" classname="PokemonFixture" />
     <testcase name="setTypes_StringVectorOneValue_TypeASetToValue" status="run" time="0.018" classname="PokemonFixture" />
-    <testcase name="setTypes_StringVectorTwoValues_TypeAAndTypeBSetToValues" status="run" time="0.02" classname="PokemonFixture" />
-    <testcase name="getGenderRates_ReturnsGenderRatesDoubleVector" status="run" time="0.025" classname="PokemonFixture" />
-    <testcase name="setGenderRates_Int_CalculatesGenderRates" status="run" time="0.023" classname="PokemonFixture" />
-    <testcase name="getFlavorText_ReturnFlavorTextAsString" status="run" time="0.022" classname="PokemonFixture" />
-    <testcase name="setFlavorText_String_SetFlavorTextToString" status="run" time="0.019" classname="PokemonFixture" />
-    <testcase name="getBasicStats_ReturnBasicStatsAsUnsignedShortVector" status="run" time="0.02" classname="PokemonFixture" />
-    <testcase name="setBasicStats_Vector_SetBasicStatsToUnsignedShortVector" status="run" time="0.02" classname="PokemonFixture" />
-    <testcase name="getStatsIndividually_ReturnIndividualStatsAsUnsignedShort" status="run" time="0.02" classname="PokemonFixture" />
-    <testcase name="setStatsIndividually_SetIndividualStatsToUnsignedShort" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="setTypes_StringVectorTwoValues_TypeAAndTypeBSetToValues" status="run" time="0.018" classname="PokemonFixture" />
+    <testcase name="getGenderRates_ReturnsGenderRatesDoubleVector" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="setGenderRates_Int_CalculatesGenderRates" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="getFlavorText_ReturnFlavorTextAsString" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="setFlavorText_String_SetFlavorTextToString" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="getBasicStats_ReturnBasicStatsAsUnsignedShortVector" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="setBasicStats_Vector_SetBasicStatsToUnsignedShortVector" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="getStatsIndividually_ReturnIndividualStatsAsUnsignedShort" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="setStatsIndividually_SetIndividualStatsToUnsignedShort" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="getWeight_ReturnWeightAsUnsignedShort" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="setWeight_UnsignedShort_SetWeightToUnsignedShort" status="run" time="0.018" classname="PokemonFixture" />
+    <testcase name="getHeight_ReturnHeightAsUnsignedShort" status="run" time="0.019" classname="PokemonFixture" />
+    <testcase name="setHeight_UnsignedShort_SetWeightToUnsignedShort" status="run" time="0.019" classname="PokemonFixture" />
   </testsuite>
 </testsuites>

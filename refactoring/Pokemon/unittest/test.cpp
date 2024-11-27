@@ -183,6 +183,27 @@ TEST_F(PokemonFixture, setStatsIndividually_SetIndividualStatsToUnsignedShort) {
     EXPECT_EQ(p->getSpecialDefense(), 300);
     EXPECT_EQ(p->getSpeed(), 300);
 }
+
+TEST_F(PokemonFixture, getWeight_ReturnWeightAsUnsignedShort) {
+    EXPECT_EQ(p->getWeight(), 85);
+}
+
+TEST_F(PokemonFixture, setWeight_UnsignedShort_SetWeightToUnsignedShort) {
+    p->setWeight(300);
+    
+    EXPECT_EQ(p->getWeight(), 300);
+}
+
+TEST_F(PokemonFixture, getHeight_ReturnHeightAsUnsignedShort) {
+    EXPECT_EQ(p->getHeight(), 6);
+}
+
+TEST_F(PokemonFixture, setHeight_UnsignedShort_SetWeightToUnsignedShort) {
+    p->setHeight(300);
+    
+    EXPECT_EQ(p->getHeight(), 300);
+}
+
 // Main function to run all tests and generate XML report
 int main(int argc, char** argv) {
     // Set the output to XML format

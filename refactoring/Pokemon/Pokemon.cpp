@@ -63,10 +63,18 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 
 	//set hight and weight
 	if ((*pokemon)[0][5] != "NULL" && (*pokemon)[0][5] != "None")
-		this->setWeight((*pokemon)[0][5]);
+		this->setWeight(std::stoi((*pokemon)[0][5]));
 	if((*pokemon)[0][6] != "NULL" && (*pokemon)[0][6] != "None" )
-		this->setHeight((*pokemon)[0][6]);
+		this->setHeight(std::stoi((*pokemon)[0][6]));
 
+	//set abilities
+	std::vector<std::string> abilities;
+	for (int i = 7; i <= 9; i++) {	
+		if ((*pokemon)[0][i] != "NULL" && (*pokemon)[0][i] != "None") {
+			abilities.push_back((*pokemon)[0][i]);
+		}
+	}
+	this->setAbilities(abilities);
 
 	//set pokemon gender rates
 	//pass gender rate ID
