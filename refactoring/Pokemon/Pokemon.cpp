@@ -68,13 +68,14 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 		this->setHeight(std::stoi((*pokemon)[0][6]));
 
 	//set abilities
-	std::vector<std::string> abilities;
+	std::vector<std::string> pAbilities;
 	for (int i = 7; i <= 9; i++) {	
 		if ((*pokemon)[0][i] != "NULL" && (*pokemon)[0][i] != "None") {
-			abilities.push_back((*pokemon)[0][i]);
+			pAbilities.push_back((*pokemon)[0][i]);
 		}
 	}
-	this->setAbilities(abilities);
+	//abilities(new std::vector<std::string>());
+	this->setAbilities(pAbilities);
 
 	//set pokemon gender rates
 	//pass gender rate ID
@@ -162,6 +163,21 @@ void Pokemon::setHeight(const unsigned short h) {
 unsigned short Pokemon::getHeight() const {
 	return this->height;
 }
+
+void Pokemon::setAbilities(const std::vector<std::string> a) {
+	if (!(*this->abilities).empty()) {
+		(*this->abilities).clear();
+	}
+
+	for (int i = 0; i < a.size(); i++) {
+		(*this->abilities).push_back(a[i]);
+	}
+}
+
+std::vector<std::string>* Pokemon::getAbilities() const {
+	return this->abilities;
+}
+
 void Pokemon::setGenderRates(const double genderRateID) {
 	// if vector not empty, then empty it
 	if (!this->genderRates.empty())

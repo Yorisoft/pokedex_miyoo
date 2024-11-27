@@ -19,7 +19,7 @@ private:
 		evolutionChainID, evolvesFromSpeciesID;
 
 	std::vector<double> genderRates;	
-	std::vector<std::string> abilities;
+	std::vector<std::string> *abilities = new std::vector<std::string>();
 	std::vector<std::string> routes;
 	
 	void setMemberVaribles(std::vector<std::vector<std::string>>*);
@@ -47,9 +47,9 @@ public:
 	unsigned short getSpecialAttack() const;
 	unsigned short getSpecialDefense() const;
 	unsigned short getSpeed() const;
+	std::vector<std::string>* getAbilities() const;
 	std::string getRoutes();
 	std::string getEvolutionLine();
-	std::string getAbilities();
 
 
 	// setters
@@ -69,10 +69,10 @@ public:
 	void setSpecialAttack(const unsigned short);
 	void setSpecialDefense(const unsigned short);
 	void setSpeed(const unsigned short);
+	void setAbilities(const std::vector<std::string>);
 	void setRoutes(const std::vector<int>);
 	void setEvolutionLine(const std::vector<int>);
-	void setAbilities(const std::vector<std::string>);
-
+	
 };
 
 #endif // Pokemon.h

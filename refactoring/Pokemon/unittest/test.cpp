@@ -204,6 +204,29 @@ TEST_F(PokemonFixture, setHeight_UnsignedShort_SetWeightToUnsignedShort) {
     EXPECT_EQ(p->getHeight(), 300);
 }
 
+TEST_F(PokemonFixture, getAbilities_ReturnAbilitiesAsVectorPrt) {
+    std::vector<std::string>* currentAbilities = p->getAbilities();
+
+    EXPECT_EQ((*currentAbilities)[0], "blaze");
+    EXPECT_EQ((*currentAbilities)[1], "solar-power");
+}
+
+TEST_F(PokemonFixture, setAbilities_VectorString_SetAbilitiesToVectorString) {
+    std::vector<std::string> newAbilities;
+    newAbilities.push_back("test_ability_1");
+    newAbilities.push_back("test_ability_2");
+    newAbilities.push_back("test_ability_3");
+
+    p->setAbilities(newAbilities);
+    
+    std::vector<std::string>* currentAbilities = p->getAbilities();
+   
+    for (int i = 0; i < (*currentAbilities).size(); i++) {
+        EXPECT_EQ((*currentAbilities)[i], newAbilities[i]);
+    }
+}
+
+
 // Main function to run all tests and generate XML report
 int main(int argc, char** argv) {
     // Set the output to XML format
