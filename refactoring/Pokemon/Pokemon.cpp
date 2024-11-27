@@ -74,9 +74,12 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 
 	//set basic stats
 	// index 10 - 15 correspond to HP, Atck, Def, Sp. Atk, Sp. Def, Spd
-	std::vector<std::string>* basicStats = new std::vector<std::string>; 
+	std::vector<unsigned short>* basicStats = new std::vector<unsigned short>; 
 	for (int i = 10; i < 16; i++) {
-		(*basicStats).push_back((*pokemon)[0][i]);
+			
+		if ((*pokemon)[0][i] != "NULL" && (*pokemon)[0][i] != "None") {
+			(*basicStats).push_back(std::stoi((*pokemon)[0][i]));
+		}
 	}
 	this->setBasicStats(basicStats);
 }
@@ -153,57 +156,46 @@ std::string Pokemon::getFlavorText() const {
 	return this->flavorText;
 }
 
-void Pokemon::setBasicStats(const std::vector<std::string>* stats) {
+void Pokemon::setBasicStats(const std::vector<unsigned short>* stats) {
 	// set HP
-	if (!(*stats).empty()) {
-		this->setHP(std::stoi((*stats)[0]));
-	}
-	else {
-		std::cout << "HP not set \n";
-	}
-
-	// set Attack
-	if ((*stats)[1] != "NULL" && (*stats)[1] != "None") {
-		this->setAttack(std::stoi((*stats)[1]));
-	}
-	else {
-		std::cout << "Attack not set \n";
-	}
-
-	// set Defense
-	if ((*stats)[2] != "NULL" && (*stats)[2] != "None") {
-		this->setDefense(std::stoi((*stats)[2]));
-	}
-	else {
-		std::cout << "Defense not set \n";
-	}
-
-	// set Special Attack
-	if ((*stats)[3] != "NULL" && (*stats)[3] != "None") {
-		this->setSpecialAttack(std::stoi((*stats)[3]));
-	}
-	else {
-		std::cout << "Special Attack not set \n";
-	}
-
-	// set Special Defense
-	if ((*stats)[4] != "NULL" && (*stats)[4] != "None") {
-		this->setSpecialDefense(std::stoi((*stats)[4]));
-	}
-	else {
-		std::cout << "Special Defense not set \n";
-	}
-
-	// set Speed
-	if ((*stats)[5] != "NULL" && (*stats)[5] != "None") {
-		this->setSpeed(std::stoi((*stats)[5]));
-	}
-	else {
-		std::cout << "Speed not set \n";
-	}
-
+	this->setHP((*stats)[0]);
+	this->setAttack((*stats)[1]);
+	this->setDefense((*stats)[2]);
+	this->setSpecialAttack((*stats)[3]);
+	this->setSpecialDefense((*stats)[4]);
+	this->setSpeed((*stats)[5]);
 }
 
+std::vector<unsigned short> Pokemon::getBasicStats() const {
+	std::vector<unsigned short> stats;
+	stats.push_back(this->healthPoint);
+	stats.push_back(this->attack);
+	stats.push_back(this->defense);
+	stats.push_back(this->specialAttack);
+	stats.push_back(this->specialDefense);
+	stats.push_back(this->speed);
+
+	return stats;
+}
+
+void Pokemon::setHP(const unsigned short i) {
+	this->healthPoint = i;
+}
+void Pokemon::setAttack(const unsigned short a){
+	this->attack = a;
+}
+void Pokemon::setDefense(const unsigned short d){
+	this->defense = d;
+}
+void Pokemon::setSpecialAttack(const unsigned short spa){
+	this->specialAttack = spa;
+}
+void Pokemon::setSpecialDefense(const unsigned short spd){
+	this->specialDefense = spd;
+}
+void Pokemon::setSpeed(const unsigned short s){
+	this->speed = s;
+}
 
 Pokemon::~Pokemon() {
 	

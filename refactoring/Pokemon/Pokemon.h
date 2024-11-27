@@ -15,11 +15,11 @@ private:
 		id,
 		evolutionChainID,
 		evolvesFromSpeciesID, 
-		healPoint,
+		healthPoint,
 		attack,
-		defence,
+		defense,
 		specialAttack,
-		specialDefence,
+		specialDefense,
 		speed;
 
 	std::vector<double> genderRates;
@@ -46,7 +46,7 @@ public:
 	std::vector<std::string> getTypes();
 	std::vector<double> getGenderRates() const;
 	std::string getFlavorText() const;
-	std::vector<std::string>* getBasicStats() const;
+	std::vector<unsigned short> getBasicStats() const;
 	unsigned short getHP();
 	unsigned short getAttack();
 	unsigned short getDefense();
@@ -66,13 +66,13 @@ public:
 	void setTypes(const std::vector<std::string>&);
 	void setGenderRates(const double);
 	void setFlavorText(const std::string&);
-	void setBasicStats(const std::vector<std::string>*);
-	void setHP(const int);
-	void setAttack(const int);
-	void setDefense(const int);
-	void setSpecialAttack(const int);
-	void setSpecialDefense(const int);
-	void setSpeed(const int);
+	void setBasicStats(const std::vector<unsigned short>*);
+	void setHP(const unsigned short);
+	void setAttack(const unsigned short);
+	void setDefense(const unsigned short);
+	void setSpecialAttack(const unsigned short);
+	void setSpecialDefense(const unsigned short);
+	void setSpeed(const unsigned short);
 	void setRoutes(const std::vector<int>);
 	void setEvolutionLine(const std::vector<int>);
 	void setAbilities(const std::vector<std::string>);

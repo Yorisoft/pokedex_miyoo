@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="13" failures="0" disabled="0" errors="0" timestamp="2024-11-26T10:25:45" time="0.248" name="AllTests">
-  <testsuite name="PokemonFixture" tests="13" failures="0" disabled="0" errors="0" time="0.246">
-    <testcase name="givenGetID_Int_SetsIDToInt" status="run" time="0.019" classname="PokemonFixture" />
-    <testcase name="givenSetID_WhenInt_ThenSetIdToInt" status="run" time="0.017" classname="PokemonFixture" />
+<testsuites tests="15" failures="0" disabled="0" errors="0" timestamp="2024-11-26T22:41:28" time="0.317" name="AllTests">
+  <testsuite name="PokemonFixture" tests="15" failures="0" disabled="0" errors="0" time="0.31">
+    <testcase name="givenGetID_Int_SetsIDToInt" status="run" time="0.052" classname="PokemonFixture" />
+    <testcase name="givenSetID_WhenInt_ThenSetIdToInt" status="run" time="0.022" classname="PokemonFixture" />
     <testcase name="givenGetName_ReturnNameAsString" status="run" time="0.017" classname="PokemonFixture" />
     <testcase name="givenSetName_WhenStringName_ThenNameSetToString" status="run" time="0.017" classname="PokemonFixture" />
-    <testcase name="givenGetGenus_ReturnGenusAsString" status="run" time="0.017" classname="PokemonFixture" />
-    <testcase name="givenSetGenus_WhenStringGenus_ThenGenusSetToString" status="run" time="0.017" classname="PokemonFixture" />
-    <testcase name="givenGetTypes_ReturnTypesAsStringVector" status="run" time="0.019" classname="PokemonFixture" />
-    <testcase name="givenSetTypes_WhenStringVectorOneValue_ThenTypeASetToValue" status="run" time="0.016" classname="PokemonFixture" />
-    <testcase name="givenSetTypes_WhenStringVectorTwoValues_ThenTypeAAndTypeBSetToValues" status="run" time="0.02" classname="PokemonFixture" />
+    <testcase name="givenGetGenus_ReturnGenusAsString" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="givenSetGenus_WhenStringGenus_ThenGenusSetToString" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="givenGetTypes_ReturnTypesAsStringVector" status="run" time="0.016" classname="PokemonFixture" />
+    <testcase name="givenSetTypes_WhenStringVectorOneValue_ThenTypeASetToValue" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="givenSetTypes_WhenStringVectorTwoValues_ThenTypeAAndTypeBSetToValues" status="run" time="0.016" classname="PokemonFixture" />
     <testcase name="givenGetGenderRates_ReturnsGenderRatesDoubleVector" status="run" time="0.017" classname="PokemonFixture" />
-    <testcase name="givenSetGenderRates_WhenIntID_ThenCalculatesGenderRates" status="run" time="0.018" classname="PokemonFixture" />
-    <testcase name="givenGetFlavorText_ReturnFlavorTextAsString" status="run" time="0.022" classname="PokemonFixture" />
-    <testcase name="givenSetFlavorText_WhenString_ThenSetFlavorTextToString" status="run" time="0.018" classname="PokemonFixture" />
+    <testcase name="givenSetGenderRates_WhenIntID_ThenCalculatesGenderRates" status="run" time="0.028" classname="PokemonFixture" />
+    <testcase name="givenGetFlavorText_ReturnFlavorTextAsString" status="run" time="0.019" classname="PokemonFixture" />
+    <testcase name="givenSetFlavorText_WhenString_ThenSetFlavorTextToString" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="givenGetBasicStats_ReturnBasicStatsAsUnsignedShortVector" status="run" time="0.017" classname="PokemonFixture" />
+    <testcase name="givenSetBasicStats_GivenVector_SetBasicStatsAsUnsignedShortVector" status="run" time="0.016" classname="PokemonFixture" />
   </testsuite>
 </testsuites>

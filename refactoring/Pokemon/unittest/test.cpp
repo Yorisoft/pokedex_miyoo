@@ -129,6 +129,39 @@ TEST_F(PokemonFixture, givenSetFlavorText_WhenString_ThenSetFlavorTextToString) 
 }
 
 
+TEST_F(PokemonFixture, givenGetBasicStats_ReturnBasicStatsAsUnsignedShortVector) {
+    std::vector<unsigned short> testBasicStats;  // fill vector with known stats for charmander
+    testBasicStats.push_back(39);
+    testBasicStats.push_back(52);
+    testBasicStats.push_back(43);
+    testBasicStats.push_back(60);
+    testBasicStats.push_back(50);
+    testBasicStats.push_back(65);
+
+    std::vector<unsigned short> currentBasicStats = p->getBasicStats();
+
+    for (int i = 0; i < testBasicStats.size(); i++) {
+        EXPECT_EQ(testBasicStats[i], currentBasicStats[i]);
+    }
+}
+
+TEST_F(PokemonFixture, givenSetBasicStats_GivenVector_SetBasicStatsAsUnsignedShortVector) {
+    std::vector<unsigned short> newBasicStats;  // fill vector with known stats for charmander
+    newBasicStats.push_back(300);
+    newBasicStats.push_back(300);
+    newBasicStats.push_back(300);
+    newBasicStats.push_back(300);
+    newBasicStats.push_back(300);
+    newBasicStats.push_back(300);
+
+    p->setBasicStats(&newBasicStats);
+    std::vector<unsigned short> currentBasicStats = p->getBasicStats();
+
+    for (int i = 0; i < currentBasicStats.size(); i++) {
+        EXPECT_EQ(newBasicStats[i], currentBasicStats[i]);
+    }
+}
+
 
 
 // Main function to run all tests and generate XML report
