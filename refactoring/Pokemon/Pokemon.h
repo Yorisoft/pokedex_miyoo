@@ -18,11 +18,12 @@ private:
 		specialAttack, specialDefense, speed,
 		evolutionChainID, evolvesFromSpeciesID;
 
-	std::vector<double> genderRates;	
-	std::vector<std::string> *abilities = new std::vector<std::string>();
-	std::vector<std::string> routes;
+	std::vector<double>* genderRates;	
+	std::vector<std::string> *abilities;
+	std::vector<std::vector<std::string>>* routes;
 	
-	void setMemberVaribles(std::vector<std::vector<std::string>>*);
+	void setMemberVaribles(std::vector<std::vector<std::string>>*, std::vector<std::vector<std::string>>*);
+	std::vector<std::vector<std::string>> queryForPokeData(std::string& pName, std::string& sqlStatement);
 
 public:
 	Pokemon(const int);
@@ -38,7 +39,7 @@ public:
 	std::vector<std::string> getTypes();
 	unsigned short getWeight() const;
 	unsigned short getHeight() const;
-	std::vector<double> getGenderRates() const;
+	std::vector<double>* getGenderRates() const;
 	std::string getFlavorText() const;
 	std::vector<unsigned short> getBasicStats() const;
 	unsigned short getHP() const;
@@ -48,7 +49,8 @@ public:
 	unsigned short getSpecialDefense() const;
 	unsigned short getSpeed() const;
 	std::vector<std::string>* getAbilities() const;
-	std::string getRoutes();
+	std::vector<std::vector<std::string>>* getRoutes() const;
+	unsigned short getEvolutionChainId() const;
 	std::string getEvolutionLine();
 
 
@@ -70,7 +72,8 @@ public:
 	void setSpecialDefense(const unsigned short);
 	void setSpeed(const unsigned short);
 	void setAbilities(const std::vector<std::string>);
-	void setRoutes(const std::vector<int>);
+	void setRoutes(const std::vector<std::vector<std::string>>);
+	void setEvolutionChainId(const unsigned short);
 	void setEvolutionLine(const std::vector<int>);
 	
 };

@@ -85,3 +85,33 @@ const std::string SQL_getPokemonByNameTest =
 	"GROUP BY ps.id, v.id, ta.identifier, tb.identifier, ps.gender_rate, p.weight, p.height, ps.evolution_chain_id, ps.evolves_from_species_id "
 	"ORDER BY ps.id, v.id; ";
 
+const std::string SQL_getPokemonRoutesByName = R"(
+SELECT 
+    p.id AS pokemon_id,
+    p.identifier AS pokemon_name,
+    v.identifier AS game_version,
+    l.identifier AS route_or_location,
+    em.identifier AS encounter_method,
+    min(e.min_level) AS min_level,
+    max(e.max_level) AS max_level,
+    SUM(COALESCE(laer.rate, es.rarity, 0)) AS total_encounter_rate
+FROM pokemon p
+JOIN encounters e ON p.id = e.pokemon_id
+JOIN location_areas la ON e.location_area_id = la.id
+JOIN locations l ON la.location_id = l.id
+JOIN versions v ON e.version_id = v.id
+LEFT JOIN location_area_encounter_rates laer 
+    ON laer.location_area_id = la.id 
+    AND laer.version_id = v.id
+LEFT JOIN encounter_slots es ON e.encounter_slot_id = es.id
+LEFT JOIN encounter_methods em ON es.encounter_method_id = em.id
+WHERE 
+    p.identifier = '${pokemon_name}'
+    AND v.identifier = '${game_version}'
+GROUP BY 
+    p.id, v.id, l.id, em.id
+ORDER BY 
+    p.id, v.id, l.identifier, em.identifier
+LIMIT 1000;
+)";
+

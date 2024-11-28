@@ -95,20 +95,20 @@ TEST_F(PokemonFixture, setTypes_StringVectorTwoValues_TypeAAndTypeBSetToValues) 
 }
 
 TEST_F(PokemonFixture, getGenderRates_ReturnsGenderRatesDoubleVector) {
-    std::vector<double> currentGenderRates = p->getGenderRates();
+    std::vector<double>* currentGenderRates = p->getGenderRates();
 
-    EXPECT_EQ(currentGenderRates[0], 12.5);
-    EXPECT_EQ(currentGenderRates[1], 87.5);
+    EXPECT_EQ((*currentGenderRates)[0], 12.5);
+    EXPECT_EQ((*currentGenderRates)[1], 87.5);
 } 
 
 TEST_F(PokemonFixture, setGenderRates_Int_CalculatesGenderRates) {
     const double newGenderRateID = 4;
     p->setGenderRates(newGenderRateID);
 
-    std::vector<double> currentGenderRates = p->getGenderRates();
+    std::vector<double>* currentGenderRates = p->getGenderRates();
 
-    EXPECT_EQ(currentGenderRates[0], 50);
-    EXPECT_EQ(currentGenderRates[1], 50);
+    EXPECT_EQ((*currentGenderRates)[0], 50);
+    EXPECT_EQ((*currentGenderRates)[1], 50);
 }
 
 TEST_F(PokemonFixture, getFlavorText_ReturnFlavorTextAsString) {
@@ -223,6 +223,52 @@ TEST_F(PokemonFixture, setAbilities_VectorString_SetAbilitiesToVectorString) {
    
     for (int i = 0; i < (*currentAbilities).size(); i++) {
         EXPECT_EQ((*currentAbilities)[i], newAbilities[i]);
+    }
+}
+
+TEST_F(PokemonFixture, getRoutes_ReturnRoutesAsVectorVectorStringPrt) {
+    std::vector<std::vector<std::string>>* currentRoutes = p->getRoutes();
+    std::vector<std::vector<std::string>> testRoutes;
+
+    std::vector<std::string> routes;
+    routes.push_back("4");
+    routes.push_back("charmander");
+    routes.push_back("red");
+    routes.push_back("pallet-town");
+    routes.push_back("gift");
+    routes.push_back("5");
+    routes.push_back("5");
+    routes.push_back("100");
+
+    testRoutes.push_back(routes);
+
+    for (int r = 0; r < (*currentRoutes).size(); r++) {
+        for (int c = 0; c < (*currentRoutes)[0].size(); c++) {
+            EXPECT_EQ((*currentRoutes)[r][c], testRoutes[r][c]);
+        }
+    }
+}
+
+TEST_F(PokemonFixture, setRoutes_VetorVectorString_SetRoutesToVectorVectorString) {
+    std::vector<std::vector<std::string>> testRoutes;
+    std::vector<std::string> routes;
+
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    routes.push_back("TEST");
+    testRoutes.push_back(routes);
+    p->setRoutes(testRoutes);
+
+    std::vector<std::vector<std::string>>* currentRoutes = p->getRoutes();
+    for (int r = 0; r < (*currentRoutes).size(); r++) {
+        for (int c = 0; c < (*currentRoutes)[0].size(); c++) {
+            EXPECT_EQ((*currentRoutes)[r][c], testRoutes[r][c]);
+        }
     }
 }
 

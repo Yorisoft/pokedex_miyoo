@@ -16,33 +16,43 @@ Pokemon::Pokemon(const int ID) {
 }
 
 Pokemon::Pokemon(std::string* pokemon) {
+	this->genderRates = new std::vector<double>();
+	this->abilities = new std::vector<std::string>();
+	this->routes = new std::vector<std::vector<std::string>>();
 	// call pokedex to pokedex for data
 
 	// find position of string to replace with pokemon name
-	std::string SQLstatement = SQL_getPokemonByName;
-	size_t pos = SQLstatement.find("${pokemon_name}");
-	while (pos != std::string::npos) {
-		// filter by pokemon name
-		SQLstatement.replace(pos, std::string("${pokemon_name}").length(), *pokemon);
-		pos = SQLstatement.find("${pokemon_name}");
-	}
+	std::string poke_SQLstatement = SQL_getPokemonByName;
+	std::string route_SQLstatement = SQL_getPokemonRoutesByName;
+
+	std::vector<std::vector<std::string>> pokeData = this->queryForPokeData(*pokemon, poke_SQLstatement);	
+	std::vector<std::vector<std::string>> routeData = this->queryForPokeData(*pokemon, route_SQLstatement);
 	
-	// call databse to pokedex for data
-	std::vector<std::vector<std::string>>* results = Pokedex::executeSQL(&SQLstatement);
-	if (!results || results->empty()) {
-		std::cout << "Pokemon(std::string*): " << std::endl
-			<< "Could not execute sql statement. result is null or empty." << std::endl;
-	}
-	else {
-		this->setMemberVaribles(results);
-	}
+	this->setMemberVaribles(&pokeData, &routeData);
 }
 
 Pokemon::Pokemon(std::vector<std::vector<std::string>>* DBresults) {
 
 }
 
-void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) {
+std::vector<std::vector<std::string>> Pokemon::queryForPokeData(std::string& pName, std::string& sqlStatement) {
+	size_t pos = sqlStatement.find("${pokemon_name}");
+	while (pos != std::string::npos) {
+		// filter by pokemon name
+		sqlStatement.replace(pos, std::string("${pokemon_name}").length(), pName);
+		pos = sqlStatement.find("${pokemon_name}");
+	}
+	
+	// call databse to pokedex for data
+	std::vector<std::vector<std::string>>* results = Pokedex::executeSQL(&sqlStatement);
+	if (!results || results->empty()) {
+		std::cout << "Pokemon(std::string*): " << std::endl
+			<< "Could not execute sql statement. result is null or empty." << std::endl;
+	}
+	return *results;
+}
+
+void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon, std::vector<std::vector<std::string>>* routes) {
 	// set id
 	this->setID(std::stoi((*pokemon)[0][0]));
 	
@@ -98,6 +108,12 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon) 
 		}
 	}
 	this->setBasicStats(basicStats);
+
+	//set evolution chain Id
+	unsigned short evoChainId = std::stoi((*pokemon)[0][19]);
+	this->setEvolutionChainId(evoChainId);
+	//set routes ptr
+	this->setRoutes(*routes);
 }
 
 void Pokemon::setID(const int ID) {
@@ -180,15 +196,15 @@ std::vector<std::string>* Pokemon::getAbilities() const {
 
 void Pokemon::setGenderRates(const double genderRateID) {
 	// if vector not empty, then empty it
-	if (!this->genderRates.empty())
-		this->genderRates.clear();
+	if (!(*this->genderRates).empty())
+		(*this->genderRates).clear();
 	// Calculate female gender rate = fgenderRate
 	// subtrace fgenderRate from 100 = mgenderRate
-	this->genderRates.push_back((genderRateID / 8.0) * 100.0);
-	this->genderRates.push_back(100.0 - this->genderRates[0]);
+	(*this->genderRates).push_back((genderRateID / 8.0) * 100.0);
+	(*this->genderRates).push_back(100.0 - (*this->genderRates)[0]);
 }
 
-std::vector<double> Pokemon::getGenderRates() const {
+std::vector<double>* Pokemon::getGenderRates() const {
 	return this->genderRates;
 }
 
@@ -209,7 +225,6 @@ void Pokemon::setBasicStats(const std::vector<unsigned short>* stats) {
 	this->setSpecialDefense((*stats)[4]);
 	this->setSpeed((*stats)[5]);
 }
-
 std::vector<unsigned short> Pokemon::getBasicStats() const {
 	std::vector<unsigned short> stats;
 	stats.push_back(this->healthPoint);
@@ -266,8 +281,28 @@ unsigned short Pokemon::getSpeed() const{
 }
 
 
+void Pokemon::setEvolutionChainId(const unsigned short ID) {
+	this->evolutionChainID = ID;
+}
+unsigned short Pokemon::getEvolutionChainId() const {
+	return this->evolutionChainID;
+}
+void Pokemon::setRoutes(const std::vector<std::vector<std::string>> routes) {
+	if (!(*this->routes).empty())
+		(*this->routes).clear();
+	for (auto route : routes) {
+		(*this->routes).push_back(route);
+	}
+}
+
+std::vector<std::vector<std::string>>* Pokemon::getRoutes() const {
+	return this->routes;
+}
+
+
 Pokemon::~Pokemon() {
-	
+	delete abilities;
+	delete genderRates;
 
 }
 
