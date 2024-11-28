@@ -51,6 +51,7 @@ public:
 	std::vector<std::string>* getAbilities() const;
 	std::vector<std::vector<std::string>>* getRoutes() const;
 	unsigned short getEvolutionChainId() const;
+	unsigned short getEvolvesFromSpeciesId() const;
 	std::string getEvolutionLine();
 
 
@@ -74,6 +75,7 @@ public:
 	void setAbilities(const std::vector<std::string>);
 	void setRoutes(const std::vector<std::vector<std::string>>);
 	void setEvolutionChainId(const unsigned short);
+	void setEvolvesFromSpeciesId(const unsigned short);
 	void setEvolutionLine(const std::vector<int>);
 	
 };

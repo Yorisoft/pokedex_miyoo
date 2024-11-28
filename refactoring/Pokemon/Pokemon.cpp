@@ -110,8 +110,17 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon, 
 	this->setBasicStats(basicStats);
 
 	//set evolution chain Id
-	unsigned short evoChainId = std::stoi((*pokemon)[0][19]);
-	this->setEvolutionChainId(evoChainId);
+	if ((*pokemon)[0][19] != "NULL" && (*pokemon)[0][19] != "None") {
+		unsigned short evoChainId = std::stoi((*pokemon)[0][19]);
+		this->setEvolutionChainId(evoChainId);
+	}
+
+	// set evolves from species Id
+	if ((*pokemon)[0][20] != "NULL" && (*pokemon)[0][20] != "None") {
+		unsigned short evoFromSpeciesId = std::stoi((*pokemon)[0][20]);
+		this->setEvolvesFromSpeciesId(evoFromSpeciesId);
+	}
+
 	//set routes ptr
 	this->setRoutes(*routes);
 }
@@ -280,13 +289,13 @@ unsigned short Pokemon::getSpeed() const{
 	return this->speed;
 }
 
-
 void Pokemon::setEvolutionChainId(const unsigned short ID) {
 	this->evolutionChainID = ID;
 }
 unsigned short Pokemon::getEvolutionChainId() const {
 	return this->evolutionChainID;
 }
+
 void Pokemon::setRoutes(const std::vector<std::vector<std::string>> routes) {
 	if (!(*this->routes).empty())
 		(*this->routes).clear();
@@ -294,12 +303,16 @@ void Pokemon::setRoutes(const std::vector<std::vector<std::string>> routes) {
 		(*this->routes).push_back(route);
 	}
 }
-
 std::vector<std::vector<std::string>>* Pokemon::getRoutes() const {
 	return this->routes;
 }
 
-
+void Pokemon::setEvolvesFromSpeciesId(const unsigned short ID) {
+	this->evolvesFromSpeciesID = ID;
+}
+unsigned short Pokemon::getEvolvesFromSpeciesId() const {
+	return this->evolvesFromSpeciesID;
+}
 Pokemon::~Pokemon() {
 	delete abilities;
 	delete genderRates;

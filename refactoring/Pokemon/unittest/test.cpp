@@ -272,7 +272,14 @@ TEST_F(PokemonFixture, setRoutes_VetorVectorString_SetRoutesToVectorVectorString
     }
 }
 
+TEST_F(PokemonFixture, getEvolutionChainId_ReturnEvolutionChainIdAsUnsignedShort) {
+    EXPECT_EQ(p->getEvolutionChainId(), 2);
+}
 
+TEST_F(PokemonFixture, setEvolutionChainId_UnsignedShort_SetEvolutionChainIdToUnsignedShort) {
+    p->setEvolutionChainId(300);
+    EXPECT_EQ(p->getEvolutionChainId(), 300);
+}
 // Main function to run all tests and generate XML report
 int main(int argc, char** argv) {
     // Set the output to XML format
