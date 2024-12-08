@@ -16,11 +16,7 @@ char* Pokedex::zErrMsg;
 
 
 Pokedex::Pokedex() {
-   /* this->rc = this->openDB(this->DB_PATH);
-    if (this->rc != SQLITE_OK) {
-        std::cout << "Database did not open.. Creating Pokedex without data.." << std::endl;
-    }*/
-}
+ }
 
 int Pokedex::openDB() {
     rc = sqlite3_open(getDBpath().c_str(), &db);
@@ -37,7 +33,6 @@ void Pokedex::closeDB(sqlite3* db) {
 
 const std::string Pokedex::getDBpath() {
     return isTestMode ? TEST_DB_PATH : MAIN_DB_PATH;
-   // return TEST_DB_PATH;
 }
 
 void Pokedex::enableTestMode(bool isTest) { // Used for changing directory paths between testing and live environments
@@ -70,15 +65,11 @@ std::vector<std::vector<std::string>>* Pokedex::executeSQL(const std::string* SQ
     rc = openDB();
 
     // execute sql querry
-    // For testing, delete whenever
-    // std::cout << SQLstatement << std::endl << std::endl;
 	if (sqlite3_exec(db, SQLstatement.c_str(), callback, results, &zErrMsg) != SQLITE_OK || rc != SQLITE_OK) {
 		std::cout << "SQL error: " << zErrMsg << std::endl;
 		sqlite3_close(db);
         return {};
 	}
-    // For testing, delete whenever
-    // printSQLresults(results);
     closeDB(db);
 	return results;
 }

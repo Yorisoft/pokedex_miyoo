@@ -30,33 +30,8 @@ public:
 	Pokemon(std::string*);
 	Pokemon(std::vector<std::vector<std::string>>*);
 	~Pokemon();
-	
-	// getters
-
-	unsigned short getID() const;
-	std::string getName() const;
-	std::string getGenus() const;
-	std::vector<std::string> getTypes();
-	unsigned short getWeight() const;
-	unsigned short getHeight() const;
-	std::vector<double>* getGenderRates() const;
-	std::string getFlavorText() const;
-	std::vector<unsigned short> getBasicStats() const;
-	unsigned short getHP() const;
-	unsigned short getAttack() const;
-	unsigned short getDefense() const;
-	unsigned short getSpecialAttack() const;
-	unsigned short getSpecialDefense() const;
-	unsigned short getSpeed() const;
-	std::vector<std::string>* getAbilities() const;
-	std::vector<std::vector<std::string>>* getRoutes() const;
-	unsigned short getEvolutionChainId() const;
-	unsigned short getEvolvesFromSpeciesId() const;
-	std::string getEvolutionLine();
-
 
 	// setters
-
 	void setID(const int);
 	void setName(const std::string&);
 	void setGenus(const std::string&);
@@ -74,15 +49,30 @@ public:
 	void setSpeed(const unsigned short);
 	void setAbilities(const std::vector<std::string>);
 	void setRoutes(const std::vector<std::vector<std::string>>);
-	void setEvolutionChainId(const unsigned short);
-	void setEvolvesFromSpeciesId(const unsigned short);
-	void setEvolutionLine(const std::vector<int>);
+	void setEvolutionChainID(const unsigned short);
+	void setEvolvesFromSpeciesID(const unsigned short);
+
+	// getters
+	unsigned short getID() const;
+	std::string getName() const;
+	std::string getGenus() const;
+	std::vector<std::string> getTypes();
+	unsigned short getWeight() const;
+	unsigned short getHeight() const;
+	std::vector<double>* getGenderRates() const;
+	std::string getFlavorText() const;
+	std::vector<unsigned short> getBasicStats() const;
+	unsigned short getHP() const;
+	unsigned short getAttack() const;
+	unsigned short getDefense() const;
+	unsigned short getSpecialAttack() const;
+	unsigned short getSpecialDefense() const;
+	unsigned short getSpeed() const;
+	std::vector<std::string>* getAbilities() const;
+	std::vector<std::vector<std::string>>* getRoutes() const;
+	unsigned short getEvolutionChainID() const;
+	unsigned short getEvolvesFromSpeciesID() const;
 	
 };
 
 #endif // Pokemon.h
-
-/*std::string Pokemon::getName(const int ID) {
-
-	return;
-}*/

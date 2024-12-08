@@ -11,7 +11,7 @@ int main() {
 	Pokemon* pokemon = new Pokemon(&pokemonName);
 
 	// for testing.
-	//std::cout << "This is pokemon object name member variable: " << pokemon->getName() << std::endl;
+	std::cout << "This is pokemon object 'name' member variable: " << pokemon->getName() << std::endl;
 	std::cin.get();
 
 	return 0;

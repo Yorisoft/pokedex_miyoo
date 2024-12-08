@@ -29,7 +29,7 @@ public:
 // The scenario under which it's being tested.
 // The expected behavior when the scenario is invoked.
 
-TEST_F(PokemonFixture, getID_Int_ReturnIdAsInt) {
+TEST_F(PokemonFixture, getID_ReturnIdAsInt) {
     EXPECT_EQ(p->getID(), 4); // charmander is pokemon in fixture. ID should be 4.
 }
 
@@ -273,13 +273,27 @@ TEST_F(PokemonFixture, setRoutes_VetorVectorString_SetRoutesToVectorVectorString
 }
 
 TEST_F(PokemonFixture, getEvolutionChainId_ReturnEvolutionChainIdAsUnsignedShort) {
-    EXPECT_EQ(p->getEvolutionChainId(), 2);
+    EXPECT_EQ(p->getEvolutionChainID(), 2);
 }
 
 TEST_F(PokemonFixture, setEvolutionChainId_UnsignedShort_SetEvolutionChainIdToUnsignedShort) {
-    p->setEvolutionChainId(300);
-    EXPECT_EQ(p->getEvolutionChainId(), 300);
+    p->setEvolutionChainID(300);
+    EXPECT_EQ(p->getEvolutionChainID(), 300);
 }
+
+TEST_F(PokemonFixture, getEvolvesFromSpeciesID_ReturnEvolvesFromSpeciesIDAsUnsingedShort) {
+    std::string newPokeName = "pikachu";
+    delete p;
+    p = new Pokemon(&newPokeName);
+
+    EXPECT_EQ(p->getEvolvesFromSpeciesID(), 172);
+}
+
+TEST_F(PokemonFixture, setEvolvesFromSpeciesID_UnsignedShort_SetsEvolvesFromSpeciesIDToUnsingedShort) {
+    p->setEvolvesFromSpeciesID(300);
+    EXPECT_EQ(p->getEvolvesFromSpeciesID(), 300);
+}
+
 // Main function to run all tests and generate XML report
 int main(int argc, char** argv) {
     // Set the output to XML format

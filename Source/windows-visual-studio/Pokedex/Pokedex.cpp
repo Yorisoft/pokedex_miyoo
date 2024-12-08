@@ -535,22 +535,22 @@ void RenderPokedexList(SDL_Surface** screen, SDL_Renderer** renderer, TTF_Font**
 
         // Insert the key-value pair
         color_map["bug"] = { {103,116,69}, {81,91,52} };                    // Ebony
-        color_map["dark"] = { {55,55,65}, {40,40,50} };           // DimGray and DarkGray
+        color_map["dark"] = { {55,55,65}, {40,40,50} };                     // DimGray and DarkGray
         color_map["dragon"] = { {76,63,105}, {59,50,81} };                  // SteelBlue and CornflowerBlue
-        color_map["electric"] = { {90, 90, 30}, {70, 70, 20} };                  // Field drab, Dark drab brown
-        color_map["fairy"] = { {121,67,103}, {100,48,74} };          // Pink and LightPink
-        color_map["fighting"] = { {78,45,45}, {57,34,34} };           // Orange and Gold
+        color_map["electric"] = { {90, 90, 30}, {70, 70, 20} };             // Field drab, Dark drab brown
+        color_map["fairy"] = { {121,67,103}, {100,48,74} };                 // Pink and LightPink
+        color_map["fighting"] = { {78,45,45}, {57,34,34} };                 // Orange and Gold
         color_map["fire"] = { {111, 53, 17}, {86, 42, 19} };                // Russet, Seal brown
         color_map["flying"] = { {76,91,87}, {54,71,68} };                   // Feldgrau, Dark slate grey
-        color_map["ghost"] = { {85,70,93}, {66,51,74} };           // SlateBlue and MediumSlateBlue
+        color_map["ghost"] = { {85,70,93}, {66,51,74} };                    // SlateBlue and MediumSlateBlue
         color_map["grass"] = { {44, 61, 43}, {40, 52, 39} };                // Dark green, Black Olive
-        color_map["ground"] = { {89,69,52}, {71,59,46} };                     // Walnut brown, Taupe
+        color_map["ground"] = { {89,69,52}, {71,59,46} };                   // Walnut brown, Taupe
         color_map["ice"] = { {73,84,91}, {55,60,64} };                      // Onyx, Gunmetal
-        color_map["normal"] = { {105,112,95}, {76,83,66} };         // BlanchedAlmond and Cornsilk   {106,102,83}, {94,92,79}
+        color_map["normal"] = { {105,112,95}, {76,83,66} };                 // BlanchedAlmond and Cornsilk   {106,102,83}, {94,92,79}
         color_map["poison"] = { {92,77,89}, {67,54,71} };                   // MediumPurple and Purple
-        color_map["psychic"] = { {91,63,79}, {76,45,63} };        // Plum and Violet
+        color_map["psychic"] = { {91,63,79}, {76,45,63} };                  // Plum and Violet
         color_map["rock"] = { {71,67,63}, {61,58,55} };
-        color_map["steel"] = { {99,117,125}, {79,94,100} };          // Silver and LightGray
+        color_map["steel"] = { {99,117,125}, {79,94,100} };                 // Silver and LightGray
         color_map["water"] = { {43, 58, 78}, {33, 46, 62} };                // Charcoal, Gunmetal
 
 
