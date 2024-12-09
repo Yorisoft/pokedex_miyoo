@@ -4,8 +4,10 @@
 #include <SDL.h>
 #include <SDL_image.h>                   	
 #include <SDL_ttf.h>
+#include "PokedexActivityEvent.h"
+#include "PokeSurface.h"
 
-class Pokedex {
+class Pokedex : public PokedexActivityEvent {
 private:
 	bool running;
 
@@ -36,6 +38,8 @@ public:
     void onLoop();
 
     void onRender();
+
+    void onExit();
 
     void onCleanup();
 

@@ -12,7 +12,6 @@
 #include"Pokedex.h"
 #include"Pokemon.h"
 #include"PokedexDB.h"
-#include"PokeSurface.h"
 #include"SQLstatements.h"
 
 Pokedex::Pokedex() {
@@ -142,8 +141,8 @@ bool Pokedex::onSDLInit() {
 
 bool Pokedex::onInit() {
     std::cout << "onInit: start" << std::endl;
-    std::string fileName = "res/icons/abra.png";
-    if ((screenTest = PokeSurface::onLoad(fileName)) == NULL) {
+    std::string fileName = "res/icons/myimage.bmp";
+    if ((screenTest = PokeSurface::onLoadBMP(fileName)) == NULL) {
         return false;
     }
 
@@ -153,9 +152,9 @@ bool Pokedex::onInit() {
 
 void Pokedex::onEvent(SDL_Event* event) {
     std::cout << "onEvent: start" << std::endl;
-    if (event->type == SDL_QUIT) {
-        running = false;
-    }
+
+    PokedexActivityEvent::onEvent(event);
+
     std::cout << "onEvent: end" << std::endl;
 }
 
@@ -173,6 +172,7 @@ void Pokedex::onLoop() {
 void Pokedex::onRender() {
     //std::cout << "onRender: start" << std::endl;
     PokeSurface::onDraw(screen, screenTest, 0, 0);
+    PokeSurface::onDraw(screen, screenTest, 100, 100, 0, 0, 50, 50);
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderClear(renderer);
@@ -198,6 +198,10 @@ void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
         frameCount = 0; // Reset frame count
         lastTime = currentTime; // Reset last time
     }
+}
+
+void Pokedex::onExit() {
+    running = false;
 }
 
 void Pokedex::onCleanup() {
