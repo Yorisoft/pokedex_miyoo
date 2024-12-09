@@ -2,11 +2,19 @@
 #include<vector>
 #include<string>
 #include"sqlite/sqlite3.h"
-#include"Pokemon.h"
 #include"Pokedex.h"
+#include"Pokemon.h"
+#include"PokedexDB.h"
 #include"SQLstatements.h"
 
-int main() {
+Pokedex::Pokedex() {
+}
+
+int Pokedex::OnExecute() {
+	return 0;
+}
+
+int main(int argc, char* argv[]) {
 	std::string pokemonName= "charmander";
 	Pokemon* pokemon = new Pokemon(&pokemonName);
 

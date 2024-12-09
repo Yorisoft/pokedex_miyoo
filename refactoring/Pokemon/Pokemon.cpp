@@ -1,5 +1,5 @@
 #include"Pokemon.h"
-#include"Pokedex.h"
+#include"PokedexDB.h"
 #include"SQLstatements.h"
 #include<iostream> 
 #include<string>
@@ -44,7 +44,7 @@ std::vector<std::vector<std::string>> Pokemon::queryForPokeData(std::string& pNa
 	}
 	
 	// call databse to pokedex for data
-	std::vector<std::vector<std::string>>* results = Pokedex::executeSQL(&sqlStatement);
+	std::vector<std::vector<std::string>>* results = PokedexDB::executeSQL(&sqlStatement);
 	if (!results || results->empty()) {
 		std::cout << "Pokemon(std::string*): " << std::endl
 			<< "Could not execute sql statement. result is null or empty." << std::endl;

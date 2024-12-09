@@ -2,23 +2,23 @@
 #include <vector>
 #include <string>
 #include "sqlite/sqlite3.h"
-#include "Pokedex.h"
+#include "PokedexDB.h"
 
-bool Pokedex::isTestMode = false;
-const std::string Pokedex::MAIN_DB_PATH = "res/db/pokedex.sqlite";
-const std::string Pokedex::TEST_DB_PATH = "../res/db/pokedex.sqlite";
-std::string Pokedex::gameVersion = "red";
-int Pokedex::languageVersion = 9;
-std::vector<std::vector<std::string>>* Pokedex::results = new std::vector<std::vector<std::string>>();
-sqlite3* Pokedex::db;
-int Pokedex::rc;   
-char* Pokedex::zErrMsg;
+bool PokedexDB::isTestMode = false;
+const std::string PokedexDB::MAIN_DB_PATH = "res/db/pokedex.sqlite";
+const std::string PokedexDB::TEST_DB_PATH = "../res/db/pokedex.sqlite";
+std::string PokedexDB::gameVersion = "red";
+int PokedexDB::languageVersion = 9;
+std::vector<std::vector<std::string>>* PokedexDB::results = new std::vector<std::vector<std::string>>();
+sqlite3* PokedexDB::db;
+int PokedexDB::rc;   
+char* PokedexDB::zErrMsg;
 
 
-Pokedex::Pokedex() {
+PokedexDB::PokedexDB() {
  }
 
-int Pokedex::openDB() {
+int PokedexDB::openDB() {
     rc = sqlite3_open(getDBpath().c_str(), &db);
     if (rc != SQLITE_OK) {
         std::cout << "SQLite could not open file! SQLite Error: " << sqlite3_errmsg(db) << std::endl;
@@ -27,19 +27,19 @@ int Pokedex::openDB() {
     return rc;
 }
 
-void Pokedex::closeDB(sqlite3* db) {
+void PokedexDB::closeDB(sqlite3* db) {
     sqlite3_close(db);
 }
 
-const std::string Pokedex::getDBpath() {
+const std::string PokedexDB::getDBpath() {
     return isTestMode ? TEST_DB_PATH : MAIN_DB_PATH;
 }
 
-void Pokedex::enableTestMode(bool isTest) { // Used for changing directory paths between testing and live environments
+void PokedexDB::enableTestMode(bool isTest) { // Used for changing directory paths between testing and live environments
     isTestMode = isTest;
 }
 
-std::vector<std::vector<std::string>>* Pokedex::executeSQL(const std::string* SQL_STATEMENT) {
+std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* SQL_STATEMENT) {
     // change sql statement to be language specific
     // find position of string to replace with languageVersion
     std::string SQLstatement = *SQL_STATEMENT;
@@ -75,7 +75,7 @@ std::vector<std::vector<std::string>>* Pokedex::executeSQL(const std::string* SQ
 }
 
 //  copy and pasted from the internet. Not super sure what the heck its doing. 
-int Pokedex::callback(void* results, int argc, char** argv, char** azColName) {
+int PokedexDB::callback(void* results, int argc, char** argv, char** azColName) {
     // using void* to handle results, 
     // cast results into a vector of vector of strings pointer.
     auto* res = static_cast<std::vector<std::vector<std::string>>*>(results);
@@ -90,7 +90,7 @@ int Pokedex::callback(void* results, int argc, char** argv, char** azColName) {
     return 0;
  }
 
-void Pokedex::printSQLresults(std::vector<std::vector<std::string>>* results) {
+void PokedexDB::printSQLresults(std::vector<std::vector<std::string>>* results) {
     for (const auto& row : (*results)) {
         for (const auto& col : row) {
             std::cout << col << " | ";
@@ -99,7 +99,7 @@ void Pokedex::printSQLresults(std::vector<std::vector<std::string>>* results) {
     }
 }
 
-void Pokedex::cleanup() {
+void PokedexDB::cleanup() {
     if (results) {
         delete results;
         results = nullptr;

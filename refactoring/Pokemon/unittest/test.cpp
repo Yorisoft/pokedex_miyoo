@@ -4,7 +4,7 @@ class PokemonFixture : public ::testing::Test {
 protected:
     void SetUp() override {
         // Set up your test environment here
-		Pokedex::enableTestMode(true);
+		PokedexDB::enableTestMode(true);
 
 		std::string testPokemonName = "charmander";
 		p = new Pokemon(&testPokemonName);

@@ -2,7 +2,7 @@
 #ifndef POKEACTIVITYMANAGER_H
 #define POKEACTIVITYMANAGER_H
 
-#include "PokeActivity.h"
+#include "PokedexActivity.h"
 
 enum {
     APPSTATE_NONE,
@@ -14,7 +14,7 @@ enum {
 
 class PokedexActivityManager {
 private:
-    static PokeActivity* activity;
+    static PokedexActivity* activity;
 
 public:
     static void onEvent(SDL_Event* Event);
@@ -25,7 +25,7 @@ public:
 
     static void setActiveState(int AppStateID);
 
-    static PokeActivity* getActiveState();
+    static PokedexActivity* getActiveState();
 };
 
 #endif

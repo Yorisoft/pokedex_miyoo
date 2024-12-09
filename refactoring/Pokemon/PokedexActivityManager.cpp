@@ -5,7 +5,7 @@
 #include "PokeActivityPokedexList.h"
 #include "PokeActivityPokemonEntry.h"
 
-PokeActivity* PokedexActivityManager::activity = 0;
+PokedexActivity* PokedexActivityManager::activity = 0;
 
 void PokedexActivityManager::onEvent(SDL_Event* event) {
     if (activity) {
@@ -37,16 +37,16 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
         activity = 0;
         break;
     case 1:
-        activity = PokeAvtivityIntro::GetInstance();
+        activity = PokeActivityIntro::GetInstance();
         break;
     case 2:
-        activity = PokeAvtivityMenu::GetInstance();
+        activity = PokeActivityMenu::GetInstance();
         break;
     case 3:
-        activity = PokeAvtivityPokedexList::GetInstance();
+        activity = PokeActivityPokedexList::GetInstance();
         break;
     case 4:
-        activity = PokeAvtivityPokemonEntry::GetInstance();
+        activity = PokeActivityPokemonEntry::GetInstance();
         break;
     }
 
@@ -55,6 +55,6 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
     }
 }
 
-PokeActivity* PokedexActivityManager::getActiveState() {
+PokedexActivity* PokedexActivityManager::getActiveState() {
     return activity;
 }
