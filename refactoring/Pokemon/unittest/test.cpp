@@ -114,7 +114,7 @@ TEST_F(PokemonFixture, setGenderRates_Int_CalculatesGenderRates) {
 TEST_F(PokemonFixture, getFlavorText_ReturnFlavorTextAsString) {
     std::string currentFText = p->getFlavorText();
 
-    EXPECT_EQ(currentFText, "Obviously prefers hot places. When it rains, steamis said to spout from the tip of its tail.");
+    EXPECT_EQ(currentFText, "Obviously prefers hot places. When it rains, steamis said to spout from the tip of its tail."); // not sure what to do about that ^L.. Im positive it will cause issues. 
 }
 
 TEST_F(PokemonFixture, setFlavorText_String_SetFlavorTextToString) {

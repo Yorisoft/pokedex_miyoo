@@ -9,11 +9,17 @@ class Pokedex {
 private:
 	bool running;
 
-    SDL_Window* window = NULL;
-    SDL_Surface* screen = NULL;
-    SDL_Texture* texture = NULL;
-    SDL_Renderer* renderer = NULL;
-    TTF_Font* font = NULL;
+    // Variables for FPS calculation
+    Uint32 frameCount;
+    Uint32 lastTime;
+    float fps;
+
+    SDL_Window* window;
+    SDL_Surface* screen;
+    SDL_Surface* screenTest;
+    SDL_Texture* texture;
+    SDL_Renderer* renderer;
+    TTF_Font* font;
 
 public:
 
@@ -23,6 +29,8 @@ public:
 
     bool onInit();
 
+    bool onSDLInit();
+
     void onEvent(SDL_Event* event);
 
     void onLoop();
@@ -30,6 +38,8 @@ public:
     void onRender();
 
     void onCleanup();
+
+    void calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps);
 };
 
 #endif

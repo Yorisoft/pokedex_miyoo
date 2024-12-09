@@ -237,16 +237,16 @@ void HandleInputs(SDL_Event& windowEvent, bool& quit, View& currentView, int& se
 }
 
 // Function to load an image
-SDL_Surface* LoadImage(SDL_Surface** imgSurafce, string& imagePath) {
+SDL_Surface* LoadImage(SDL_Surface** imgSurface, string& imagePath) {
     cout << "starting: LoadImage" << endl;
     SDL_Surface* optimizedSurface = NULL;
-    *imgSurafce = IMG_Load(imagePath.c_str());
-    if (*imgSurafce == NULL) {
+    *imgSurface = IMG_Load(imagePath.c_str());
+    if (*imgSurface == NULL) {
         cout << "Unable to load image! SDL Error: " << IMG_GetError() << endl;
         exit(EXIT_FAILURE);
     }
-    optimizedSurface = SDL_ConvertSurfaceFormat(*imgSurafce, SDL_PIXELFORMAT_RGBA32, 0);
-    SDL_FreeSurface(*imgSurafce);
+    optimizedSurface = SDL_ConvertSurfaceFormat(*imgSurface, SDL_PIXELFORMAT_RGBA32, 0);
+    SDL_FreeSurface(*imgSurface);
     if (optimizedSurface == NULL) {
         cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << endl;
         exit;
