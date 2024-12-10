@@ -47,7 +47,7 @@ SDL_Surface* PokeSurface::onLoadBMP(std::string& file) {
     return optimizedSurface;
 }
 
-bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, int X, int Y) {
+bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, int X, int Y, int W, int H) {
     if (destinationSurface == NULL || sourceSurface == NULL) {
         std::cout << "Missing Source or Desitination Surface! SDL Error: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -56,30 +56,26 @@ bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSur
     SDL_Rect destinationRect;
     destinationRect.x = X;
     destinationRect.y = Y;
+    destinationRect.w = W;
+    destinationRect.h = H;
 
-    SDL_BlitScaled(sourceSurface, NULL, destinationSurface, &destinationRect);
+    SDL_BlitSurface(sourceSurface, NULL, destinationSurface, &destinationRect);
 
     return true;
 }
 
-bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, int X, int Y, int X2, int Y2, int W, int H) {
+bool PokeSurface::onDrawScaled(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, int X, int Y, int W, int H) {
     if (destinationSurface == NULL || sourceSurface == NULL) {
         return false;
     }
 
-    SDL_Rect DestR;
+    SDL_Rect sourceRect;
+    sourceRect.x = X;
+    sourceRect.y = Y;
+    sourceRect.w = sourceSurface->w * W;
+    sourceRect.h = sourceSurface->h * H;
 
-    DestR.x = X;
-    DestR.y = Y;
-
-    SDL_Rect SrcR;
-
-    SrcR.x = X2;
-    SrcR.y = Y2;
-    SrcR.w = sourceSurface->w * W;
-    SrcR.h = sourceSurface->h * H;
-
-    SDL_BlitSurface(sourceSurface, NULL, destinationSurface, &SrcR);
+    SDL_BlitScaled(sourceSurface, NULL, destinationSurface, &sourceRect);
 
     return true;
 }

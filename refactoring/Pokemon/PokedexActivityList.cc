@@ -35,7 +35,7 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display) {
     SDL_FillRect(surf_display, NULL, SDL_MapRGB(surf_display->format, 0, 0, 0));
 
     if (surf_logo) {
-        PokeSurface::onDraw(surf_display, surf_logo, 0, 0, 0, 0, 3, 3);
+        PokeSurface::onDrawScaled(surf_display, surf_logo, 0, 0, 3, 3);
     }
     SDL_FreeSurface(surf_logo);
 }

@@ -1,5 +1,11 @@
 #ifndef _CEVENT_H_
 #define _CEVENT_H_
+
+// Window Settings
+#define WINDOW_HEIGHT 480                   // window height in pixels
+#define WINDOW_WIDTH 640                    // window width in pixels
+#define DEPTH 16                            // window depth in pixels
+#define MAX_VISIBLE_ITEMS 5                 // Set the maximum number of visible
 // Controller inputs
 #define SW_BTN_UP SDLK_UP
 #define SW_BTN_DOWN SDLK_DOWN
@@ -22,7 +28,6 @@
 #define SW_BTN_POWER SDLK_FIRST
 
 #include <SDL.h>
-#include <SDL_image.h>                   	
 
 class PokedexActivityEvent {
 public:

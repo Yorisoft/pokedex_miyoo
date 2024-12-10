@@ -14,9 +14,9 @@ public:
 
     static SDL_Surface* onLoadBMP(std::string& file);
 
-    static bool onDraw(SDL_Surface* Surf_Dest, SDL_Surface* Surf_Src, int X, int Y);
+    static bool onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, int X, int Y, int W, int H);
     
-    static bool onDraw(SDL_Surface* Surf_Dest, SDL_Surface* Surf_Src, int X, int Y, int X2, int Y2, int W, int H);
+    static bool onDrawScaled(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, int X, int Y, int W, int H);
 };
 
 #endif

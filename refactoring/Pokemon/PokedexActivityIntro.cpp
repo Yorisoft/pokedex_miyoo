@@ -51,7 +51,9 @@ void PokedexActivityIntro::onRender(SDL_Surface* surf_display) {
 
     if (surf_logo) {
         SDL_SetSurfaceAlphaMod(surf_display, logoAlpha); // Apply the current alpha for fade-in
-        PokeSurface::onDraw(surf_display, surf_logo, 0, 0);
+        int W = WINDOW_WIDTH;
+        int H = WINDOW_HEIGHT;
+        PokeSurface::onDraw(surf_display, surf_logo, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 }
 
