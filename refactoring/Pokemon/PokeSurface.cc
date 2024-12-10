@@ -57,7 +57,7 @@ bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSur
     destinationRect.x = X;
     destinationRect.y = Y;
 
-    SDL_BlitSurface(sourceSurface, NULL, destinationSurface, &destinationRect);
+    SDL_BlitScaled(sourceSurface, NULL, destinationSurface, &destinationRect);
 
     return true;
 }
@@ -76,10 +76,10 @@ bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSur
 
     SrcR.x = X2;
     SrcR.y = Y2;
-    SrcR.w = W;
-    SrcR.h = H;
+    SrcR.w = sourceSurface->w * W;
+    SrcR.h = sourceSurface->h * H;
 
-    SDL_BlitSurface(sourceSurface, &SrcR, destinationSurface, &DestR);
+    SDL_BlitSurface(sourceSurface, NULL, destinationSurface, &SrcR);
 
     return true;
 }

@@ -10,7 +10,8 @@ private:
 
     SDL_Surface* surf_logo;
 
-    int StartTime;
+    int StartTime;        
+    Uint8 logoAlpha;
 
 private:
     PokedexActivityIntro();

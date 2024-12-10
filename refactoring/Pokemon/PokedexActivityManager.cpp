@@ -27,7 +27,7 @@ void PokedexActivityManager::onRender(SDL_Surface* surface_display) {
 
 void PokedexActivityManager::setActiveState(int AppStateID) {
     // push back current activity
-    if (activity) {
+    if (activity && activity != 0) {
         activity->onDeactivate();
     }
 

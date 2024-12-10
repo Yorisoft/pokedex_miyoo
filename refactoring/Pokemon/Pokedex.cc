@@ -61,6 +61,12 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
 
+    int imgFlags = IMG_INIT_PNG;
+    if (!(IMG_Init(imgFlags) & imgFlags)) {
+        std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError();
+        exit(EXIT_FAILURE);
+    }
+
     this->window = SDL_CreateWindow(
         "Pokedex",
         SDL_WINDOWPOS_UNDEFINED,
@@ -99,6 +105,20 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
 
+    /*SDL_Surface* tempSurface = SDL_CreateRGBSurface(
+        0,
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+        DEPTH,
+        0, 0, 0, 0
+    );
+    if (!tempSurface) {
+        std::cout << "Failed to create tempSurface: " << SDL_GetError();
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+    }*/
+
+    //this->screen = SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0); 
     this->screen = SDL_CreateRGBSurface(
         0,
         WINDOW_WIDTH,
@@ -106,6 +126,11 @@ bool Pokedex::onSDLInit() {
         DEPTH,
         0, 0, 0, 0
     );
+    if (!this->screen) {
+        std::cout << "Failed to create optimized surface, screen, from tempSurface: " << SDL_GetError();
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+    }
 
     if (TTF_Init() == -1) {
         std::cout << "SDL could not initialize TTF_Init: " << TTF_GetError() << std::endl;
@@ -115,12 +140,6 @@ bool Pokedex::onSDLInit() {
     this->font = TTF_OpenFont("res/font/Pokemon_GB.ttf", 20);
     if (this->font == NULL) {
         std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    int imgFlags = IMG_INIT_PNG;
-    if (!(IMG_Init(imgFlags) & imgFlags)) {
-        std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError();
         exit(EXIT_FAILURE);
     }
 
@@ -207,7 +226,7 @@ void Pokedex::onExit() {
 
 void Pokedex::onCleanup() {
     std::cout << "onCleanUp: start" << std::endl;
-    PokedexActivityManager::setActiveState(APPSTATE_NONE);
+    //PokedexActivityManager::setActiveState(APPSTATE_NONE);
 
     SDL_FreeSurface(screen);
     SDL_FreeSurface(screenTest);

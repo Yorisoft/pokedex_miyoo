@@ -22,6 +22,7 @@
 #define SW_BTN_POWER SDLK_FIRST
 
 #include <SDL.h>
+#include <SDL_image.h>                   	
 
 class PokedexActivityEvent {
 public:
