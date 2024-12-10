@@ -1,9 +1,9 @@
 #include "PokedexActivityManager.h"
 
-#include "PokeActivityIntro.h"
-#include "PokeActivityMenu.h"
-#include "PokeActivityPokedexList.h"
-#include "PokeActivityPokemonEntry.h"
+#include "PokedexActivityIntro.h"
+#include "PokedexActivityList.h"
+//#include "PokeActivityPokedexList.h"
+//#include "PokeActivityPokemonEntry.h"
 
 PokedexActivity* PokedexActivityManager::activity = 0;
 
@@ -28,7 +28,7 @@ void PokedexActivityManager::onRender(SDL_Surface* surface_display) {
 void PokedexActivityManager::setActiveState(int AppStateID) {
     // push back current activity
     if (activity) {
-        activity->onDeativate();
+        activity->onDeactivate();
     }
 
     // Change state to be the desired activity
@@ -37,16 +37,18 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
         activity = 0;
         break;
     case 1:
-        activity = PokeActivityIntro::GetInstance();
+        activity = PokedexActivityIntro::getInstance();
         break;
     case 2:
-        activity = PokeActivityMenu::GetInstance();
+        activity = PokedexActivityList::getInstance();
         break;
-    case 3:
-        activity = PokeActivityPokedexList::GetInstance();
+   /* case 3:
+        activity = PokeActivityPokedexList::getInstance();
         break;
     case 4:
-        activity = PokeActivityPokemonEntry::GetInstance();
+        activity = PokeActivityPokemonEntry::getInstance();
+        break;*/
+    default:
         break;
     }
 

@@ -76,8 +76,8 @@ bool PokeSurface::onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSur
 
     SrcR.x = X2;
     SrcR.y = Y2;
-    SrcR.w = destinationSurface->w;
-    SrcR.h = destinationSurface->h;
+    SrcR.w = W;
+    SrcR.h = H;
 
     SDL_BlitSurface(sourceSurface, &SrcR, destinationSurface, &DestR);
 

@@ -141,10 +141,7 @@ bool Pokedex::onSDLInit() {
 
 bool Pokedex::onInit() {
     std::cout << "onInit: start" << std::endl;
-    std::string fileName = "res/icons/myimage.bmp";
-    if ((screenTest = PokeSurface::onLoadBMP(fileName)) == NULL) {
-        return false;
-    }
+    PokedexActivityManager::setActiveState(APPSTATE_INTRO);
 
     std::cout << "onInit: end" << std::endl;
 	return true;
@@ -154,6 +151,7 @@ void Pokedex::onEvent(SDL_Event* event) {
     std::cout << "onEvent: start" << std::endl;
 
     PokedexActivityEvent::onEvent(event);
+    PokedexActivityManager::onEvent(event);
 
     std::cout << "onEvent: end" << std::endl;
 }
@@ -165,14 +163,17 @@ void Pokedex::onLoop() {
     calculateFPS(frameCount, lastTime, fps);
     std::cout << std::fixed << std::setprecision(2);
     std::cout << "FPS: " << fps << "\r"; // Output FPS
-    
+
+    PokedexActivityManager::onLoop();
     //std::cout << "onLoop: end" << std::endl;
 }
 
 void Pokedex::onRender() {
-    //std::cout << "onRender: start" << std::endl;
-    PokeSurface::onDraw(screen, screenTest, 0, 0);
-    PokeSurface::onDraw(screen, screenTest, 100, 100, 0, 0, 50, 50);
+    ////std::cout << "onRender: start" << std::endl;
+    //PokeSurface::onDraw(screen, screenTest, 0, 0);
+    //PokeSurface::onDraw(screen, screenTest, 100, 100, 0, 0, 50, 50);
+    SDL_RenderClear(renderer);
+    PokedexActivityManager::onRender(screen);
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderClear(renderer);
@@ -206,6 +207,7 @@ void Pokedex::onExit() {
 
 void Pokedex::onCleanup() {
     std::cout << "onCleanUp: start" << std::endl;
+    PokedexActivityManager::setActiveState(APPSTATE_NONE);
 
     SDL_FreeSurface(screen);
     SDL_FreeSurface(screenTest);

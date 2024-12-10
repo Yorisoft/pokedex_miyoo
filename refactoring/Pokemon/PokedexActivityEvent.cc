@@ -8,6 +8,9 @@ PokedexActivityEvent::~PokedexActivityEvent() {
 }
 
 void PokedexActivityEvent::onEvent(SDL_Event* event) {
+    if (event->type == SDL_QUIT) {
+        onExit();
+    }
     switch (event->key.keysym.sym) {
         case SW_BTN_A:
         case SW_BTN_B:

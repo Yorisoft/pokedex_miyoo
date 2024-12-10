@@ -1,19 +1,19 @@
 #ifndef POKEDEXACTIVITY_H
 #define POKEDEXACTIVITY_H
 
-#include "ActivityEvent.h"
+#include "PokedexActivityEvent.h"
 
-class PokedexActivity : public ActivityEvent {
+class PokedexActivity : public PokedexActivityEvent {
 public:
     PokedexActivity();
 
-    virtual void OnActivate() = 0;
+    virtual void onActivate() = 0;
 
-    virtual void OnDeactivate() = 0;
+    virtual void onDeactivate() = 0;
 
-    virtual void OnLoop() = 0;
+    virtual void onLoop() = 0;
 
-    virtual void OnRender(SDL_Surface* surf_display) = 0;
+    virtual void onRender(SDL_Surface* surf_display) = 0;
 };
 
 #endif
