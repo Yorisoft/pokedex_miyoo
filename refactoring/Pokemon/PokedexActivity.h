@@ -13,7 +13,7 @@ public:
 
     virtual void onLoop() = 0;
 
-    virtual void onRender(SDL_Surface* surf_display) = 0;
+    virtual void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) = 0;
 };
 
 #endif

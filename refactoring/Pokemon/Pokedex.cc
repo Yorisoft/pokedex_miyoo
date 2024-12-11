@@ -196,7 +196,7 @@ void Pokedex::onRender() {
     //PokeSurface::onDraw(screen, screenTest, 100, 100, 0, 0, 50, 50);
 
     SDL_RenderClear(renderer);
-    PokedexActivityManager::onRender(screen);
+    PokedexActivityManager::onRender(screen, renderer, texture);
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderClear(renderer);

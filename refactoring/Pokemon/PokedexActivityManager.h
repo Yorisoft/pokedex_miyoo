@@ -20,7 +20,7 @@ public:
 
     static void onLoop();
 
-    static void onRender(SDL_Surface* surface_display);
+    static void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
     static void setActiveState(int AppStateID);
 

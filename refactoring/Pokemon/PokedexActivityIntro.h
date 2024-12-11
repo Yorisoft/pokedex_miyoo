@@ -23,7 +23,7 @@ public:
 
     void onLoop();
 
-    void onRender(SDL_Surface* surf_display);
+    void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
 public:
     static PokedexActivityIntro* getInstance();

@@ -19,9 +19,9 @@ void PokedexActivityManager::onLoop() {
     }
 }
 
-void PokedexActivityManager::onRender(SDL_Surface* surface_display) {
+void PokedexActivityManager::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
     if (activity) {
-        activity->onRender(surface_display);
+        activity->onRender(surf_display, renderer, texture);
     }
 }
 

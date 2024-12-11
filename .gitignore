@@ -44,3 +44,4 @@ Source/union-miyoomini-toolchain/workspace/pokedex/DownloadAudio
 Source/union-miyoomini-toolchain/workspace/pokedex/audio_downloader.cpp
 Source/union-miyoomini-toolchain/workspace/pokedex/res/audio/
 Source/windows-visual-studio/Pokedex/res/audio/
+**/test.cpp

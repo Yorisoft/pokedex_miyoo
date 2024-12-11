@@ -37,7 +37,7 @@ public:
 
     void onLoop();
 
-    void onRender(SDL_Surface* surf_display);
+    void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
     bool pokedexList(SDL_Surface* targetSurface, const std::vector<std::vector<std::string>>& dbResults);
 

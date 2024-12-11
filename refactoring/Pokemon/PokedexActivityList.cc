@@ -40,7 +40,7 @@ void PokedexActivityList::onDeactivate() {
 void PokedexActivityList::onLoop() {
 }
 
-void PokedexActivityList::onRender(SDL_Surface* surf_display) {
+void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
     // Clear the display surface
     SDL_FillRect(surf_display, NULL, SDL_MapRGB(surf_display->format, 0, 0, 0));
     
