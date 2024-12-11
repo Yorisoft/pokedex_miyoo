@@ -104,7 +104,7 @@ bool Pokedex::onSDLInit() {
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
-
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     /*SDL_Surface* tempSurface = SDL_CreateRGBSurface(
         0,
         WINDOW_WIDTH,
@@ -199,7 +199,6 @@ void Pokedex::onRender() {
     PokedexActivityManager::onRender(screen, renderer, texture);
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
-    //SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
