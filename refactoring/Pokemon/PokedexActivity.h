@@ -2,6 +2,9 @@
 #define POKEDEXACTIVITY_H
 
 #include "PokedexActivityEvent.h"
+#include <sstream>
+#include <map>
+#include <vector>
 
 class PokedexActivity : public PokedexActivityEvent {
 public:

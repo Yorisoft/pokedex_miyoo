@@ -46,7 +46,7 @@ void PokedexActivityIntro::onLoop() {
 
 void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
     // Clear the display surface
-    SDL_FillRect(surf_display, NULL, SDL_MapRGB(surf_display->format, 0, 0, 0));
+    //SDL_FillRect(surf_display, NULL, SDL_MapRGB(surf_display->format, 0, 0, 0));
 
     if (surf_logo) {
         SDL_SetTextureAlphaMod(texture, logoAlpha); // Apply the current alpha for fade-in

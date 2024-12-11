@@ -4,9 +4,6 @@
 #include "PokedexActivity.h"
 #include "PokeSurface.h"
 #include "SQLstatements.h"
-#include <sstream>
-#include <map>
-#include <vector>
 
 class PokedexActivityList : public PokedexActivity {
 private:
