@@ -46,13 +46,38 @@ const std::string SQL_getPokemonByName = R"(
 	ORDER BY ps.id, v.id;)";
 
 const std::string SQL_getNameAndID = R"(
-    SELECT p.id AS pokemon_id, psn.name AS pokemon_name_in_language
-    FROM pokemon AS p
-    JOIN pokemon_species_names AS psn ON p.species_id = psn.pokemon_species_id
-    JOIN pokemon_game_indices AS pgi ON p.id = pgi.pokemon_id
-    JOIN versions AS v ON pgi.version_id = v.id
-    WHERE v.identifier = '${game_version}' AND psn.local_language_id = '${language_id}'
-    ORDER BY p.id;)";
+    SELECT 
+        p.id AS pokemon_id,
+        psn.name AS pokemon_name_in_language,
+        pdn.pokedex_number AS regional_pokedex_id
+    FROM 
+        pokemon AS p
+    JOIN 
+        pokemon_species_names AS psn ON p.species_id = psn.pokemon_species_id
+    JOIN 
+        pokemon_game_indices AS pgi ON p.id = pgi.pokemon_id
+    JOIN 
+        versions AS v ON pgi.version_id = v.id
+    LEFT JOIN 
+        pokemon_dex_numbers AS pdn ON p.species_id = pdn.species_id
+    WHERE 
+        v.identifier = '${game_version}'
+        AND psn.local_language_id = '${language_id}'
+        AND pdn.pokedex_id = '${region_id}'
+    ORDER BY 
+        pdn.pokedex_number;
+)";
+
+
+
+const std::string SQL_getGameVersions = R"(
+   SELECT v.id AS version_id, 
+       v.identifier AS version_identifier, 
+       vn.name AS version_name_in_language
+    FROM versions AS v
+    JOIN version_names AS vn ON v.id = vn.version_id
+    WHERE vn.local_language_id = '${language_id}'
+    ORDER BY v.id;)";
 
 const std::string SQL_getPokemonByNameTest =
 	"SELECT "

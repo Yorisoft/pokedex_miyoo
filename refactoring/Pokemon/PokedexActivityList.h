@@ -3,7 +3,6 @@
 
 #include "PokedexActivity.h"
 #include "PokeSurface.h"
-#include "SQLstatements.h"
 
 class PokedexActivityList : public PokedexActivity {
 private:

@@ -167,12 +167,12 @@ bool Pokedex::onInit() {
 }
 
 void Pokedex::onEvent(SDL_Event* event) {
-    std::cout << "onEvent: start" << std::endl;
+    //std::cout << "onEvent: start" << std::endl;
 
     PokedexActivityEvent::onEvent(event);
     PokedexActivityManager::onEvent(event);
 
-    std::cout << "onEvent: end" << std::endl;
+    //std::cout << "onEvent: end" << std::endl;
 }
 
 void Pokedex::onLoop() {
@@ -184,7 +184,7 @@ void Pokedex::onLoop() {
     std::cout << std::fixed << std::setprecision(2);
 
     // Right-align the output by setting fill to spaces and width
-    std::cout << "FPS: " << fps << "\r";
+    //std::cout << "FPS: " << fps << "\r";
 
     PokedexActivityManager::onLoop();
     //std::cout << "onLoop: end" << std::endl;

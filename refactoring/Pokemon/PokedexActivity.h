@@ -5,6 +5,8 @@
 #include <sstream>
 #include <map>
 #include <vector>
+#include "PokedexDB.h"
+#include "SQLstatements.h"
 
 class PokedexActivity : public PokedexActivityEvent {
 public:

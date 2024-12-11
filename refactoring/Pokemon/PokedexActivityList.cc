@@ -1,6 +1,5 @@
 #include "PokedexActivityList.h"
 #include "PokedexActivityManager.h"
-#include "PokedexDB.h"
 #include "ColorMap.h"
 
 PokedexActivityList PokedexActivityList::instance;
@@ -20,6 +19,8 @@ PokedexActivityList::PokedexActivityList() {
 }
 
 void PokedexActivityList::onActivate() {
+    std::cout << "PokedexActivityList::onActivate START \n";
+
     StartTime = SDL_GetTicks();
     dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
     for (auto& pokemon : *dbResults) {
@@ -28,6 +29,8 @@ void PokedexActivityList::onActivate() {
         }
         std::cout << std::endl;
     }
+
+    std::cout << "PokedexActivityList::onActivate END \n";
 }
 
 void PokedexActivityList::onDeactivate() {

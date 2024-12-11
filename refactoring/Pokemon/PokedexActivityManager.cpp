@@ -2,7 +2,7 @@
 
 #include "PokedexActivityIntro.h"
 #include "PokedexActivityList.h"
-//#include "PokeActivityPokedexList.h"
+#include "PokedexActivityMenu.h"
 //#include "PokeActivityPokemonEntry.h"
 
 PokedexActivity* PokedexActivityManager::activity = 0;
@@ -42,10 +42,10 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
     case 2:
         activity = PokedexActivityList::getInstance();
         break;
-   /* case 3:
-        activity = PokeActivityPokedexList::getInstance();
+    case 3:
+        activity = PokedexActivityMenu::getInstance();
         break;
-    case 4:
+    /*case 4:
         activity = PokeActivityPokemonEntry::getInstance();
         break;*/
     default:

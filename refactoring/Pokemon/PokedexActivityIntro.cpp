@@ -40,7 +40,7 @@ void PokedexActivityIntro::onLoop() {
     }
 
     if (StartTime + 4000 < SDL_GetTicks()) {
-        PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_LIST);
+        PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_MENU);
     }
 }
 

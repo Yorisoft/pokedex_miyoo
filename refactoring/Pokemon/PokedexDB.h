@@ -15,6 +15,7 @@ private:
 	static const std::string MAIN_DB_PATH;
 	static const std::string TEST_DB_PATH;
 	static std::string gameVersion;
+	static int regionVersion;
 
 	static int callback(void* results, int argc, char** argv, char** azColName);
 	static const std::string getDBpath();
@@ -28,6 +29,9 @@ public:
 	static std::vector<std::vector<std::string>>* executeSQL(const std::string*);
 	static void printSQLresults(std::vector<std::vector<std::string>>*);
 	static void enableTestMode(bool);  // To turn on test mode
+	static void setLanguageVersion(int);
+	static void setGameVersion(std::string&);
+	static void setRegionVersion(int);
 	
 	~PokedexDB();
 
