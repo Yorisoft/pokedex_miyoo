@@ -47,9 +47,9 @@ const std::string SQL_getPokemonByName = R"(
 
 const std::string SQL_getNameAndID = R"(
     SELECT 
-        p.id AS pokemon_id,
+        pdn.pokedex_number AS regional_pokedex_id,
         psn.name AS pokemon_name_in_language,
-        pdn.pokedex_number AS regional_pokedex_id
+        p.id AS pokemon_id
     FROM 
         pokemon AS p
     JOIN 

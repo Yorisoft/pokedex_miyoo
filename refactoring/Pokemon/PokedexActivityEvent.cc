@@ -17,7 +17,9 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
         case SW_BTN_RIGHT:
         case SW_BTN_LEFT:
         case SW_BTN_UP:
+            onKeyUp(event->key.keysym.sym, event->key.keysym.mod);
         case SW_BTN_DOWN:
+            onKeyDown(event->key.keysym.sym, event->key.keysym.mod);
         case SW_BTN_R1:
         case SW_BTN_L1:
         case SW_BTN_R2:
@@ -37,6 +39,50 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
 }
 
 void PokedexActivityEvent::onKeyDown(SDL_Keycode sym,Uint16 mod) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onKeyUp(SDL_Keycode sym,Uint16 mod) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonA(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonB(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonX(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonY(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonL(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonLT(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonR(int mX, int mY) {
+    //Pure virtual, do nothing
+}
+
+void PokedexActivityEvent::onButtonRT(int mX, int mY) {
     //Pure virtual, do nothing
 }
 

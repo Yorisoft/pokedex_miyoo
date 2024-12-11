@@ -39,6 +39,28 @@ public:
 
     virtual void onKeyDown(SDL_Keycode sym, Uint16 mod);
 
+    virtual void onKeyUp(SDL_Keycode sym, Uint16 mod);
+
+    virtual void onButtonLeft(SDL_Keycode sym, Uint16 mod);
+
+    virtual void onButtonRight(SDL_Keycode sym, Uint16 mod);
+
+    virtual void onButtonA(int mX, int mY);
+
+    virtual void onButtonB(int mX, int mY);
+
+    virtual void onButtonX(int mX, int mY);
+
+    virtual void onButtonY(int mX, int mY);
+
+    virtual void onButtonL(int mX, int mY);
+
+    virtual void onButtonLT(int mX, int mY);
+
+    virtual void onButtonR(int mX, int mY);
+
+    virtual void onButtonRT(int mX, int mY);
+
     virtual void onMinimize();
 
     virtual void onRestore();
