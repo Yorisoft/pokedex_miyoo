@@ -38,7 +38,6 @@ void PokedexActivityIntro::onLoop() {
     else {
         logoAlpha = 255;
     }
-    std::cout << logoAlpha << std::endl;
 
     if (StartTime + 4000 < SDL_GetTicks()) {
         PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_LIST);

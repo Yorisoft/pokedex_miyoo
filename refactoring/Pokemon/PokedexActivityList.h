@@ -3,6 +3,10 @@
 
 #include "PokedexActivity.h"
 #include "PokeSurface.h"
+#include "SQLstatements.h"
+#include <sstream>
+#include <map>
+#include <vector>
 
 class PokedexActivityList : public PokedexActivity {
 private:
@@ -11,6 +15,17 @@ private:
     SDL_Surface* surf_logo;
 
     int StartTime;
+
+    std::vector<std::vector<std::string>>* dbResults;
+    //TTF_Font* listFont;
+    SDL_Surface* pokeListLabelSurface, * pokemonListEntrySurface;
+    std::ostringstream textStream;
+
+    SDL_Color color;
+    SDL_Color highlightColor;
+    std::string fontPath;
+    int pokemonListSurfaceHeight;
+
 
 private:
     PokedexActivityList();
@@ -24,8 +39,13 @@ public:
 
     void onRender(SDL_Surface* surf_display);
 
+    bool pokedexList(SDL_Surface* targetSurface, const std::vector<std::vector<std::string>>& dbResults);
+
+    bool pokemonEntry(SDL_Surface* targetSurface, const std::vector<std::string>& pokemon, int index);
+
 public:
     static PokedexActivityList* getInstance();
 };
 
+   // Charcoal, Gunmetal
 #endif

@@ -180,8 +180,11 @@ void Pokedex::onLoop() {
 
     // Calculate and print FPS
     calculateFPS(frameCount, lastTime, fps);
+    const int width = 100; // Total width allocated for FPS output
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "FPS: " << fps << "\r"; // Output FPS
+
+    // Right-align the output by setting fill to spaces and width
+    std::cout << "FPS: " << fps << "\r";
 
     PokedexActivityManager::onLoop();
     //std::cout << "onLoop: end" << std::endl;
@@ -191,6 +194,7 @@ void Pokedex::onRender() {
     ////std::cout << "onRender: start" << std::endl;
     //PokeSurface::onDraw(screen, screenTest, 0, 0);
     //PokeSurface::onDraw(screen, screenTest, 100, 100, 0, 0, 50, 50);
+
     SDL_RenderClear(renderer);
     PokedexActivityManager::onRender(screen);
 
