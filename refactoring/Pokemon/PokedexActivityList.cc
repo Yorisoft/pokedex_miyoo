@@ -1,6 +1,5 @@
 #include "PokedexActivityList.h"
 #include "PokedexActivityManager.h"
-#include "ColorMap.h"
 
 PokedexActivityList PokedexActivityList::instance;
 

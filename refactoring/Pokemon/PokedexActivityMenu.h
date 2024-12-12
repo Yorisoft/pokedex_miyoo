@@ -9,11 +9,15 @@ private:
     static PokedexActivityMenu instance;
 
     SDL_Surface* surf_logo;
+    SDL_Surface* listEntrySurface;
+    TTF_Font* fontSurface;
+    SDL_Surface* IDSurface;
 
     std::vector<std::vector<std::string>>* dbResults;
+    int selectedIndex, offset, itemHeight;
 
-    std::map<std::string, int> languageMap;
-    std::map<std::string, int> regionMap;
+    SDL_Color color;
+    SDL_Color highlightColor;
 
     PokedexActivityMenu();
 
@@ -27,6 +31,10 @@ public:
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
     static PokedexActivityMenu* getInstance();
+
+    void onKeyDown(SDL_Keycode sym, Uint16 mod);
+
+    void onKeyUp(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif

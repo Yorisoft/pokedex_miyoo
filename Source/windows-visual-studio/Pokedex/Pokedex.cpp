@@ -378,7 +378,7 @@ void RenderPokemonID(SDL_Surface** pokemonListEntrySurface, TTF_Font** font, vec
     pokeListIDRect.w = (*pokemonListEntrySurface)->w;
     pokeListIDRect.h = (*pokemonListEntrySurface)->h;
 
-    !SDL_BlitSurface(pokeListIDSurface, NULL, *pokemonListEntrySurface, &pokeListIDRect);
+    SDL_BlitSurface(pokeListIDSurface, NULL, *pokemonListEntrySurface, &pokeListIDRect);
     SDL_FreeSurface(pokeListIDSurface);
 }
 

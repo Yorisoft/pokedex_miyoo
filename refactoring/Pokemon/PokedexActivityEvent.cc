@@ -11,20 +11,29 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
     if (event->type == SDL_QUIT) {
         onExit();
     }
-    switch (event->key.keysym.sym) {
+    else if (event->type == SDL_KEYDOWN) {
+        switch (event->key.keysym.sym) {
         case SW_BTN_A:
+            break;
         case SW_BTN_B:
+            break;
         case SW_BTN_RIGHT:
+            break;
         case SW_BTN_LEFT:
+            break;
         case SW_BTN_UP:
             onKeyUp(event->key.keysym.sym, event->key.keysym.mod);
+            break;
         case SW_BTN_DOWN:
             onKeyDown(event->key.keysym.sym, event->key.keysym.mod);
+            break;
         case SW_BTN_R1:
+            break;
         case SW_BTN_L1:
+            break;
         case SW_BTN_R2:
+            break;
         case SW_BTN_L2:
-            onKeyDown(event->key.keysym.sym, event->key.keysym.mod);
             break;
         case SDL_SYSWMEVENT:
             break;
@@ -35,7 +44,8 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
         default:
             onUser(event->user.type, event->user.code, event->user.data1, event->user.data2);
             break;
-    }
+        }
+    }   
 }
 
 void PokedexActivityEvent::onKeyDown(SDL_Keycode sym,Uint16 mod) {

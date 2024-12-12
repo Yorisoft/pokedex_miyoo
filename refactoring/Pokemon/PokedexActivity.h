@@ -7,6 +7,7 @@
 #include <vector>
 #include "PokedexDB.h"
 #include "SQLstatements.h"
+#include "Mappings.h"
 
 class PokedexActivity : public PokedexActivityEvent {
 public:

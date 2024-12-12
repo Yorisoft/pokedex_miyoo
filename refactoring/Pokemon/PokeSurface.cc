@@ -72,8 +72,8 @@ bool PokeSurface::onDrawScaled(SDL_Surface* destinationSurface, SDL_Surface* sou
     SDL_Rect sourceRect;
     sourceRect.x = X;
     sourceRect.y = Y;
-    sourceRect.w = sourceSurface->w * W;
-    sourceRect.h = sourceSurface->h * H;
+    sourceRect.w = W;
+    sourceRect.h = H;
 
     SDL_BlitScaled(sourceSurface, NULL, destinationSurface, &sourceRect);
 
