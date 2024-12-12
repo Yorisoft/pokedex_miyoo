@@ -23,41 +23,41 @@ const std::map<std::string, std::vector<std::vector<int>>> color_map = {
 };
 // Define and initialize the global constant map
 const std::map<int, std::vector<int>> gameColorMap = {
-        {1, {111, 53, 17}},    // Red - Fire-like color, Russet
-        {2, {43, 58, 78}},     // Blue - Water-like color, Charcoal
-        {3, {90, 90, 30}},     // Yellow - Electric-like color, Field drab
-        {4, {78, 45, 45}},     // Gold - Fighting theme color, Orange
-        {5, {99, 117, 125}},   // Silver - Steel-like color, Silver
-        {6, {73, 84, 91}},     // Crystal - Onyx-like color, Onyx
-        {7, {111, 53, 17}},    // Ruby - Fire-like color variant (same as red)
-        {8, {43, 58, 78}},     // Sapphire - Water-like color variant (same as blue)
-        {9, {44, 61, 43}},     // Emerald - Grass-like color
-        {10, {111, 53, 18}},   // FireRed - Fire-like color variant
-        {11, {44, 62, 43}},    // LeafGreen - Grass-like color variant
-        {12, {71, 67, 63}},    // Diamond - Rock color
-        {13, {121, 67, 103}},  // Pearl - Fairy-like color
-        {14, {98, 116, 124}},  // Platinum - Steel color variant
-        {15, {77, 46, 46}},    // HeartGold - Fighting theme color variant
-        {16, {98, 116, 124}},  // SoulSilver - Steel color variant
-        {17, {55, 55, 65}},    // Black - Dark theme color, DimGray
-        {18, {105, 112, 95}},  // White - Normal theme color, BlanchedAlmond
-        {19, {50, 50, 60}},    // Black 2 - Dark theme variant
-        {20, {100, 107, 90}},  // White 2 - Normal theme variant
-        {21, {91, 63, 79}},    // X - Psychic theme color
-        {22, {88, 60, 76}},    // Y - Psychic theme variant
-        {23, {114, 55, 19}},   // Omega Ruby - Fire-like color variant
-        {24, {46, 61, 81}},    // Alpha Sapphire - Water-like color variant
-        {25, {113, 55, 19}},   // Sun - Fire-like color variant
-        {26, {85, 70, 93}},    // Moon - Ghost theme color
-        {27, {116, 58, 22}},   // Ultra Sun - Fire-like color variant
-        {28, {88, 73, 96}},    // Ultra Moon - Ghost theme variant
-        {29, {99, 117, 125}},  // Sword - Steel theme color
-        {30, {96, 114, 122}},  // Shield - Steel theme variant
-        {31, {71, 67, 63}},    // Brilliant Diamond - Rock color
-        {32, {118, 65, 100}},  // Shining Pearl - Fairy-like color variant
-        {33, {103, 116, 69}},  // Legends: Arceus - Bug theme color
-        {34, {111, 53, 17}},   // Scarlet - Fire-like color (same as red)
-        {35, {92, 77, 89}}     // Violet - Poison theme color
+    {1, {205, 92, 92}},    // Red - Indian Red
+    {2, {70, 130, 180}},   // Blue - Steel Blue
+    {3, {218, 165, 32}},   // Yellow - Golden Rod
+    {4, {210, 105, 30}},   // Gold - Chocolate
+    {5, {192, 192, 192}},  // Silver - Silver
+    {6, {112, 128, 144}},  // Crystal - Slate Gray
+    {7, {178, 34, 34}},    // Ruby - Fire Brick
+    {8, {65, 105, 225}},   // Sapphire - Royal Blue
+    {9, {60, 179, 113}},   // Emerald - Medium Sea Green
+    {10, {205, 92, 92}},   // FireRed - Indian Red (same as Red)
+    {11, {85, 107, 47}},   // LeafGreen - Dark Olive Green
+    {12, {169, 169, 169}}, // Diamond - Dark Gray
+    {13, {255, 182, 193}}, // Pearl - Light Pink
+    {14, {176, 196, 222}}, // Platinum - Light Steel Blue
+    {15, {218, 165, 32}},  // HeartGold - Golden Rod (same as Yellow)
+    {16, {192, 192, 192}}, // SoulSilver - Silver (same as Silver)
+    {17, {47, 79, 79}},    // Black - Dark Slate Gray
+    {18, {245, 245, 245}}, // White - White Smoke
+    {19, {47, 79, 79}},    // Black 2 - Dark Slate Gray (same as Black)
+    {20, {245, 245, 245}}, // White 2 - White Smoke (same as White)
+    {21, {138, 43, 226}},  // X - Blue Violet
+    {22, {147, 112, 219}}, // Y - Medium Purple
+    {23, {178, 34, 34}},   // Omega Ruby - Fire Brick (same as Ruby)
+    {24, {70, 130, 180}},  // Alpha Sapphire - Steel Blue (same as Blue)
+    {25, {250, 128, 114}}, // Sun - Salmon
+    {26, {176, 196, 222}}, // Moon - Light Steel Blue (same as Platinum)
+    {27, {233, 150, 122}}, // Ultra Sun - Dark Salmon
+    {28, {123, 104, 238}}, // Ultra Moon - Medium Slate Blue
+    {29, {205, 133, 63}},  // Sword - Peru
+    {30, {112, 128, 144}}, // Shield - Slate Gray (same as Crystal)
+    {31, {160, 82, 45}},   // Brilliant Diamond - Sienna
+    {32, {255, 160, 122}}, // Shining Pearl - Light Salmon
+    {33, {144, 238, 144}}, // Legends: Arceus - Light Green
+    {34, {240, 128, 128}}, // Scarlet - Light Coral
+    {35, {186, 85, 211}}   // Violet - Medium Orchid
 };
 const std::map<std::string, int> languageMap = {
     {"ja-Hrkt", 1},

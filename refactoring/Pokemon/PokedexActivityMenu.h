@@ -10,6 +10,7 @@ private:
 
     SDL_Surface* surf_logo;
     SDL_Surface* listEntrySurface;
+    SDL_Surface* listBackgroundSurface;
     TTF_Font* fontSurface;
     SDL_Surface* IDSurface;
 

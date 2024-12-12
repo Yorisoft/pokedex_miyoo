@@ -9,7 +9,7 @@ PokedexActivityMenu::PokedexActivityMenu() {
     fontSurface = NULL;
     IDSurface = NULL;
     listEntrySurface = NULL;
-
+    listBackgroundSurface = NULL;
     // initialize variables
     dbResults = NULL;
     selectedIndex = 0, offset = 0, itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
@@ -49,7 +49,6 @@ void PokedexActivityMenu::onActivate() {
 void PokedexActivityMenu::onDeactivate() {
     if (surf_logo) {
         SDL_FreeSurface(surf_logo);
-        surf_logo = NULL;
     }       
     TTF_CloseFont(fontSurface);
     TTF_Quit();
@@ -61,8 +60,24 @@ void PokedexActivityMenu::onLoop() {
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
     // Clear the display surface
-    SDL_FillRect(surf_display, NULL, SDL_MapRGB(surf_display->format, 0, 0, 0));
+    SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
     //std::cout << "PokedexActivityMenu::onRender START \n";
+
+    std::string backgroundImageFile = "res/icons/icon/menu_background.png";
+    listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
+    SDL_Rect backgroundRect;
+    backgroundRect.x = 0;
+    backgroundRect.y = 0;
+    backgroundRect.w = surf_display->w;
+    backgroundRect.h = surf_display->h;
+
+    PokeSurface::onDrawScaled(surf_display, listBackgroundSurface,
+       backgroundRect.x, 
+       backgroundRect.y, 
+       backgroundRect.w, 
+       backgroundRect.h 
+    );
+    SDL_FreeSurface(listBackgroundSurface);
 
     for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
         //std::cout << "starting.." << i << std::endl;
@@ -76,31 +91,46 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
             static_cast<Uint8>(gameColorMap.at(gameID)[1]),
             static_cast<Uint8>(gameColorMap.at(gameID)[2])
         };
+
         listEntrySurface = SDL_CreateRGBSurface(
             0,
-            WINDOW_WIDTH,
+            surf_display->w,
             itemHeight,
             DEPTH,
-            0, 0, 0, 0
+            0, 0, 0, 255
         );
-        SDL_FillRect(
+        listEntrySurface = SDL_ConvertSurfaceFormat(listEntrySurface, SDL_PIXELFORMAT_RGBA32, 0);
+        /*SDL_FillRect(
             listEntrySurface,
             NULL,
             SDL_MapRGBA(
                 listEntrySurface->format,
-                backgroundColors.r,
-                backgroundColors.g,
-                backgroundColors.b,
-                128
+                0, 0, 0,
+                255
             )
-        );
-
+        );*/
         SDL_Rect listEntryRect;
-        listEntryRect.x = 0;
+        listEntryRect.x = surf_display->w - (surf_display->w * 0.8);;
         listEntryRect.y = (i * itemHeight);
         listEntryRect.w = listEntrySurface->w;
         listEntryRect.h = listEntrySurface->h;
 
+        backgroundImageFile = "res/icons/icon/menu_item_background_";
+        offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
+        listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
+
+        SDL_Rect backgroundItemRect;
+        backgroundItemRect.x = 0;
+        backgroundItemRect.y = 0;
+        backgroundItemRect.w = listEntrySurface->w;
+        backgroundItemRect.h = listEntrySurface->h;
+        PokeSurface::onDrawScaled(listEntrySurface, listBackgroundSurface,
+           backgroundItemRect.x, 
+           backgroundItemRect.y, 
+           backgroundItemRect.w, 
+           backgroundItemRect.h 
+        );
+        SDL_FreeSurface(listBackgroundSurface);
 
         surf_logo = TTF_RenderText_Blended(
             fontSurface,
@@ -113,7 +143,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
         };
         
         SDL_Rect gameVersionRect;
-        gameVersionRect.x = 0;
+        gameVersionRect.x = (listEntryRect.w / 2) - (surf_logo->w / 2);;
         gameVersionRect.y = (listEntryRect.h / 2) - (surf_logo->h / 2);
         gameVersionRect.w = listEntrySurface->w;
         gameVersionRect.h = listEntrySurface->h;
@@ -132,8 +162,12 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
             listEntryRect.h
         );
  
-        SDL_FreeSurface(listEntrySurface);
+        
     //std::cout << "PokedexActivityMenu::onRender END \n";
+    }
+    // At the end, free listEntrySurface if no longer needed
+    if (listEntrySurface) {
+        SDL_FreeSurface(listEntrySurface);
     }
 }
 
