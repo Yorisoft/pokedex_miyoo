@@ -14,6 +14,7 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
     else if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
         case SW_BTN_A:
+            onButtonA(event->key.keysym.sym, event->key.keysym.mod);
             break;
         case SW_BTN_B:
             break;
@@ -65,7 +66,7 @@ void PokedexActivityEvent::onButtonRight(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonA(int mX, int mY) {
+void PokedexActivityEvent::onButtonA(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 

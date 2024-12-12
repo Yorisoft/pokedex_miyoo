@@ -37,6 +37,8 @@ public:
 
     void onButtonDown(SDL_Keycode sym, Uint16 mod);
 
+    void onButtonA(SDL_Keycode sym, Uint16 mod);
+
 };
 
 #endif
