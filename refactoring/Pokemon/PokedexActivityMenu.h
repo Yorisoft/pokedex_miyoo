@@ -32,9 +32,10 @@ public:
 
     static PokedexActivityMenu* getInstance();
 
-    void onKeyDown(SDL_Keycode sym, Uint16 mod);
+    void onButtonUp(SDL_Keycode sym, Uint16 mod);
 
-    void onKeyUp(SDL_Keycode sym, Uint16 mod);
+    void onButtonDown(SDL_Keycode sym, Uint16 mod);
+
 };
 
 #endif

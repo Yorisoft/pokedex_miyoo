@@ -22,10 +22,10 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
         case SW_BTN_LEFT:
             break;
         case SW_BTN_UP:
-            onKeyUp(event->key.keysym.sym, event->key.keysym.mod);
+            onButtonUp(event->key.keysym.sym, event->key.keysym.mod);
             break;
         case SW_BTN_DOWN:
-            onKeyDown(event->key.keysym.sym, event->key.keysym.mod);
+            onButtonDown(event->key.keysym.sym, event->key.keysym.mod);
             break;
         case SW_BTN_R1:
             break;
@@ -48,11 +48,12 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
     }   
 }
 
-void PokedexActivityEvent::onKeyDown(SDL_Keycode sym,Uint16 mod) {
+
+void PokedexActivityEvent::onButtonUp(SDL_Keycode sym,Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onKeyUp(SDL_Keycode sym,Uint16 mod) {
+void PokedexActivityEvent::onButtonDown(SDL_Keycode sym,Uint16 mod) {
     //Pure virtual, do nothing
 }
 

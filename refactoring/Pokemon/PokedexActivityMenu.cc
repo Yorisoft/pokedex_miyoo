@@ -141,7 +141,16 @@ PokedexActivityMenu* PokedexActivityMenu::getInstance() {
     return &instance;
 }
 
-void PokedexActivityMenu::onKeyDown(SDL_Keycode sym, Uint16 mod) {
+void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex > 0) {
+        selectedIndex--;
+        if (selectedIndex < offset) {
+            offset--;
+        }
+    }
+}
+
+void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
@@ -150,11 +159,3 @@ void PokedexActivityMenu::onKeyDown(SDL_Keycode sym, Uint16 mod) {
     }
 }
 
-void PokedexActivityMenu::onKeyUp(SDL_Keycode sym, Uint16 mod) {
-    if (selectedIndex > 0) {
-        selectedIndex--;
-        if (selectedIndex < offset) {
-            offset--;
-        }
-    }
-}

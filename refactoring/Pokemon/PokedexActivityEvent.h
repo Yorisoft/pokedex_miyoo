@@ -38,9 +38,9 @@ public:
 
     virtual void onEvent(SDL_Event* Event);
 
-    virtual void onKeyDown(SDL_Keycode sym, Uint16 mod);
+    virtual void onButtonUp(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onKeyUp(SDL_Keycode sym, Uint16 mod);
+    virtual void onButtonDown(SDL_Keycode sym, Uint16 mod);
 
     virtual void onButtonLeft(SDL_Keycode sym, Uint16 mod);
 
