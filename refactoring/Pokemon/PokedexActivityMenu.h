@@ -15,6 +15,7 @@ private:
     SDL_Surface* IDSurface;
 
     std::vector<std::vector<std::string>>* dbResults;
+    std::vector<std::string> game;
     int selectedIndex, offset, itemHeight;
 
     SDL_Color color;
@@ -30,6 +31,8 @@ public:
     void onLoop();
 
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
+
+    bool renderListItems(SDL_Surface* surf_display, int i);
 
     static PokedexActivityMenu* getInstance();
 
