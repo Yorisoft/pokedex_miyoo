@@ -99,7 +99,6 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
             DEPTH,
             0, 0, 0, 255
         );
-        listEntrySurface = SDL_ConvertSurfaceFormat(listEntrySurface, SDL_PIXELFORMAT_RGBA32, 0);
         /*SDL_FillRect(
             listEntrySurface,
             NULL,
