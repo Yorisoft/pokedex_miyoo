@@ -74,9 +74,11 @@ const std::string SQL_getGameVersions = R"(
    SELECT v.id AS version_id, 
        v.identifier AS version_identifier, 
        vn.name AS version_name_in_language
-    FROM versions AS v
-    JOIN version_names AS vn ON v.id = vn.version_id
-    WHERE vn.local_language_id = '${language_id}'
+    FROM versions v
+    JOIN version_names vn ON v.id = vn.version_id
+    WHERE 
+        vn.local_language_id = 9
+        AND v.id BETWEEN 1 AND 30
     ORDER BY v.id;)";
 
 const std::string SQL_getPokemonByNameTest =

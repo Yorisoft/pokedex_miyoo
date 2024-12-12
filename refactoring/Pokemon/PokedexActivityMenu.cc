@@ -62,14 +62,14 @@ void PokedexActivityMenu::onLoop() {
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
     // Clear the display surface
     SDL_FillRect(surf_display, NULL, SDL_MapRGB(surf_display->format, 0, 0, 0));
-    std::cout << "PokedexActivityMenu::onRender START \n";
+    //std::cout << "PokedexActivityMenu::onRender START \n";
 
-    for (int i = 0; i < MAX_VISIBLE_ITEMS && selectedIndex + i < dbResults->size(); i++) {
-        std::cout << "starting.." << i << std::endl;
-        std::cout << "selectedIndex: " << selectedIndex << std::endl;
-        std:: cout << "offset: " << offset << std::endl;
+    for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
+        //std::cout << "starting.." << i << std::endl;
+        //std::cout << "selectedIndex: " << selectedIndex << std::endl;
+        //std:: cout << "offset: " << offset << std::endl;
 
-        std::vector<std::string> game = (*dbResults)[selectedIndex + i];
+        std::vector<std::string> game = (*dbResults)[offset + i];
         int gameID = stoi(game[0]);
         SDL_Color backgroundColors = {
             static_cast<Uint8>(gameColorMap.at(gameID)[0]),
@@ -105,7 +105,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
         surf_logo = TTF_RenderText_Blended(
             fontSurface,
             game[2].c_str(),
-            i == 0 ? highlightColor : color
+            offset + i == selectedIndex ? highlightColor : color
         );
         if (surf_logo == NULL) {
             std::cout << "Unable to render text! SDL Error: pokeListIDSurface " << TTF_GetError() << std::endl;
@@ -133,7 +133,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
         );
  
         SDL_FreeSurface(listEntrySurface);
-    std::cout << "PokedexActivityMenu::onRender END \n";
+    //std::cout << "PokedexActivityMenu::onRender END \n";
     }
 }
 
@@ -144,7 +144,7 @@ PokedexActivityMenu* PokedexActivityMenu::getInstance() {
 void PokedexActivityMenu::onKeyDown(SDL_Keycode sym, Uint16 mod) {
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
-        if (selectedIndex >= offset) {
+        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
     }
@@ -154,7 +154,7 @@ void PokedexActivityMenu::onKeyUp(SDL_Keycode sym, Uint16 mod) {
     if (selectedIndex > 0) {
         selectedIndex--;
         if (selectedIndex < offset) {
-            offset =  selectedIndex;
+            offset--;
         }
     }
 }
