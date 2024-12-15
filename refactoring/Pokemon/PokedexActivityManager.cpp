@@ -7,6 +7,10 @@
 
 PokedexActivity* PokedexActivityManager::activity = 0;
 
+std::stack<PokedexActivity*> PokedexActivityManager::sceneStack;
+
+std::map<std::string, VariantType> PokedexActivityManager::prop;
+
 void PokedexActivityManager::onEvent(SDL_Event* event) {
     if (activity) {
         activity->onEvent(event);
@@ -26,10 +30,11 @@ void PokedexActivityManager::onRender(SDL_Surface* surf_display, SDL_Renderer* r
 }
 
 void PokedexActivityManager::setActiveState(int AppStateID) {
-    // push back current activity
-    if (activity && activity != 0) {
-        activity->onDeactivate();
-    }
+    //PokedexActivity* current = activity;
+    // // push back current activity
+    //if (current && current != 0) {
+    //    sceneStack.push(current);
+    //}
 
     // Change state to be the desired activity
     switch (AppStateID) {
@@ -52,9 +57,48 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
         break;
     }
 
-    if (activity) {
+    // push back current activity
+    if (activity && activity != 0) {
+        sceneStack.push(activity);
+        sceneStack.top()->onActivate();
+    }
+}
+
+void PokedexActivityManager::setProp(const char* key, VariantType val) {
+    if (key != nullptr) {
+        prop[key] = val;
+    }
+}
+
+void PokedexActivityManager::push(int AppStateID) {
+    std::cout << "PokedexActivityManager::push()  START" << std::endl;
+    if (!sceneStack.empty()) {
+        sceneStack.top()->onFreeze();
+    }
+
+    setActiveState(AppStateID);
+    std::cout << "PokedexActivityManager::push()  END" << std::endl;
+}
+//
+
+void PokedexActivityManager::back() {
+    std::cout << "PokedexActivityManager::back()  START" << std::endl;
+    PokedexActivity* current = sceneStack.top();
+    sceneStack.pop();
+
+    activity = sceneStack.empty() ? nullptr : sceneStack.top();
+    if (!activity) {
+        std::cout << "activity  empty. Nothing to go back to." << std::endl;
+        return;
+    }
+
+    current->onDeactivate();
+
+    if (!sceneStack.empty()) {
+        std::cout << "!sceneStack.empty(). Calling activity->onActivate()." << std::endl;
         activity->onActivate();
     }
+    std::cout << "PokedexActivityManager::back()  END" << std::endl;
 }
 
 PokedexActivity* PokedexActivityManager::getActiveState() {

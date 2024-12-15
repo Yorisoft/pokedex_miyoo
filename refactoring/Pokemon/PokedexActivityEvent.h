@@ -48,7 +48,7 @@ public:
 
     virtual void onButtonA(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonB(int mX, int mY);
+    virtual void onButtonB(SDL_Keycode sym, Uint16 mod);
 
     virtual void onButtonX(int mX, int mY);
 

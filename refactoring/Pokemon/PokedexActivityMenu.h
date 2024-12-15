@@ -12,7 +12,6 @@ private:
     SDL_Surface* listEntrySurface;
     SDL_Surface* listBackgroundSurface;
     TTF_Font* fontSurface;
-    SDL_Surface* IDSurface;
 
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> game;
@@ -33,6 +32,8 @@ public:
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
     bool renderListItems(SDL_Surface* surf_display, int i);
+
+    void onFreeze();
 
     static PokedexActivityMenu* getInstance();
 

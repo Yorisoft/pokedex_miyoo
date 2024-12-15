@@ -40,7 +40,11 @@ void PokedexActivityIntro::onLoop() {
     }
 
     if (StartTime + 4000 < SDL_GetTicks()) {
-        PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_MENU);
+        // set props
+
+        // call next activity
+        PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
+        //PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_MENU);
     }
 }
 
@@ -50,10 +54,15 @@ void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* ren
 
     if (surf_logo) {
         SDL_SetTextureAlphaMod(texture, logoAlpha); // Apply the current alpha for fade-in
-        int W = WINDOW_WIDTH;
-        int H = WINDOW_HEIGHT;
-        PokeSurface::onDraw(surf_display, surf_logo, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        SDL_Rect splashScreenRect = {
+            0, 0, WINDOW_WIDTH, WINDOW_HEIGHT
+        };
+        PokeSurface::onDraw(surf_display, surf_logo, &splashScreenRect);
     }
+}
+
+void PokedexActivityIntro::onFreeze() {
+// do nothing for now..
 }
 
 PokedexActivityIntro* PokedexActivityIntro::getInstance() {

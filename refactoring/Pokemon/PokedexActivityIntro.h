@@ -25,6 +25,8 @@ public:
 
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
+    void onFreeze();
+
 public:
     static PokedexActivityIntro* getInstance();
 };

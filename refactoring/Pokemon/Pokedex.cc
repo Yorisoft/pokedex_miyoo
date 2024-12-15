@@ -105,20 +105,7 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    /*SDL_Surface* tempSurface = SDL_CreateRGBSurface(
-        0,
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-        DEPTH,
-        0, 0, 0, 0
-    );
-    if (!tempSurface) {
-        std::cout << "Failed to create tempSurface: " << SDL_GetError();
-        SDL_Quit();
-        exit(EXIT_FAILURE);
-    }*/
-
-    //this->screen = SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0); 
+    
     this->screen = SDL_CreateRGBSurface(
         0,
         WINDOW_WIDTH,
@@ -263,12 +250,4 @@ int main(int argc, char* argv[]) {
 	return pokedexApp.onExecute();
 
     std::cout << "main: end" << std::endl;
-	//std::string pokemonName= "charmander";
-	//Pokemon* pokemon = new Pokemon(&pokemonName);
-
-	//// for testing.
-	//std::cout << "This is pokemon object 'name' member variable: " << pokemon->getName() << std::endl;
-	//std::cin.get();
-
-	//return 0;
 }

@@ -9,12 +9,19 @@ private:
     static PokedexActivityList instance;
 
     SDL_Surface* surf_logo;
+    SDL_Surface* pokeIconSurface;
+    SDL_Surface* listEntrySurface;
+    SDL_Surface* listBackgroundSurface;
+    TTF_Font* fontSurface;
+    SDL_Surface* IDSurface;
 
     int StartTime;
 
     std::vector<std::vector<std::string>>* dbResults;
+    std::vector<std::string> pokemon;
     //TTF_Font* listFont;
     SDL_Surface* pokeListLabelSurface, * pokemonListEntrySurface;
+    int selectedIndex, offset, itemHeight;
     std::ostringstream textStream;
 
     SDL_Color color;
@@ -35,12 +42,20 @@ public:
 
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
-    bool pokedexList(SDL_Surface* targetSurface, const std::vector<std::vector<std::string>>& dbResults);
+    void onFreeze();
 
-    bool pokemonEntry(SDL_Surface* targetSurface, const std::vector<std::string>& pokemon, int index);
+    bool renderListItems(SDL_Surface* surf_display, int i);
 
 public:
     static PokedexActivityList* getInstance();
+
+    void onButtonUp(SDL_Keycode sym, Uint16 mod);
+
+    void onButtonDown(SDL_Keycode sym, Uint16 mod);
+
+    void onButtonA(SDL_Keycode sym, Uint16 mod);
+
+    void onButtonB(SDL_Keycode sym, Uint16 mod);
 };
 
    // Charcoal, Gunmetal

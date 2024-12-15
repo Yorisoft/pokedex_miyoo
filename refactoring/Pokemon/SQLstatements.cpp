@@ -46,39 +46,49 @@ const std::string SQL_getPokemonByName = R"(
 	ORDER BY ps.id, v.id;)";
 
 const std::string SQL_getNameAndID = R"(
-    SELECT 
+    SELECT
         pdn.pokedex_number AS regional_pokedex_id,
-        psn.name AS pokemon_name_in_language,
-        p.id AS pokemon_id
-    FROM 
+        p.species_id AS national_pokedex_id, -- Assuming species_id is the national pokedex_id
+        p.identifier AS pokemon_identifier,
+        psn.name AS pokemon_name_in_language
+    FROM
         pokemon AS p
-    JOIN 
+    JOIN
         pokemon_species_names AS psn ON p.species_id = psn.pokemon_species_id
-    JOIN 
+    JOIN
         pokemon_game_indices AS pgi ON p.id = pgi.pokemon_id
-    JOIN 
+    JOIN
         versions AS v ON pgi.version_id = v.id
-    LEFT JOIN 
+    JOIN
         pokemon_dex_numbers AS pdn ON p.species_id = pdn.species_id
-    WHERE 
-        v.identifier = '${game_version}'
-        AND psn.local_language_id = '${language_id}'
-        AND pdn.pokedex_id = '${region_id}'
-    ORDER BY 
-        pdn.pokedex_number;
-)";
+    JOIN
+        pokedexes AS px ON pdn.pokedex_id = px.id
+    JOIN
+        regions AS r ON px.region_id = r.id
+    WHERE
+        psn.local_language_id = '${language_id}'
+        AND r.id = '${region_id}'
+        AND v.identifier = '${game_version}'
+        AND px.identifier NOT LIKE '%updated%'
+    GROUP BY
+        pdn.pokedex_number, p.species_id -- Ensure you include species_id in GROUP BY
+    ORDER BY
+        regional_pokedex_id;)";
 
 
 
 const std::string SQL_getGameVersions = R"(
-   SELECT v.id AS version_id, 
-       v.identifier AS version_identifier, 
-       vn.name AS version_name_in_language
+	SELECT v.id AS version_id, 
+		v.identifier AS version_identifier, 
+		vn.name AS version_name_in_language, 
+		r.id AS region_id
     FROM versions v
     JOIN version_names vn ON v.id = vn.version_id
-    WHERE 
-        vn.local_language_id = 9
-        AND v.id BETWEEN 1 AND 30
+    JOIN pokedex_version_groups pvg ON v.version_group_id = pvg.version_group_id
+    JOIN pokedexes p ON pvg.pokedex_id = p.id
+    JOIN regions r ON p.region_id = r.id
+    WHERE vn.local_language_id = '${language_id}'
+      AND v.id BETWEEN 1 AND 22
     ORDER BY v.id;)";
 
 const std::string SQL_getPokemonByNameTest =
