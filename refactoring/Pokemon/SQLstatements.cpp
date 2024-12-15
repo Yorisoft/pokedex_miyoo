@@ -48,9 +48,11 @@ const std::string SQL_getPokemonByName = R"(
 const std::string SQL_getNameAndID = R"(
     SELECT
         pdn.pokedex_number AS regional_pokedex_id,
-        p.species_id AS national_pokedex_id, -- Assuming species_id is the national pokedex_id
+        p.species_id AS national_pokedex_id,
         p.identifier AS pokemon_identifier,
-        psn.name AS pokemon_name_in_language
+        psn.name AS pokemon_name_in_language,
+        t1.identifier AS type_1,
+        t2.identifier AS type_2
     FROM
         pokemon AS p
     JOIN
@@ -65,13 +67,21 @@ const std::string SQL_getNameAndID = R"(
         pokedexes AS px ON pdn.pokedex_id = px.id
     JOIN
         regions AS r ON px.region_id = r.id
+    JOIN
+        pokemon_types AS pt1 ON p.id = pt1.pokemon_id AND pt1.slot = 1
+    LEFT JOIN
+        pokemon_types AS pt2 ON p.id = pt2.pokemon_id AND pt2.slot = 2
+    JOIN
+        types AS t1 ON pt1.type_id = t1.id
+    LEFT JOIN
+        types AS t2 ON pt2.type_id = t2.id
     WHERE
         psn.local_language_id = '${language_id}'
         AND r.id = '${region_id}'
         AND v.identifier = '${game_version}'
         AND px.identifier NOT LIKE '%updated%'
     GROUP BY
-        pdn.pokedex_number, p.species_id -- Ensure you include species_id in GROUP BY
+        pdn.pokedex_number, p.species_id 
     ORDER BY
         regional_pokedex_id;)";
 

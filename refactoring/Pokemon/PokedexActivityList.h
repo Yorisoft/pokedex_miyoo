@@ -10,6 +10,9 @@ private:
 
     SDL_Surface* surf_logo;
     SDL_Surface* pokeIconSurface;
+    SDL_Surface* pokeType1Surface;
+    SDL_Surface* pokeType2Surface;
+    SDL_Surface* pokeIDSurface;
     SDL_Surface* listEntrySurface;
     SDL_Surface* listBackgroundSurface;
     TTF_Font* fontSurface;
