@@ -1,5 +1,5 @@
-#ifndef _CEVENT_H_
-#define _CEVENT_H_
+#ifndef _POKEDEXACTIVITYEVENT_H_
+#define _POKEDEXACTIVITYEVENT_H_
 
 // Window Settings
 #define WINDOW_HEIGHT 480                   // window height in pixels
@@ -50,17 +50,17 @@ public:
 
     virtual void onButtonB(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonX(int mX, int mY);
+    virtual void onButtonX(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonY(int mX, int mY);
+    virtual void onButtonY(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonL(int mX, int mY);
+    virtual void onButtonL(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonLT(int mX, int mY);
+    virtual void onButtonLT(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonR(int mX, int mY);
+    virtual void onButtonR(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonRT(int mX, int mY);
+    virtual void onButtonRT(SDL_Keycode sym, Uint16 mod);
 
     virtual void onMinimize();
 

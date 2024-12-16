@@ -50,7 +50,6 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
     }   
 }
 
-
 void PokedexActivityEvent::onButtonUp(SDL_Keycode sym,Uint16 mod) {
     //Pure virtual, do nothing
 }
@@ -75,27 +74,27 @@ void PokedexActivityEvent::onButtonB(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonX(int mX, int mY) {
+void PokedexActivityEvent::onButtonX(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonY(int mX, int mY) {
+void PokedexActivityEvent::onButtonY(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonL(int mX, int mY) {
+void PokedexActivityEvent::onButtonL(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonLT(int mX, int mY) {
+void PokedexActivityEvent::onButtonLT(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonR(int mX, int mY) {
+void PokedexActivityEvent::onButtonR(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
-void PokedexActivityEvent::onButtonRT(int mX, int mY) {
+void PokedexActivityEvent::onButtonRT(SDL_Keycode sym, Uint16 mod) {
     //Pure virtual, do nothing
 }
 
