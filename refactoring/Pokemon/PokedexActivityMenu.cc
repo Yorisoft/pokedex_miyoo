@@ -3,16 +3,16 @@
 
 PokedexActivityMenu PokedexActivityMenu::instance;
 
-PokedexActivityMenu::PokedexActivityMenu() {
-    // surface
-    surf_logo = NULL;
-    fontSurface = NULL;
-    listEntrySurface = NULL;
-    listBackgroundSurface = NULL;
-    // initialize variables
-    dbResults = NULL;
-    selectedIndex = 0, offset = 0, itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
-
+PokedexActivityMenu::PokedexActivityMenu() : 
+gameNameSurface(nullptr),
+fontSurface(nullptr),
+listEntrySurface(nullptr),
+listBackgroundSurface(nullptr),
+dbResults(nullptr),
+selectedIndex(0),
+offset(0),
+itemHeight(static_cast<int>(WINDOW_HEIGHT / 5))
+{
     // color maps
     color = { 255, 255, 255 };
     highlightColor = { 255, 0, 0 };
@@ -40,14 +40,14 @@ void PokedexActivityMenu::onActivate() {
 
 void PokedexActivityMenu::onDeactivate() {
     selectedIndex = 0, offset = 0;
-    if (surf_logo) {
-        SDL_FreeSurface(surf_logo);
+    if (gameNameSurface) {
+        SDL_FreeSurface(gameNameSurface);
     }       
     TTF_CloseFont(fontSurface);
 }
 
 void PokedexActivityMenu::onLoop() {
-    //PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_LIST);
+
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
@@ -103,30 +103,28 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
 
     //List item title
-    surf_logo = TTF_RenderText_Blended(
+    gameNameSurface = TTF_RenderText_Blended(
         fontSurface,
         (*dbResults)[offset + i][2].c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
-    if (surf_logo == NULL) {
-        std::cout << "Unable to render text! SDL Error: surf_logo " << TTF_GetError() << std::endl;
+    if (gameNameSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: gameNameSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
     SDL_Rect gameVersionRect;
-    gameVersionRect.x = listEntryRect.x + (listEntryRect.w / 2) - (surf_logo->w / 2);
-    gameVersionRect.y = (i * itemHeight)+(listEntryRect.h / 2) - (surf_logo->h / 2);
-    gameVersionRect.w = surf_logo->w;
-    gameVersionRect.h = surf_logo->h;
-    PokeSurface::onDraw(surf_display, surf_logo, &gameVersionRect);
-    SDL_FreeSurface(surf_logo);
+    gameVersionRect.x = listEntryRect.x + (listEntryRect.w / 2) - (gameNameSurface->w / 2);
+    gameVersionRect.y = (i * itemHeight)+(listEntryRect.h / 2) - (gameNameSurface->h / 2);
+    gameVersionRect.w = gameNameSurface->w;
+    gameVersionRect.h = gameNameSurface->h;
+    PokeSurface::onDraw(surf_display, gameNameSurface, &gameVersionRect);
+    SDL_FreeSurface(gameNameSurface);
 
     return true;
 }
 
 void PokedexActivityMenu::onFreeze() {
-    //PokedexActivityManager::setProp("menu_selectedIndex", selectedIndex);
-    //PokedexActivityManager::setProp("menu_offset", offset);
 }
 
 PokedexActivityMenu* PokedexActivityMenu::getInstance() {
@@ -159,6 +157,5 @@ void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     PokedexDB::setRegionVersion(std::stoi(game[3]));
 
     PokedexActivityManager::push(APPSTATE_POKEDEX_LIST);
-    //PokedexActivityManager::setActiveState(APPSTATE_POKEDEX_LIST);
 }
 

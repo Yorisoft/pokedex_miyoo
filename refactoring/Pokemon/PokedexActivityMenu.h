@@ -7,17 +7,17 @@ class PokedexActivityMenu : public PokedexActivity {
 private:
     static PokedexActivityMenu instance;
 
-    SDL_Surface* surf_logo;
-    SDL_Surface* listEntrySurface;
-    SDL_Surface* listBackgroundSurface;
-    TTF_Font* fontSurface;
-
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> game;
-    int selectedIndex, offset, itemHeight;
+
+    SDL_Surface* gameNameSurface, *listEntrySurface,
+        *listBackgroundSurface;
+    TTF_Font* fontSurface;
 
     SDL_Color color;
     SDL_Color highlightColor;
+    
+    int selectedIndex, offset, itemHeight;
 
     PokedexActivityMenu();
 
