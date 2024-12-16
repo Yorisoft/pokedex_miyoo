@@ -10,9 +10,6 @@
 #include<iomanip>
 #include"sqlite/sqlite3.h"
 #include"Pokedex.h"
-#include"Pokemon.h"
-#include"PokedexDB.h"
-#include"SQLstatements.h"
 
 Pokedex::Pokedex() {
     window = NULL;
@@ -171,7 +168,7 @@ void Pokedex::onLoop() {
     std::cout << std::fixed << std::setprecision(2);
 
     // Right-align the output by setting fill to spaces and width
-    //std::cout << "FPS: " << fps << "\r";
+    std::cout << "FPS: " << fps << "\r";
 
     PokedexActivityManager::onLoop();
     //std::cout << "onLoop: end" << std::endl;
@@ -179,9 +176,6 @@ void Pokedex::onLoop() {
 
 void Pokedex::onRender() {
     ////std::cout << "onRender: start" << std::endl;
-    //PokeSurface::onDraw(screen, screenTest, 0, 0);
-    //PokeSurface::onDraw(screen, screenTest, 100, 100, 0, 0, 50, 50);
-
     SDL_RenderClear(renderer);
     PokedexActivityManager::onRender(screen, renderer, texture);
 
@@ -204,9 +198,9 @@ void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
 
     // Update FPS every 1 second
     if (elapsedTime >= 1000) {
-        fps = frameCount / (elapsedTime / 1000.0f); // Frames per second
-        frameCount = 0; // Reset frame count
-        lastTime = currentTime; // Reset last time
+        fps = frameCount / (elapsedTime / 1000.0f);
+        frameCount = 0;
+        lastTime = currentTime;
     }
 }
 
@@ -216,7 +210,6 @@ void Pokedex::onExit() {
 
 void Pokedex::onCleanup() {
     std::cout << "onCleanUp: start" << std::endl;
-    //PokedexActivityManager::setActiveState(APPSTATE_NONE);
 
     SDL_FreeSurface(screen);
     SDL_FreeSurface(screenTest);
