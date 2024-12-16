@@ -2,13 +2,12 @@
 #define __POKEDEXACTIVITYINTO_H__
 
 #include "PokedexActivity.h"
-#include "PokeSurface.h"
 
 class PokedexActivityIntro : public PokedexActivity {
 private:
     static PokedexActivityIntro instance;
 
-    SDL_Surface* surf_logo;
+    SDL_Surface* splashSurface;
 
     int StartTime;        
     Uint8 logoAlpha;

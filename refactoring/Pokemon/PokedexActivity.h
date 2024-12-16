@@ -1,10 +1,11 @@
 #ifndef POKEDEXACTIVITY_H
 #define POKEDEXACTIVITY_H
 
-#include "PokedexActivityEvent.h"
 #include <sstream>
-#include <map>
 #include <vector>
+#include <map>
+#include "PokedexActivityEvent.h"
+#include "PokeSurface.h"
 #include "PokedexDB.h"
 #include "SQLstatements.h"
 #include "Mappings.h"

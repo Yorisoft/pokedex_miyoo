@@ -2,36 +2,24 @@
 #define __POKEDEXACTIVITYLIST_H__
 
 #include "PokedexActivity.h"
-#include "PokeSurface.h"
 
 class PokedexActivityList : public PokedexActivity {
 private:
     static PokedexActivityList instance;
 
-    SDL_Surface* surf_logo;
-    SDL_Surface* pokeIconSurface;
-    SDL_Surface* pokeType1Surface;
-    SDL_Surface* pokeType2Surface;
-    SDL_Surface* pokeIDSurface;
-    SDL_Surface* listEntrySurface;
-    SDL_Surface* listBackgroundSurface;
-    TTF_Font* fontSurface;
-    SDL_Surface* IDSurface;
-
-    int StartTime;
-
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> pokemon;
-    //TTF_Font* listFont;
-    SDL_Surface* pokeListLabelSurface, * pokemonListEntrySurface;
+
+    SDL_Surface* pokeIDSurface, *pokeNameSurface,
+    *pokeIconSurface, *pokeType1Surface,
+    *pokeType2Surface, *listEntrySurface,
+    *listBackgroundSurface;
+    TTF_Font* fontSurface;
+    SDL_Color color, highlightColor;
+
+    int StartTime;
     int selectedIndex, offset, itemHeight;
-    std::ostringstream textStream;
-
-    SDL_Color color;
-    SDL_Color highlightColor;
     std::string fontPath;
-    int pokemonListSurfaceHeight;
-
 
 private:
     PokedexActivityList();
@@ -49,6 +37,12 @@ public:
 
     bool renderListItems(SDL_Surface* surf_display, int i);
 
+    SDL_Rect renderItemBackground(SDL_Surface* surf_display, int i);
+
+    bool renderItemSprites(SDL_Surface* surf_display, int i);
+
+    bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i);
+
 public:
     static PokedexActivityList* getInstance();
 
@@ -61,5 +55,4 @@ public:
     void onButtonB(SDL_Keycode sym, Uint16 mod);
 };
 
-   // Charcoal, Gunmetal
 #endif

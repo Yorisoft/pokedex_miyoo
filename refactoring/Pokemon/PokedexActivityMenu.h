@@ -2,7 +2,6 @@
 #define __POKEDEXACTIVITYMENU_H__
 
 #include "PokedexActivity.h"
-#include "PokeSurface.h"
 
 class PokedexActivityMenu : public PokedexActivity {
 private:
