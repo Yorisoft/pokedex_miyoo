@@ -23,16 +23,13 @@ private:
 	static void closeDB(sqlite3* db);
 	static void cleanup();
 
-
 public:
 	PokedexDB();
+	~PokedexDB();
 	static std::vector<std::vector<std::string>>* executeSQL(const std::string*);
 	static void printSQLresults(std::vector<std::vector<std::string>>*);
 	static void enableTestMode(bool);  // To turn on test mode
 	static void setLanguageVersion(int);
 	static void setGameVersion(std::string&);
 	static void setRegionVersion(int);
-	
-	~PokedexDB();
-
 };

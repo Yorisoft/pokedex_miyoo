@@ -15,7 +15,6 @@ sqlite3* PokedexDB::db;
 int PokedexDB::rc;   
 char* PokedexDB::zErrMsg;
 
-
 PokedexDB::PokedexDB() {
  }
 
@@ -125,7 +124,6 @@ void PokedexDB::cleanup() {
     }
     
 }
-
 
 void PokedexDB::setLanguageVersion(int version_id) {
     languageVersion = version_id;

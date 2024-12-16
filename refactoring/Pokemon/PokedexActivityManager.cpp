@@ -3,7 +3,6 @@
 #include "PokedexActivityIntro.h"
 #include "PokedexActivityList.h"
 #include "PokedexActivityMenu.h"
-//#include "PokeActivityPokemonEntry.h"
 
 PokedexActivity* PokedexActivityManager::activity = 0;
 std::stack<PokedexActivity*> PokedexActivityManager::sceneStack;
