@@ -125,8 +125,8 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
 }
 
 void PokedexActivityMenu::onFreeze() {
-    PokedexActivityManager::setProp("menu_selectedIndex", selectedIndex);
-    PokedexActivityManager::setProp("menu_offset", offset);
+    //PokedexActivityManager::setProp("menu_selectedIndex", selectedIndex);
+    //PokedexActivityManager::setProp("menu_offset", offset);
 }
 
 PokedexActivityMenu* PokedexActivityMenu::getInstance() {

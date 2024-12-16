@@ -6,10 +6,7 @@
 //#include "PokeActivityPokemonEntry.h"
 
 PokedexActivity* PokedexActivityManager::activity = 0;
-
 std::stack<PokedexActivity*> PokedexActivityManager::sceneStack;
-
-std::map<std::string, VariantType> PokedexActivityManager::prop;
 
 void PokedexActivityManager::onEvent(SDL_Event* event) {
     if (activity) {
@@ -30,12 +27,6 @@ void PokedexActivityManager::onRender(SDL_Surface* surf_display, SDL_Renderer* r
 }
 
 void PokedexActivityManager::setActiveState(int AppStateID) {
-    //PokedexActivity* current = activity;
-    // // push back current activity
-    //if (current && current != 0) {
-    //    sceneStack.push(current);
-    //}
-
     // Change state to be the desired activity
     switch (AppStateID) {
     case 0:
@@ -45,10 +36,10 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
         activity = PokedexActivityIntro::getInstance();
         break;
     case 2:
-        activity = PokedexActivityList::getInstance();
+        activity = PokedexActivityMenu::getInstance();
         break;
     case 3:
-        activity = PokedexActivityMenu::getInstance();
+        activity = PokedexActivityList::getInstance();
         break;
     /*case 4:
         activity = PokeActivityPokemonEntry::getInstance();
@@ -64,12 +55,6 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
     }
 }
 
-void PokedexActivityManager::setProp(const char* key, VariantType val) {
-    if (key != nullptr) {
-        prop[key] = val;
-    }
-}
-
 void PokedexActivityManager::push(int AppStateID) {
     std::cout << "PokedexActivityManager::push()  START" << std::endl;
     if (!sceneStack.empty()) {
@@ -79,7 +64,6 @@ void PokedexActivityManager::push(int AppStateID) {
     setActiveState(AppStateID);
     std::cout << "PokedexActivityManager::push()  END" << std::endl;
 }
-//
 
 void PokedexActivityManager::back() {
     std::cout << "PokedexActivityManager::back()  START" << std::endl;
