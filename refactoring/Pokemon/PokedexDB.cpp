@@ -10,6 +10,7 @@ const std::string PokedexDB::TEST_DB_PATH = "../res/db/pokedex.sqlite";
 std::string PokedexDB::gameVersion = "red";
 int PokedexDB::languageVersion = 9;
 int PokedexDB::regionVersion = 1;
+std::string PokedexDB::pokemonIdentifier = "charmander";
 std::vector<std::vector<std::string>>* PokedexDB::results = new std::vector<std::vector<std::string>>();
 sqlite3* PokedexDB::db;
 int PokedexDB::rc;   
@@ -64,6 +65,14 @@ std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* 
     while (pos != std::string::npos) {
         SQLstatement.replace(pos, std::string("${region_id}").length(), std::to_string(regionVersion));
         pos = SQLstatement.find("${region_id}");
+    }
+
+    // change sql statement to be pokemon specific
+    // find position of string to replace with pokemonIdentifier
+    pos = SQLstatement.find("${pokemon_identifier}");
+    while (pos != std::string::npos) {
+        SQLstatement.replace(pos, std::string("${pokemon_identifier}").length(), pokemonIdentifier);
+        pos = SQLstatement.find("${pokemon_identifier}");
     }
 
     // clear any previous results
@@ -135,4 +144,12 @@ void PokedexDB::setGameVersion(std::string& version_name) {
 
 void PokedexDB::setRegionVersion(int version_id) {
     regionVersion = version_id;
+}
+
+void PokedexDB::setPokemonIdentifier(std::string& pokemon_identifier) {
+    pokemonIdentifier = pokemon_identifier;
+}
+
+std::string PokedexDB::getPokemonIdentifier() {
+    return pokemonIdentifier;
 }

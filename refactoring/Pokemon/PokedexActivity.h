@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include<iomanip>
 #include "PokedexActivityEvent.h"
 #include "PokeSurface.h"
 #include "PokedexDB.h"

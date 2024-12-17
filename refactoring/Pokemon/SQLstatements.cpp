@@ -86,7 +86,7 @@ const std::string SQL_getNameAndID = R"(
         regional_pokedex_id;)";
 
 
-
+// // // // //  
 const std::string SQL_getGameVersions = R"(
 	SELECT v.id AS version_id, 
 		v.identifier AS version_identifier, 
@@ -99,7 +99,166 @@ const std::string SQL_getGameVersions = R"(
     JOIN regions r ON p.region_id = r.id
     WHERE vn.local_language_id = '${language_id}'
       AND v.id BETWEEN 1 AND 22
-    ORDER BY v.id;)";
+    ORDER BY v.id;
+)";
+
+const std::string SQL_getPokeRegionalID = R"(
+    SELECT
+      ps.id AS pokemon_id,
+      pdn.pokedex_number AS regional_pokedex_id
+    FROM
+      pokemon_species ps
+    JOIN
+      pokemon_species_names psn ON ps.id = psn.pokemon_species_id
+    JOIN
+      pokemon_dex_numbers pdn ON ps.id = pdn.species_id
+    JOIN
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN
+      regions r ON px.region_id = r.id
+    JOIN
+      pokemon_game_indices pgi ON ps.id = pgi.pokemon_id
+    JOIN
+      versions v ON pgi.version_id = v.id
+    WHERE
+      psn.local_language_id = '${language_id}'
+      AND r.id = '${region_id}'
+      AND v.identifier = '${game_version}'
+      AND ps.identifier = '${pokemon_identifier}'
+      AND px.identifier NOT LIKE '%updated%';
+)";
+
+const std::string SQL_getPokeName = R"(
+    SELECT
+      ps.id AS pokemon_id,
+      psn.name AS pokemon_name
+    FROM
+      pokemon_species ps
+    JOIN
+      pokemon_species_names psn ON ps.id = psn.pokemon_species_id
+    JOIN
+      pokemon_dex_numbers pdn ON ps.id = pdn.species_id
+    JOIN
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN
+      regions r ON px.region_id = r.id
+    JOIN
+      pokemon_game_indices pgi ON ps.id = pgi.pokemon_id
+    JOIN
+      versions v ON pgi.version_id = v.id
+    WHERE
+      psn.local_language_id = '${language_id}'
+      AND r.id = '${region_id}'
+      AND v.identifier = '${game_version}'
+      AND ps.identifier = '${pokemon_identifier}'
+      AND px.identifier NOT LIKE '%updated%';
+)";
+
+const std::string SQL_getPokeTypes = R"(
+    SELECT 
+      t1.identifier AS type_1, 
+      t2.identifier AS type_2
+    FROM 
+      pokemon p
+    JOIN 
+      pokemon_game_indices pgi ON p.id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON p.species_id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    LEFT JOIN 
+      pokemon_types pt1 ON p.id = pt1.pokemon_id AND pt1.slot = 1
+    LEFT JOIN 
+      types t1 ON pt1.type_id = t1.id
+    LEFT JOIN 
+      pokemon_types pt2 ON p.id = pt2.pokemon_id AND pt2.slot = 2
+    LEFT JOIN 
+      types t2 ON pt2.type_id = t2.id
+    WHERE 
+      v.identifier = '${game_version}'
+      AND r.id = '${region_id}'
+      AND p.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      AND px.identifier NOT LIKE '%updated%';
+)";
+
+
+const std::string SQL_getPokeGenus = R"(
+    SELECT 
+      psn.name AS species_name,
+      psn.genus AS species_genus
+    FROM 
+      pokemon_species ps
+    JOIN 
+      pokemon_species_names psn ON ps.id = psn.pokemon_species_id
+    JOIN 
+      pokemon_game_indices pgi ON ps.id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON ps.id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    WHERE 
+      psn.local_language_id = '${language_id}'
+      AND v.identifier = '${game_version}' 
+      AND r.id = '${region_id}'
+      AND ps.identifier = '${pokemon_identifier}'
+      AND px.identifier NOT LIKE '%updated%';
+)";
+
+
+const std::string SQL_getPokeHW = R"(
+    SELECT 
+      p.height AS pokemon_height,
+      p.weight AS pokemon_weight
+    FROM 
+      pokemon p
+    JOIN 
+      pokemon_game_indices pgi ON p.id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON p.species_id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    WHERE 
+      v.identifier = '${game_version}' 
+      AND r.id = '${region_id}'
+      AND p.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      AND px.identifier NOT LIKE '%updated%';
+)";
+
+const std::string SQL_getPokeFlavorText = R"(
+    SELECT 
+      psft.flavor_text
+    FROM 
+      pokemon_species_flavor_text psft
+    JOIN 
+      pokemon_game_indices pgi ON psft.species_id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON psft.species_id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    WHERE 
+      psft.language_id = '${language_id}'
+      AND v.identifier = '${game_version}'
+      AND r.id = '${region_id}'
+      AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      AND px.identifier NOT LIKE '%updated%';
+)";
+// // // // // // 
 
 const std::string SQL_getPokemonByNameTest =
 	"SELECT "

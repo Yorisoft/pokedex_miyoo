@@ -9,4 +9,12 @@ extern const std::string SQL_getNameAndID;
 extern const std::string SQL_getGameVersions;
 
 
+extern const std::string SQL_getPokeName;
+extern const std::string SQL_getPokeRegionalID;
+extern const std::string SQL_getPokeTypes;
+extern const std::string SQL_getPokeGenus;
+extern const std::string SQL_getPokeHW;
+extern const std::string SQL_getPokeFlavorText;
+
+
 #endif

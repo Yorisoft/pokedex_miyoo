@@ -4,7 +4,34 @@
 #include<iostream> 
 #include<string>
 
-Pokemon::Pokemon(const int ID) {
+Pokemon::Pokemon() {
+	std::vector<std::vector<std::string>>* results;
+
+	// set id
+	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
+	setID(std::stoi((*results)[0][1]));
+
+	// set name;
+	results = PokedexDB::executeSQL(&SQL_getPokeName);
+	setName((*results)[0][1]);
+
+	// set types;
+	results = PokedexDB::executeSQL(&SQL_getPokeTypes);
+	setTypes((*results)[0]);
+
+	// set genus;
+	results = PokedexDB::executeSQL(&SQL_getPokeGenus);
+	setGenus((*results)[0][1]);
+
+	// set height & weight;
+	results = PokedexDB::executeSQL(&SQL_getPokeHW);
+	setHeight(std::stoi((*results)[0][0]));
+	setWeight(std::stoi((*results)[0][1]));
+
+	// set flavor text;
+	results = PokedexDB::executeSQL(&SQL_getPokeFlavorText);
+	setFlavorText((*results)[0][0]);
+
 	// make a call to pokedex class 
 	// use pokedex sqlite functions to get pokemon information. 
 
@@ -13,6 +40,10 @@ Pokemon::Pokemon(const int ID) {
 
 	//this->setMemberVaribles(results);
 
+
+}
+
+Pokemon::Pokemon(std::string pokemon) {
 }
 
 Pokemon::Pokemon(std::string* pokemon) {
@@ -174,18 +205,31 @@ std::vector<std::string> Pokemon::getTypes() {
 }
 
 void Pokemon::setWeight(const unsigned short w) {
-	this->weight = w;
+	double weightInPounds = w * 0.22;
+	weightInPounds = std::ceil(weightInPounds * 10.0) / 10.0;
+
+	// Store the rounded weight as a string with 1 decimal place
+	std::ostringstream stream;
+	stream << std::fixed << std::setprecision(1) << weightInPounds;
+	this->weight = stream.str();
 }
 
-unsigned short Pokemon::getWeight() const {
+std::string Pokemon::getWeight() const {
 	return this->weight;
 }
 
 void Pokemon::setHeight(const unsigned short h) {
-	this->height = h;
+	double heightDecimeters = h * 0.1;         
+	double heightInInches = heightDecimeters * 39.37;         
+	int totalInches = static_cast<int>(std::round(heightInInches)); // Round to nearest inch
+
+	int feet = totalInches / 12;       
+	int inches = totalInches % 12;     
+
+	this->height = std::to_string(feet) + '\'' + std::to_string(inches);
 }
 
-unsigned short Pokemon::getHeight() const {
+std::string Pokemon::getHeight() const {
 	return this->height;
 }
 
@@ -218,7 +262,31 @@ std::vector<double>* Pokemon::getGenderRates() const {
 }
 
 void Pokemon::setFlavorText(const std::string& fText) {
-	this->flavorText = fText;
+	//for (char c : fText) {
+	//	std::cout << static_cast<int>(c) << " "; // Print each character's ASCII value
+	//}
+	// Or to replace \n with a string:
+	std::string replacement = " "; 
+	std::string result = fText;
+	size_t pos = 0;
+	while ((pos = result.find("\n", pos)) != std::string::npos) {
+		result.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	pos = 0;
+	while ((pos = result.find("\r", pos)) != std::string::npos) {
+		result.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	pos = 0;
+	while ((pos = result.find("\f", pos)) != std::string::npos) {
+		result.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	this->flavorText = result;
 }
 
 std::string Pokemon::getFlavorText() const {

@@ -255,12 +255,17 @@ void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
-    ////Set Game version and regional pokedex ID for PokedexDB
+    ////Set pokemon identifier for PokedexDB
+    pokemon = (*dbResults)[selectedIndex];
+    PokedexDB::setPokemonIdentifier(pokemon[2]);
+
+    ////Call next activity
+    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_INFO);
 
 }
 
 void PokedexActivityList::onButtonB(SDL_Keycode sym, Uint16 mod) {
-    //Set Game version and regional pokedex ID for PokedexDB
+    ////Set pokemon identifier for PokedexDB
 
     PokedexActivityManager::back();
 }

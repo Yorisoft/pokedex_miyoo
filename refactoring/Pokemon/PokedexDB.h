@@ -9,13 +9,15 @@ private:
 	static std::vector<std::vector<std::string>>* results;
     static sqlite3* db;
 	static int rc;   
-	static int languageVersion;
     static char* zErrMsg;
 	static bool isTestMode;
 	static const std::string MAIN_DB_PATH;
 	static const std::string TEST_DB_PATH;
+
+	static int languageVersion;
 	static std::string gameVersion;
 	static int regionVersion;
+	static std::string pokemonIdentifier;
 
 	static int callback(void* results, int argc, char** argv, char** azColName);
 	static const std::string getDBpath();
@@ -31,5 +33,7 @@ public:
 	static void enableTestMode(bool);  // To turn on test mode
 	static void setLanguageVersion(int);
 	static void setGameVersion(std::string&);
+	static void setPokemonIdentifier(std::string&);
+	static std::string getPokemonIdentifier();
 	static void setRegionVersion(int);
 };

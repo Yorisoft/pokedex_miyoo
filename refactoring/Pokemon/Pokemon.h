@@ -2,6 +2,9 @@
 #define POKEMON_H
 
 #include<iostream>
+#include<iomanip>
+#include<cmath>
+#include<sstream>
 #include<string>
 #include<vector>
 
@@ -9,11 +12,11 @@ class Pokemon {
 private:
 	std::string
 		name, genus,
+		weight, height,
 		typeA, typeB,	
 		flavorText;
 	unsigned short
 		id, 
-		weight, height,
 		healthPoint, attack, defense,
 		specialAttack, specialDefense, speed,
 		evolutionChainID, evolvesFromSpeciesID;
@@ -26,7 +29,8 @@ private:
 	std::vector<std::vector<std::string>> queryForPokeData(std::string& pName, std::string& sqlStatement);
 
 public:
-	Pokemon(const int);
+	Pokemon();
+	Pokemon(std::string);
 	Pokemon(std::string*);
 	Pokemon(std::vector<std::vector<std::string>>*);
 	~Pokemon();
@@ -57,8 +61,8 @@ public:
 	std::string getName() const;
 	std::string getGenus() const;
 	std::vector<std::string> getTypes();
-	unsigned short getWeight() const;
-	unsigned short getHeight() const;
+	std::string getWeight() const;
+	std::string getHeight() const;
 	std::vector<double>* getGenderRates() const;
 	std::string getFlavorText() const;
 	std::vector<unsigned short> getBasicStats() const;
