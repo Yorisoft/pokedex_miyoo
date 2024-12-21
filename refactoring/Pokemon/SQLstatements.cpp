@@ -258,6 +258,56 @@ const std::string SQL_getPokeFlavorText = R"(
       AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
       AND px.identifier NOT LIKE '%updated%';
 )";
+
+const std::string SQL_getPokeStats = R"(
+    SELECT DISTINCT
+      ps.base_stat, 
+      s.identifier AS stat_name
+    FROM 
+      pokemon_stats ps
+    JOIN 
+      stats s ON ps.stat_id = s.id
+    JOIN 
+      pokemon p ON ps.pokemon_id = p.id
+    JOIN 
+      pokemon_game_indices pgi ON p.id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON p.species_id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    WHERE 
+      p.identifier = '${pokemon_identifier}'
+      AND v.identifier = '${game_version}'
+      AND r.id = '${region_id}';
+)";
+
+const std::string SQL_getPokeGenderRates = R"(
+    SELECT DISTINCT
+      ps.gender_rate
+    FROM 
+      pokemon_species ps
+    JOIN 
+      pokemon p ON ps.id = p.species_id
+    JOIN 
+      pokemon_game_indices pgi ON p.id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON ps.id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    WHERE 
+      p.identifier = '${pokemon_identifier}'
+      AND v.identifier = '${game_version}'
+      AND r.id = '${region_id}';
+)";
+
 // // // // // // 
 
 const std::string SQL_getPokemonByNameTest =

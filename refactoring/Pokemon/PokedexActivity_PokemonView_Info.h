@@ -47,6 +47,8 @@ public:
     static PokedexActivity_PokemonView_Info* getInstance();
 
     void onButtonB(SDL_Keycode sym, Uint16 mod);
+
+    void onButtonRight(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif

@@ -7,6 +7,10 @@
 Pokemon::Pokemon() {
 	std::vector<std::vector<std::string>>* results;
 
+	this->genderRates = new std::vector<double>();
+	this->abilities = new std::vector<std::string>();
+	this->routes = new std::vector<std::vector<std::string>>();
+
 	// set id
 	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
 	setID(std::stoi((*results)[0][1]));
@@ -31,6 +35,25 @@ Pokemon::Pokemon() {
 	// set flavor text;
 	results = PokedexDB::executeSQL(&SQL_getPokeFlavorText);
 	setFlavorText((*results)[0][0]);
+
+	// set gender Rates;
+	results = PokedexDB::executeSQL(&SQL_getPokeGenderRates);
+	setGenderRates(std::stoi((*results)[0][0]));
+
+	// set stats;
+	results = PokedexDB::executeSQL(&SQL_getPokeStats);
+	std::vector<unsigned short>* stats = new std::vector<unsigned short>();
+	for (std::vector<std::string> stat : *results) {
+		stats->push_back(std::stoi(stat[0]));
+	}
+	setBasicStats(stats);
+
+	// set abilities;
+	results = PokedexDB::executeSQL(&SQL_getPokeGenderRates);
+	for (std::vector<std::string> stat : *results) {
+		stats->push_back(std::stoi(stat[0]));
+	}
+	setGenderRates(std::stoi((*results)[0][0]));
 
 	// make a call to pokedex class 
 	// use pokedex sqlite functions to get pokemon information. 
@@ -351,7 +374,27 @@ unsigned short Pokemon::getSpecialDefense() const {
 }
 //setter and getter for Speed
 void Pokemon::setSpeed(const unsigned short s){
-	this->speed = s;
+	std::string speedStr = std::to_string(s);
+	size_t pos = 0;
+	std::string replacement = ""; 
+	while ((pos = speedStr.find("\n", pos)) != std::string::npos) {
+		speedStr.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	pos = 0;
+	while ((pos = speedStr.find("\r", pos)) != std::string::npos) {
+		speedStr.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	pos = 0;
+	while ((pos = speedStr.find("\f", pos)) != std::string::npos) {
+		speedStr.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	this->speed = std::stoi(speedStr);
 }
 unsigned short Pokemon::getSpeed() const{
 	return this->speed;
