@@ -139,7 +139,7 @@ SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, in
 }
 
 bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
-    std::string pokemonName = pokemon[2];
+    std::string pokemonName = pokemon[1];
     std::string iconFile = "res/sprites/" + pokemonName + ".png";
     pokeIconSurface = PokeSurface::onLoadImg(iconFile);
 
@@ -156,7 +156,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     SDL_FreeSurface(pokeIconSurface);
 
     //List item types_1
-    std::string pokemonType1 = pokemon[4];
+    std::string pokemonType1 = pokemon[3];
     iconFile = "res/types/" + pokemonType1 + ".png";
     pokeType1Surface = PokeSurface::onLoadImg(iconFile);
 
@@ -173,8 +173,8 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     SDL_FreeSurface(pokeType1Surface);
 
     //List item types_2
-    if (pokemon[5] != "NULL") {
-        std::string pokemonType2 = pokemon[5];
+    if (pokemon[4] != "NULL") {
+        std::string pokemonType2 = pokemon[4];
         iconFile = "res/types/" + pokemonType2 + ".png";
         pokeType2Surface = PokeSurface::onLoadImg(iconFile);
 
@@ -217,7 +217,7 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
     //List pokemon name
     pokeNameSurface = TTF_RenderText_Blended(
         fontSurface,
-        pokemon[3].c_str(),
+        pokemon[2].c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
     if (pokeNameSurface == NULL) {
@@ -257,7 +257,7 @@ void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
     pokemon = (*dbResults)[selectedIndex];
-    PokedexDB::setPokemonIdentifier(pokemon[2]);
+    PokedexDB::setPokemonIdentifier(pokemon[1]);
 
     ////Call next activity
     PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_INFO);

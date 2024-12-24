@@ -10,6 +10,7 @@ const std::string PokedexDB::TEST_DB_PATH = "../res/db/pokedex.sqlite";
 std::string PokedexDB::gameVersion = "red";
 int PokedexDB::languageVersion = 9;
 int PokedexDB::regionVersion = 1;
+int PokedexDB::regionGroupVersion = 1;
 std::string PokedexDB::pokemonIdentifier = "charmander";
 std::vector<std::vector<std::string>>* PokedexDB::results = new std::vector<std::vector<std::string>>();
 sqlite3* PokedexDB::db;
@@ -144,6 +145,10 @@ void PokedexDB::setGameVersion(std::string& version_name) {
 
 void PokedexDB::setRegionVersion(int version_id) {
     regionVersion = version_id;
+}
+
+void PokedexDB::setRegionGroupVersion(int group_version_id) {
+    regionGroupVersion = group_version_id;
 }
 
 void PokedexDB::setPokemonIdentifier(std::string& pokemon_identifier) {

@@ -15,8 +15,10 @@ extern const std::string SQL_getPokeTypes;
 extern const std::string SQL_getPokeGenus;
 extern const std::string SQL_getPokeHW;
 extern const std::string SQL_getPokeFlavorText;
+extern const std::string SQL_getPokeAbilities;
 extern const std::string SQL_getPokeStats;
 extern const std::string SQL_getPokeGenderRates;
+extern const std::string SQL_getPokeMoves;
 
 
 #endif

@@ -4,50 +4,48 @@
 
 // God bless ChatGPT for providing this.. this.. work of art.
 const std::string SQL_getPokemonByName = R"(
-		SELECT 
-		ps.id AS pokemon_id, 
-		ps.identifier AS pokemon_name, 
-		MIN(REPLACE(psn.genus, CHAR(10), ' ')) AS genus,
-		ta.identifier AS type_a, 
-		COALESCE(tb.identifier, 'None') AS type_b, 
-		p.weight, 
-		p.height, 
-		MAX(CASE WHEN pa.slot = 1 THEN a.identifier END) AS ability_1,
-		MAX(CASE WHEN pa.slot = 2 THEN a.identifier END) AS ability_2,
-		MAX(CASE WHEN pa.slot = 3 THEN a.identifier END) AS ability_3,
-		ps.gender_rate, 
-		MIN(REPLACE(f.flavor_text, CHAR(10), ' ')) AS flavor_text, 
-		v.identifier AS game_version, 
-		MAX(CASE WHEN s.stat_id = 1 THEN s.base_stat END) AS hp, 
-		MAX(CASE WHEN s.stat_id = 2 THEN s.base_stat END) AS attack, 
-		MAX(CASE WHEN s.stat_id = 3 THEN s.base_stat END) AS defense, 
-		MAX(CASE WHEN s.stat_id = 4 THEN s.base_stat END) AS special_attack, 
-		MAX(CASE WHEN s.stat_id = 5 THEN s.base_stat END) AS special_defense, 
-		MAX(CASE WHEN s.stat_id = 6 THEN s.base_stat END) AS speed, 
-		ps.evolution_chain_id, 
-		ps.evolves_from_species_id
-	FROM pokemon_species ps 
-	JOIN pokemon_types pta ON ps.id = pta.pokemon_id AND pta.slot = 1 
-	JOIN types ta ON pta.type_id = ta.id 
-	LEFT JOIN pokemon_types ptb ON ps.id = ptb.pokemon_id AND ptb.slot = 2 
-	LEFT JOIN types tb ON ptb.type_id = tb.id 
-	JOIN pokemon_species_flavor_text f ON ps.id = f.species_id 
-	JOIN versions v ON f.version_id = v.id 
-	JOIN pokemon_stats s ON ps.id = s.pokemon_id 
-	JOIN pokemon p ON ps.id = p.species_id  
-	JOIN pokemon_abilities pa ON ps.id = pa.pokemon_id 
-	JOIN abilities a ON pa.ability_id = a.id 
-	JOIN pokemon_species_names psn ON ps.id = psn.pokemon_species_id
-	WHERE ps.identifier = '${pokemon_name}' 
-	AND v.identifier = '${game_version}'
-	AND f.language_id = '${language_id}'  
-	AND psn.local_language_id = '${language_id}' 
-	GROUP BY ps.id, v.id, ta.identifier, tb.identifier, ps.gender_rate, p.weight, p.height, ps.evolution_chain_id, ps.evolves_from_species_id 
-	ORDER BY ps.id, v.id;)";
+		SELECT
+            pdn.pokedex_number AS regional_pokedex_id,
+            p.species_id AS national_pokedex_id,
+            p.identifier AS pokemon_identifier,
+            psn.name AS pokemon_name_in_language,
+            t1.identifier AS type_1,
+            t2.identifier AS type_2
+        FROM
+            pokemon AS p
+        JOIN
+            pokemon_species_names AS psn ON p.species_id = psn.pokemon_species_id
+        JOIN
+            pokemon_game_indices AS pgi ON p.id = pgi.pokemon_id
+        JOIN
+            versions AS v ON pgi.version_id = v.id
+        JOIN
+            pokemon_dex_numbers AS pdn ON p.species_id = pdn.species_id
+        JOIN
+            pokedexes AS px ON pdn.pokedex_id = px.id
+        JOIN
+            regions AS r ON px.region_id = r.id
+        JOIN
+            pokemon_types AS pt1 ON p.id = pt1.pokemon_id AND pt1.slot = 1
+        LEFT JOIN
+            pokemon_types AS pt2 ON p.id = pt2.pokemon_id AND pt2.slot = 2
+        JOIN
+            types AS t1 ON pt1.type_id = t1.id
+        LEFT JOIN
+            types AS t2 ON pt2.type_id = t2.id
+        WHERE
+            psn.local_language_id = '${language_id}'
+            AND r.id = '${region_id}'
+            AND v.identifier = '${game_version}'
+            AND px.identifier NOT LIKE '%updated%'
+        GROUP BY
+            pdn.pokedex_number, p.species_id 
+        ORDER BY
+            regional_pokedex_id;
+)";
 
 const std::string SQL_getNameAndID = R"(
-    SELECT
-        pdn.pokedex_number AS regional_pokedex_id,
+    SELECT 
         p.species_id AS national_pokedex_id,
         p.identifier AS pokemon_identifier,
         psn.name AS pokemon_name_in_language,
@@ -56,17 +54,9 @@ const std::string SQL_getNameAndID = R"(
     FROM
         pokemon AS p
     JOIN
-        pokemon_species_names AS psn ON p.species_id = psn.pokemon_species_id
+        pokemon_species AS ps ON p.species_id = ps.id
     JOIN
-        pokemon_game_indices AS pgi ON p.id = pgi.pokemon_id
-    JOIN
-        versions AS v ON pgi.version_id = v.id
-    JOIN
-        pokemon_dex_numbers AS pdn ON p.species_id = pdn.species_id
-    JOIN
-        pokedexes AS px ON pdn.pokedex_id = px.id
-    JOIN
-        regions AS r ON px.region_id = r.id
+        pokemon_species_names AS psn ON ps.id = psn.pokemon_species_id
     JOIN
         pokemon_types AS pt1 ON p.id = pt1.pokemon_id AND pt1.slot = 1
     LEFT JOIN
@@ -77,29 +67,43 @@ const std::string SQL_getNameAndID = R"(
         types AS t2 ON pt2.type_id = t2.id
     WHERE
         psn.local_language_id = '${language_id}'
-        AND r.id = '${region_id}'
-        AND v.identifier = '${game_version}'
-        AND px.identifier NOT LIKE '%updated%'
+        AND ps.generation_id = '${region_id}'
     GROUP BY
-        pdn.pokedex_number, p.species_id 
+        p.species_id
     ORDER BY
-        regional_pokedex_id;)";
+        p.species_id;
+)";
 
 
 // // // // //  
 const std::string SQL_getGameVersions = R"(
-	SELECT v.id AS version_id, 
-		v.identifier AS version_identifier, 
-		vn.name AS version_name_in_language, 
-		r.id AS region_id
-    FROM versions v
-    JOIN version_names vn ON v.id = vn.version_id
-    JOIN pokedex_version_groups pvg ON v.version_group_id = pvg.version_group_id
-    JOIN pokedexes p ON pvg.pokedex_id = p.id
-    JOIN regions r ON p.region_id = r.id
-    WHERE vn.local_language_id = '${language_id}'
-      AND v.id BETWEEN 1 AND 22
-    ORDER BY v.id;
+	SELECT
+        v.id AS version_id,
+        v.identifier AS version_identifier,
+        vn.name AS version_name_in_language,
+        r.id AS region_id,
+        r.identifier AS region_identifier,
+        g.id AS generation_id,
+        g.identifier AS generation_identifier,
+        v.version_group_id AS version_group_id  -- Added version_group_id
+    FROM
+        versions AS v
+    JOIN
+        version_names AS vn ON v.id = vn.version_id
+    JOIN
+        pokedex_version_groups AS pvg ON v.version_group_id = pvg.version_group_id
+    JOIN
+        pokedexes AS p ON pvg.pokedex_id = p.id
+    JOIN
+        regions AS r ON p.region_id = r.id
+    JOIN
+        generations AS g ON r.id = g.main_region_id
+    WHERE
+        vn.local_language_id = '${language_id}'
+        AND v.id <= 22
+        AND v.id NOT IN (10, 11, 15, 16, 21, 22)
+    ORDER BY
+        v.id;
 )";
 
 const std::string SQL_getPokeRegionalID = R"(
@@ -259,6 +263,29 @@ const std::string SQL_getPokeFlavorText = R"(
       AND px.identifier NOT LIKE '%updated%';
 )";
 
+const std::string SQL_getPokeAbilities = R"(
+    SELECT 
+      psft.flavor_text
+    FROM 
+      pokemon_species_flavor_text psft
+    JOIN 
+      pokemon_game_indices pgi ON psft.species_id = pgi.pokemon_id
+    JOIN 
+      versions v ON pgi.version_id = v.id
+    JOIN 
+      pokemon_dex_numbers pdn ON psft.species_id = pdn.species_id
+    JOIN 
+      pokedexes px ON pdn.pokedex_id = px.id
+    JOIN 
+      regions r ON px.region_id = r.id
+    WHERE 
+      psft.language_id = '${language_id}'
+      AND v.identifier = '${game_version}'
+      AND r.id = '${region_id}'
+      AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      AND px.identifier NOT LIKE '%updated%';
+)";
+
 const std::string SQL_getPokeStats = R"(
     SELECT DISTINCT
       ps.base_stat, 
@@ -306,6 +333,62 @@ const std::string SQL_getPokeGenderRates = R"(
       p.identifier = '${pokemon_identifier}'
       AND v.identifier = '${game_version}'
       AND r.id = '${region_id}';
+)";
+
+const std::string SQL_getPokeMoves = R"(
+    SELECT DISTINCT
+        m.id AS Move_ID,
+        m.identifier AS Move_Name,
+        t.identifier AS Type,
+        dc.identifier AS Class,
+        m.pp AS PP,
+        m.power AS Power,
+        m.accuracy AS Accuracy,
+        m.priority AS Priority,
+        me.meta_ailment_id AS Effect,
+        COALESCE(CASE WHEN pm_method.identifier = 'level-up' THEN pm.level ELSE NULL END, NULL) AS Pokemon_Level,
+        pm_method.identifier AS Learn_Method,
+        v.identifier AS Game_Version
+    FROM 
+        pokemon AS p
+    INNER JOIN 
+        pokemon_moves AS pm 
+        ON p.id = pm.pokemon_id
+    INNER JOIN 
+        moves AS m 
+        ON pm.move_id = m.id
+    INNER JOIN 
+        types AS t 
+        ON m.type_id = t.id
+    INNER JOIN 
+        move_meta AS me 
+        ON m.id = me.move_id
+    INNER JOIN 
+        move_damage_classes AS dc
+        ON m.damage_class_id = dc.id
+    INNER JOIN 
+        pokemon_move_methods AS pm_method
+        ON pm.pokemon_move_method_id = pm_method.id
+    INNER JOIN 
+        version_groups vg
+        ON vg.id = pm.version_group_id
+    INNER JOIN 
+        versions v
+        ON vg.identifier = v.identifier
+    INNER JOIN 
+        pokedex_version_groups pvg
+        ON pvg.version_group_id = vg.id
+    INNER JOIN 
+        pokedexes pd
+        ON pd.id = pvg.pokedex_id
+    INNER JOIN 
+        regions r
+        ON pd.region_id = r.id
+    WHERE 
+        p.identifier = '${pokemon_identifier}'
+        AND r.id = '${region_id}'
+    ORDER BY 
+        pm_method.identifier, pm.level;
 )";
 
 // // // // // // 

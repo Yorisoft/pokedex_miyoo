@@ -5,6 +5,7 @@
 #include "PokedexActivityMenu.h"
 #include "PokedexActivity_PokemonView_Info.h"
 #include "PokedexActivity_PokemonView_Stats.h"
+#include "PokedexActivity_PokemonView_Moves.h"
 
 PokedexActivity* PokedexActivityManager::activity = 0;
 std::stack<PokedexActivity*> PokedexActivityManager::sceneStack;
@@ -47,6 +48,9 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
         break;
     case 5:
         activity = PokedexActivity_PokemonView_Stats::getInstance();
+        break;
+    case 6:
+        activity = PokedexActivity_PokemonView_Moves::getInstance();
         break;
     default:
         break;

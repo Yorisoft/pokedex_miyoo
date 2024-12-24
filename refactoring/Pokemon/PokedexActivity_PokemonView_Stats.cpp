@@ -215,7 +215,9 @@ PokedexActivity_PokemonView_Stats* PokedexActivity_PokemonView_Stats::getInstanc
 
 void PokedexActivity_PokemonView_Stats::onButtonB(SDL_Keycode sym, Uint16 mod){}
 
-void PokedexActivity_PokemonView_Stats::onButtonRight(SDL_Keycode sym, Uint16 mod){}
+void PokedexActivity_PokemonView_Stats::onButtonRight(SDL_Keycode sym, Uint16 mod){
+    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_MOVES);
+}
 
 void PokedexActivity_PokemonView_Stats::onButtonLeft(SDL_Keycode sym, Uint16 mod){
     PokedexActivityManager::back();

@@ -17,6 +17,7 @@ private:
 	static int languageVersion;
 	static std::string gameVersion;
 	static int regionVersion;
+	static int regionGroupVersion;
 	static std::string pokemonIdentifier;
 
 	static int callback(void* results, int argc, char** argv, char** azColName);
@@ -36,4 +37,5 @@ public:
 	static void setPokemonIdentifier(std::string&);
 	static std::string getPokemonIdentifier();
 	static void setRegionVersion(int);
+	static void setRegionGroupVersion(int);
 };
