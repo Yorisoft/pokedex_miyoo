@@ -8,6 +8,8 @@ class PokedexActivity_PokemonView_Moves : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Moves instance;
 
+    Pokemon* pokemon;
+
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> move;
 
@@ -16,7 +18,10 @@ private:
 
     SDL_Surface* backgroundSurface, * listEntrySurface,
         * moveNameSurface, * moveTypeSurface, * movePPSurface,
-        * moveMethodSurface, * pokeIconSurface;
+        * moveMethodSurface, * pokeIconSurface,
+        * pokeType1Surface, * pokeType2Surface,
+        * pokeNameSurface,
+        * movePwrSurface, * moveAcrySurface, * moveEffectSurface;
     TTF_Font* fontSurface;
     SDL_Color color, highlightColor;
 
@@ -33,7 +38,9 @@ public:
 
     bool renderItemDetails(SDL_Surface* surf_display, int i);
 
-    bool renderListItems(SDL_Surface* surf_display, int i);
+    bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i);
+
+    std::string cleanString(std::string str);
 
     void onFreeze();
 

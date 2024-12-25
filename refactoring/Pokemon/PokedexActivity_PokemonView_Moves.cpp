@@ -12,7 +12,14 @@ moveTypeSurface(nullptr),
 movePPSurface(nullptr),
 moveMethodSurface(nullptr),
 pokeIconSurface(nullptr),
+pokeType1Surface(nullptr),
+pokeType2Surface(nullptr),
+pokeNameSurface(nullptr),
+movePwrSurface(nullptr),
+moveAcrySurface(nullptr),
+moveEffectSurface(nullptr),
 dbResults(nullptr),
+pokemon(nullptr),
 selectedIndex(0),
 offset(0),
 itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.7 / 5))
@@ -26,6 +33,8 @@ itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.7 / 5))
 
 void PokedexActivity_PokemonView_Moves::onActivate() {
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
+    // For some reason.. pokemon needs to be created before executeSQL command...
+    pokemon = new Pokemon();
 
     dbResults = PokedexDB::executeSQL(&SQL_getPokeMovesDetail);
     for (std::vector<std::string>&moves : *dbResults) {
@@ -36,6 +45,10 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
     }
     move = (*dbResults)[selectedIndex];
 
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    if (!fontSurface) {
+        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
+    }
 
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
 }
@@ -44,6 +57,10 @@ void PokedexActivity_PokemonView_Moves::onDeactivate() {
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
 
     selectedIndex = 0, offset = 0;
+
+    // closing font
+    TTF_CloseFont(fontSurface);
+
 
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
 }
@@ -72,19 +89,23 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
 
     PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
     SDL_FreeSurface(backgroundSurface);
+
     // Render _PokemonView_Moves Items
     for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
         move = (*dbResults)[offset + i];
 
         // Render list items
-        if (!renderListItems(surf_display, i)) {
+        if (!renderListItems(surf_display, renderer, i)) {
             exit(EXIT_FAILURE);
         }
     }
 
 }
 
-bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, int i) {
+bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i) {
+    // Fill the surface with transparent color
+    //SDL_FillRect(listEntrySurface, NULL, SDL_MapRGBA(listEntrySurface->format, 150, 150, 150, 255));
+
     //Render list item background/surface
     listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
         0,
@@ -96,11 +117,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     if (!listEntrySurface) {
         std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
-        return 1;
     }
-
-    // Fill the surface with transparent color
-    //SDL_FillRect(listEntrySurface, NULL, SDL_MapRGBA(listEntrySurface->format, 150, 150, 150, 255));
 
     int spacing = 18; 
     SDL_Rect listEntryRect;
@@ -108,9 +125,16 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     listEntryRect.y = 65 + (i * (itemHeight + spacing));
     listEntryRect.w = surf_display->w * 0.45;
     listEntryRect.h = itemHeight;
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
+    if (offset + i == selectedIndex) {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black
+        SDL_RenderDrawRect(renderer, &listEntryRect);
+    }
+    else {
+        PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
+    }
     SDL_FreeSurface(listEntrySurface);
 
+    /////////////////////////////////////////////////////////////////////////////
     //Render item type
     std::string moveTypePath = "res/types/" + move[2] + ".png";
     moveTypeSurface = PokeSurface::onLoadImg(moveTypePath);
@@ -127,12 +151,9 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     PokeSurface::onDrawScaled(surf_display, moveTypeSurface, &moveTypeRect);
     SDL_FreeSurface(moveTypeSurface);
 
+
+    /////////////////////////////////////////////////////////////////////////////
     //Render item title/name
-    // load font
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 14);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
-    }
     
     // make all upper case
     std::string moveName = move[1];
@@ -150,23 +171,15 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     };
 
     SDL_Rect moveNameRect;
-    moveNameRect.x = 20 + moveTypeRect.x + moveTypeRect.w;
+    moveNameRect.x = 10 + moveTypeRect.x + moveTypeRect.w;
     moveNameRect.y = moveTypeRect.y + 10;
-    moveNameRect.w = moveNameSurface->w;
-    moveNameRect.h = moveNameSurface->h;
-    PokeSurface::onDraw(surf_display, moveNameSurface, &moveNameRect);
+    moveNameRect.w = moveNameSurface->w * 0.8;
+    moveNameRect.h = moveNameSurface->h * 0.8;
+    PokeSurface::onDrawScaled(surf_display, moveNameSurface, &moveNameRect);
     SDL_FreeSurface(moveNameSurface);
 
-    // closing font
-    TTF_CloseFont(fontSurface);
-
+    /////////////////////////////////////////////////////////////////////////////
     // Render method
-    // load font
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
-    }
-
     std::string methodString = move[9];
     if (methodString == "level-up") {
         methodString = "LV." + move[8];
@@ -196,17 +209,9 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     PokeSurface::onDraw(surf_display, moveMethodSurface, &moveMethodRect);
     SDL_FreeSurface(moveMethodSurface);
 
-    // closing font
-    TTF_CloseFont(fontSurface);
-
-
+    /////////////////////////////////////////////////////////////////////////////
     // Render PP
     // load font
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
-    }
-
     std::string ppString = move[3] + '/' + move[3];
     movePPSurface = TTF_RenderText_Blended(
         fontSurface,
@@ -226,9 +231,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     PokeSurface::onDraw(surf_display, movePPSurface, &movePPRect);
     SDL_FreeSurface(movePPSurface);
 
-    // closing font
-    TTF_CloseFont(fontSurface);
-
+    /////////////////////////////////////////////////////////////////////////////
     // Render selected Item details
     if (offset + i == selectedIndex) {
         //redern item details
@@ -241,11 +244,11 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
 }
 
 bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, int i) {
-    //get move details
-    std::string pokeIconPath = PokedexDB::getPokemonIdentifier();
-    pokeIconPath = "res/icons/" + pokeIconPath + ".png";
+    // render poke icon
+    std::string iconPath = PokedexDB::getPokemonIdentifier();
+    iconPath = "res/icons/" + iconPath + ".png";
 
-    pokeIconSurface = PokeSurface::onLoadImg(pokeIconPath);
+    pokeIconSurface = PokeSurface::onLoadImg(iconPath);
     if (pokeIconSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeIconSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -259,8 +262,160 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     PokeSurface::onDrawScaled(surf_display, pokeIconSurface, &pokeIconRect);
     SDL_FreeSurface(pokeIconSurface);
+    
+    /////////////////////////////////////////////////////////////////////////////
+
+    // Render Name
+    std::string pokeName = pokemon->getName();
+    pokeNameSurface = TTF_RenderText_Blended(
+        fontSurface,
+        pokeName.c_str(),
+        color
+    );
+    if (pokeNameSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: pokeNameSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect pokeNameRect;
+    pokeNameRect.x = (pokeIconRect.x + pokeIconRect.w);
+    pokeNameRect.y = pokeIconRect.y + pokeIconRect.h/2;
+    pokeNameRect.w = pokeNameSurface->w;
+    pokeNameRect.h = pokeNameSurface->h;
+    PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
+    SDL_FreeSurface(pokeNameSurface);
+
+    ////////////////////////////////////////////////////////////////////////////
+
+
+    // render poke types
+    std::vector<std::string> pokemonTypes = pokemon->getTypes();
+    iconPath = "res/types/" + pokemonTypes[0] + ".png";
+    pokeType1Surface = PokeSurface::onLoadImg(iconPath);
+
+    if (pokeType1Surface == NULL) {
+        std::cout << "Unable to load surface: pokeType1Surface Type 1" << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+    SDL_Rect pokeType1Rect;
+    pokeType1Rect.x = pokeIconRect.x + pokeIconRect.w;
+    pokeType1Rect.y = (pokeIconRect.y + pokeIconRect.h ) - pokeType1Surface->h;
+    pokeType1Rect.w = pokeType1Surface->w * 2;
+    pokeType1Rect.h = pokeType1Surface->h * 2;
+    PokeSurface::onDrawScaled(surf_display, pokeType1Surface, &pokeType1Rect);
+    SDL_FreeSurface(pokeType1Surface);
+
+    //List item types_2
+    if (pokemonTypes[1] != "NULL") { 
+        iconPath = "res/types/" + pokemonTypes[1] + ".png";
+        pokeType2Surface = PokeSurface::onLoadImg(iconPath);
+        if (pokeType2Surface == NULL) {
+            std::cout << "Unable to render text! SDL Error: pokeType2Surface " << SDL_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        };
+
+        SDL_Rect pokeType2Rect;
+        pokeType2Rect.x = pokeType1Rect.x + pokeType1Rect.w + 5;
+        pokeType2Rect.y = pokeType1Rect.y;
+        pokeType2Rect.w = pokeType2Surface->w * 2;
+        pokeType2Rect.h = pokeType2Surface->h * 2;
+
+        PokeSurface::onDrawScaled(surf_display, pokeType2Surface, &pokeType2Rect);
+        SDL_FreeSurface(pokeType2Surface);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+
+    // Render Power
+    
+    movePwrSurface = TTF_RenderText_Blended(
+        fontSurface,
+        (move[5] == "NULL" ? "--" : move[5]).c_str(),
+        color
+    );
+    if (movePwrSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: movePwrSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect movePwrRect;
+    movePwrRect.x = pokeType1Rect.x + 20;
+    movePwrRect.y = pokeType1Rect.y + 80;
+    movePwrRect.w = movePwrSurface->w;
+    movePwrRect.h = movePwrSurface->h;
+    PokeSurface::onDraw(surf_display, movePwrSurface, &movePwrRect);
+    SDL_FreeSurface(movePwrSurface);
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Render Accuracy
+    moveAcrySurface = TTF_RenderText_Blended(
+        fontSurface,
+        (move[6] == "NULL" ? "--" : move[6]).c_str(),
+        color
+    );
+    if (moveAcrySurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: moveAcrySurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect moveAcryRect;
+    moveAcryRect.x = movePwrRect.x ;
+    moveAcryRect.y = (movePwrRect.y + movePwrRect.h) + 20;
+    moveAcryRect.w = moveAcrySurface->w;
+    moveAcryRect.h = moveAcrySurface->h;
+    PokeSurface::onDraw(surf_display, moveAcrySurface, &moveAcryRect);
+    SDL_FreeSurface(moveAcrySurface);
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Render Effect
+    std::string effect = cleanString(move[7]);
+    moveEffectSurface = TTF_RenderText_Blended_Wrapped(
+        fontSurface,
+        effect.c_str(),
+        color,
+        320
+    );
+    if (moveEffectSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: moveEffectSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect moveEffectRect;
+    moveEffectRect.x = 15;
+    moveEffectRect.y = (WINDOW_HEIGHT / 2 ) + 50;
+    moveEffectRect.w = moveEffectSurface->w;
+    moveEffectRect.h = moveEffectSurface->h;
+    PokeSurface::onDraw(surf_display, moveEffectSurface, &moveEffectRect);
+    SDL_FreeSurface(moveEffectSurface);
+
+    ////////////////////////////////////////////////////////////////////////////
 
     return true;
+}
+
+std::string PokedexActivity_PokemonView_Moves::cleanString(std::string str) {
+	std::string replacement = " "; 
+	std::string cleanStr = str;
+	size_t pos = 0;
+	while ((pos = cleanStr.find("\n", pos)) != std::string::npos) {
+		cleanStr.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	pos = 0;
+	while ((pos = cleanStr.find("\r", pos)) != std::string::npos) {
+		cleanStr.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	pos = 0;
+	while ((pos = cleanStr.find("\f", pos)) != std::string::npos) {
+		cleanStr.replace(pos, 1, replacement);
+		pos += replacement.length();
+	}
+
+	return cleanStr;
+
 }
 
 void PokedexActivity_PokemonView_Moves::onFreeze() {
