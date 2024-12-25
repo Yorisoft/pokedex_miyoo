@@ -20,6 +20,7 @@ extern const std::string SQL_getPokeStats;
 extern const std::string SQL_getPokeGenderRates;
 extern const std::string SQL_getPokeMovesDetail;
 extern const std::string SQL_getPokeMoves;
+extern const std::string SQL_getPokeRoutes;
 
 
 #endif

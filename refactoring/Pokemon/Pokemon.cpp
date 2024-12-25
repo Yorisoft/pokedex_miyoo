@@ -55,6 +55,10 @@ Pokemon::Pokemon() {
 	}
 	setGenderRates(std::stoi((*results)[0][0]));
 
+	// set routes;
+	results = PokedexDB::executeSQL(&SQL_getPokeRoutes);
+	setRoutes(*results);
+
 	// make a call to pokedex class 
 	// use pokedex sqlite functions to get pokemon information. 
 

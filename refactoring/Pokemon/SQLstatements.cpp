@@ -423,6 +423,46 @@ const std::string SQL_getPokeMovesDetail = R"(
         Learn_Method, Learn_Level;
 )";
 
+
+const std::string SQL_getPokeRoutes = R"(
+    SELECT 
+        vg.identifier AS version_group,
+        l.identifier AS route_or_location,
+        em.identifier AS encounter_method,
+        MIN(e.min_level) AS min_level,
+        MAX(e.max_level) AS max_level,
+        SUM(COALESCE(laer.rate, es.rarity, 0)) AS total_encounter_rate
+    FROM 
+        pokemon p
+    JOIN 
+        encounters e ON p.id = e.pokemon_id
+    JOIN 
+        location_areas la ON e.location_area_id = la.id
+    JOIN 
+        locations l ON la.location_id = l.id
+    JOIN 
+        location_game_indices lgi ON l.id = lgi.location_id
+    JOIN 
+        versions v ON e.version_id = v.id
+    JOIN 
+        version_groups vg ON v.version_group_id = vg.id
+    LEFT JOIN 
+        location_area_encounter_rates laer 
+        ON laer.location_area_id = la.id 
+        AND laer.version_id = v.id
+    LEFT JOIN 
+        encounter_slots es ON e.encounter_slot_id = es.id
+    LEFT JOIN 
+        encounter_methods em ON es.encounter_method_id = em.id
+    WHERE 
+        p.identifier = '${pokemon_identifier}'
+        AND vg.id = '${regionGroup_id}'
+    GROUP BY 
+        vg.id, l.id, em.id, lgi.game_index
+    ORDER BY 
+        vg.id, lgi.game_index, l.identifier, em.identifier;
+)";
+
 // // // // // // 
 
 const std::string SQL_getPokemonByNameTest =

@@ -255,7 +255,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     };
 
     SDL_Rect pokeIconRect;
-    pokeIconRect.x = 10;
+    pokeIconRect.x = 0;
     pokeIconRect.y = 40;
     pokeIconRect.w = pokeIconSurface->w * 2;
     pokeIconRect.h = pokeIconSurface->h * 2;
@@ -452,7 +452,7 @@ void PokedexActivity_PokemonView_Moves::onButtonLeft(SDL_Keycode sym, Uint16 mod
 
 void PokedexActivity_PokemonView_Moves::onButtonRight(SDL_Keycode sym, Uint16 mod) {
 
-    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
+    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_LOCATION);
 }
 
 void PokedexActivity_PokemonView_Moves::onButtonA(SDL_Keycode sym, Uint16 mod) {
