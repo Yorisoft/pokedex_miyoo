@@ -338,17 +338,11 @@ const std::string SQL_getPokeGenderRates = R"(
 const std::string SQL_getPokeMoves = R"(
     SELECT DISTINCT
         m.id AS Move_ID,
-        m.identifier AS Move_Name,
-        t.identifier AS Type,
-        dc.identifier AS Class,
-        m.pp AS PP,
-        m.power AS Power,
-        m.accuracy AS Accuracy,
-        m.priority AS Priority,
-        me.meta_ailment_id AS Effect,
-        COALESCE(CASE WHEN pm_method.identifier = 'level-up' THEN pm.level ELSE NULL END, NULL) AS Pokemon_Level,
-        pm_method.identifier AS Learn_Method,
-        v.identifier AS Game_Version
+        mn.name AS Move_Name_Localized,
+        t.identifier AS Move_Type,
+        m.pp AS Move_PP,
+        pm.level AS Learn_Level,
+        pmm.identifier AS Learn_Method
     FROM 
         pokemon AS p
     INNER JOIN 
@@ -358,37 +352,75 @@ const std::string SQL_getPokeMoves = R"(
         moves AS m 
         ON pm.move_id = m.id
     INNER JOIN 
+        move_names AS mn
+        ON m.id = mn.move_id
+    INNER JOIN 
         types AS t 
         ON m.type_id = t.id
-    INNER JOIN 
-        move_meta AS me 
-        ON m.id = me.move_id
-    INNER JOIN 
-        move_damage_classes AS dc
-        ON m.damage_class_id = dc.id
-    INNER JOIN 
-        pokemon_move_methods AS pm_method
-        ON pm.pokemon_move_method_id = pm_method.id
     INNER JOIN 
         version_groups vg
         ON vg.id = pm.version_group_id
     INNER JOIN 
-        versions v
-        ON vg.identifier = v.identifier
-    INNER JOIN 
-        pokedex_version_groups pvg
-        ON pvg.version_group_id = vg.id
-    INNER JOIN 
-        pokedexes pd
-        ON pd.id = pvg.pokedex_id
-    INNER JOIN 
-        regions r
-        ON pd.region_id = r.id
+        pokemon_move_methods AS pmm
+        ON pm.pokemon_move_method_id = pmm.id
     WHERE 
-        p.identifier = '${pokemon_identifier}'
-        AND r.id = '${region_id}'
+         mn.local_language_id = '${language_id}'
+         AND vg.id = '${regionGroup_id}'
+         AND p.identifier = '${pokemon_identifier}'
     ORDER BY 
-        pm_method.identifier, pm.level;
+        pmm.identifier, pm.level;
+)";
+
+const std::string SQL_getPokeMovesDetail = R"(
+    SELECT *
+    FROM (
+        SELECT DISTINCT
+            m.id AS Move_ID,
+            mn.name AS Move_Name_Localized,
+            t.identifier AS Move_Type,
+            m.pp AS Move_PP,
+            dc.identifier AS Class,
+            m.power AS Power,
+            m.accuracy AS Accuracy,
+            MAX(mft.flavor_text) AS Flavor_Text,
+            pm.level AS Learn_Level,
+            pmm.identifier AS Learn_Method
+        FROM 
+            pokemon AS p
+        INNER JOIN 
+            pokemon_moves AS pm 
+            ON p.id = pm.pokemon_id
+        INNER JOIN 
+            moves AS m 
+            ON pm.move_id = m.id
+        INNER JOIN 
+            move_names AS mn
+            ON m.id = mn.move_id
+        INNER JOIN 
+            types AS t 
+            ON m.type_id = t.id
+        INNER JOIN 
+            move_damage_classes AS dc
+            ON m.damage_class_id = dc.id
+        LEFT JOIN 
+            move_flavor_text mft
+            ON m.id = mft.move_id
+            AND mft.language_id = '${language_id}'
+        INNER JOIN 
+            version_groups vg
+            ON vg.id = pm.version_group_id
+        INNER JOIN 
+            pokemon_move_methods AS pmm
+            ON pm.pokemon_move_method_id = pmm.id
+        WHERE 
+            mn.local_language_id = '${language_id}'
+            AND vg.id = '${regionGroup_id}'
+            AND p.identifier = '${pokemon_identifier}'
+        GROUP BY 
+            m.id, mn.name, t.identifier, m.pp, pm.level, pmm.identifier, dc.identifier, m.power, m.accuracy
+    ) AS subquery
+    ORDER BY 
+        Learn_Method, Learn_Level;
 )";
 
 // // // // // // 

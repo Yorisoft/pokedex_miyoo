@@ -79,10 +79,6 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
             exit(EXIT_FAILURE);
         }
     }
-    // At the end, free listEntrySurface if no longer needed
-    if (listEntrySurface) {
-        SDL_FreeSurface(listEntrySurface);
-    }
 }
 
 bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
@@ -101,6 +97,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     listEntryRect.w = surf_display->w * 0.9;
     listEntryRect.h = itemHeight;
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
+    SDL_FreeSurface(listEntrySurface);
 
     //List item title
     gameNameSurface = TTF_RenderText_Blended(

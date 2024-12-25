@@ -18,6 +18,7 @@ extern const std::string SQL_getPokeFlavorText;
 extern const std::string SQL_getPokeAbilities;
 extern const std::string SQL_getPokeStats;
 extern const std::string SQL_getPokeGenderRates;
+extern const std::string SQL_getPokeMovesDetail;
 extern const std::string SQL_getPokeMoves;
 
 

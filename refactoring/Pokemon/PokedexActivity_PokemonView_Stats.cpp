@@ -55,6 +55,8 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Stats::onDeactivate() {
+    // closing font
+    TTF_CloseFont(fontSurface);
 }
 
 void PokedexActivity_PokemonView_Stats::onLoop() {

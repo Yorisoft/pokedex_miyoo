@@ -26,7 +26,6 @@ itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.6 / 5))
 void PokedexActivityList::onActivate() {
     std::cout << "PokedexActivityList::onActivate START \n";
 
-    StartTime = SDL_GetTicks();
     dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
     for (auto& pokemon : *dbResults) {
         for (auto& col : pokemon) {
@@ -44,10 +43,6 @@ void PokedexActivityList::onActivate() {
 
 void PokedexActivityList::onDeactivate() {
     selectedIndex = 0, offset = 0;
-    if (pokeNameSurface) {
-        SDL_FreeSurface(pokeNameSurface);
-        pokeNameSurface = NULL;
-    }      
     TTF_CloseFont(fontSurface);
 }
 
@@ -82,10 +77,6 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
         }
-    }
-    // At the end, free listEntrySurface if no longer needed
-    if (listEntrySurface) {
-        SDL_FreeSurface(listEntrySurface);
     }
 }
 
@@ -134,6 +125,7 @@ SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, in
     listEntryRect.w = surf_display->w * 0.5;
     listEntryRect.h = itemHeight;
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
+    SDL_FreeSurface(listEntrySurface);
     
     return listEntryRect;
 }

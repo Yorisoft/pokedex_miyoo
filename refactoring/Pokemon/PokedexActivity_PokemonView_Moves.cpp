@@ -1,25 +1,25 @@
-#include "PokedexActivity_PokemonView_Moves.h"
 #include "PokedexActivityManager.h"
+#include "PokedexActivity_PokemonView_Moves.h"
 
 PokedexActivity_PokemonView_Moves PokedexActivity_PokemonView_Moves::instance;
 
 PokedexActivity_PokemonView_Moves::PokedexActivity_PokemonView_Moves() :
 backgroundSurface(nullptr),
+fontSurface(nullptr),
 listEntrySurface(nullptr),
 moveNameSurface(nullptr),
-pokeIconSurface(nullptr),
 moveTypeSurface(nullptr),
-pokeIDSurface(nullptr),
-fontSurface(nullptr),
+movePPSurface(nullptr),
+moveMethodSurface(nullptr),
+pokeIconSurface(nullptr),
 dbResults(nullptr),
-pokemon(nullptr),
 selectedIndex(0),
 offset(0),
 itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.7 / 5))
 {
     fontPath = "res/font/Pokemon_GB.ttf";
     // color maps
-    color = { 255, 255, 255 };
+    color = { 64, 64, 64};
     highlightColor = { 255, 0, 0 };
 
 }
@@ -27,28 +27,25 @@ itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.7 / 5))
 void PokedexActivity_PokemonView_Moves::onActivate() {
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
 
-    dbResults = PokedexDB::executeSQL(&SQL_getPokeMoves);
+    dbResults = PokedexDB::executeSQL(&SQL_getPokeMovesDetail);
     for (std::vector<std::string>&moves : *dbResults) {
         for (auto& col : moves) {
             std::cout << col << " | ";
         }
         std::cout << std::endl;
     }
+    move = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 18);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Moves::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
+
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
 }
 
 void PokedexActivity_PokemonView_Moves::onDeactivate() {
+    std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
+
     selectedIndex = 0, offset = 0;
-    if (moveNameSurface) {
-        SDL_FreeSurface(moveNameSurface);
-        moveNameSurface = NULL;
-    }
-    TTF_CloseFont(fontSurface);
+
+    std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
 }
 
 void PokedexActivity_PokemonView_Moves::onLoop() {
@@ -75,27 +72,25 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
 
     PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
     SDL_FreeSurface(backgroundSurface);
-
     // Render _PokemonView_Moves Items
     for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
         move = (*dbResults)[offset + i];
+
         // Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
         }
     }
-    // At the end, free listEntrySurface if no longer needed
-    //if (listEntrySurface) {
-    //    SDL_FreeSurface(listEntrySurface);
-    //}
+
 }
 
 bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, int i) {
+    //Render list item background/surface
     listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
         0,
         surf_display->w * 0.9,
         itemHeight,
-        32, 
+        DEPTH,
         SDL_PIXELFORMAT_RGBA32
     );
     if (!listEntrySurface) {
@@ -105,12 +100,9 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     }
 
     // Fill the surface with transparent color
-    Uint32 transparentColor = SDL_MapRGBA(listEntrySurface->format, 150, 150, 150, 100); // RGBA(0, 0, 0, 0)
-    //SDL_FillRect(listEntrySurface, NULL, transparentColor);
+    //SDL_FillRect(listEntrySurface, NULL, SDL_MapRGBA(listEntrySurface->format, 150, 150, 150, 255));
 
-    //List item title
-    int spacing = 18; // Adjust this value for more or less space between items
-
+    int spacing = 18; 
     SDL_Rect listEntryRect;
     listEntryRect.x = surf_display->w - (surf_display->w * 0.45) - 8;
     listEntryRect.y = 65 + (i * (itemHeight + spacing));
@@ -119,9 +111,37 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);
 
+    //Render item type
+    std::string moveTypePath = "res/types/" + move[2] + ".png";
+    moveTypeSurface = PokeSurface::onLoadImg(moveTypePath);
+    if (moveTypeSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: moveTypeSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+    
+    SDL_Rect moveTypeRect;
+    moveTypeRect.x = listEntryRect.x;
+    moveTypeRect.y = listEntryRect.y;
+    moveTypeRect.w = moveTypeSurface->w * 1.5;
+    moveTypeRect.h = moveTypeSurface->h * 1.5;
+    PokeSurface::onDrawScaled(surf_display, moveTypeSurface, &moveTypeRect);
+    SDL_FreeSurface(moveTypeSurface);
+
+    //Render item title/name
+    // load font
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 14);
+    if (!fontSurface) {
+        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
+    }
+    
+    // make all upper case
+    std::string moveName = move[1];
+    for (int i = 0; i < moveName.size(); i++) {
+        moveName[i] = std::toupper(moveName[i]);
+    }
     moveNameSurface = TTF_RenderText_Blended(
         fontSurface,
-        move[1].c_str(),
+        moveName.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
     if (moveNameSurface == NULL) {
@@ -130,12 +150,115 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     };
 
     SDL_Rect moveNameRect;
-    moveNameRect.x = listEntryRect.x + (listEntryRect.w / 2) - (moveNameSurface->w / 2);
-    moveNameRect.y = (i * itemHeight)+(listEntryRect.h / 2) - (moveNameSurface->h / 2);
+    moveNameRect.x = 20 + moveTypeRect.x + moveTypeRect.w;
+    moveNameRect.y = moveTypeRect.y + 10;
     moveNameRect.w = moveNameSurface->w;
     moveNameRect.h = moveNameSurface->h;
     PokeSurface::onDraw(surf_display, moveNameSurface, &moveNameRect);
     SDL_FreeSurface(moveNameSurface);
+
+    // closing font
+    TTF_CloseFont(fontSurface);
+
+    // Render method
+    // load font
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    if (!fontSurface) {
+        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
+    }
+
+    std::string methodString = move[9];
+    if (methodString == "level-up") {
+        methodString = "LV." + move[8];
+        moveMethodSurface = TTF_RenderText_Blended(
+            fontSurface,
+            methodString.c_str(),
+            offset + i == selectedIndex ? highlightColor : color
+        );
+    }
+    else {
+        moveMethodSurface = TTF_RenderText_Blended(
+            fontSurface,
+            methodString.c_str(),
+            offset + i == selectedIndex ? highlightColor : color
+        );
+    }
+    if (moveMethodSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: moveMethodSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect moveMethodRect;
+    moveMethodRect.x = listEntryRect.x;
+    moveMethodRect.y = (listEntryRect.y + listEntryRect.h ) - moveMethodSurface->h;
+    moveMethodRect.w = moveMethodSurface->w;
+    moveMethodRect.h = moveMethodSurface->h;
+    PokeSurface::onDraw(surf_display, moveMethodSurface, &moveMethodRect);
+    SDL_FreeSurface(moveMethodSurface);
+
+    // closing font
+    TTF_CloseFont(fontSurface);
+
+
+    // Render PP
+    // load font
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    if (!fontSurface) {
+        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
+    }
+
+    std::string ppString = move[3] + '/' + move[3];
+    movePPSurface = TTF_RenderText_Blended(
+        fontSurface,
+        ppString.c_str(),
+        offset + i == selectedIndex ? highlightColor : color
+    );
+    if (movePPSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: movePPSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect movePPRect;
+    movePPRect.x = (listEntryRect.x + listEntryRect.w ) - movePPSurface->w;
+    movePPRect.y = (listEntryRect.y + listEntryRect.h ) - movePPSurface->h;
+    movePPRect.w = movePPSurface->w;
+    movePPRect.h = movePPSurface->h;
+    PokeSurface::onDraw(surf_display, movePPSurface, &movePPRect);
+    SDL_FreeSurface(movePPSurface);
+
+    // closing font
+    TTF_CloseFont(fontSurface);
+
+    // Render selected Item details
+    if (offset + i == selectedIndex) {
+        //redern item details
+        if (!renderItemDetails(surf_display, i)) {
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    return true;
+}
+
+bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, int i) {
+    //get move details
+    std::string pokeIconPath = PokedexDB::getPokemonIdentifier();
+    pokeIconPath = "res/icons/" + pokeIconPath + ".png";
+
+    pokeIconSurface = PokeSurface::onLoadImg(pokeIconPath);
+    if (pokeIconSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: pokeIconSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect pokeIconRect;
+    pokeIconRect.x = 10;
+    pokeIconRect.y = 40;
+    pokeIconRect.w = pokeIconSurface->w * 2;
+    pokeIconRect.h = pokeIconSurface->h * 2;
+
+    PokeSurface::onDrawScaled(surf_display, pokeIconSurface, &pokeIconRect);
+    SDL_FreeSurface(pokeIconSurface);
 
     return true;
 }
@@ -166,21 +289,21 @@ void PokedexActivity_PokemonView_Moves::onButtonDown(SDL_Keycode sym, Uint16 mod
     }
 }
 
-void PokedexActivity_PokemonView_Moves::onButtonRight(SDL_Keycode sym, Uint16 mod) {
-
-    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
-}
-
 void PokedexActivity_PokemonView_Moves::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
 
     PokedexActivityManager::back();
 }
 
+void PokedexActivity_PokemonView_Moves::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+
+    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
+}
+
 void PokedexActivity_PokemonView_Moves::onButtonA(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
-    move = (*dbResults)[selectedIndex];
-    PokedexDB::setPokemonIdentifier(move[1]);
+    //move = (*dbResults)[selectedIndex];
+    //PokedexDB::setPokemonIdentifier(move[1]);
 
     ////Call next activity
     //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_INFO);
@@ -189,4 +312,3 @@ void PokedexActivity_PokemonView_Moves::onButtonA(SDL_Keycode sym, Uint16 mod) {
 
 void PokedexActivity_PokemonView_Moves::onButtonB(SDL_Keycode sym, Uint16 mod) {
 }
-

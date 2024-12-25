@@ -11,6 +11,7 @@ std::string PokedexDB::gameVersion = "red";
 int PokedexDB::languageVersion = 9;
 int PokedexDB::regionVersion = 1;
 int PokedexDB::regionGroupVersion = 1;
+int PokedexDB::moveID = 1;
 std::string PokedexDB::pokemonIdentifier = "charmander";
 std::vector<std::vector<std::string>>* PokedexDB::results = new std::vector<std::vector<std::string>>();
 sqlite3* PokedexDB::db;
@@ -68,12 +69,29 @@ std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* 
         pos = SQLstatement.find("${region_id}");
     }
 
+    // change sql statement to be game version group specific
+    // find position of string to replace with regionVersion
+    pos = SQLstatement.find("${regionGroup_id}");
+    while (pos != std::string::npos) {
+        SQLstatement.replace(pos, std::string("${regionGroup_id}").length(), std::to_string(regionGroupVersion));
+        pos = SQLstatement.find("${regionGroup_id}");
+    }
+
     // change sql statement to be pokemon specific
     // find position of string to replace with pokemonIdentifier
     pos = SQLstatement.find("${pokemon_identifier}");
     while (pos != std::string::npos) {
         SQLstatement.replace(pos, std::string("${pokemon_identifier}").length(), pokemonIdentifier);
         pos = SQLstatement.find("${pokemon_identifier}");
+    }
+
+
+    // change sql statement to be move specific
+    // find position of string to replace with moveID
+    pos = SQLstatement.find("${move_id}");
+    while (pos != std::string::npos) {
+        SQLstatement.replace(pos, std::string("${move_id}").length(), std::to_string(moveID));
+        pos = SQLstatement.find("${move_id}");
     }
 
     // clear any previous results
@@ -149,6 +167,10 @@ void PokedexDB::setRegionVersion(int version_id) {
 
 void PokedexDB::setRegionGroupVersion(int group_version_id) {
     regionGroupVersion = group_version_id;
+}
+
+void PokedexDB::setMoveID(int move_ID) {
+    moveID = move_ID;
 }
 
 void PokedexDB::setPokemonIdentifier(std::string& pokemon_identifier) {

@@ -11,21 +11,15 @@ private:
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> move;
 
-    Pokemon* pokemon;
-
-    TTF_Font* fontSurface;
-    SDL_Surface* backgroundSurface, * listEntrySurface,
-        * moveNameSurface, * pokeIDSurface,
-        * pokeIconSurface, * moveTypeSurface,
-        * pwrSurface, * acrySurface, * effectSurface;
-    SDL_Color color;
-    SDL_Color highlightColor;
-
     int selectedIndex, offset, itemHeight;
-
     std::string fontPath;
 
-private:
+    SDL_Surface* backgroundSurface, * listEntrySurface,
+        * moveNameSurface, * moveTypeSurface, * movePPSurface,
+        * moveMethodSurface, * pokeIconSurface;
+    TTF_Font* fontSurface;
+    SDL_Color color, highlightColor;
+
     PokedexActivity_PokemonView_Moves();
 
 public:
@@ -37,25 +31,25 @@ public:
 
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
+    bool renderItemDetails(SDL_Surface* surf_display, int i);
+
     bool renderListItems(SDL_Surface* surf_display, int i);
 
     void onFreeze();
 
-public:
     static PokedexActivity_PokemonView_Moves* getInstance();
 
     void onButtonUp(SDL_Keycode sym, Uint16 mod);
 
     void onButtonDown(SDL_Keycode sym, Uint16 mod);
 
-    void onButtonRight(SDL_Keycode sym, Uint16 mod);
-
     void onButtonLeft(SDL_Keycode sym, Uint16 mod);
+
+    void onButtonRight(SDL_Keycode sym, Uint16 mod);
 
     void onButtonA(SDL_Keycode sym, Uint16 mod);
 
     void onButtonB(SDL_Keycode sym, Uint16 mod);
-
 };
 
 #endif
