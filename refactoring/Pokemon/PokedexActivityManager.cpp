@@ -7,6 +7,7 @@
 #include "PokedexActivity_PokemonView_Stats.h"
 #include "PokedexActivity_PokemonView_Moves.h"
 #include "PokedexActivity_PokemonView_Location.h"
+#include "PokedexActivity_PokemonView_Evolution.h"
 
 PokedexActivity* PokedexActivityManager::activity = 0;
 std::stack<PokedexActivity*> PokedexActivityManager::sceneStack;
@@ -55,6 +56,9 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
         break;
     case 7:
         activity = PokedexActivity_PokemonView_Location::getInstance();
+        break;
+    case 8:
+        activity = PokedexActivity_PokemonView_Evolution::getInstance();
         break;
     default:
         break;

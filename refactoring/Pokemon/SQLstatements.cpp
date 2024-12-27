@@ -132,6 +132,11 @@ const std::string SQL_getPokeRegionalID = R"(
       AND px.identifier NOT LIKE '%updated%';
 )";
 
+const std::string SQL_getPokeEvoID = R"(
+    SELECT evolution_chain_id FROM pokemon_species
+    WHERE identifier = '${pokemon_identifier}'
+)";
+
 const std::string SQL_getPokeName = R"(
     SELECT
       ps.id AS pokemon_id,
@@ -463,6 +468,51 @@ const std::string SQL_getPokeRoutes = R"(
         vg.id, lgi.game_index, l.identifier, em.identifier;
 )";
 
+const std::string SQL_getPokeEvoChain = R"(
+    SELECT
+        ps.evolution_chain_id,
+        p.id AS pokemon_id,
+        p.identifier AS pokemon_identifier,
+        ps.generation_id,
+        psn.name AS localized_name,
+        COALESCE(et.identifier, 'Base') AS evolution_method,
+        pe.minimum_level,
+        item_locale.name AS trigger_item_name,
+        pe.time_of_day,
+        pe.minimum_happiness,
+        pe.minimum_affection,
+        pe.known_move_type_id
+    FROM
+        pokemon_species ps
+    JOIN
+        pokemon p ON ps.id = p.species_id
+    LEFT JOIN
+        pokemon_species_names psn ON ps.id = psn.pokemon_species_id
+    LEFT JOIN
+        pokemon_evolution pe ON ps.id = pe.evolved_species_id
+    LEFT JOIN
+        evolution_triggers et ON pe.evolution_trigger_id = et.id
+    LEFT JOIN
+        items i ON pe.trigger_item_id = i.id
+    LEFT JOIN
+        item_names item_locale ON i.id = item_locale.item_id AND item_locale.local_language_id = '${language_id}'
+    WHERE
+        ps.evolution_chain_id = '${evoChain_id}'
+        AND psn.local_language_id = '${language_id}'
+    GROUP BY
+        ps.evolution_chain_id,
+        p.id,
+        p.identifier,
+        ps.generation_id,
+        psn.name,
+        COALESCE(et.identifier, 'Base'), 
+        pe.minimum_level,
+        item_locale.name,
+        pe.time_of_day,
+        pe.minimum_happiness,
+        pe.minimum_affection,
+        pe.known_move_type_id;
+)";
 // // // // // // 
 
 const std::string SQL_getPokemonByNameTest =

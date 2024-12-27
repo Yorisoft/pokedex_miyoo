@@ -29,10 +29,13 @@ itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.7 / 5))
 
 }
 
+PokedexActivity_PokemonView_Location::~PokedexActivity_PokemonView_Location() {}
+
 void PokedexActivity_PokemonView_Location::onActivate() {
     std::cout << "PokedexActivity_PokemonView_Location::onActivate START \n";
     // For some reason.. pokemon needs to be created before executeSQL command...
     pokemon = new Pokemon();
+    routes = pokemon->getRoutes();
     printPokeInfo();
 
 
@@ -47,7 +50,6 @@ void PokedexActivity_PokemonView_Location::onActivate() {
 
 void PokedexActivity_PokemonView_Location::printPokeInfo() {
     std::vector<unsigned short> stats = pokemon->getBasicStats();
-    routes = pokemon->getRoutes();
     
     std::cout << "ID: " << pokemon->getID() << '\n';
     std::cout << "Name: " << pokemon->getName() << '\n';
@@ -141,7 +143,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
 
     SDL_Rect pokeIconRect;
     pokeIconRect.x = 0;
-    pokeIconRect.y = 40;
+    pokeIconRect.y = 50;
     pokeIconRect.w = pokeIconSurface->w * 2;
     pokeIconRect.h = pokeIconSurface->h * 2;
 
@@ -164,7 +166,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
 
     SDL_Rect pokeNameRect;
     pokeNameRect.x = (pokeIconRect.x + pokeIconRect.w);
-    pokeNameRect.y = pokeIconRect.y + pokeIconRect.h/2;
+    pokeNameRect.y = (pokeIconRect.y + pokeIconRect.h/2) - 10;
     pokeNameRect.w = pokeNameSurface->w;
     pokeNameRect.h = pokeNameSurface->h;
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
@@ -184,7 +186,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
     };
     SDL_Rect pokeType1Rect;
     pokeType1Rect.x = pokeIconRect.x + pokeIconRect.w;
-    pokeType1Rect.y = (pokeIconRect.y + pokeIconRect.h ) - pokeType1Surface->h;
+    pokeType1Rect.y = (pokeNameRect.y + pokeNameRect.h ) + 5;
     pokeType1Rect.w = pokeType1Surface->w * 2;
     pokeType1Rect.h = pokeType1Surface->h * 2;
     PokeSurface::onDrawScaled(surf_display, pokeType1Surface, &pokeType1Rect);
@@ -426,7 +428,7 @@ void PokedexActivity_PokemonView_Location::onButtonLeft(SDL_Keycode sym, Uint16 
 }
 
 void PokedexActivity_PokemonView_Location::onButtonRight(SDL_Keycode sym, Uint16 mod){
-    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_LOCATION);
+    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_EVOLUTION);
 }
 
 void PokedexActivity_PokemonView_Location::onButtonA(SDL_Keycode sym, Uint16 mod){}

@@ -24,6 +24,7 @@ private:
 	std::vector<double>* genderRates;	
 	std::vector<std::string> *abilities;
 	std::vector<std::vector<std::string>>* routes;
+	std::vector<std::vector<std::string>>* evoChain;
 	
 	void setMemberVaribles(std::vector<std::vector<std::string>>*, std::vector<std::vector<std::string>>*);
 	std::vector<std::vector<std::string>> queryForPokeData(std::string& pName, std::string& sqlStatement);
@@ -54,6 +55,7 @@ public:
 	void setAbilities(const std::vector<std::string>);
 	void setRoutes(const std::vector<std::vector<std::string>>);
 	void setEvolutionChainID(const unsigned short);
+	void setEvolutionChain(const std::vector<std::vector<std::string>>);
 	void setEvolvesFromSpeciesID(const unsigned short);
 
 	// getters
@@ -75,6 +77,7 @@ public:
 	std::vector<std::string>* getAbilities() const;
 	std::vector<std::vector<std::string>>* getRoutes() const;
 	unsigned short getEvolutionChainID() const;
+	std::vector<std::vector<std::string>>* getEvolutionChain() const;
 	unsigned short getEvolvesFromSpeciesID() const;
 	
 };

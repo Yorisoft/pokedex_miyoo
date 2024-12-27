@@ -10,6 +10,7 @@ Pokemon::Pokemon() {
 	this->genderRates = new std::vector<double>();
 	this->abilities = new std::vector<std::string>();
 	this->routes = new std::vector<std::vector<std::string>>();
+	this->evoChain = new std::vector<std::vector<std::string>>();
 
 	// set id
 	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
@@ -59,6 +60,15 @@ Pokemon::Pokemon() {
 	results = PokedexDB::executeSQL(&SQL_getPokeRoutes);
 	setRoutes(*results);
 
+	// set evoChainID;
+	results = PokedexDB::executeSQL(&SQL_getPokeEvoID);
+	setEvolutionChainID(std::stoi((*results)[0][0]));
+
+	PokedexDB::setEvoChainID(getEvolutionChainID());
+
+	// set evoChain;
+	results = PokedexDB::executeSQL(&SQL_getPokeEvoChain);
+	setEvolutionChain(*results);
 	// make a call to pokedex class 
 	// use pokedex sqlite functions to get pokemon information. 
 
@@ -409,6 +419,17 @@ void Pokemon::setEvolutionChainID(const unsigned short ID) {
 }
 unsigned short Pokemon::getEvolutionChainID() const {
 	return this->evolutionChainID;
+}
+
+void Pokemon::setEvolutionChain(const std::vector<std::vector<std::string>> evo_chain) {
+	if (!(*this->evoChain).empty())
+		(*this->evoChain).clear();
+	for (auto evo : evo_chain) {
+		(*this->evoChain).push_back(evo);
+	}
+}
+std::vector<std::vector<std::string>>* Pokemon::getEvolutionChain() const {
+	return this->evoChain;
 }
 
 void Pokemon::setEvolvesFromSpeciesID(const unsigned short ID) {

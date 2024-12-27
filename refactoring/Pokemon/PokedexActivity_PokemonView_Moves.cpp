@@ -256,7 +256,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     SDL_Rect pokeIconRect;
     pokeIconRect.x = 0;
-    pokeIconRect.y = 40;
+    pokeIconRect.y = 50;
     pokeIconRect.w = pokeIconSurface->w * 2;
     pokeIconRect.h = pokeIconSurface->h * 2;
 
@@ -279,7 +279,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     SDL_Rect pokeNameRect;
     pokeNameRect.x = (pokeIconRect.x + pokeIconRect.w);
-    pokeNameRect.y = pokeIconRect.y + pokeIconRect.h/2;
+    pokeNameRect.y = (pokeIconRect.y + pokeIconRect.h/2) - 10;
     pokeNameRect.w = pokeNameSurface->w;
     pokeNameRect.h = pokeNameSurface->h;
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
@@ -299,7 +299,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     };
     SDL_Rect pokeType1Rect;
     pokeType1Rect.x = pokeIconRect.x + pokeIconRect.w;
-    pokeType1Rect.y = (pokeIconRect.y + pokeIconRect.h ) - pokeType1Surface->h;
+    pokeType1Rect.y = (pokeNameRect.y + pokeNameRect.h ) + 5;
     pokeType1Rect.w = pokeType1Surface->w * 2;
     pokeType1Rect.h = pokeType1Surface->h * 2;
     PokeSurface::onDrawScaled(surf_display, pokeType1Surface, &pokeType1Rect);
