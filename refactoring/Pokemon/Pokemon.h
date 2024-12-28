@@ -27,7 +27,6 @@ private:
 	std::vector<std::vector<std::string>>* evoChain;
 	
 	void setMemberVaribles(std::vector<std::vector<std::string>>*, std::vector<std::vector<std::string>>*);
-	std::vector<std::vector<std::string>> queryForPokeData(std::string& pName, std::string& sqlStatement);
 
 public:
 	Pokemon();

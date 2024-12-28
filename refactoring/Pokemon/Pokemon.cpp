@@ -94,23 +94,6 @@ Pokemon::Pokemon(std::vector<std::vector<std::string>>* DBresults) {
 
 }
 
-std::vector<std::vector<std::string>> Pokemon::queryForPokeData(std::string& pName, std::string& sqlStatement) {
-	size_t pos = sqlStatement.find("${pokemon_name}");
-	while (pos != std::string::npos) {
-		// filter by pokemon name
-		sqlStatement.replace(pos, std::string("${pokemon_name}").length(), pName);
-		pos = sqlStatement.find("${pokemon_name}");
-	}
-	
-	// call databse to pokedex for data
-	std::vector<std::vector<std::string>>* results = PokedexDB::executeSQL(&sqlStatement);
-	if (!results || results->empty()) {
-		std::cout << "Pokemon(std::string*): " << std::endl
-			<< "Could not execute sql statement. result is null or empty." << std::endl;
-	}
-	return *results;
-}
-
 void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon, std::vector<std::vector<std::string>>* routes) {
 	// set id
 	this->setID(std::stoi((*pokemon)[0][0]));
