@@ -101,7 +101,7 @@ const std::string SQL_getGameVersions = R"(
     WHERE
         vn.local_language_id = :language_id
         AND v.id <= 22
-        AND v.id NOT IN (10, 11, 15, 16, 21, 22)
+        AND v.id NOT IN (10, 11, 15, 16)
     ORDER BY
         v.id;
 )";
