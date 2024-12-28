@@ -3,31 +3,31 @@
 
 PokedexActivityMenu PokedexActivityMenu::instance;
 
-PokedexActivityMenu::PokedexActivityMenu() : 
-gameNameSurface(nullptr),
-fontSurface(nullptr),
-listEntrySurface(nullptr),
-listBackgroundSurface(nullptr),
-dbResults(nullptr),
-selectedIndex(0),
-offset(0),
-itemHeight(static_cast<int>(WINDOW_HEIGHT / 5))
+PokedexActivityMenu::PokedexActivityMenu() :
+    gameNameSurface(nullptr),
+    fontSurface(nullptr),
+    listEntrySurface(nullptr),
+    listBackgroundSurface(nullptr),
+    dbResults(nullptr),
+    color({ 255, 255, 255 }),
+    highlightColor({ 255, 0, 0 }),
+    selectedIndex(0),
+    offset(0),
+    itemHeight(static_cast<int>(WINDOW_HEIGHT / 5))
 {
-    // color maps
-    color = { 255, 255, 255 };
-    highlightColor = { 255, 0, 0 };
 }
 
 void PokedexActivityMenu::onActivate() {
     std::cout << "PokedexActivityMenu::onActivate START \n";
 
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
-    for (auto& game : *dbResults) {
+    for (std::vector<std::string>& game : *dbResults) {
         for (auto& col : game) {
             std::cout << col << " | ";
         }
         std::cout << std::endl;
     }
+    game = (*dbResults)[selectedIndex];
 
     fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 28); 
     if (!fontSurface) {
@@ -131,7 +131,6 @@ PokedexActivityMenu* PokedexActivityMenu::getInstance() {
 void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
     if (selectedIndex > 0) {
         selectedIndex--;
-        game = (*dbResults)[selectedIndex];
         if (selectedIndex < offset) {
             offset--;
         }
@@ -141,7 +140,6 @@ void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
-        game = (*dbResults)[selectedIndex];
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
@@ -150,6 +148,8 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     //Set Game version and regional pokedex ID for PokedexDB
+    game = (*dbResults)[selectedIndex];
+
     PokedexDB::setGameIdentifier(game[1]);
     PokedexDB::setRegionID(std::stoi(game[3]));
     PokedexDB::setGenerationID(std::stoi(game[5]));
