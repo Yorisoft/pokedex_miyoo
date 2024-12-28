@@ -69,15 +69,6 @@ Pokemon::Pokemon() {
 	// set evoChain;
 	results = PokedexDB::executeSQL(&SQL_getPokeEvoChain);
 	setEvolutionChain(*results);
-	// make a call to pokedex class 
-	// use pokedex sqlite functions to get pokemon information. 
-
-	// call function to set all of the member variables   
-	
-
-	//this->setMemberVaribles(results);
-
-
 }
 
 Pokemon::Pokemon(std::string pokemon) {
@@ -424,7 +415,7 @@ unsigned short Pokemon::getEvolutionChainID() const {
 void Pokemon::setEvolutionChain(const std::vector<std::vector<std::string>> evo_chain) {
 	if (!(*this->evoChain).empty())
 		(*this->evoChain).clear();
-	for (auto evo : evo_chain) {
+	for (auto& evo : evo_chain) {
 		(*this->evoChain).push_back(evo);
 	}
 }
@@ -442,7 +433,7 @@ unsigned short Pokemon::getEvolvesFromSpeciesID() const {
 void Pokemon::setRoutes(const std::vector<std::vector<std::string>> routes) {
 	if (!(*this->routes).empty())
 		(*this->routes).clear();
-	for (auto route : routes) {
+	for (auto& route : routes) {
 		(*this->routes).push_back(route);
 	}
 }
@@ -454,5 +445,5 @@ Pokemon::~Pokemon() {
 	delete abilities;
 	delete genderRates;
 	delete routes;
-
+	delete evoChain;
 }
