@@ -23,7 +23,6 @@ private:
 	static int evoChainID;
 	static std::string pokemonIdentifier;
 
-	static int callback(void* results, int argc, char** argv, char** azColName);
 	static const std::string getDBpath();
 	static int openDB();
 	static void closeDB(sqlite3* db);

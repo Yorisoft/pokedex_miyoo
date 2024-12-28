@@ -28,7 +28,6 @@ void PokedexActivityMenu::onActivate() {
         }
         std::cout << std::endl;
     }
-    game = (*dbResults)[selectedIndex];
 
     fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 28); 
     if (!fontSurface) {
@@ -74,6 +73,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
 
     // Render List Items
     for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
+        game = (*dbResults)[offset + i];
         // Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
@@ -102,7 +102,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     //List item title
     gameNameSurface = TTF_RenderText_Blended(
         fontSurface,
-        (*dbResults)[offset + i][2].c_str(),
+        game[2].c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
     if (gameNameSurface == NULL) {
