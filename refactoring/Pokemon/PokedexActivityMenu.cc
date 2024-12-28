@@ -150,8 +150,8 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     //Set Game version and regional pokedex ID for PokedexDB
-    PokedexDB::setGameVersion(game[1]);
-    PokedexDB::setRegionVersion(std::stoi(game[3]));
+    PokedexDB::setGameIdentifier(game[1]);
+    PokedexDB::setRegionID(std::stoi(game[3]));
     PokedexDB::setGenerationID(std::stoi(game[5]));
     PokedexDB::setVersionGroupID(std::stoi(game[7]));
 

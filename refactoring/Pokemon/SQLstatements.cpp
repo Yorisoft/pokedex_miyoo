@@ -34,9 +34,9 @@ const std::string SQL_getPokemonByName = R"(
         LEFT JOIN
             types AS t2 ON pt2.type_id = t2.id
         WHERE
-            psn.local_language_id = '${language_id}'
-            AND r.id = '${region_id}'
-            AND v.identifier = '${game_version}'
+            psn.local_language_id = :language_id
+            AND r.id = :region_id
+            AND v.identifier = :game_version
             AND px.identifier NOT LIKE '%updated%'
         GROUP BY
             pdn.pokedex_number, p.species_id 
@@ -66,8 +66,8 @@ const std::string SQL_getNameAndID = R"(
     LEFT JOIN
         types AS t2 ON pt2.type_id = t2.id
     WHERE
-        psn.local_language_id = '${language_id}'
-        AND ps.generation_id = '${region_id}'
+        psn.local_language_id = :language_id
+        AND ps.generation_id = :generation_id
     GROUP BY
         p.species_id
     ORDER BY
@@ -99,7 +99,7 @@ const std::string SQL_getGameVersions = R"(
     JOIN
         generations AS g ON r.id = g.main_region_id
     WHERE
-        vn.local_language_id = '${language_id}'
+        vn.local_language_id = :language_id
         AND v.id <= 22
         AND v.id NOT IN (10, 11, 15, 16, 21, 22)
     ORDER BY
@@ -125,16 +125,16 @@ const std::string SQL_getPokeRegionalID = R"(
     JOIN
       versions v ON pgi.version_id = v.id
     WHERE
-      psn.local_language_id = '${language_id}'
-      AND r.id = '${region_id}'
-      AND v.identifier = '${game_version}'
-      AND ps.identifier = '${pokemon_identifier}'
+      psn.local_language_id = :language_id
+      AND r.id = :region_id
+      AND v.identifier = :game_version
+      AND ps.identifier = :pokemon_identifier
       AND px.identifier NOT LIKE '%updated%';
 )";
 
 const std::string SQL_getPokeEvoID = R"(
     SELECT evolution_chain_id FROM pokemon_species
-    WHERE identifier = '${pokemon_identifier}'
+    WHERE identifier = :pokemon_identifier
 )";
 
 const std::string SQL_getPokeName = R"(
@@ -156,10 +156,10 @@ const std::string SQL_getPokeName = R"(
     JOIN
       versions v ON pgi.version_id = v.id
     WHERE
-      psn.local_language_id = '${language_id}'
-      AND r.id = '${region_id}'
-      AND v.identifier = '${game_version}'
-      AND ps.identifier = '${pokemon_identifier}'
+      psn.local_language_id = :language_id
+      AND r.id = :region_id
+      AND v.identifier = :game_version
+      AND ps.identifier = :pokemon_identifier
       AND px.identifier NOT LIKE '%updated%';
 )";
 
@@ -188,9 +188,9 @@ const std::string SQL_getPokeTypes = R"(
     LEFT JOIN 
       types t2 ON pt2.type_id = t2.id
     WHERE 
-      v.identifier = '${game_version}'
-      AND r.id = '${region_id}'
-      AND p.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      v.identifier = :game_version
+      AND r.id = :region_id
+      AND p.species_id = (SELECT id FROM pokemon_species WHERE identifier = :pokemon_identifier)
       AND px.identifier NOT LIKE '%updated%';
 )";
 
@@ -214,10 +214,10 @@ const std::string SQL_getPokeGenus = R"(
     JOIN 
       regions r ON px.region_id = r.id
     WHERE 
-      psn.local_language_id = '${language_id}'
-      AND v.identifier = '${game_version}' 
-      AND r.id = '${region_id}'
-      AND ps.identifier = '${pokemon_identifier}'
+      psn.local_language_id = :language_id
+      AND v.identifier = :game_version 
+      AND r.id = :region_id
+      AND ps.identifier = :pokemon_identifier
       AND px.identifier NOT LIKE '%updated%';
 )";
 
@@ -239,9 +239,9 @@ const std::string SQL_getPokeHW = R"(
     JOIN 
       regions r ON px.region_id = r.id
     WHERE 
-      v.identifier = '${game_version}' 
-      AND r.id = '${region_id}'
-      AND p.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      v.identifier = :game_version 
+      AND r.id = :region_id
+      AND p.species_id = (SELECT id FROM pokemon_species WHERE identifier = :pokemon_identifier)
       AND px.identifier NOT LIKE '%updated%';
 )";
 
@@ -261,10 +261,10 @@ const std::string SQL_getPokeFlavorText = R"(
     JOIN 
       regions r ON px.region_id = r.id
     WHERE 
-      psft.language_id = '${language_id}'
-      AND v.identifier = '${game_version}'
-      AND r.id = '${region_id}'
-      AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      psft.language_id = :language_id
+      AND v.identifier = :game_version
+      AND r.id = :region_id
+      AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = :pokemon_identifier)
       AND px.identifier NOT LIKE '%updated%';
 )";
 
@@ -284,10 +284,10 @@ const std::string SQL_getPokeAbilities = R"(
     JOIN 
       regions r ON px.region_id = r.id
     WHERE 
-      psft.language_id = '${language_id}'
-      AND v.identifier = '${game_version}'
-      AND r.id = '${region_id}'
-      AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = '${pokemon_identifier}')
+      psft.language_id = :language_id
+      AND v.identifier = :game_version
+      AND r.id = :region_id
+      AND psft.species_id = (SELECT id FROM pokemon_species WHERE identifier = :pokemon_identifier)
       AND px.identifier NOT LIKE '%updated%';
 )";
 
@@ -312,9 +312,9 @@ const std::string SQL_getPokeStats = R"(
     JOIN 
       regions r ON px.region_id = r.id
     WHERE 
-      p.identifier = '${pokemon_identifier}'
-      AND v.identifier = '${game_version}'
-      AND r.id = '${region_id}';
+      p.identifier = :pokemon_identifier
+      AND v.identifier = :game_version
+      AND r.id = :region_id;
 )";
 
 const std::string SQL_getPokeGenderRates = R"(
@@ -335,9 +335,9 @@ const std::string SQL_getPokeGenderRates = R"(
     JOIN 
       regions r ON px.region_id = r.id
     WHERE 
-      p.identifier = '${pokemon_identifier}'
-      AND v.identifier = '${game_version}'
-      AND r.id = '${region_id}';
+      p.identifier = :pokemon_identifier
+      AND v.identifier = :game_version
+      AND r.id = :region_id;
 )";
 
 const std::string SQL_getPokeMoves = R"(
@@ -369,9 +369,9 @@ const std::string SQL_getPokeMoves = R"(
         pokemon_move_methods AS pmm
         ON pm.pokemon_move_method_id = pmm.id
     WHERE 
-         mn.local_language_id = '${language_id}'
-         AND vg.id = '${versionGroup_id}'
-         AND p.identifier = '${pokemon_identifier}'
+         mn.local_language_id = :language_id
+         AND vg.id = :version_group_id
+         AND p.identifier = :pokemon_identifier
     ORDER BY 
         pmm.identifier, pm.level;
 )";
@@ -410,7 +410,7 @@ const std::string SQL_getPokeMovesDetail = R"(
         LEFT JOIN 
             move_flavor_text mft
             ON m.id = mft.move_id
-            AND mft.language_id = '${language_id}'
+            AND mft.language_id = :language_id
         INNER JOIN 
             version_groups vg
             ON vg.id = pm.version_group_id
@@ -418,9 +418,9 @@ const std::string SQL_getPokeMovesDetail = R"(
             pokemon_move_methods AS pmm
             ON pm.pokemon_move_method_id = pmm.id
         WHERE 
-            mn.local_language_id = '${language_id}'
-            AND vg.id = '${versionGroup_id}'
-            AND p.identifier = '${pokemon_identifier}'
+            mn.local_language_id = :language_id
+            AND vg.id = :version_group_id
+            AND p.identifier = :pokemon_identifier
         GROUP BY 
             m.id, mn.name, t.identifier, m.pp, pm.level, pmm.identifier, dc.identifier, m.power, m.accuracy
     ) AS subquery
@@ -460,8 +460,8 @@ const std::string SQL_getPokeRoutes = R"(
     LEFT JOIN 
         encounter_methods em ON es.encounter_method_id = em.id
     WHERE 
-        p.identifier = '${pokemon_identifier}'
-        AND vg.id = '${versionGroup_id}'
+        p.identifier = :pokemon_identifier
+        AND vg.id = :version_group_id
     GROUP BY 
         vg.id, l.id, em.id, lgi.game_index
     ORDER BY 
@@ -495,10 +495,10 @@ const std::string SQL_getPokeEvoChain = R"(
     LEFT JOIN
         items i ON pe.trigger_item_id = i.id
     LEFT JOIN
-        item_names item_locale ON i.id = item_locale.item_id AND item_locale.local_language_id = '${language_id}'
+        item_names item_locale ON i.id = item_locale.item_id AND item_locale.local_language_id = :language_id
     WHERE
-        ps.evolution_chain_id = '${evoChain_id}'
-        AND psn.local_language_id = '${language_id}'
+        ps.evolution_chain_id = :evo_chain_id
+        AND psn.local_language_id = :language_id
     GROUP BY
         ps.evolution_chain_id,
         p.id,
@@ -549,9 +549,9 @@ const std::string SQL_getPokemonByNameTest =
 	"JOIN abilities a ON pa.ability_id = a.id "
 	"JOIN pokemon_species_names psn ON ps.id = psn.pokemon_species_id "
 	"WHERE ps.identifier = 'charmander' "
-	"AND v.identifier = '${game_version}'  "
-	"AND f.language_id = '${language_id}'  "
-	"AND psn.local_language_id = '${language_id}' "
+	"AND v.identifier = :game_version  "
+	"AND f.language_id = :language_id  "
+	"AND psn.local_language_id = :language_id "
 	"GROUP BY ps.id, v.id, ta.identifier, tb.identifier, ps.gender_rate, p.weight, p.height, ps.evolution_chain_id, ps.evolves_from_species_id "
 	"ORDER BY ps.id, v.id; ";
 
@@ -576,8 +576,8 @@ LEFT JOIN location_area_encounter_rates laer
 LEFT JOIN encounter_slots es ON e.encounter_slot_id = es.id
 LEFT JOIN encounter_methods em ON es.encounter_method_id = em.id
 WHERE 
-    p.identifier = '${pokemon_name}'
-    AND v.identifier = '${game_version}'
+    p.identifier = :pokemon_identifier
+    AND v.identifier = :game_version
 GROUP BY 
     p.id, v.id, l.id, em.id
 ORDER BY 
