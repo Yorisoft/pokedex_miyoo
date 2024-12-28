@@ -17,7 +17,8 @@ private:
 	static int languageVersion;
 	static std::string gameVersion;
 	static int regionVersion;
-	static int regionGroupVersion;
+	static int versionGroupID;
+	static int generationID;
     static int moveID;
 	static int evoChainID;
 	static std::string pokemonIdentifier;
@@ -39,7 +40,8 @@ public:
 	static void setPokemonIdentifier(std::string&);
 	static std::string getPokemonIdentifier();
 	static void setRegionVersion(int);
-	static void setRegionGroupVersion(int);
+	static void setGenerationID(int);
+	static void setVersionGroupID(int);
 	static void setMoveID(int);
 	static void setEvoChainID(int);
 };

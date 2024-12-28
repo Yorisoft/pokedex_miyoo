@@ -370,7 +370,7 @@ const std::string SQL_getPokeMoves = R"(
         ON pm.pokemon_move_method_id = pmm.id
     WHERE 
          mn.local_language_id = '${language_id}'
-         AND vg.id = '${regionGroup_id}'
+         AND vg.id = '${versionGroup_id}'
          AND p.identifier = '${pokemon_identifier}'
     ORDER BY 
         pmm.identifier, pm.level;
@@ -419,7 +419,7 @@ const std::string SQL_getPokeMovesDetail = R"(
             ON pm.pokemon_move_method_id = pmm.id
         WHERE 
             mn.local_language_id = '${language_id}'
-            AND vg.id = '${regionGroup_id}'
+            AND vg.id = '${versionGroup_id}'
             AND p.identifier = '${pokemon_identifier}'
         GROUP BY 
             m.id, mn.name, t.identifier, m.pp, pm.level, pmm.identifier, dc.identifier, m.power, m.accuracy
@@ -461,7 +461,7 @@ const std::string SQL_getPokeRoutes = R"(
         encounter_methods em ON es.encounter_method_id = em.id
     WHERE 
         p.identifier = '${pokemon_identifier}'
-        AND vg.id = '${regionGroup_id}'
+        AND vg.id = '${versionGroup_id}'
     GROUP BY 
         vg.id, l.id, em.id, lgi.game_index
     ORDER BY 

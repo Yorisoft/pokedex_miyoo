@@ -32,7 +32,7 @@ private:
 public:
 	Pokemon();
 	Pokemon(std::string);
-	Pokemon(std::string*);
+	//Pokemon(std::string*);
 	Pokemon(std::vector<std::vector<std::string>>*);
 	~Pokemon();
 

@@ -36,6 +36,7 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
     // For some reason.. pokemon needs to be created before executeSQL command...
     pokemon = new Pokemon();
 
+    std::cout << "Create new pokemon. Making getPokeMoveDetails call to db" << std::endl;
     dbResults = PokedexDB::executeSQL(&SQL_getPokeMovesDetail);
     for (std::vector<std::string>&moves : *dbResults) {
         for (auto& col : moves) {

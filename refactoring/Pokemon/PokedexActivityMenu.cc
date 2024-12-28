@@ -92,9 +92,9 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     };
 
     SDL_Rect listEntryRect;
-    listEntryRect.x = surf_display->w - (surf_display->w * 0.9);
+    listEntryRect.x = 0;
     listEntryRect.y = (i * itemHeight);
-    listEntryRect.w = surf_display->w * 0.9;
+    listEntryRect.w = surf_display->w;
     listEntryRect.h = itemHeight;
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);
@@ -112,7 +112,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
 
     SDL_Rect gameVersionRect;
     gameVersionRect.x = listEntryRect.x + (listEntryRect.w / 2) - (gameNameSurface->w / 2);
-    gameVersionRect.y = (i * itemHeight)+(listEntryRect.h / 2) - (gameNameSurface->h / 2);
+    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (gameNameSurface->h / 2);
     gameVersionRect.w = gameNameSurface->w;
     gameVersionRect.h = gameNameSurface->h;
     PokeSurface::onDraw(surf_display, gameNameSurface, &gameVersionRect);
@@ -151,8 +151,9 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     //Set Game version and regional pokedex ID for PokedexDB
     PokedexDB::setGameVersion(game[1]);
-    PokedexDB::setRegionVersion(std::stoi(game[5]));
-    PokedexDB::setRegionGroupVersion(std::stoi(game[7]));
+    PokedexDB::setRegionVersion(std::stoi(game[3]));
+    PokedexDB::setGenerationID(std::stoi(game[5]));
+    PokedexDB::setVersionGroupID(std::stoi(game[7]));
 
     PokedexActivityManager::push(APPSTATE_POKEDEX_LIST);
 }

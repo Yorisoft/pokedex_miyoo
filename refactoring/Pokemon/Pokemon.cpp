@@ -50,11 +50,11 @@ Pokemon::Pokemon() {
 	setBasicStats(stats);
 
 	// set abilities;
-	results = PokedexDB::executeSQL(&SQL_getPokeGenderRates);
-	for (std::vector<std::string> stat : *results) {
-		stats->push_back(std::stoi(stat[0]));
-	}
-	setGenderRates(std::stoi((*results)[0][0]));
+	//results = PokedexDB::executeSQL(&SQL_getPokeGenderRates);
+	//for (std::vector<std::string> stat : *results) {
+	//	stats->push_back(std::stoi(stat[0]));
+	//}
+	//setGenderRates(std::stoi((*results)[0][0]));
 
 	// set routes;
 	results = PokedexDB::executeSQL(&SQL_getPokeRoutes);
@@ -83,21 +83,21 @@ Pokemon::Pokemon() {
 Pokemon::Pokemon(std::string pokemon) {
 }
 
-Pokemon::Pokemon(std::string* pokemon) {
-	this->genderRates = new std::vector<double>();
-	this->abilities = new std::vector<std::string>();
-	this->routes = new std::vector<std::vector<std::string>>();
-	// call pokedex to pokedex for data
-
-	// find position of string to replace with pokemon name
-	std::string poke_SQLstatement = SQL_getPokemonByName;
-	std::string route_SQLstatement = SQL_getPokemonRoutesByName;
-
-	std::vector<std::vector<std::string>> pokeData = this->queryForPokeData(*pokemon, poke_SQLstatement);	
-	std::vector<std::vector<std::string>> routeData = this->queryForPokeData(*pokemon, route_SQLstatement);
-	
-	this->setMemberVaribles(&pokeData, &routeData);
-}
+//Pokemon::Pokemon(std::string* pokemon) {
+//	this->genderRates = new std::vector<double>();
+//	this->abilities = new std::vector<std::string>();
+//	this->routes = new std::vector<std::vector<std::string>>();
+//	// call pokedex to pokedex for data
+//
+//	// find position of string to replace with pokemon name
+//	std::string poke_SQLstatement = SQL_getPokemonByName;
+//	std::string route_SQLstatement = SQL_getPokemonRoutesByName;
+//
+//	std::vector<std::vector<std::string>> pokeData = this->queryForPokeData(*pokemon, poke_SQLstatement);	
+//	std::vector<std::vector<std::string>> routeData = this->queryForPokeData(*pokemon, route_SQLstatement);
+//	
+//	this->setMemberVaribles(&pokeData, &routeData);
+//}
 
 Pokemon::Pokemon(std::vector<std::vector<std::string>>* DBresults) {
 
