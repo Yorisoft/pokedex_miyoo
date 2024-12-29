@@ -15,6 +15,7 @@ pokeIconSurface(nullptr),
 pokeType1Surface(nullptr),
 pokeType2Surface(nullptr),
 pokeNameSurface(nullptr),
+moveClassSurface(nullptr),
 movePwrSurface(nullptr),
 moveAcrySurface(nullptr),
 moveEffectSurface(nullptr),
@@ -348,6 +349,24 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     SDL_FreeSurface(movePwrSurface);
 
     ////////////////////////////////////////////////////////////////////////////
+    //List item category/class
+    iconPath = "res/types/" + move[4] + ".png";
+    moveClassSurface = PokeSurface::onLoadImg(iconPath);
+    if (moveClassSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: moveClassSurface " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect moveClassRect;
+    moveClassRect.x = movePwrRect.x + 100;
+    moveClassRect.y = movePwrRect.y - 10;
+    moveClassRect.w = moveClassSurface->w * 2;
+    moveClassRect.h = moveClassSurface->h * 2;
+
+    PokeSurface::onDrawScaled(surf_display, moveClassSurface, &moveClassRect);
+    SDL_FreeSurface(moveClassSurface);
+
+    //////////////////////////////////////////////////////////////////////////////////
     // Render Accuracy
     moveAcrySurface = TTF_RenderText_Blended(
         fontSurface,

@@ -74,6 +74,7 @@ void PokedexActivity_PokemonView_Location::printPokeInfo() {
     }
 
 }
+
 void PokedexActivity_PokemonView_Location::onDeactivate() {
     std::cout << "PokedexActivity_PokemonView_Location::onActivate START \n";
 
@@ -127,7 +128,6 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
         }
     }
 }
-
 
 bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_display) {
     //Render pokedmon info
@@ -421,7 +421,6 @@ void PokedexActivity_PokemonView_Location::onButtonDown(SDL_Keycode sym, Uint16 
         }
     }
 }
-
 
 void PokedexActivity_PokemonView_Location::onButtonLeft(SDL_Keycode sym, Uint16 mod){
     PokedexActivityManager::back();

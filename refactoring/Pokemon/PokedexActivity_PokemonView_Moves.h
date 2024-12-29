@@ -20,7 +20,7 @@ private:
         * moveNameSurface, * moveTypeSurface, * movePPSurface,
         * moveMethodSurface, * pokeIconSurface,
         * pokeType1Surface, * pokeType2Surface,
-        * pokeNameSurface,
+        * pokeNameSurface, * moveClassSurface,
         * movePwrSurface, * moveAcrySurface, * moveEffectSurface;
     TTF_Font* fontSurface;
     SDL_Color color, highlightColor;
