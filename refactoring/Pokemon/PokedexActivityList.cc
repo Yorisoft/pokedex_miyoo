@@ -3,7 +3,18 @@
 
 PokedexActivityList PokedexActivityList::instance;
 
-PokedexActivityList::PokedexActivityList()
+PokedexActivityList::PokedexActivityList() : 
+    pokeNameSurface(nullptr),
+    pokeIconSurface(nullptr),
+    pokeType1Surface(nullptr),
+    pokeType2Surface(nullptr),
+    pokeIDSurface(nullptr),
+    listEntrySurface(nullptr),
+    listBackgroundSurface(nullptr),
+    fontSurface(nullptr),
+    dbResults(nullptr),
+    selectedIndex(0),
+    offset(0)
 {
 }
 
@@ -11,25 +22,13 @@ PokedexActivityList::~PokedexActivityList() {
 }
 
 void PokedexActivityList::onActivate() {
-    pokeNameSurface = nullptr,
-        pokeIconSurface = nullptr,
-        pokeType1Surface = nullptr,
-        pokeType2Surface = nullptr,
-        pokeIDSurface = nullptr,
-        listEntrySurface = nullptr,
-        listBackgroundSurface = nullptr;
+    itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
 
-    fontSurface = nullptr;
-
-    color = { 255, 255, 255 },
-        highlightColor = { 255, 0, 0 };
+    color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
 
     fontPath = "res/font/Pokemon_GB.ttf";
 
-    selectedIndex = 0,
-        offset = 0,
-        itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
-
+//////////////////////////////////////////////////////////////////////////////////////
     std::cout << "PokedexActivityList::onActivate START \n";
 
     dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
@@ -41,7 +40,7 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 18);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
     if (!fontSurface) {
         std::cerr << "PokedexActivityList::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -64,8 +63,10 @@ void PokedexActivityList::onDeactivate() {
     color = {  }, 
         highlightColor = {  };
 
-    //delete dbResults;
-    //dbResults = nullptr;
+    //if (dbResults) {
+    //    delete dbResults; 
+    //    dbResults = nullptr; 
+    //}
 
     pokemon.clear();
 

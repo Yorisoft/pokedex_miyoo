@@ -23,7 +23,12 @@ private:
 
     PokedexActivityMenu();
     ~PokedexActivityMenu();
+
     bool renderListItems(SDL_Surface* surf_display, int i);
+
+    void onButtonUp(SDL_Keycode sym, Uint16 mod);
+    void onButtonDown(SDL_Keycode sym, Uint16 mod);
+    void onButtonA(SDL_Keycode sym, Uint16 mod);
 
 public:
     void onActivate();
@@ -37,13 +42,6 @@ public:
     void onFreeze();
 
     static PokedexActivityMenu* getInstance();
-
-    void onButtonUp(SDL_Keycode sym, Uint16 mod);
-
-    void onButtonDown(SDL_Keycode sym, Uint16 mod);
-
-    void onButtonA(SDL_Keycode sym, Uint16 mod);
-
 };
 
 #endif

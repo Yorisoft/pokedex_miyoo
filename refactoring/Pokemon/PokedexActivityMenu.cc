@@ -3,7 +3,14 @@
 
 PokedexActivityMenu PokedexActivityMenu::instance;
 
-PokedexActivityMenu::PokedexActivityMenu()
+PokedexActivityMenu::PokedexActivityMenu() :
+    gameNameSurface(nullptr),
+    listEntrySurface(nullptr),
+    listBackgroundSurface(nullptr),
+    fontSurface(nullptr),
+    dbResults(nullptr),
+    selectedIndex(0),
+    offset(0)
 {
 }
 
@@ -11,29 +18,16 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 }
 
 void PokedexActivityMenu::onActivate() {
-    gameNameSurface = nullptr,
-        listEntrySurface = nullptr,
-        listBackgroundSurface = nullptr;
-
-    fontSurface = nullptr;
-
-    color = { 255, 255, 255 },
-        highlightColor = { 255, 0, 0 };
-
-    dbResults = nullptr; 
+    color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
 
     fontPath = "res/font/Pokemon_GB.ttf";
-    selectedIndex = 0,
-        offset = 0,
-        itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
+
+    itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
 //////////////////////////////////////////////////////////////////////////////////////
-
     std::cout << "PokedexActivityMenu::onActivate START \n";
 
-    std::cout << "PokedexActivityMenu::onActivate calling dbResults \n";
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
-    std::cout << "PokedexActivityMenu::onActivate dbResults aquired \n";
     for (std::vector<std::string>& game : *dbResults) {
         for (auto& col : game) {
             std::cout << col << " | ";
@@ -62,8 +56,10 @@ void PokedexActivityMenu::onDeactivate() {
     color = { }, 
         highlightColor = { };
 
-    delete dbResults;
-    dbResults = nullptr;
+    //if (dbResults) {
+    //    delete dbResults; 
+    //    dbResults = nullptr; 
+    //}
 
     game.clear();
 

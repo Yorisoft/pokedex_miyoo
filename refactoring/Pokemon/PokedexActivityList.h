@@ -25,6 +25,11 @@ private:
     PokedexActivityList();
     ~PokedexActivityList();
 
+    bool renderListItems(SDL_Surface* surf_display, int i);
+    SDL_Rect renderItemBackground(SDL_Surface* surf_display, int i);
+    bool renderItemSprites(SDL_Surface* surf_display, int i);
+    bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i);
+
     void onButtonUp(SDL_Keycode sym, Uint16 mod);
     void onButtonDown(SDL_Keycode sym, Uint16 mod);
     void onButtonA(SDL_Keycode sym, Uint16 mod);
@@ -40,14 +45,6 @@ public:
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
 
     void onFreeze();
-
-    bool renderListItems(SDL_Surface* surf_display, int i);
-
-    SDL_Rect renderItemBackground(SDL_Surface* surf_display, int i);
-
-    bool renderItemSprites(SDL_Surface* surf_display, int i);
-
-    bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i);
 
     static PokedexActivityList* getInstance();
 
