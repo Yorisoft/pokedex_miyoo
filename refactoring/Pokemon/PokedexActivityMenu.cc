@@ -97,7 +97,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     SDL_FreeSurface(listBackgroundSurface);
 
     // Render List Items
-    for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
+    for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
         game = (*dbResults)[offset + i];
         // Render list items
         if (!renderListItems(surf_display, i)) {
@@ -183,3 +183,40 @@ void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::push(APPSTATE_POKEDEX_LIST);
 }
 
+void PokedexActivityMenu::onButtonB(SDL_Keycode sym, Uint16 mod) {
+}
+
+void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex < dbResults->size() - 3) {
+        selectedIndex += 3;
+        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
+            offset += 3;
+            // Ensure offset doesn't go out of bounds
+            if (offset > dbResults->size() - MAX_VISIBLE_ITEMS) {
+                offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+            }
+        }
+    }
+    else {
+        // If we exceed the last item, set selectedIndex to the last item visible
+        selectedIndex = dbResults->size() - 1;
+        offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+    }
+}
+
+void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex >= 3) {
+        selectedIndex -= 3;
+        if (selectedIndex < offset) {
+            offset -= 3; // Reduce offset accordingly
+            // Ensure offset doesn't go negative
+            if (offset < 0) {
+                offset = 0;  // Cap offset to zero
+            }
+        }
+    }
+    else {
+        selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
+        offset = 0;  // Cap offset to zero
+    }
+}

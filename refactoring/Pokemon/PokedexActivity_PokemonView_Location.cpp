@@ -434,3 +434,38 @@ void PokedexActivity_PokemonView_Location::onButtonRight(SDL_Keycode sym, Uint16
 void PokedexActivity_PokemonView_Location::onButtonA(SDL_Keycode sym, Uint16 mod){}
 
 void PokedexActivity_PokemonView_Location::onButtonB(SDL_Keycode sym, Uint16 mod){}
+
+void PokedexActivity_PokemonView_Location::onButtonR(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex < routes->size() - MAX_VISIBLE_ITEMS) {
+        selectedIndex += MAX_VISIBLE_ITEMS;
+        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
+            offset += MAX_VISIBLE_ITEMS;
+            // Ensure offset doesn't go out of bounds
+            if (offset > routes->size() - MAX_VISIBLE_ITEMS) {
+                offset = routes->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+            }
+        }
+    }
+    else {
+        // If we exceed the last item, set selectedIndex to the last item visible
+        selectedIndex = routes->size() - 1;
+        offset = routes->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+    }
+}
+
+void PokedexActivity_PokemonView_Location::onButtonL(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex >= MAX_VISIBLE_ITEMS) {
+        selectedIndex -= MAX_VISIBLE_ITEMS;
+        if (selectedIndex < offset) {
+            offset -= MAX_VISIBLE_ITEMS; // Reduce offset accordingly
+            // Ensure offset doesn't go negative
+            if (offset < 0) {
+                offset = 0;  // Cap offset to zero
+            }
+        }
+    }
+    else {
+        selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
+        offset = 0;  // Cap offset to zero
+    }
+}

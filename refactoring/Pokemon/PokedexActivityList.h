@@ -34,6 +34,8 @@ private:
     void onButtonDown(SDL_Keycode sym, Uint16 mod);
     void onButtonA(SDL_Keycode sym, Uint16 mod);
     void onButtonB(SDL_Keycode sym, Uint16 mod);
+    void onButtonR(SDL_Keycode sym, Uint16 mod);
+    void onButtonL(SDL_Keycode sym, Uint16 mod);
 
 public:
     void onActivate();

@@ -445,6 +445,41 @@ void PokedexActivity_PokemonView_Moves::onButtonDown(SDL_Keycode sym, Uint16 mod
     }
 }
 
+void PokedexActivity_PokemonView_Moves::onButtonR(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex < dbResults->size() - MAX_VISIBLE_ITEMS) {
+        selectedIndex += MAX_VISIBLE_ITEMS;
+        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
+            offset += MAX_VISIBLE_ITEMS;
+            // Ensure offset doesn't go out of bounds
+            if (offset > dbResults->size() - MAX_VISIBLE_ITEMS) {
+                offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+            }
+        }
+    }
+    else {
+        // If we exceed the last item, set selectedIndex to the last item visible
+        selectedIndex = dbResults->size() - 1;
+        offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+    }
+}
+
+void PokedexActivity_PokemonView_Moves::onButtonL(SDL_Keycode sym, Uint16 mod) {
+    if (selectedIndex >= MAX_VISIBLE_ITEMS) {
+        selectedIndex -= MAX_VISIBLE_ITEMS;
+        if (selectedIndex < offset) {
+            offset -= MAX_VISIBLE_ITEMS; // Reduce offset accordingly
+            // Ensure offset doesn't go negative
+            if (offset < 0) {
+                offset = 0;  // Cap offset to zero
+            }
+        }
+    }
+    else {
+        selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
+        offset = 0;  // Cap offset to zero
+    }
+}
+
 void PokedexActivity_PokemonView_Moves::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
 

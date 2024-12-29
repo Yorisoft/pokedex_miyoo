@@ -27,9 +27,19 @@ private:
         * routeLvlSurface, * routeSmrySurface;
 
     void printPokeInfo();
+
     bool renderPokeInfo(SDL_Surface* surf_display);
     bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i);
     bool renderItemDetails(SDL_Surface* surf_display, int i);
+
+    void onButtonUp(SDL_Keycode sym, Uint16 mod);
+    void onButtonDown(SDL_Keycode sym, Uint16 mod);
+    void onButtonLeft(SDL_Keycode sym, Uint16 mod);
+    void onButtonRight(SDL_Keycode sym, Uint16 mod);
+    void onButtonA(SDL_Keycode sym, Uint16 mod);
+    void onButtonB(SDL_Keycode sym, Uint16 mod);
+    void onButtonR(SDL_Keycode sym, Uint16 mod);
+    void onButtonL(SDL_Keycode sym, Uint16 mod);
 
 public:
     PokedexActivity_PokemonView_Location();
@@ -43,12 +53,6 @@ public:
 
     static PokedexActivity_PokemonView_Location* getInstance();
 
-    void onButtonUp(SDL_Keycode sym, Uint16 mod);
-    void onButtonDown(SDL_Keycode sym, Uint16 mod);
-    void onButtonLeft(SDL_Keycode sym, Uint16 mod);
-    void onButtonRight(SDL_Keycode sym, Uint16 mod);
-    void onButtonA(SDL_Keycode sym, Uint16 mod);
-    void onButtonB(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif
