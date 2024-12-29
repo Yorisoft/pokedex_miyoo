@@ -87,6 +87,7 @@ void PokedexActivityManager::back() {
     // Call onDeactivate() before popping to ensure proper cleanup
     if (current) {
         current->onDeactivate();
+        //current = nullptr;
     }
     sceneStack.pop();
 
@@ -97,6 +98,7 @@ void PokedexActivityManager::back() {
     }
 
     //current->onDeactivate();
+    //delete current;
 
     if (!sceneStack.empty()) {
         std::cout << "!sceneStack.empty(). Calling activity->onActivate()." << std::endl;

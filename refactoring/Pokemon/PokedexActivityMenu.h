@@ -12,14 +12,18 @@ private:
 
     SDL_Surface* gameNameSurface, *listEntrySurface,
         *listBackgroundSurface;
+
     TTF_Font* fontSurface;
 
     SDL_Color color;
     SDL_Color highlightColor;
     
+    std::string fontPath;
     int selectedIndex, offset, itemHeight;
 
     PokedexActivityMenu();
+    ~PokedexActivityMenu();
+    bool renderListItems(SDL_Surface* surf_display, int i);
 
 public:
     void onActivate();
@@ -29,8 +33,6 @@ public:
     void onLoop();
 
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
-
-    bool renderListItems(SDL_Surface* surf_display, int i);
 
     void onFreeze();
 

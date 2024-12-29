@@ -15,7 +15,7 @@ int PokedexDB::generationID = 1;
 int PokedexDB::versionGroupID = 1;
 int PokedexDB::moveID = 1;
 int PokedexDB::evoChainID = 1;
-std::vector<std::vector<std::string>>* PokedexDB::results = new std::vector<std::vector<std::string>>();
+std::vector<std::vector<std::string>>* PokedexDB::results;
 sqlite3* PokedexDB::db;
 int PokedexDB::rc;   
 char* PokedexDB::zErrMsg;

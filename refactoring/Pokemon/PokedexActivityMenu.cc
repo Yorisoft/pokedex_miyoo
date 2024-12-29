@@ -3,24 +3,37 @@
 
 PokedexActivityMenu PokedexActivityMenu::instance;
 
-PokedexActivityMenu::PokedexActivityMenu() :
-    gameNameSurface(nullptr),
-    fontSurface(nullptr),
-    listEntrySurface(nullptr),
-    listBackgroundSurface(nullptr),
-    dbResults(nullptr),
-    color({ 255, 255, 255 }),
-    highlightColor({ 255, 0, 0 }),
-    selectedIndex(0),
-    offset(0),
-    itemHeight(static_cast<int>(WINDOW_HEIGHT / 5))
+PokedexActivityMenu::PokedexActivityMenu()
 {
 }
 
+PokedexActivityMenu::~PokedexActivityMenu() {
+}
+
 void PokedexActivityMenu::onActivate() {
+    gameNameSurface = nullptr,
+        listEntrySurface = nullptr,
+        listBackgroundSurface = nullptr;
+
+    fontSurface = nullptr;
+
+    color = { 255, 255, 255 },
+        highlightColor = { 255, 0, 0 };
+
+    dbResults = nullptr; 
+
+    fontPath = "res/font/Pokemon_GB.ttf";
+    selectedIndex = 0,
+        offset = 0,
+        itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
+
+//////////////////////////////////////////////////////////////////////////////////////
+
     std::cout << "PokedexActivityMenu::onActivate START \n";
 
+    std::cout << "PokedexActivityMenu::onActivate calling dbResults \n";
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
+    std::cout << "PokedexActivityMenu::onActivate dbResults aquired \n";
     for (std::vector<std::string>& game : *dbResults) {
         for (auto& col : game) {
             std::cout << col << " | ";
@@ -29,7 +42,7 @@ void PokedexActivityMenu::onActivate() {
     }
     game = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 28); 
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 28);
     if (!fontSurface) {
         std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -38,15 +51,31 @@ void PokedexActivityMenu::onActivate() {
 }
 
 void PokedexActivityMenu::onDeactivate() {
-    selectedIndex = 0, offset = 0;
-    if (gameNameSurface) {
-        SDL_FreeSurface(gameNameSurface);
-    }       
     TTF_CloseFont(fontSurface);
+
+    gameNameSurface = nullptr, 
+        listEntrySurface = nullptr, 
+        listBackgroundSurface = nullptr;
+
+    fontSurface = nullptr;
+
+    color = { }, 
+        highlightColor = { };
+
+    delete dbResults;
+    dbResults = nullptr;
+
+    game.clear();
+
+    fontPath.clear();
+
+    selectedIndex = 0,
+        offset = 0;
+
+    itemHeight = 0;
 }
 
 void PokedexActivityMenu::onLoop() {
-
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {

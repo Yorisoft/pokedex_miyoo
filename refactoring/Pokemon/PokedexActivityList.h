@@ -14,15 +14,21 @@ private:
     *pokeIconSurface, *pokeType1Surface,
     *pokeType2Surface, *listEntrySurface,
     *listBackgroundSurface;
+
     TTF_Font* fontSurface;
     SDL_Color color, highlightColor;
 
-    int StartTime;
     int selectedIndex, offset, itemHeight;
     std::string fontPath;
 
 private:
     PokedexActivityList();
+    ~PokedexActivityList();
+
+    void onButtonUp(SDL_Keycode sym, Uint16 mod);
+    void onButtonDown(SDL_Keycode sym, Uint16 mod);
+    void onButtonA(SDL_Keycode sym, Uint16 mod);
+    void onButtonB(SDL_Keycode sym, Uint16 mod);
 
 public:
     void onActivate();
@@ -43,16 +49,8 @@ public:
 
     bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i);
 
-public:
     static PokedexActivityList* getInstance();
 
-    void onButtonUp(SDL_Keycode sym, Uint16 mod);
-
-    void onButtonDown(SDL_Keycode sym, Uint16 mod);
-
-    void onButtonA(SDL_Keycode sym, Uint16 mod);
-
-    void onButtonB(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif

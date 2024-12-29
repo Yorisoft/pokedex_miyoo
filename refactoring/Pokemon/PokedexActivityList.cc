@@ -3,27 +3,33 @@
 
 PokedexActivityList PokedexActivityList::instance;
 
-PokedexActivityList::PokedexActivityList() :
-pokeNameSurface(nullptr),
-pokeIconSurface(nullptr),
-pokeType1Surface(nullptr),
-pokeType2Surface(nullptr),
-pokeIDSurface(nullptr),
-fontSurface(nullptr),
-listEntrySurface(nullptr),
-listBackgroundSurface(nullptr),
-dbResults(nullptr),
-selectedIndex(0),
-offset(0),
-itemHeight(static_cast<int>(WINDOW_HEIGHT * 0.6 / 5))
+PokedexActivityList::PokedexActivityList()
 {
-    color = { 255, 255, 255 };
-    highlightColor = { 255, 0, 0 };
-    fontPath = "res/font/Pokemon_GB.ttf";
+}
 
+PokedexActivityList::~PokedexActivityList() {
 }
 
 void PokedexActivityList::onActivate() {
+    pokeNameSurface = nullptr,
+        pokeIconSurface = nullptr,
+        pokeType1Surface = nullptr,
+        pokeType2Surface = nullptr,
+        pokeIDSurface = nullptr,
+        listEntrySurface = nullptr,
+        listBackgroundSurface = nullptr;
+
+    fontSurface = nullptr;
+
+    color = { 255, 255, 255 },
+        highlightColor = { 255, 0, 0 };
+
+    fontPath = "res/font/Pokemon_GB.ttf";
+
+    selectedIndex = 0,
+        offset = 0,
+        itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
+
     std::cout << "PokedexActivityList::onActivate START \n";
 
     dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
@@ -33,6 +39,7 @@ void PokedexActivityList::onActivate() {
         }
         std::cout << std::endl;
     }
+    pokemon = (*dbResults)[selectedIndex];
 
     fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 18);
     if (!fontSurface) {
@@ -42,8 +49,32 @@ void PokedexActivityList::onActivate() {
 }
 
 void PokedexActivityList::onDeactivate() {
-    selectedIndex = 0, offset = 0;
     TTF_CloseFont(fontSurface);
+
+    pokeNameSurface = nullptr,
+        pokeIconSurface = nullptr,
+        pokeType1Surface = nullptr,
+        pokeType2Surface = nullptr,
+        pokeIDSurface = nullptr,
+        listEntrySurface = nullptr,
+        listBackgroundSurface = nullptr;
+
+    fontSurface = nullptr;
+
+    color = {  }, 
+        highlightColor = {  };
+
+    //delete dbResults;
+    //dbResults = nullptr;
+
+    pokemon.clear();
+
+    fontPath.clear();
+
+    selectedIndex = 0,
+        offset = 0;
+
+    itemHeight = 0;
 }
 
 void PokedexActivityList::onLoop() {
