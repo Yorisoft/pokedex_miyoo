@@ -62,6 +62,10 @@ public:
 
     virtual void onButtonRT(SDL_Keycode sym, Uint16 mod);
 
+    virtual void onButtonSelect(SDL_Keycode sym, Uint16 mod);
+
+    virtual void onButtonStart(SDL_Keycode sym, Uint16 mod);
+
     virtual void onMinimize();
 
     virtual void onRestore();
