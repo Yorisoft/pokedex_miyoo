@@ -3,6 +3,7 @@
 #include "PokedexActivityIntro.h"
 #include "PokedexActivityList.h"
 #include "PokedexActivityMenu.h"
+#include "PokedexActivitySetting.h"
 #include "PokedexActivity_PokemonView_Info.h"
 #include "PokedexActivity_PokemonView_Stats.h"
 #include "PokedexActivity_PokemonView_Moves.h"
@@ -60,9 +61,9 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
     case 8:
         activity = PokedexActivity_PokemonView_Evolution::getInstance();
         break;
-    //case 9:
-    //    activity = PokedexActivitySettings::getInstance();
-    //    break;
+    case 9:
+        activity = PokedexActivitySetting::getInstance();
+        break;
     default:
         break;
     }
