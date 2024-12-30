@@ -39,7 +39,7 @@ void PokedexActivityIntro::onLoop() {
         logoAlpha = 255;
     }
 
-    if (StartTime + 4000 < SDL_GetTicks()) {
+    if (static_cast<Uint32>(StartTime + 4000) < SDL_GetTicks()) {
         // call next activity
         PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
     }

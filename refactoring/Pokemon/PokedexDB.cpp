@@ -1,7 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include "sqlite/sqlite3.h"
 #include "PokedexDB.h"
 
 bool PokedexDB::isTestMode = false;
@@ -21,6 +17,9 @@ int PokedexDB::rc;
 char* PokedexDB::zErrMsg;
 
 PokedexDB::PokedexDB() {
+ }
+
+PokedexDB::~PokedexDB() {
  }
 
 int PokedexDB::openDB() {

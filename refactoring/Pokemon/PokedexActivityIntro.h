@@ -1,5 +1,5 @@
-#ifndef __POKEDEXACTIVITYINTO_H__
-#define __POKEDEXACTIVITYINTO_H__
+#ifndef __POKEDEXACTIVITYINTRO_H__
+#define __POKEDEXACTIVITYINTRO_H__
 
 #include "PokedexActivity.h"
 

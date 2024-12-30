@@ -1,5 +1,9 @@
-#pragma once
+#ifndef POKEDEXDB_H
+#define POKEDEXDB_H
+
 #include <iostream> 
+#include <vector>
+#include <string>
 #include"sqlite/sqlite3.h"
 
 
@@ -44,3 +48,5 @@ public:
 	static void setMoveID(int);
 	static void setEvoChainID(int);
 };
+
+#endif

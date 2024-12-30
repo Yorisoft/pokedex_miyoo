@@ -2,14 +2,12 @@
 #define POKEDEXACTIVITY_H
 
 #include <sstream>
-#include <vector>
 #include <map>
-#include<iomanip>
+#include <iomanip>
 #include "PokedexActivityEvent.h"
 #include "PokeSurface.h"
 #include "PokedexDB.h"
 #include "SQLstatements.h"
-#include "Mappings.h"
 
 class PokedexActivity : public PokedexActivityEvent {
 public:

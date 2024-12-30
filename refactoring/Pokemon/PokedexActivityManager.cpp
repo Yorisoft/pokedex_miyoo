@@ -60,6 +60,9 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
     case 8:
         activity = PokedexActivity_PokemonView_Evolution::getInstance();
         break;
+    //case 9:
+    //    activity = PokedexActivitySettings::getInstance();
+    //    break;
     default:
         break;
     }

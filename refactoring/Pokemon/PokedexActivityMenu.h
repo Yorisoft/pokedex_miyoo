@@ -21,9 +21,6 @@ private:
     std::string fontPath;
     int selectedIndex, offset, itemHeight;
 
-    PokedexActivityMenu();
-    ~PokedexActivityMenu();
-
     bool renderListItems(SDL_Surface* surf_display, int i);
 
     void onButtonUp(SDL_Keycode sym, Uint16 mod);
@@ -32,8 +29,13 @@ private:
     void onButtonB(SDL_Keycode sym, Uint16 mod);
     void onButtonR(SDL_Keycode sym, Uint16 mod);
     void onButtonL(SDL_Keycode sym, Uint16 mod);
+    void onButtonSelect(SDL_Keycode, Uint16);
+    void onButtonStart(SDL_Keycode, Uint16);
 
 public:
+    PokedexActivityMenu();
+    ~PokedexActivityMenu();
+
     void onActivate();
 
     void onDeactivate();

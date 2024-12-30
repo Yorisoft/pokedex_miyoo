@@ -1,8 +1,6 @@
 #include"Pokemon.h"
 #include"PokedexDB.h"
 #include"SQLstatements.h"
-#include<iostream> 
-#include<string>
 
 Pokemon::Pokemon() {
 	std::vector<std::vector<std::string>>* results;

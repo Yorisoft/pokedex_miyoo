@@ -220,3 +220,8 @@ void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
         offset = 0;  // Cap offset to zero
     }
 }
+
+void PokedexActivityMenu::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivityMenu::onButtonStart(SDL_Keycode sym, Uint16 mod) {
+    //PokedexActivityManager::push(APPSTATE_POKEDEX_SETTINGS);
+}
