@@ -3,6 +3,7 @@
 **.gif
 **libSDL2**
 **libcurl.**
+**/curl-7.64.0
 
 !refactoring/Pokemon/res/types/*.png
 !refactoring/Pokemon/res/icons/icon/*.png
@@ -13,9 +14,10 @@
 !Source/union-miyoomini-toolchain/workspace/build/lib/
 !App/Pokedex/res/types/*.png
 !App/Pokedex/res/icons/icon/*.png
+!**mksdl2**
 
 #	ignore build files
-**/build/
+**/build
 **/Debug
 **/.vs
 **/x64
@@ -30,6 +32,7 @@
 **packages.config
 **/gtest
 **/src
+
 # Source/union-miyoomini-toolchain/workspace/pokedex/build/*
 # Source/windows-visual-studio/Pokedex/Debug/*
 # Source/windows-visual-studio/Pokedex/.vs/*
