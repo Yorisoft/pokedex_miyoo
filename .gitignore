@@ -4,6 +4,8 @@
 **libSDL2**
 **libcurl.**
 
+!refactoring/Pokemon/res/types/*.png
+!refactoring/Pokemon/res/icons/icon/*.png
 !Source/union-miyoomini-toolchain/workspace/pokedex/res/types/*.png
 !Source/union-miyoomini-toolchain/workspace/pokedex/res/icons/icon/*.png
 !Source/windows-visual-studio/Pokedex/res/types/*.png
