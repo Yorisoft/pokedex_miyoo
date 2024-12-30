@@ -14,7 +14,7 @@
 !Source/union-miyoomini-toolchain/workspace/build/lib/
 !App/Pokedex/res/types/*.png
 !App/Pokedex/res/icons/icon/*.png
-!**mksdl2*
+
 
 #	ignore build files
 **/build
@@ -24,6 +24,7 @@
 **/out
 **/.build
 **SDL2**
+!**/mksdl2**
 **.sln
 **.vcxproj
 **.vcxproj.**
