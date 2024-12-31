@@ -111,6 +111,23 @@ void PokedexActivityManager::back() {
     std::cout << "PokedexActivityManager::back()  END" << std::endl;
 }
 
+void PokedexActivityManager::replace(int AppStateID) {
+    std::cout << "PokedexActivityManager::replace() START" << std::endl;
+
+    if (!sceneStack.empty()) {
+        PokedexActivity* current = sceneStack.top();
+        if (current) {
+            current->onDeactivate();
+            sceneStack.pop();
+            // delete current;
+        }
+    }
+
+    setActiveState(AppStateID);
+
+    std::cout << "PokedexActivityManager::replace() END" << std::endl;
+}
+
 PokedexActivity* PokedexActivityManager::getActiveState() {
     return activity;
 }

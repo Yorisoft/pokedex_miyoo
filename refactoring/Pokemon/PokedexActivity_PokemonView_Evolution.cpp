@@ -353,8 +353,10 @@ void PokedexActivity_PokemonView_Evolution::onButtonDown(SDL_Keycode sym, Uint16
     }
 }
 void PokedexActivity_PokemonView_Evolution::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
-    PokedexActivityManager::back();
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_LOCATION);
 }
 void PokedexActivity_PokemonView_Evolution::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
 void PokedexActivity_PokemonView_Evolution::onButtonA(SDL_Keycode sym, Uint16 mod) {}
-void PokedexActivity_PokemonView_Evolution::onButtonB(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivity_PokemonView_Evolution::onButtonB(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::back();
+}

@@ -331,11 +331,15 @@ bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_displa
 
 void PokedexActivity_PokemonView_Info::onButtonB(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
-
     PokedexActivityManager::back();
 }
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_STATS);
+    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
+}
 
-    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
+void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::back();
+    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
 }

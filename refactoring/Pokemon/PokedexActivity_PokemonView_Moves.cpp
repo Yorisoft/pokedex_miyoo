@@ -501,13 +501,13 @@ void PokedexActivity_PokemonView_Moves::onButtonL(SDL_Keycode sym, Uint16 mod) {
 
 void PokedexActivity_PokemonView_Moves::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_STATS);
 
-    PokedexActivityManager::back();
 }
 
 void PokedexActivity_PokemonView_Moves::onButtonRight(SDL_Keycode sym, Uint16 mod) {
-
-    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_LOCATION);
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_LOCATION);
+    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_LOCATION);
 }
 
 void PokedexActivity_PokemonView_Moves::onButtonA(SDL_Keycode sym, Uint16 mod) {
@@ -521,4 +521,5 @@ void PokedexActivity_PokemonView_Moves::onButtonA(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivity_PokemonView_Moves::onButtonB(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::back();
 }

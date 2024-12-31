@@ -49,6 +49,8 @@ public:
     void onButtonB(SDL_Keycode sym, Uint16 mod);
 
     void onButtonRight(SDL_Keycode sym, Uint16 mod);
+
+    void onButtonLeft(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif

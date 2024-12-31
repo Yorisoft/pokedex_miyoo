@@ -423,16 +423,19 @@ void PokedexActivity_PokemonView_Location::onButtonDown(SDL_Keycode sym, Uint16 
 }
 
 void PokedexActivity_PokemonView_Location::onButtonLeft(SDL_Keycode sym, Uint16 mod){
-    PokedexActivityManager::back();
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_MOVES);
 }
 
 void PokedexActivity_PokemonView_Location::onButtonRight(SDL_Keycode sym, Uint16 mod){
-    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_EVOLUTION);
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_EVOLUTION);
+    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_EVOLUTION);
 }
 
 void PokedexActivity_PokemonView_Location::onButtonA(SDL_Keycode sym, Uint16 mod){}
 
-void PokedexActivity_PokemonView_Location::onButtonB(SDL_Keycode sym, Uint16 mod){}
+void PokedexActivity_PokemonView_Location::onButtonB(SDL_Keycode sym, Uint16 mod){
+    PokedexActivityManager::back();
+}
 
 void PokedexActivity_PokemonView_Location::onButtonR(SDL_Keycode sym, Uint16 mod) {
     if (selectedIndex < routes->size() - MAX_VISIBLE_ITEMS) {

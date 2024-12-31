@@ -37,6 +37,8 @@ public:
     static void push(int AppStateID);
 
     static void back();
+
+    static void replace(int AppStateID);
 };
 
 #endif
