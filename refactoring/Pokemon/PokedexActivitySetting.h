@@ -5,18 +5,21 @@
 
 class PokedexActivitySetting : public PokedexActivity {
     private:
+        static const int OPTION_ITEMS_SIZE = 1;
+
         static PokedexActivitySetting instance;
+        std::vector<std::string>* optionItems;
         std::map<int, std::string> language_map;
     
     
         int selectedIndex, offset, itemHeight;
         std::string fontPath;
     
-        SDL_Surface* backgroundSurface;
+        SDL_Surface* backgroundSurface, * listEntrySurface;
         TTF_Font* fontSurface;
         SDL_Color color, highlightColor;
     
-        //bool renderListItems(SDL_Surface* surf_display, int i);
+        bool renderListItems(SDL_Surface* surf_display, int i);
         //void printOptionsInfo();
     
 public:

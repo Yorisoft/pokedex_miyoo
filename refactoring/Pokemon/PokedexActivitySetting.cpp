@@ -6,10 +6,12 @@ PokedexActivitySetting PokedexActivitySetting::instance;
 PokedexActivitySetting::PokedexActivitySetting() :
 backgroundSurface(nullptr),
 fontSurface(nullptr),
+listEntrySurface(nullptr),
+optionItems(nullptr),
 fontPath("res/font/Pokemon_GB.ttf"),
 selectedIndex(0),
 offset(0),
-itemHeight(static_cast<int>((WINDOW_HEIGHT / 3) * 0.7))
+itemHeight(static_cast<int>(WINDOW_HEIGHT / 9))
 {
 }
 
@@ -19,6 +21,8 @@ PokedexActivitySetting::~PokedexActivitySetting() {
 void PokedexActivitySetting::onActivate() {
     std::cout << "PokedexActivitySetting::onActivate START \n";
     color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
+    optionItems = new std::vector<std::string>();
+    optionItems->push_back("Language");
 
     //// Populate the map with translations for "language"
     language_map[1] = "言語";         // Japanese
@@ -70,25 +74,57 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
     SDL_FreeSurface(backgroundSurface);
 
     //// Render List Items
-    //for (int i = 0; i < 3 && offset + i < evoChain->size(); i++) {
-    //    if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1] || std::stoi((*evoChain)[offset + i][1]) >= 1000)
-    //        continue;
-    //    evo = (*evoChain)[offset + i];
-    //    // Render list items
-    //    if (!renderListItems(surf_display, i)) {
-    //        exit(EXIT_FAILURE);
-    //    }
-    //}
+    // MAX_ITEMS = 7
+    for (int i = 0; i < 7 && offset + i < optionItems->size(); i++) {
+        //evo = (*optionItems)[offset + i];
+        //// Render list items
+        if (!renderListItems(surf_display, i)) {
+            exit(EXIT_FAILURE);
+        }
+    }
 
 }
-//
-////bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
-////    return true;
-////}
-////
-////void PokedexActivitySetting::printOptionsInfo() {
-////}
-////
+
+bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
+    //List item background
+    //listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
+    //    0,
+    //    surf_display->w,
+    //    itemHeight,
+    //    DEPTH,
+    //    SDL_PIXELFORMAT_RGBA32
+    //);
+    //if (!listEntrySurface) {
+    //    std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
+    //    exit(EXIT_FAILURE);
+    //}
+    //// Define red color
+    //Uint32 redColor = SDL_MapRGB(listEntrySurface->format, 255, 0, 0);
+
+    //// Fill the surface with red
+    //SDL_FillRect(listEntrySurface, nullptr, redColor);
+
+    std::string ListackgroundImageFile = "res/icons/icon/setting_item_background.png";
+    listEntrySurface = PokeSurface::onLoadImg(ListackgroundImageFile);
+    if (listEntrySurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    int topBorderW = 168;
+    SDL_Rect listEntryRect;
+    listEntryRect.x = 42;
+    listEntryRect.y = (i * itemHeight) + topBorderW;
+    listEntryRect.w = surf_display->w * .87;
+    listEntryRect.h = itemHeight;
+    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
+    SDL_FreeSurface(listEntrySurface);
+    return true;
+}
+
+//void PokedexActivitySetting::printOptionsInfo() {
+//}
+
 PokedexActivitySetting* PokedexActivitySetting::getInstance() {
     return &instance;
 }
@@ -96,16 +132,16 @@ PokedexActivitySetting* PokedexActivitySetting::getInstance() {
 void PokedexActivitySetting::onButtonUp(SDL_Keycode sym, Uint16 mod) {
     //if (selectedIndex > 0) {
     //    selectedIndex--;
-    //    evo = (*evoChain)[selectedIndex];
+    //    evo = (*optionItems)[selectedIndex];
     //    if (selectedIndex < offset) {
     //        offset--;
     //    }
     //}
 }
 void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
-    //if (selectedIndex < evoChain->size() - 1) {
+    //if (selectedIndex < optionItems->size() - 1) {
     //    selectedIndex++;
-    //    evo = (*evoChain)[selectedIndex];
+    //    evo = (*optionItems)[selectedIndex];
     //    if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
     //        offset++;
     //    }
