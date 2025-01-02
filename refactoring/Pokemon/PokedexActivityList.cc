@@ -336,4 +336,6 @@ void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod) {
 
 void PokedexActivityList::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
 
-void PokedexActivityList::onButtonStart(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivityList::onButtonStart(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
+}

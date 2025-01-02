@@ -474,4 +474,6 @@ void PokedexActivity_PokemonView_Location::onButtonL(SDL_Keycode sym, Uint16 mod
 
 void PokedexActivity_PokemonView_Location::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
 
-void PokedexActivity_PokemonView_Location::onButtonStart(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivity_PokemonView_Location::onButtonStart(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
+}
