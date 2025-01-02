@@ -329,9 +329,13 @@ bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_displa
     return true;
 }
 
-void PokedexActivity_PokemonView_Info::onButtonB(SDL_Keycode sym, Uint16 mod) {
-    ////Set pokemon identifier for PokedexDB
+void PokedexActivity_PokemonView_Info::onButtonUp(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Info::onButtonDown(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::back();
+    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
 }
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
@@ -339,7 +343,18 @@ void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod
     //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
 }
 
-void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+void PokedexActivity_PokemonView_Info::onButtonA(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Info::onButtonB(SDL_Keycode sym, Uint16 mod) {
+    ////Set pokemon identifier for PokedexDB
     PokedexActivityManager::back();
-    //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
 }
+
+void PokedexActivity_PokemonView_Info::onButtonR(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Info::onButtonL(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Info::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Info::onButtonStart(SDL_Keycode sym, Uint16 mod) {}
+

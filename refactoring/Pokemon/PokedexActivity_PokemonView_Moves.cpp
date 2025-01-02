@@ -523,3 +523,7 @@ void PokedexActivity_PokemonView_Moves::onButtonA(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivity_PokemonView_Moves::onButtonB(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::back();
 }
+
+void PokedexActivity_PokemonView_Moves::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivity_PokemonView_Moves::onButtonStart(SDL_Keycode sym, Uint16 mod) {}

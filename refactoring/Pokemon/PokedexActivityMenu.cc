@@ -174,6 +174,10 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
     }
 }
 
+void PokedexActivityMenu::onButtonLeft(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivityMenu::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
+
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     PokedexDB::setGameIdentifier(game[1]);
     PokedexDB::setRegionID(std::stoi(game[3]));

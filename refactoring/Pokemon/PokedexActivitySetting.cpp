@@ -24,6 +24,7 @@ PokedexActivitySetting::PokedexActivitySetting() :
 {
     color = { 0, 0, 0 }, highlightColor = { 248, 184, 112 };
 
+
 }
 
 PokedexActivitySetting::~PokedexActivitySetting() {
@@ -31,7 +32,6 @@ PokedexActivitySetting::~PokedexActivitySetting() {
 
 void PokedexActivitySetting::onActivate() {
     std::cout << "PokedexActivitySetting::onActivate START \n";
-
     /// initialize setting and setting options START
     // SETTINGS
     settings = new std::vector<std::string>();
@@ -60,6 +60,7 @@ void PokedexActivitySetting::onActivate() {
     optionItems->push_back(audioOptions);
 
 /// initialize setting and setting options END 
+
 
     if (!std::filesystem::exists(userConfigFile)) {
         for (std::string& setting : *settings) {
@@ -158,7 +159,9 @@ void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
 void PokedexActivitySetting::onDeactivate() {
     // closing font
     TTF_CloseFont(fontSurface);
-
+    delete settings;
+    delete optionItems;
+    audioOptions.clear();
     //fontPath.clear();
 
     //selectedSettingIndex = 0,
@@ -347,6 +350,20 @@ void PokedexActivitySetting::onButtonRight(SDL_Keycode sym, Uint16 mod) {
     if (selectedOptionIndex < settingOptions.size() - 1) {
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex + 1][0]);
     }
+    for (auto& pair : userSettingMap) {
+        std::cout << pair.first << ':' << pair.second;
+    }
+    std::cout << '\n' 
+        << selectedOptionIndex << '\n'
+        << settingOptions.size() << '\n';
+
+    for (auto& row : settingOptions) {
+        for (auto& col : row) {
+            std::cout << col << '|';
+       }
+        std::cout << '\n';
+    }
+
 }
 void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
     // print user selected configs to file
@@ -360,6 +377,8 @@ void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivitySetting::onButtonB(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::back();
 }
+void PokedexActivitySetting::onButtonR(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivitySetting::onButtonL(SDL_Keycode sym, Uint16 mod) {}
 void PokedexActivitySetting::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
 void PokedexActivitySetting::onButtonStart(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::back();

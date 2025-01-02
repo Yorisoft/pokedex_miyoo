@@ -278,6 +278,11 @@ void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
     }
 }
 
+void PokedexActivityList::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+}
+
+void PokedexActivityList::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+}
 void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
     pokemon = (*dbResults)[selectedIndex];
@@ -328,3 +333,7 @@ void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod) {
     }
 
 }
+
+void PokedexActivityList::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
+
+void PokedexActivityList::onButtonStart(SDL_Keycode sym, Uint16 mod) {}
