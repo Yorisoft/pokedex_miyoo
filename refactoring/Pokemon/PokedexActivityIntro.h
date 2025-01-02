@@ -7,6 +7,7 @@ class PokedexActivityIntro : public PokedexActivity {
 private:
     static PokedexActivityIntro instance;
 
+    static const std::string userConfigFile;
     SDL_Surface* splashSurface;
 
     int StartTime;        

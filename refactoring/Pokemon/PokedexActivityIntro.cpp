@@ -1,10 +1,13 @@
 #include "PokedexActivityIntro.h"
 #include "PokedexActivityManager.h"
+#include <filesystem>
 
 PokedexActivityIntro PokedexActivityIntro::instance;
+const std::string PokedexActivityIntro::userConfigFile = "user_config";
 
 PokedexActivityIntro::PokedexActivityIntro() {
     splashSurface = NULL;
+    StartTime = SDL_GetTicks();
     logoAlpha = 0;
 }
 
@@ -12,9 +15,6 @@ void PokedexActivityIntro::onActivate() {
     // Load Simple Logo
     std::string file = "res/img/splash.png";
     splashSurface = PokeSurface::onLoadImg(file);
-
-    StartTime = SDL_GetTicks();
-    logoAlpha = 0;
 }
 
 void PokedexActivityIntro::onDeactivate() {
@@ -40,8 +40,16 @@ void PokedexActivityIntro::onLoop() {
     }
 
     if (static_cast<Uint32>(StartTime + 4000) < SDL_GetTicks()) {
-        // call next activity
-        PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
+        // check if user config exit.
+        // create if not. POKEDEX_SETTINGS handles creation of config file.
+        if (!std::filesystem::exists(userConfigFile)) {
+            PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
+
+        }
+        else {
+            // call next activity
+            PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
+        }
     }
 }
 
