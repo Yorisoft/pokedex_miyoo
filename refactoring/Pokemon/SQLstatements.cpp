@@ -512,7 +512,6 @@ const std::string SQL_getPokeEvoChain = R"(
         pe.known_move_type_id;
 )";
 
-
 const std::string SQL_getLanguageVersion = R"(
     SELECT
         l.id AS language_id,
