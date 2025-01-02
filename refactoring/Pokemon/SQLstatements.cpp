@@ -497,6 +497,7 @@ const std::string SQL_getPokeEvoChain = R"(
     WHERE
         ps.evolution_chain_id = :evo_chain_id
         AND psn.local_language_id = :language_id
+        AND p.id <= 648
     GROUP BY
         ps.evolution_chain_id,
         p.id,
