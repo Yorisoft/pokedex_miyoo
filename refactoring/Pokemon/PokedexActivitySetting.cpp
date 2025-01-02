@@ -31,11 +31,14 @@ PokedexActivitySetting::~PokedexActivitySetting() {
 
 void PokedexActivitySetting::onActivate() {
     std::cout << "PokedexActivitySetting::onActivate START \n";
-/// initialize setting and setting options START
+
+    /// initialize setting and setting options START
+    // SETTINGS
     settings = new std::vector<std::string>();
     settings->push_back("LANGUAGE");
     settings->push_back("AUDIO");
 
+    // SETTING OPTIONS: languages
     languages = PokedexDB::executeSQL(&SQL_getLanguageVersion);
     for (auto& row : *languages) {
         for (auto& col : row) {
@@ -47,7 +50,7 @@ void PokedexActivitySetting::onActivate() {
     // TODO - COMMENT OUT WHEN DONE TESTING
     languages->insert(languages->begin(), { "0", "TEST" });
 
-    //// Populate the map with translations for "language"
+    // SETTING OPTIONS: audioOptions
     audioOptions.push_back({ "0", "OFF" });
     audioOptions.push_back({ "1", "ON" });
 
@@ -55,6 +58,7 @@ void PokedexActivitySetting::onActivate() {
     optionItems = new std::vector<std::vector<std::vector<std::string>>>();
     optionItems->push_back(*languages);
     optionItems->push_back(audioOptions);
+
 /// initialize setting and setting options END 
 
     if (!std::filesystem::exists(userConfigFile)) {
@@ -81,12 +85,6 @@ void PokedexActivitySetting::onActivate() {
     if (it != settingOptions.end()) {
         selectedOptionIndex = std::distance(settingOptions.begin(), it);
     }
-    //for (auto& row : settingOptions) {
-    //    for (auto& col : row) {
-    //        std::cout << col << '|';
-    //    }
-    //    std::cout << std::endl;
-    //}
 
 /// set selected setting/settingOption END
 
@@ -146,7 +144,6 @@ void PokedexActivitySetting::loadUserConfig(const std::string& file_name) {
             userSettingMap["LANGUAGE"] = std::stoi(tempVal);
         } else if (pair.first == "AUDIO") {
             userSettingMap["AUDIO"] = std::stoi(tempVal);
-            //PokedexDB::setLanguageID(std::stoi(tempVal));
         }
     }
 }
@@ -181,7 +178,7 @@ void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
 }
 void PokedexActivitySetting::onDeactivate() {
     // closing font
-    //TTF_CloseFont(fontSurface);
+    TTF_CloseFont(fontSurface);
 
     //fontPath.clear();
 
@@ -205,12 +202,6 @@ void PokedexActivitySetting::onLoop() {
     if (it != settingOptions.end()) {
         selectedOptionIndex = std::distance(settingOptions.begin(), it);
     }
-    //for (auto& row : settingOptions) {
-    //    for (auto& col : row) {
-    //        std::cout << col << '|';
-    //    }
-    //    std::cout << std::endl;
-    //}
 
 /// set selected setting/settingOption END
 }
@@ -239,9 +230,6 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
     //// Render List Items
     // MAX_ITEMS = 7
     for (int i = 0; i < 7 && static_cast<std::size_t>(offset + i) < settings->size(); i++) {
-        //setting = (*settings)[offset + i];
-        //settingOptions = (*optionItems)[offset + i];
-        //// Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
         }
@@ -304,12 +292,9 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
     SDL_FreeSurface(optionNameSurface);
 
     /////////////////////////////////////////////////////////////////////////////
-    // //// Render List Items
+    // //// Render List Items list 
     // MAX_ITEMS = 1
     for (int j = i; j == i && static_cast<std::size_t>(offset + j) < (*optionItems)[offset + i].size(); j++) {
-        //setting = (*settings)[offset + j];
-        //settingOptions = (*optionItems)[offset + j];
-        //// Render list items
         if (!renderSettingOptions(surf_display, &settingNameRect, j)) {
             exit(EXIT_FAILURE);
         }
@@ -355,9 +340,6 @@ bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL
     return true;
 }
 
-//void PokedexActivitySetting::printOptionsInfo() {
-//}
-
 PokedexActivitySetting* PokedexActivitySetting::getInstance() {
     return &instance;
 }
@@ -382,43 +364,25 @@ void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 }
 void PokedexActivitySetting::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     if (selectedOptionIndex > 0) {
-        // call function to set variable in user config file
-        // to be settingOptions at selectedOptionIndex - 1
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex - 1][0]);
         
     }
-    setUserConfig(userConfigFile);
-    //setting;
-    //settingOptions;
-
-    //if (selectedIndex > 0) { // Ensure we're not at the left-most option index
-    //    selectedIndex--;
-    //    settingOption = (*optionItems)[selectedIndex];
-    //    std::cout << "Changed selected setting for: " << (*settings)[selectedIndex] << std::endl;
-    //}
+    //setUserConfig(userConfigFile);
 }
 void PokedexActivitySetting::onButtonRight(SDL_Keycode sym, Uint16 mod) {
     if (selectedOptionIndex < settingOptions.size() - 1) {
-        // call function to set variable in user config file
-        // to be settingOptions at selectedOptionIndex - 1
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex + 1][0]);
         
     }
-    setUserConfig(userConfigFile);
-    //if (selectedIndex < settings->size() - 1) {
-    //    selectedIndex++;
-    //    //evo = (*optionItems)[selectedIndex];
-    //    if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
-    //        offset++;
-    //    }
-    //}
+    //setUserConfig(userConfigFile);
 }
 void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
+    setUserConfig(userConfigFile);
     PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
     PokedexActivityManager::back();
 }
 void PokedexActivitySetting::onButtonB(SDL_Keycode sym, Uint16 mod) {
-    PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
+    //PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
     PokedexActivityManager::back();
 }
 void PokedexActivitySetting::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
