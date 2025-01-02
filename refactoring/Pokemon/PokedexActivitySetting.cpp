@@ -84,7 +84,7 @@ void PokedexActivitySetting::onActivate() {
 
 /// set selected setting/settingOption END
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivitySetting::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -260,7 +260,7 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
 
     SDL_Rect settingNameRect;
     settingNameRect.x = listEntryRect.x + 40;
-    settingNameRect.y = listEntryRect.y + 20;
+    settingNameRect.y = listEntryRect.y + (listEntryRect.h/2) - (optionNameSurface->h/2);
     settingNameRect.w = optionNameSurface->w;
     settingNameRect.h = optionNameSurface->h;
     PokeSurface::onDraw(surf_display, optionNameSurface, &settingNameRect);

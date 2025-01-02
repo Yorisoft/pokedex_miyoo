@@ -182,7 +182,7 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display) {
 
     SDL_Rect pokeIDRect;
     pokeIDRect.x = WINDOW_WIDTH/2 + 125;
-    pokeIDRect.y = 70;
+    pokeIDRect.y = 65;
     pokeIDRect.w = pokeIDSurface->w;
     pokeIDRect.h = pokeIDSurface->h;
     PokeSurface::onDraw(surf_display, pokeIDSurface, &pokeIDRect);
@@ -202,9 +202,9 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display) {
 
     SDL_Rect pokeNameRect;
     pokeNameRect.x = pokeIDRect.x;
-    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 25;
-    pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
-    pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
+    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 15;
+    pokeNameRect.w = static_cast<int>(pokeNameSurface->w);
+    pokeNameRect.h = static_cast<int>(pokeNameSurface->h);
 
     PokeSurface::onDrawScaled(surf_display, pokeNameSurface, &pokeNameRect);
     SDL_FreeSurface(pokeNameSurface);
@@ -227,7 +227,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
     };
     
     SDL_Rect heightRect;
-    heightRect.x = WINDOW_WIDTH/2 + 122;
+    heightRect.x = WINDOW_WIDTH/2 + 125;
     heightRect.y = WINDOW_HEIGHT/2 - 35;
     heightRect.w = pokeHeightSurface->w;
     heightRect.h = pokeHeightSurface->h;
@@ -248,7 +248,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
     
     SDL_Rect weightRect;
     weightRect.x = heightRect.x;
-    weightRect.y = 25 + heightRect.y + heightRect.h;
+    weightRect.y = 10 + heightRect.y + heightRect.h;
     weightRect.w = pokeWeightSurface->w;
     weightRect.h = pokeWeightSurface->h;
 
@@ -273,7 +273,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
     
     SDL_Rect genderRect;
     genderRect.x = weightRect.x;
-    genderRect.y = 25 + weightRect.y + weightRect.h;
+    genderRect.y = 15 + weightRect.y + weightRect.h;
     genderRect.w = pokeGenderSurface->w;
     genderRect.h = pokeGenderSurface->h;
 
@@ -298,8 +298,8 @@ bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_displa
     SDL_Rect genusRect;
     genusRect.x = 10;
     genusRect.y = 60;
-    genusRect.w = 300;
-    genusRect.h = 25;
+    genusRect.w = pokeGenusSurface->w;
+    genusRect.h = pokeGenusSurface->h;
 
     PokeSurface::onDrawScaled(surf_display, pokeGenusSurface, &genusRect);
     SDL_FreeSurface(pokeGenusSurface);
@@ -310,7 +310,7 @@ bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_displa
         fontSurface,
         pokeFlavorText.c_str(),
         { 96, 96, 96 },
-        640 
+        620 
     );
     if (flavorTextSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: flavorTextSurface " << TTF_GetError() << std::endl;
@@ -318,7 +318,7 @@ bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_displa
     };
     
     SDL_Rect fTextRect;
-    fTextRect.x = 20;
+    fTextRect.x = 25;
     fTextRect.y = WINDOW_HEIGHT/2 + 100;
     fTextRect.w = flavorTextSurface->w;
     fTextRect.h = flavorTextSurface->h;

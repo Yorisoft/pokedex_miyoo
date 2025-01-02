@@ -33,28 +33,28 @@ void PokedexActivityIntro::onLoop() {
     Uint32 elapsedTime = currentTime - StartTime;
 
     // Update logoAlpha value. Should be 255 after 3 seconds. 
-    if (elapsedTime <= 3000) {
-        logoAlpha = (255 * elapsedTime) / 3000; 
-    }
-    else {
-        logoAlpha = 255;
-    }
+    //if (elapsedTime <= 3000) {
+    //    logoAlpha = (255 * elapsedTime) / 3000; 
+    //}
+    //else {
+    //    logoAlpha = 255;
+    //}
 
-    if (static_cast<Uint32>(StartTime + 4000) < SDL_GetTicks()) {
-        // check if user config exit.
-        // create if not. POKEDEX_SETTINGS handles creation of config file.
-        if (!std::filesystem::exists(userConfigFile)) {
-            PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
-        }
-        else {
+    //if (static_cast<Uint32>(StartTime + 4000) < SDL_GetTicks()) {
+    //    // check if user config exit.
+    //    // create if not. POKEDEX_SETTINGS handles creation of config file.
+    //    if (!std::filesystem::exists(userConfigFile)) {
+    //        PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
+    //    }
+    //    else {
             loadUserConfig(userConfigFile);
             // set glabal variables based on user config
             PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
              
             // call next activity
             PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
-        }
-    }
+    //    }
+    //}
 }
 
 void PokedexActivityIntro::loadUserConfig(const std::string& file_name) {

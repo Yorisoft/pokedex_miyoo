@@ -22,7 +22,7 @@ private:
     SDL_Color color, highlightColor;
 
     void printPokeInfo();
-    bool renderPokeInfo(SDL_Surface* surf_display);
+    bool renderPokeInfo(SDL_Surface* surf_display, int i);
     bool renderListItems(SDL_Surface* surf_display, int i);
 
 public:

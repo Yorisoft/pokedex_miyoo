@@ -18,7 +18,7 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 }
 
 void PokedexActivityMenu::onActivate() {
-    color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
+    color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
 
     fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 
@@ -36,7 +36,7 @@ void PokedexActivityMenu::onActivate() {
     }
     game = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 28);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 32);
     if (!fontSurface) {
         std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -138,9 +138,10 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
         exit(EXIT_FAILURE);
     };
 
+    int leftBorder = 15;
     SDL_Rect gameVersionRect;
-    gameVersionRect.x = listEntryRect.x + (listEntryRect.w / 2) - (gameNameSurface->w / 2);
-    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (gameNameSurface->h / 2);
+    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (gameNameSurface->w / 2);
+    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (gameNameSurface->h / 2) - 10;
     gameVersionRect.w = gameNameSurface->w;
     gameVersionRect.h = gameNameSurface->h;
     PokeSurface::onDraw(surf_display, gameNameSurface, &gameVersionRect);

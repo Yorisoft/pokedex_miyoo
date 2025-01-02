@@ -147,7 +147,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
 
     SDL_Rect pokeIDRect;
     pokeIDRect.x = 10;
-    pokeIDRect.y = 70;
+    pokeIDRect.y = 60;
     pokeIDRect.w = pokeIDSurface->w;
     pokeIDRect.h = pokeIDSurface->h;
     PokeSurface::onDraw(surf_display, pokeIDSurface, &pokeIDRect);
@@ -168,8 +168,8 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
     SDL_Rect pokeNameRect;
     pokeNameRect.x = pokeIDRect.x + pokeIDRect.w + 10;
     pokeNameRect.y = pokeIDRect.y;
-    pokeNameRect.w = 190;
-    pokeNameRect.h = 20;
+    pokeNameRect.w = pokeNameSurface->w;
+    pokeNameRect.h = pokeNameSurface->h;
 
     PokeSurface::onDrawScaled(surf_display, pokeNameSurface, &pokeNameRect);
     SDL_FreeSurface(pokeNameSurface);
@@ -191,8 +191,8 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display) {
         );
 
         SDL_Rect statsRect;
-        statsRect.x = WINDOW_WIDTH - statsSurface->w - 20;
-        statsRect.y = (38 * i) + 90;
+        statsRect.x = (WINDOW_WIDTH - statsSurface->w) - 60;
+        statsRect.y = (38 * i) + 80;
         statsRect.w = statsSurface->w;
         statsRect.h = statsSurface->h;
 

@@ -29,7 +29,7 @@ void PokedexActivity_PokemonView_Evolution::onActivate() {
     printPokeInfo();
     evo = (*evoChain)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivity_PokemonView_Evolution::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -94,9 +94,9 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
 
     //// Render List Items
     for (int i = 0; i < 3 && static_cast<std::size_t>(offset + i) < evoChain->size(); i++) {
-        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1] || std::stoi((*evoChain)[offset + i][1]) >= 649)
+        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1] ) // < -- skip forms. for now..
             continue;
-        evo = (*evoChain)[offset + i];
+        //evo = (*evoChain)[offset + i];
         // Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
@@ -125,7 +125,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     /////////////////////////////////////////////////////////////////////////////
     // render poke sprite
-    std::string spritePath = evo[2];
+    std::string spritePath = (*evoChain)[offset + i][2];
     spritePath = "res/sprites/" + spritePath + ".png";
 
     pokeSpriteSurface = PokeSurface::onLoadImg(spritePath);
@@ -146,7 +146,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     // Render Item ID
     // make it a 3 digit
     std::stringstream formattedID;
-    formattedID << std::setw(3) << std::setfill('0') << evo[1];
+    formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[offset + i][1];
     std::string pokeID = formattedID.str();
 
     pokeIDSurface = TTF_RenderUTF8_Blended(
@@ -161,7 +161,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     SDL_Rect pokeIDRect;
     pokeIDRect.x = listEntryRect.x + 60;
-    pokeIDRect.y = listEntryRect.y + 30;
+    pokeIDRect.y = listEntryRect.y + 20;
     pokeIDRect.w = static_cast<int>(pokeIDSurface->w * .8);
     pokeIDRect.h = static_cast<int>(pokeIDSurface->h * .8);
     PokeSurface::onDrawScaled(surf_display, pokeIDSurface, &pokeIDRect);
@@ -169,7 +169,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke name
-    std::string pokeName = evo[4];
+    std::string pokeName = (*evoChain)[offset + i][4];
     pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeName.c_str(),
@@ -182,7 +182,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     SDL_Rect pokeNameRect;
     pokeNameRect.x = listEntryRect.x + 10;
-    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 5;
+    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 20;
     pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
     pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
 
@@ -191,7 +191,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
 
     if (offset + i == selectedIndex) {
-        if (!renderPokeInfo(surf_display)) {
+        if (!renderPokeInfo(surf_display, i)) {
             std::cout << "Unable to load surface! SDL Error: renderPokeInfo " << SDL_GetError() << std::endl;
             exit(EXIT_FAILURE);
         }
@@ -200,9 +200,9 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     ///////////////////////////////////////////////////////////////////////////////
     ////// Render poke method
-    //std::string pokeMethod = evo[5];
+    //std::string pokeMethod = (*evoChain)[offset + i][5];
     //if (pokeMethod == "level-up") {
-    //    pokeMethod = "Lv. " + evo[6];
+    //    pokeMethod = "Lv. " + (*evoChain)[offset + i][6];
 
     //}
     //pokeMethodSurface = TTF_RenderUTF8_Blended(
@@ -227,10 +227,10 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     return true;
 }
 
-bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display) {
+bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, int i) {
     //Render pokedmon info
     // render poke sprite
-    std::string spritePath = evo[2];
+    std::string spritePath = (*evoChain)[offset + i][2];
     spritePath = "res/sprites/" + spritePath + ".png";
 
     pokeSpriteSurface = PokeSurface::onLoadImg(spritePath);
@@ -241,7 +241,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
 
     SDL_Rect pokeSpriteRect;
     pokeSpriteRect.x = 50;
-    pokeSpriteRect.y = 100;
+    pokeSpriteRect.y = 90;
     pokeSpriteRect.w = pokeSpriteSurface->w * 2;
     pokeSpriteRect.h = pokeSpriteSurface->h * 2;
 
@@ -253,7 +253,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     // Render Item ID
     // make it a 3 digit
     std::stringstream formattedID;
-    formattedID << std::setw(3) << std::setfill('0') << evo[1];
+    formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[offset + i][1];
     std::string pokeID = formattedID.str();
 
     pokeIDSurface = TTF_RenderUTF8_Blended(
@@ -267,8 +267,8 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     };
 
     SDL_Rect pokeIDRect;
-    pokeIDRect.x = 50;
-    pokeIDRect.y = WINDOW_HEIGHT/2 + 60;
+    pokeIDRect.x = 20;
+    pokeIDRect.y = WINDOW_HEIGHT/2 + 45;
     pokeIDRect.w = pokeIDSurface->w;
     pokeIDRect.h = pokeIDSurface->h;
     PokeSurface::onDraw(surf_display, pokeIDSurface, &pokeIDRect);
@@ -276,7 +276,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
 
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke name
-    std::string pokeName = evo[4];
+    std::string pokeName = (*evoChain)[offset + i][4];
     pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeName.c_str(),
@@ -290,21 +290,21 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     SDL_Rect pokeNameRect;
     pokeNameRect.x = pokeIDRect.x;
     pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 10;
-    pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
-    pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
+    pokeNameRect.w = static_cast<int>(pokeNameSurface->w);
+    pokeNameRect.h = static_cast<int>(pokeNameSurface->h);
 
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
     SDL_FreeSurface(pokeNameSurface);
 
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke method
-    std::string pokeMethod = evo[5];
+    std::string pokeMethod = (*evoChain)[offset + i][5];
     if (pokeMethod == "level-up") {
-        pokeMethod = "Lv. " + evo[6];
+        pokeMethod = "Lv. " + (*evoChain)[offset + i][6];
 
     }
     if (pokeMethod == "use-item") {
-        pokeMethod = evo[7];
+        pokeMethod = (*evoChain)[offset + i][7];
 
     }
     pokeMethodSurface = TTF_RenderUTF8_Blended(
@@ -319,9 +319,9 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
 
     SDL_Rect pokeMethodRect;
     pokeMethodRect.x = pokeNameRect.x;
-    pokeMethodRect.y = pokeNameRect.y + pokeNameRect.h + 30;
-    pokeMethodRect.w = static_cast<int>(pokeMethodSurface->w * 0.8);
-    pokeMethodRect.h = static_cast<int>(pokeMethodSurface->h * 0.8);
+    pokeMethodRect.y = pokeNameRect.y + pokeNameRect.h + 10;
+    pokeMethodRect.w = static_cast<int>(pokeMethodSurface->w);
+    pokeMethodRect.h = static_cast<int>(pokeMethodSurface->h);
 
     PokeSurface::onDraw(surf_display, pokeMethodSurface, &pokeMethodRect);
     SDL_FreeSurface(pokeMethodSurface);
@@ -356,7 +356,14 @@ void PokedexActivity_PokemonView_Evolution::onButtonLeft(SDL_Keycode sym, Uint16
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_LOCATION);
 }
 void PokedexActivity_PokemonView_Evolution::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
-void PokedexActivity_PokemonView_Evolution::onButtonA(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivity_PokemonView_Evolution::onButtonA(SDL_Keycode sym, Uint16 mod) {
+    std::cout << evo[2] << '\n';
+    PokedexDB::setPokemonIdentifier(evo[2]);
+    PokedexDB::setGenerationID(std::stoi(evo[3]));
+
+    ////Call next activity
+    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_INFO);
+}
 void PokedexActivity_PokemonView_Evolution::onButtonB(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::back();
 }

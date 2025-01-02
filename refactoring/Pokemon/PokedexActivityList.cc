@@ -24,7 +24,7 @@ PokedexActivityList::~PokedexActivityList() {
 void PokedexActivityList::onActivate() {
     itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
 
-    color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
+    color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
 
     fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 
@@ -40,7 +40,7 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivityList::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -231,7 +231,7 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
 
     SDL_Rect pokeIDRect;
     pokeIDRect.x = rect->x + 50;
-    pokeIDRect.y = (i * itemHeight + 70) + (rect->h / 2) - (pokeIDSurface->h / 2);
+    pokeIDRect.y = (i * itemHeight + 70) + (rect->h / 2) - (pokeIDSurface->h / 2) - 5; // -5 to stay above white line in background
     pokeIDRect.w = pokeIDSurface->w;
     pokeIDRect.h = pokeIDSurface->h;
     PokeSurface::onDraw(surf_display, pokeIDSurface, &pokeIDRect);
@@ -239,9 +239,14 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
 
     
     //List pokemon name
+    std::string name = pokemon[2];
+    for (int i = 0; i < name.size(); i++) {
+        name[i] = std::toupper(name[i]);
+    }
+
     pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
-        pokemon[2].c_str(),
+        name.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
     if (pokeNameSurface == NULL) {
@@ -251,7 +256,7 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
 
     SDL_Rect pokeVersionRect;
     pokeVersionRect.x = pokeIDRect.x + (rect->w / 2) - (pokeNameSurface->w / 2);
-    pokeVersionRect.y = (i * itemHeight + 70) + (rect->h / 2) - (pokeNameSurface->h / 2);
+    pokeVersionRect.y = (i * itemHeight + 70) + (rect->h / 2) - (pokeNameSurface->h / 2) - 5;// -5 to stay above white line in background
     pokeVersionRect.w = pokeNameSurface->w;
     pokeVersionRect.h = pokeNameSurface->h;
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeVersionRect);

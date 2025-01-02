@@ -47,7 +47,7 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
     }
     move = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -157,11 +157,11 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     /////////////////////////////////////////////////////////////////////////////
     //Render item title/name
     
-    // make all upper case
     std::string moveName = move[1];
-    for (int i = 0; i < moveName.size(); i++) {
-        moveName[i] = std::toupper(moveName[i]);
-    }
+    // make all upper case
+    //for (int i = 0; i < moveName.size(); i++) {
+    //    moveName[i] = std::toupper(moveName[i]);
+    //}
     moveNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         moveName.c_str(),
@@ -173,10 +173,10 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     };
 
     SDL_Rect moveNameRect;
-    moveNameRect.x = 10 + moveTypeRect.x + moveTypeRect.w;
-    moveNameRect.y = moveTypeRect.y + 10;
-    moveNameRect.w = static_cast<int>(moveNameSurface->w * 0.8);
-    moveNameRect.h = static_cast<int>(moveNameSurface->h * 0.8);
+    moveNameRect.x = moveTypeRect.x + moveTypeRect.w + 10;
+    moveNameRect.y = moveTypeRect.y + 5;
+    moveNameRect.w = moveNameSurface->w;
+    moveNameRect.h = moveNameSurface->h;
     PokeSurface::onDrawScaled(surf_display, moveNameSurface, &moveNameRect);
     SDL_FreeSurface(moveNameSurface);
 
@@ -258,7 +258,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     SDL_Rect pokeIconRect;
     pokeIconRect.x = 0;
-    pokeIconRect.y = 50;
+    pokeIconRect.y = 55;
     pokeIconRect.w = pokeIconSurface->w * 2;
     pokeIconRect.h = pokeIconSurface->h * 2;
 
@@ -281,7 +281,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     SDL_Rect pokeNameRect;
     pokeNameRect.x = (pokeIconRect.x + pokeIconRect.w);
-    pokeNameRect.y = (pokeIconRect.y + pokeIconRect.h/2) - 10;
+    pokeNameRect.y = pokeIconRect.y + 10;
     pokeNameRect.w = pokeNameSurface->w;
     pokeNameRect.h = pokeNameSurface->h;
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
@@ -341,8 +341,8 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     };
 
     SDL_Rect movePwrRect;
-    movePwrRect.x = pokeType1Rect.x + 20;
-    movePwrRect.y = pokeType1Rect.y + 80;
+    movePwrRect.x = pokeType1Rect.x + 40;
+    movePwrRect.y = pokeType1Rect.y + 70;
     movePwrRect.w = movePwrSurface->w;
     movePwrRect.h = movePwrSurface->h;
     PokeSurface::onDraw(surf_display, movePwrSurface, &movePwrRect);
@@ -358,8 +358,8 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     };
 
     SDL_Rect moveClassRect;
-    moveClassRect.x = movePwrRect.x + 100;
-    moveClassRect.y = movePwrRect.y - 10;
+    moveClassRect.x = movePwrRect.x + 80;
+    moveClassRect.y = movePwrRect.y;
     moveClassRect.w = moveClassSurface->w * 2;
     moveClassRect.h = moveClassSurface->h * 2;
 
@@ -379,8 +379,8 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     };
 
     SDL_Rect moveAcryRect;
-    moveAcryRect.x = movePwrRect.x ;
-    moveAcryRect.y = (movePwrRect.y + movePwrRect.h) + 20;
+    moveAcryRect.x = movePwrRect.x;
+    moveAcryRect.y = (movePwrRect.y + movePwrRect.h) + 10;
     moveAcryRect.w = moveAcrySurface->w;
     moveAcryRect.h = moveAcrySurface->h;
     PokeSurface::onDraw(surf_display, moveAcrySurface, &moveAcryRect);

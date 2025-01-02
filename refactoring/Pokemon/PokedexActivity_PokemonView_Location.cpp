@@ -39,7 +39,7 @@ void PokedexActivity_PokemonView_Location::onActivate() {
     printPokeInfo();
 
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivity_PokemonView_Location::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -143,7 +143,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
 
     SDL_Rect pokeIconRect;
     pokeIconRect.x = 0;
-    pokeIconRect.y = 50;
+    pokeIconRect.y = 55;
     pokeIconRect.w = pokeIconSurface->w * 2;
     pokeIconRect.h = pokeIconSurface->h * 2;
 
@@ -166,7 +166,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
 
     SDL_Rect pokeNameRect;
     pokeNameRect.x = (pokeIconRect.x + pokeIconRect.w);
-    pokeNameRect.y = (pokeIconRect.y + pokeIconRect.h/2) - 10;
+    pokeNameRect.y = pokeIconRect.y + 10;
     pokeNameRect.w = pokeNameSurface->w;
     pokeNameRect.h = pokeNameSurface->h;
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
@@ -264,8 +264,8 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     SDL_Rect moveNameRect;
     moveNameRect.x = listEntryRect.x + (listEntryRect.w / 2) - (routeNameSurface->w / 2);
     moveNameRect.y = listEntryRect.y;
-    moveNameRect.w = static_cast<int>(routeNameSurface->w * 0.8);
-    moveNameRect.h = static_cast<int>(routeNameSurface->h * 0.8);
+    moveNameRect.w = static_cast<int>(routeNameSurface->w);
+    moveNameRect.h = static_cast<int>(routeNameSurface->h);
     PokeSurface::onDrawScaled(surf_display, routeNameSurface, &moveNameRect);
     SDL_FreeSurface(routeNameSurface);
 
@@ -339,8 +339,8 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
     };
 
     SDL_Rect routeMinLvlRect;
-    routeMinLvlRect.x = 150;
-    routeMinLvlRect.y = 180;
+    routeMinLvlRect.x = 155;
+    routeMinLvlRect.y = 175;
     routeMinLvlRect.w = routeLvlSurface->w;
     routeMinLvlRect.h = routeLvlSurface->h;
     PokeSurface::onDraw(surf_display, routeLvlSurface, &routeMinLvlRect);
@@ -361,7 +361,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
 
     SDL_Rect routeMaxLvlRect;
     routeMaxLvlRect.x = routeMinLvlRect.x;
-    routeMaxLvlRect.y = (routeMinLvlRect.y + routeMinLvlRect.h ) + 30;
+    routeMaxLvlRect.y = (routeMinLvlRect.y + routeMinLvlRect.h ) + 10;
     routeMaxLvlRect.w = routeLvlSurface->w;
     routeMaxLvlRect.h = routeLvlSurface->h;
     PokeSurface::onDraw(surf_display, routeLvlSurface, &routeMaxLvlRect);
@@ -386,7 +386,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
 
     SDL_Rect moveEffectRect;
     moveEffectRect.x = 15;
-    moveEffectRect.y = (WINDOW_HEIGHT / 2 ) + 75;
+    moveEffectRect.y = (WINDOW_HEIGHT / 2 ) + 50;
     moveEffectRect.w = routeSmrySurface->w;
     moveEffectRect.h = routeSmrySurface->h;
     PokeSurface::onDraw(surf_display, routeSmrySurface, &moveEffectRect);
