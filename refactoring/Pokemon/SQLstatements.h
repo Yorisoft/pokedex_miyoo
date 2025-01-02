@@ -21,5 +21,6 @@ extern const std::string SQL_getPokeMovesDetail;
 extern const std::string SQL_getPokeMoves;
 extern const std::string SQL_getPokeRoutes;
 extern const std::string SQL_getPokeEvoChain;
+extern const std::string SQL_getLanguageVersion;
 
 #endif

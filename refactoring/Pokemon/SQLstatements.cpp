@@ -511,6 +511,21 @@ const std::string SQL_getPokeEvoChain = R"(
         pe.minimum_affection,
         pe.known_move_type_id;
 )";
+
+
+const std::string SQL_getLanguageVersion = R"(
+    SELECT
+        l.id AS language_id,
+        ln.name AS language_name,
+        l.identifier AS language_identifier
+    FROM
+        languages AS l
+    JOIN
+        language_names AS ln ON l.id = ln.language_id AND ln.language_id = ln.local_language_id
+    ORDER BY
+        l.id;
+)";
+
 // // // // // // 
 
 const std::string SQL_getPokemonRoutesByName = R"(
