@@ -31,14 +31,17 @@ private:
     bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i);
     std::string cleanString(std::string str);
 
-    void onButtonUp(SDL_Keycode sym, Uint16 mod);
-    void onButtonDown(SDL_Keycode sym, Uint16 mod);
-    void onButtonLeft(SDL_Keycode sym, Uint16 mod);
-    void onButtonRight(SDL_Keycode sym, Uint16 mod);
-    void onButtonA(SDL_Keycode sym, Uint16 mod);
-    void onButtonB(SDL_Keycode sym, Uint16 mod);
-    void onButtonR(SDL_Keycode sym, Uint16 mod);
-    void onButtonL(SDL_Keycode sym, Uint16 mod);
+    
+    void onButtonUp(SDL_Keycode, Uint16);
+    void onButtonDown(SDL_Keycode, Uint16);
+    void onButtonLeft(SDL_Keycode, Uint16);
+    void onButtonRight(SDL_Keycode, Uint16);
+    void onButtonA(SDL_Keycode, Uint16);
+    void onButtonB(SDL_Keycode, Uint16);
+    void onButtonR(SDL_Keycode, Uint16);
+    void onButtonL(SDL_Keycode, Uint16);
+    void onButtonSelect(SDL_Keycode, Uint16);
+    void onButtonStart(SDL_Keycode, Uint16);
 
 public:
     void onActivate();

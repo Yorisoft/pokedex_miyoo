@@ -49,6 +49,8 @@ public:
     void onButtonRight(SDL_Keycode, Uint16);
     void onButtonA(SDL_Keycode, Uint16);
     void onButtonB(SDL_Keycode, Uint16);
+    void onButtonR(SDL_Keycode, Uint16);
+    void onButtonL(SDL_Keycode, Uint16);
     void onButtonSelect(SDL_Keycode, Uint16);
     void onButtonStart(SDL_Keycode, Uint16);
 };
