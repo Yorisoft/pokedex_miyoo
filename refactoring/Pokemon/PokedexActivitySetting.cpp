@@ -4,7 +4,7 @@
 #include <fstream>
 #include <variant>
 #include <filesystem>
-//
+
 PokedexActivitySetting PokedexActivitySetting::instance;
 
 const std::string PokedexActivitySetting::userConfigFile = "user_config";
@@ -74,6 +74,7 @@ void PokedexActivitySetting::onActivate() {
     setting = (*settings)[selectedSettingIndex];
     settingOptions = ((*optionItems)[selectedSettingIndex]);
     std::string target = std::to_string(userSettingMap[setting]);
+
     auto it = std::find_if(
         settingOptions.begin(), 
         settingOptions.end(), 
@@ -82,6 +83,7 @@ void PokedexActivitySetting::onActivate() {
             return !vec.empty() && vec[0] == target;
         }
     );
+
     if (it != settingOptions.end()) {
         selectedOptionIndex = std::distance(settingOptions.begin(), it);
     }
@@ -114,38 +116,14 @@ void PokedexActivitySetting::loadUserConfig(const std::string& file_name) {
 
         char delim;
         std::string key;
-        std::variant<int, std::string> value;
+        int value;
         std::string tempValue;
-        while (iss >> key >> delim >> tempValue) {
-            try {
-                value = std::stoi(tempValue);
-            }
-            catch (std::invalid_argument&) {
-                value = tempValue;
-            }
+        if (iss >> key >> delim >> value) {
+            userSettingMap[key] = value;
         }
-        userConfigs.emplace_back(key, value);
     }
 
     inputFile.close();
-    
-    for (std::pair<std::string, std::variant<int, std::string>>& pair : userConfigs) {
-        std::string tempVal;
-        if (std::holds_alternative<int>(pair.second)) {
-            tempVal = std::to_string(std::get<int>(pair.second));
-        }
-        else if (std::holds_alternative<std::string>(pair.second)) {
-            tempVal = std::get<std::string>(pair.second);
-        }
-        std::cout << "Setting: " << pair.first << " :" << "Value: " << tempVal << '\n';
-
-
-        if (pair.first == "LANGUAGE") {
-            userSettingMap["LANGUAGE"] = std::stoi(tempVal);
-        } else if (pair.first == "AUDIO") {
-            userSettingMap["AUDIO"] = std::stoi(tempVal);
-        }
-    }
 }
 void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
     std::ofstream outputFile;
@@ -176,6 +154,7 @@ void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
     std::cout << "Finished writing to file: " << file_name << std::endl;
     
 }
+
 void PokedexActivitySetting::onDeactivate() {
     // closing font
     TTF_CloseFont(fontSurface);
@@ -302,7 +281,6 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
 
     return true;
 }
-
 bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* setting_rect, int i) {
     // Render Setting Option
     std::string target = std::to_string(userSettingMap[(*settings)[offset + i]]);
@@ -347,7 +325,6 @@ PokedexActivitySetting* PokedexActivitySetting::getInstance() {
 void PokedexActivitySetting::onButtonUp(SDL_Keycode sym, Uint16 mod) {
     if (selectedSettingIndex > 0) {
         selectedSettingIndex--;
-        //evo = (*optionItems)[selectedSettingIndex];
         if (selectedSettingIndex < offset) {
             offset--;
         }
@@ -356,7 +333,6 @@ void PokedexActivitySetting::onButtonUp(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
     if (selectedSettingIndex < settings->size() - 1) {
         selectedSettingIndex++;
-        //evo = (*optionItems)[selectedSettingIndex];
         if (selectedSettingIndex - offset >= 7) {
             offset++;
         }
@@ -365,25 +341,26 @@ void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivitySetting::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     if (selectedOptionIndex > 0) {
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex - 1][0]);
-        
     }
-    //setUserConfig(userConfigFile);
 }
 void PokedexActivitySetting::onButtonRight(SDL_Keycode sym, Uint16 mod) {
     if (selectedOptionIndex < settingOptions.size() - 1) {
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex + 1][0]);
-        
     }
-    //setUserConfig(userConfigFile);
 }
 void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
+    // print user selected configs to file
     setUserConfig(userConfigFile);
+
+    // set glabal variables based on user config
     PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
+
     PokedexActivityManager::back();
 }
 void PokedexActivitySetting::onButtonB(SDL_Keycode sym, Uint16 mod) {
-    //PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
     PokedexActivityManager::back();
 }
 void PokedexActivitySetting::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
-void PokedexActivitySetting::onButtonStart(SDL_Keycode sym, Uint16 mod) {}
+void PokedexActivitySetting::onButtonStart(SDL_Keycode sym, Uint16 mod) {
+    PokedexActivityManager::back();
+}
