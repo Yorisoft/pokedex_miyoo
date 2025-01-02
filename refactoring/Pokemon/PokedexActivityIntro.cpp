@@ -1,6 +1,7 @@
 #include "PokedexActivityIntro.h"
 #include "PokedexActivityManager.h"
 #include <filesystem>
+#include <fstream>
 
 PokedexActivityIntro PokedexActivityIntro::instance;
 const std::string PokedexActivityIntro::userConfigFile = "user_config";
@@ -44,13 +45,44 @@ void PokedexActivityIntro::onLoop() {
         // create if not. POKEDEX_SETTINGS handles creation of config file.
         if (!std::filesystem::exists(userConfigFile)) {
             PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
-
         }
         else {
+            loadUserConfig(userConfigFile);
+            // set glabal variables based on user config
+            PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
+             
             // call next activity
             PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
         }
     }
+}
+
+void PokedexActivityIntro::loadUserConfig(const std::string& file_name) {
+    std::ifstream inputFile;
+    std::istringstream iss;
+    std::string line;
+
+    inputFile.open(file_name);
+    if (inputFile.fail()) {
+        std::cout << "Could not open file: " << file_name << std::endl
+            << "Please provide another file name or path" << std::endl;
+    }
+    std::cout << "Opened file: " << file_name << '\n';
+
+    while (std::getline(inputFile, line)) {
+        iss.clear();
+        iss.str(line);
+
+        char delim;
+        std::string key;
+        int value;
+        std::string tempValue;
+        if (iss >> key >> delim >> value) {
+            userSettingMap[key] = value;
+        }
+    }
+
+    inputFile.close();
 }
 
 void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {

@@ -7,14 +7,17 @@ class PokedexActivityIntro : public PokedexActivity {
 private:
     static PokedexActivityIntro instance;
 
-    static const std::string userConfigFile;
     SDL_Surface* splashSurface;
 
     int StartTime;        
     Uint8 logoAlpha;
 
+    static const std::string userConfigFile;
+    std::map<std::string, int> userSettingMap;
+
 private:
     PokedexActivityIntro();
+    void loadUserConfig(const std::string&);
 
 public:
     void onActivate();
