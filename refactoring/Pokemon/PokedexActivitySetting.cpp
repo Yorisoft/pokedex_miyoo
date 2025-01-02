@@ -1,18 +1,29 @@
 ﻿#include "PokedexActivitySetting.h"
 #include "PokedexActivityManager.h"
+#include <algorithm>
+#include <fstream>
+#include <variant>
+#include <filesystem>
 //
 PokedexActivitySetting PokedexActivitySetting::instance;
 
+const std::string PokedexActivitySetting::userConfigFile = "user_config";
+
 PokedexActivitySetting::PokedexActivitySetting() :
-backgroundSurface(nullptr),
-fontSurface(nullptr),
-listEntrySurface(nullptr),
-optionItems(nullptr),
-fontPath("res/font/Pokemon_GB.ttf"),
-selectedIndex(0),
-offset(0),
-itemHeight(static_cast<int>(WINDOW_HEIGHT / 9))
+    backgroundSurface(nullptr),
+    fontSurface(nullptr),
+    listEntrySurface(nullptr),
+    optionItems(nullptr),
+    optionNameSurface(nullptr),
+    settingOptionsSurface(nullptr),
+    fontPath("res/font/Pokemon_GB.ttf"),
+    selectedSettingIndex(0),
+    selectedOptionIndex(0),
+    offset(0),
+    itemHeight(static_cast<int>(WINDOW_HEIGHT / 9))
 {
+    color = { 0, 0, 0 }, highlightColor = { 248, 184, 112 };
+
 }
 
 PokedexActivitySetting::~PokedexActivitySetting() {
@@ -20,19 +31,64 @@ PokedexActivitySetting::~PokedexActivitySetting() {
 
 void PokedexActivitySetting::onActivate() {
     std::cout << "PokedexActivitySetting::onActivate START \n";
-    color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
-    optionItems = new std::vector<std::string>();
-    optionItems->push_back("Language");
+/// initialize setting and setting options START
+    settings = new std::vector<std::string>();
+    settings->push_back("LANGUAGE");
+    settings->push_back("AUDIO");
+
+    languages = PokedexDB::executeSQL(&SQL_getLanguageVersion);
+    for (auto& row : *languages) {
+        for (auto& col : row) {
+            std::cout << col << '|';
+        }
+        std::cout << std::endl;
+    }
+
+    // TODO - COMMENT OUT WHEN DONE TESTING
+    languages->insert(languages->begin(), { "0", "TEST" });
 
     //// Populate the map with translations for "language"
-    language_map[1] = "言語";         // Japanese
-    language_map[3] = "언어";         // Korean
-    language_map[5] = "Langue";      // French
-    language_map[6] = "Sprache";     // German
-    language_map[7] = "Lenguaje";    // Spanish
-    language_map[8] = "Lingua";      // Italian
-    language_map[9] = "Language";    // English
-    language_map[10] = "Jazyk";      // Czech
+    audioOptions.push_back({ "0", "OFF" });
+    audioOptions.push_back({ "1", "ON" });
+
+    // load all setting options into one vec
+    optionItems = new std::vector<std::vector<std::vector<std::string>>>();
+    optionItems->push_back(*languages);
+    optionItems->push_back(audioOptions);
+/// initialize setting and setting options END 
+
+    if (!std::filesystem::exists(userConfigFile)) {
+        for (std::string& setting : *settings) {
+            userSettingMap[setting] = 1;
+        }
+        setUserConfig(userConfigFile);
+    }
+    loadUserConfig(userConfigFile);
+
+
+/// set selected setting/settingOption START 
+    setting = (*settings)[selectedSettingIndex];
+    settingOptions = ((*optionItems)[selectedSettingIndex]);
+    std::string target = std::to_string(userSettingMap[setting]);
+    auto it = std::find_if(
+        settingOptions.begin(), 
+        settingOptions.end(), 
+        [&target](const std::vector<std::string>& vec) { // < -- chatGPT provided lambda :)
+            // Check if the target matches the first element in the sub-vector
+            return !vec.empty() && vec[0] == target;
+        }
+    );
+    if (it != settingOptions.end()) {
+        selectedOptionIndex = std::distance(settingOptions.begin(), it);
+    }
+    //for (auto& row : settingOptions) {
+    //    for (auto& col : row) {
+    //        std::cout << col << '|';
+    //    }
+    //    std::cout << std::endl;
+    //}
+
+/// set selected setting/settingOption END
 
     fontSurface = TTF_OpenFont(fontPath.c_str(), 18);
     if (!fontSurface) {
@@ -41,16 +97,123 @@ void PokedexActivitySetting::onActivate() {
 
     std::cout << "PokedexActivitySetting::onActivate END \n";
 }
+
+void PokedexActivitySetting::loadUserConfig(const std::string& file_name) {
+    std::ifstream inputFile;
+    std::istringstream iss;
+    std::string line;
+
+    inputFile.open(file_name);
+    if (inputFile.fail()) {
+        std::cout << "Could not open file: " << file_name << std::endl
+            << "Please provide another file name or path" << std::endl;
+    }
+    std::cout << "Opened file: " << file_name << '\n';
+
+    while (std::getline(inputFile, line)) {
+        iss.clear();
+        iss.str(line);
+
+        char delim;
+        std::string key;
+        std::variant<int, std::string> value;
+        std::string tempValue;
+        while (iss >> key >> delim >> tempValue) {
+            try {
+                value = std::stoi(tempValue);
+            }
+            catch (std::invalid_argument&) {
+                value = tempValue;
+            }
+        }
+        userConfigs.emplace_back(key, value);
+    }
+
+    inputFile.close();
+    
+    for (std::pair<std::string, std::variant<int, std::string>>& pair : userConfigs) {
+        std::string tempVal;
+        if (std::holds_alternative<int>(pair.second)) {
+            tempVal = std::to_string(std::get<int>(pair.second));
+        }
+        else if (std::holds_alternative<std::string>(pair.second)) {
+            tempVal = std::get<std::string>(pair.second);
+        }
+        std::cout << "Setting: " << pair.first << " :" << "Value: " << tempVal << '\n';
+
+
+        if (pair.first == "LANGUAGE") {
+            userSettingMap["LANGUAGE"] = std::stoi(tempVal);
+        } else if (pair.first == "AUDIO") {
+            userSettingMap["AUDIO"] = std::stoi(tempVal);
+            //PokedexDB::setLanguageID(std::stoi(tempVal));
+        }
+    }
+}
+void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
+    std::ofstream outputFile;
+    std::ostringstream oss;
+    std::string line;
+
+    outputFile.open(file_name);
+    if (outputFile.fail()) {
+        std::cout << "Could not open file: " << file_name << std::endl
+            << "Please provide another file name or path" << std::endl;
+    }
+    std::cout << "Writing to file: " << file_name << std::endl;
+
+    
+    for (const auto& [key, value] : userSettingMap) {
+        outputFile << key << " = " << value;
+        //if (std::holds_alternative<int>(value)) {
+        //    outputFile << std::get<int>(value);
+        //}
+        //else if (std::holds_alternative<std::string>(value)) {
+        //    outputFile << std::get<std::string>(value);
+        //}
+        outputFile << '\n';  
+    }
+
+    // Close the file
+    outputFile.close();
+    std::cout << "Finished writing to file: " << file_name << std::endl;
+    
+}
 void PokedexActivitySetting::onDeactivate() {
     // closing font
     //TTF_CloseFont(fontSurface);
 
     //fontPath.clear();
 
-    //selectedIndex = 0,
+    //selectedSettingIndex = 0,
     //    offset = 0;
 }
-void PokedexActivitySetting::onLoop() {}
+void PokedexActivitySetting::onLoop() {
+/// set selected setting/settingOption START 
+    setting = (*settings)[selectedSettingIndex];
+    settingOptions = ((*optionItems)[selectedSettingIndex]);
+
+    std::string target = std::to_string(userSettingMap[setting]);
+    auto it = std::find_if(
+        settingOptions.begin(), 
+        settingOptions.end(), 
+        [&target](const std::vector<std::string>& vec) { // < -- chatGPT provided lambda :)
+            // Check if the target matches the first element in the sub-vector
+            return !vec.empty() && vec[0] == target;
+        }
+    );
+    if (it != settingOptions.end()) {
+        selectedOptionIndex = std::distance(settingOptions.begin(), it);
+    }
+    //for (auto& row : settingOptions) {
+    //    for (auto& col : row) {
+    //        std::cout << col << '|';
+    //    }
+    //    std::cout << std::endl;
+    //}
+
+/// set selected setting/settingOption END
+}
 void PokedexActivitySetting::onFreeze() {}
 void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
@@ -75,8 +238,9 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
 
     //// Render List Items
     // MAX_ITEMS = 7
-    for (int i = 0; i < 7 && offset + i < optionItems->size(); i++) {
-        //evo = (*optionItems)[offset + i];
+    for (int i = 0; i < 7 && static_cast<std::size_t>(offset + i) < settings->size(); i++) {
+        //setting = (*settings)[offset + i];
+        //settingOptions = (*optionItems)[offset + i];
         //// Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
@@ -86,39 +250,108 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
 }
 
 bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
-    //List item background
-    //listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
-    //    0,
-    //    surf_display->w,
-    //    itemHeight,
-    //    DEPTH,
-    //    SDL_PIXELFORMAT_RGBA32
-    //);
-    //if (!listEntrySurface) {
-    //    std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-    //    exit(EXIT_FAILURE);
-    //}
-    //// Define red color
-    //Uint32 redColor = SDL_MapRGB(listEntrySurface->format, 255, 0, 0);
-
-    //// Fill the surface with red
-    //SDL_FillRect(listEntrySurface, nullptr, redColor);
-
-    std::string ListackgroundImageFile = "res/icons/icon/setting_item_background.png";
-    listEntrySurface = PokeSurface::onLoadImg(ListackgroundImageFile);
-    if (listEntrySurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+    if (offset + i == selectedSettingIndex) {
+        std::string ListackgroundImageFile = "res/icons/icon/setting_item_background.png";
+        listEntrySurface = PokeSurface::onLoadImg(ListackgroundImageFile);
+        if (listEntrySurface == NULL) {
+            std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        };
+    }
+    else {
+        //List item background
+        listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
+            0,
+            surf_display->w,
+            itemHeight,
+            DEPTH,
+            SDL_PIXELFORMAT_RGBA32
+        );
+        if (!listEntrySurface) {
+            std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
 
     int topBorderW = 168;
     SDL_Rect listEntryRect;
     listEntryRect.x = 42;
     listEntryRect.y = (i * itemHeight) + topBorderW;
-    listEntryRect.w = surf_display->w * .87;
+    listEntryRect.w = static_cast<int>(surf_display->w * .87);
     listEntryRect.h = itemHeight;
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    // Render Setting Name
+    optionNameSurface = TTF_RenderText_Blended(
+        fontSurface,
+        (*settings)[offset + i].c_str(),
+        offset + i == selectedSettingIndex ? highlightColor : color
+    );
+    if (optionNameSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: optionNameSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect settingNameRect;
+    settingNameRect.x = listEntryRect.x + 40;
+    settingNameRect.y = listEntryRect.y + 20;
+    settingNameRect.w = optionNameSurface->w;
+    settingNameRect.h = optionNameSurface->h;
+    PokeSurface::onDraw(surf_display, optionNameSurface, &settingNameRect);
+    SDL_FreeSurface(optionNameSurface);
+
+    /////////////////////////////////////////////////////////////////////////////
+    // //// Render List Items
+    // MAX_ITEMS = 1
+    for (int j = i; j == i && static_cast<std::size_t>(offset + j) < (*optionItems)[offset + i].size(); j++) {
+        //setting = (*settings)[offset + j];
+        //settingOptions = (*optionItems)[offset + j];
+        //// Render list items
+        if (!renderSettingOptions(surf_display, &settingNameRect, j)) {
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    return true;
+}
+
+bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* setting_rect, int i) {
+    // Render Setting Option
+    std::string target = std::to_string(userSettingMap[(*settings)[offset + i]]);
+    const std::vector<std::vector<std::string>> currentOptions = (*optionItems)[offset + i];
+    auto it = std::find_if(
+        currentOptions.begin(), 
+        currentOptions.end(), 
+        [&target](const std::vector<std::string>& vec) { // < -- chatGPT provided lambda :)
+            // Check if the target matches the first element in the sub-vector
+            return !vec.empty() && vec[0] == target;
+        }
+    );
+    if (it != currentOptions.end()) {
+        size_t index = std::distance(currentOptions.begin(), it);
+        std::string selectedSetting = currentOptions[index][1];
+
+        settingOptionsSurface = TTF_RenderText_Blended(
+            fontSurface,
+            selectedSetting.c_str(),
+            offset + i == selectedSettingIndex ? highlightColor : color
+        );
+        if (settingOptionsSurface == NULL) {
+            std::cout << "Unable to render text! SDL Error: settingOptionsSurface " << TTF_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        };
+
+        SDL_Rect settingOptionRect;
+        settingOptionRect.x = (WINDOW_WIDTH/2) + 100;
+        settingOptionRect.y = setting_rect->y;
+        settingOptionRect.w = settingOptionsSurface->w;
+        settingOptionRect.h = settingOptionsSurface->h;
+        PokeSurface::onDraw(surf_display, settingOptionsSurface, &settingOptionRect);
+        SDL_FreeSurface(settingOptionsSurface);
+    }
     return true;
 }
 
@@ -130,29 +363,62 @@ PokedexActivitySetting* PokedexActivitySetting::getInstance() {
 }
 
 void PokedexActivitySetting::onButtonUp(SDL_Keycode sym, Uint16 mod) {
-    //if (selectedIndex > 0) {
-    //    selectedIndex--;
-    //    evo = (*optionItems)[selectedIndex];
-    //    if (selectedIndex < offset) {
-    //        offset--;
-    //    }
-    //}
+    if (selectedSettingIndex > 0) {
+        selectedSettingIndex--;
+        //evo = (*optionItems)[selectedSettingIndex];
+        if (selectedSettingIndex < offset) {
+            offset--;
+        }
+    }
 }
 void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
-    //if (selectedIndex < optionItems->size() - 1) {
+    if (selectedSettingIndex < settings->size() - 1) {
+        selectedSettingIndex++;
+        //evo = (*optionItems)[selectedSettingIndex];
+        if (selectedSettingIndex - offset >= 7) {
+            offset++;
+        }
+    }
+}
+void PokedexActivitySetting::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+    if (selectedOptionIndex > 0) {
+        // call function to set variable in user config file
+        // to be settingOptions at selectedOptionIndex - 1
+        userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex - 1][0]);
+        
+    }
+    setUserConfig(userConfigFile);
+    //setting;
+    //settingOptions;
+
+    //if (selectedIndex > 0) { // Ensure we're not at the left-most option index
+    //    selectedIndex--;
+    //    settingOption = (*optionItems)[selectedIndex];
+    //    std::cout << "Changed selected setting for: " << (*settings)[selectedIndex] << std::endl;
+    //}
+}
+void PokedexActivitySetting::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+    if (selectedOptionIndex < settingOptions.size() - 1) {
+        // call function to set variable in user config file
+        // to be settingOptions at selectedOptionIndex - 1
+        userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex + 1][0]);
+        
+    }
+    setUserConfig(userConfigFile);
+    //if (selectedIndex < settings->size() - 1) {
     //    selectedIndex++;
-    //    evo = (*optionItems)[selectedIndex];
+    //    //evo = (*optionItems)[selectedIndex];
     //    if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
     //        offset++;
     //    }
     //}
 }
-void PokedexActivitySetting::onButtonLeft(SDL_Keycode sym, Uint16 mod) {}
-void PokedexActivitySetting::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
 void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
+    PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
     PokedexActivityManager::back();
 }
 void PokedexActivitySetting::onButtonB(SDL_Keycode sym, Uint16 mod) {
+    PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
     PokedexActivityManager::back();
 }
 void PokedexActivitySetting::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
