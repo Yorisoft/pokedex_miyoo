@@ -16,7 +16,7 @@ PokedexActivitySetting::PokedexActivitySetting() :
     optionItems(nullptr),
     optionNameSurface(nullptr),
     settingOptionsSurface(nullptr),
-    fontPath("res/font/Pokemon_GB.ttf"),
+    fontPath("res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf"),
     selectedSettingIndex(0),
     selectedOptionIndex(0),
     offset(0),
@@ -248,7 +248,7 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
     /////////////////////////////////////////////////////////////////////////////
 
     // Render Setting Name
-    optionNameSurface = TTF_RenderText_Blended(
+    optionNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         (*settings)[offset + i].c_str(),
         offset + i == selectedSettingIndex ? highlightColor : color
@@ -293,7 +293,7 @@ bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL
         size_t index = std::distance(currentOptions.begin(), it);
         std::string selectedSetting = currentOptions[index][1];
 
-        settingOptionsSurface = TTF_RenderText_Blended(
+        settingOptionsSurface = TTF_RenderUTF8_Blended(
             fontSurface,
             selectedSetting.c_str(),
             offset + i == selectedSettingIndex ? highlightColor : color

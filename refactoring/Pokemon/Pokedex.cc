@@ -121,7 +121,7 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
 
-    this->font = TTF_OpenFont("res/font/Pokemon_GB.ttf", 20);
+    this->font = TTF_OpenFont("res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf", 20);
     if (this->font == NULL) {
         std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);

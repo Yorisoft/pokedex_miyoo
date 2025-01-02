@@ -19,7 +19,7 @@ dbResults(nullptr),
 pokemon(nullptr)
 {
 
-    fontPath = "res/font/Pokemon_GB.ttf";
+    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 }
 
 void PokedexActivity_PokemonView_Info::onActivate() {
@@ -41,7 +41,7 @@ void PokedexActivity_PokemonView_Info::onActivate() {
     std::cout << "Male: " << (*genderRates)[0] << '\n';
     std::cout << "Female: " << (*genderRates)[1] << '\n';
 
-    fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 22);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivity_PokemonView_Info::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -170,7 +170,7 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display) {
     formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
     std::string pokeID = formattedID.str();
 
-    pokeIDSurface = TTF_RenderText_Blended(
+    pokeIDSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeID.c_str(),
         { 96, 96, 96 }
@@ -190,7 +190,7 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display) {
 
     // Render Item ID
     std::string pokeName = pokemon->getName();
-    pokeNameSurface = TTF_RenderText_Blended(
+    pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeName.c_str(),
         { 96, 96, 96 }
@@ -216,7 +216,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
     std::string height = pokemon->getHeight();
     std::string weight = pokemon->getWeight();
 
-    pokeHeightSurface = TTF_RenderText_Blended(
+    pokeHeightSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         height.c_str(),
         { 96, 96, 96 }
@@ -236,7 +236,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
     SDL_FreeSurface(pokeHeightSurface);
 
     ///////
-    pokeWeightSurface = TTF_RenderText_Blended(
+    pokeWeightSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         weight.c_str(),
         { 96, 96, 96 }
@@ -261,7 +261,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
     std::stringstream iss;
     iss << (*genderRates)[0] << "/" << (*genderRates)[1];
     std::string genderRatesStr = iss.str();
-    SDL_Surface* pokeGenderSurface = TTF_RenderText_Blended(
+    SDL_Surface* pokeGenderSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         genderRatesStr.c_str(),
         { 96, 96, 96 }
@@ -285,7 +285,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display) {
 bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_display) {
     // pokemon genus
     std::string pokeGenus = pokemon->getGenus();
-    pokeGenusSurface = TTF_RenderText_Blended(
+    pokeGenusSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeGenus.c_str(),
         { 96, 96, 96 }
@@ -306,7 +306,7 @@ bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_displa
 
     // flavor text
     std::string pokeFlavorText = pokemon->getFlavorText();
-    flavorTextSurface = TTF_RenderText_Blended_Wrapped(
+    flavorTextSurface = TTF_RenderUTF8_Blended_Wrapped(
         fontSurface,
         pokeFlavorText.c_str(),
         { 96, 96, 96 },

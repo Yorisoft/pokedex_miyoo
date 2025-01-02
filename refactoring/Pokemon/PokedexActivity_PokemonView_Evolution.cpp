@@ -14,7 +14,7 @@ selectedIndex(0),
 offset(0),
 itemHeight(static_cast<int>((WINDOW_HEIGHT / 3) * 0.7))
 {
-    fontPath = "res/font/Pokemon_GB.ttf";
+    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 }
 
 PokedexActivity_PokemonView_Evolution::~PokedexActivity_PokemonView_Evolution() {
@@ -149,7 +149,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     formattedID << std::setw(3) << std::setfill('0') << evo[1];
     std::string pokeID = formattedID.str();
 
-    pokeIDSurface = TTF_RenderText_Blended(
+    pokeIDSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeID.c_str(),
         { 96, 96, 96 }
@@ -170,7 +170,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke name
     std::string pokeName = evo[4];
-    pokeNameSurface = TTF_RenderText_Blended(
+    pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeName.c_str(),
         { 96, 96, 96 }
@@ -205,7 +205,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     //    pokeMethod = "Lv. " + evo[6];
 
     //}
-    //pokeMethodSurface = TTF_RenderText_Blended(
+    //pokeMethodSurface = TTF_RenderUTF8_Blended(
     //    fontSurface,
     //    pokeMethod.c_str(),
     //    { 96, 96, 96 }
@@ -256,7 +256,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     formattedID << std::setw(3) << std::setfill('0') << evo[1];
     std::string pokeID = formattedID.str();
 
-    pokeIDSurface = TTF_RenderText_Blended(
+    pokeIDSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeID.c_str(),
         { 96, 96, 96 }
@@ -277,7 +277,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke name
     std::string pokeName = evo[4];
-    pokeNameSurface = TTF_RenderText_Blended(
+    pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeName.c_str(),
         { 96, 96, 96 }
@@ -307,7 +307,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
         pokeMethod = evo[7];
 
     }
-    pokeMethodSurface = TTF_RenderText_Blended(
+    pokeMethodSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeMethod.c_str(),
         { 96, 96, 96 }

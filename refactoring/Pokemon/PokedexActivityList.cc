@@ -26,7 +26,7 @@ void PokedexActivityList::onActivate() {
 
     color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
 
-    fontPath = "res/font/Pokemon_GB.ttf";
+    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 
 //////////////////////////////////////////////////////////////////////////////////////
     std::cout << "PokedexActivityList::onActivate START \n";
@@ -219,7 +219,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
 }
 
 bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i) {
-    pokeIDSurface = TTF_RenderText_Blended(
+    pokeIDSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokemon[0].c_str(),
         offset + i == selectedIndex ? highlightColor : color
@@ -239,7 +239,7 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
 
     
     //List pokemon name
-    pokeNameSurface = TTF_RenderText_Blended(
+    pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokemon[2].c_str(),
         offset + i == selectedIndex ? highlightColor : color

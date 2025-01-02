@@ -20,7 +20,7 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 void PokedexActivityMenu::onActivate() {
     color = { 255, 255, 255 }, highlightColor = { 255, 0, 0 };
 
-    fontPath = "res/font/Pokemon_GB.ttf";
+    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
@@ -128,7 +128,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     SDL_FreeSurface(listEntrySurface);
 
     //List item title
-    gameNameSurface = TTF_RenderText_Blended(
+    gameNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         (*dbResults)[offset + i][2].c_str(),
         offset + i == selectedIndex ? highlightColor : color

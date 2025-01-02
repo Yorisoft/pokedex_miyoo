@@ -22,7 +22,7 @@ pokemon(nullptr),
 dbResults(nullptr),
 fontSurface(nullptr)
 {
-    fontPath = "res/font/Pokemon_GB.ttf";
+    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 };
 
 void PokedexActivity_PokemonView_Stats::onActivate() {
@@ -48,7 +48,7 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 
 
 
-    fontSurface = TTF_OpenFont("res/font/Pokemon_GB.ttf", 22);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
     if (!fontSurface) {
         std::cerr << "PokedexActivity_PokemonView_Info::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -135,7 +135,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
     formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
     std::string pokeID = formattedID.str();
 
-    pokeIDSurface = TTF_RenderText_Blended(
+    pokeIDSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeID.c_str(),
         { 96, 96, 96 }
@@ -155,7 +155,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
 
     // Render Item ID
     std::string pokeName = pokemon->getName();
-    pokeNameSurface = TTF_RenderText_Blended(
+    pokeNameSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         pokeName.c_str(),
         { 96, 96, 96 }
@@ -184,7 +184,7 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display) {
     for (int i = 0; i < stats.size(); ++i) {
         std::string statsToString = std::to_string(stats[i]);
 
-        statsSurface = TTF_RenderText_Blended(
+        statsSurface = TTF_RenderUTF8_Blended(
             fontSurface,
             statsToString.c_str(),
             { 96, 96, 96 }
