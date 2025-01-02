@@ -203,8 +203,8 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display) {
     SDL_Rect pokeNameRect;
     pokeNameRect.x = pokeIDRect.x;
     pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 25;
-    pokeNameRect.w = pokeNameSurface->w * 0.8;
-    pokeNameRect.h = pokeNameSurface->h * 0.8;
+    pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
+    pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
 
     PokeSurface::onDrawScaled(surf_display, pokeNameSurface, &pokeNameRect);
     SDL_FreeSurface(pokeNameSurface);

@@ -111,7 +111,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     //Render list item background/surface
     listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
         0,
-        surf_display->w * 0.9,
+        static_cast<int>(surf_display->w * 0.9),
         itemHeight,
         DEPTH,
         SDL_PIXELFORMAT_RGBA32
@@ -123,9 +123,9 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
 
     int spacing = 18; 
     SDL_Rect listEntryRect;
-    listEntryRect.x = surf_display->w - (surf_display->w * 0.45) - 8;
+    listEntryRect.x = static_cast<int>(surf_display->w - (surf_display->w * 0.45) - 8);
     listEntryRect.y = 65 + (i * (itemHeight + spacing));
-    listEntryRect.w = surf_display->w * 0.45;
+    listEntryRect.w = static_cast<int>(surf_display->w * 0.45);
     listEntryRect.h = itemHeight;
     if (offset + i == selectedIndex) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black
@@ -148,8 +148,8 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_Rect moveTypeRect;
     moveTypeRect.x = listEntryRect.x;
     moveTypeRect.y = listEntryRect.y;
-    moveTypeRect.w = moveTypeSurface->w * 1.5;
-    moveTypeRect.h = moveTypeSurface->h * 1.5;
+    moveTypeRect.w = static_cast<int>(moveTypeSurface->w * 1.5);
+    moveTypeRect.h = static_cast<int>(moveTypeSurface->h * 1.5);
     PokeSurface::onDrawScaled(surf_display, moveTypeSurface, &moveTypeRect);
     SDL_FreeSurface(moveTypeSurface);
 
@@ -175,8 +175,8 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_Rect moveNameRect;
     moveNameRect.x = 10 + moveTypeRect.x + moveTypeRect.w;
     moveNameRect.y = moveTypeRect.y + 10;
-    moveNameRect.w = moveNameSurface->w * 0.8;
-    moveNameRect.h = moveNameSurface->h * 0.8;
+    moveNameRect.w = static_cast<int>(moveNameSurface->w * 0.8);
+    moveNameRect.h = static_cast<int>(moveNameSurface->h * 0.8);
     PokeSurface::onDrawScaled(surf_display, moveNameSurface, &moveNameRect);
     SDL_FreeSurface(moveNameSurface);
 

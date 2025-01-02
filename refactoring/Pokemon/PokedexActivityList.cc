@@ -104,7 +104,7 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     SDL_FreeSurface(listBackgroundSurface);
 
     // Render List Items
-    for (int i = 0; i < MAX_VISIBLE_ITEMS && offset + i < dbResults->size(); i++) {
+    for (int i = 0; i < MAX_VISIBLE_ITEMS && static_cast<std::size_t>(offset + i) < dbResults->size(); i++) {
         // Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
@@ -152,9 +152,9 @@ SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, in
         exit(EXIT_FAILURE);
     };
     SDL_Rect listEntryRect;
-    listEntryRect.x = surf_display->w - (surf_display->w * 0.5);
+    listEntryRect.x = static_cast<int>(surf_display->w - (surf_display->w * 0.5));
     listEntryRect.y = (i * itemHeight + 70);
-    listEntryRect.w = surf_display->w * 0.5;
+    listEntryRect.w = static_cast<int>(surf_display->w * 0.5);
     listEntryRect.h = itemHeight;
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);

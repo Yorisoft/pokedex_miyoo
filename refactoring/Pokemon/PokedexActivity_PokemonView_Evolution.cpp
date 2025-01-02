@@ -93,8 +93,8 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
     SDL_FreeSurface(backgroundSurface);
 
     //// Render List Items
-    for (int i = 0; i < 3 && offset + i < evoChain->size(); i++) {
-        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1] || std::stoi((*evoChain)[offset + i][1]) >= 1000)
+    for (int i = 0; i < 3 && static_cast<std::size_t>(offset + i) < evoChain->size(); i++) {
+        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1] || std::stoi((*evoChain)[offset + i][1]) >= 649)
             continue;
         evo = (*evoChain)[offset + i];
         // Render list items
@@ -116,9 +116,9 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     int spacing = 15; 
     SDL_Rect listEntryRect;
-    listEntryRect.x = surf_display->w - (surf_display->w * 0.5);
+    listEntryRect.x = static_cast<int>(surf_display->w - (surf_display->w * 0.5));
     listEntryRect.y = 65 + (i * (itemHeight + spacing));
-    listEntryRect.w = surf_display->w * 0.50;
+    listEntryRect.w = static_cast<int>(surf_display->w * 0.50);
     listEntryRect.h = itemHeight;
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);
@@ -135,7 +135,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     };
 
     SDL_Rect pokeSpriteRect;
-    pokeSpriteRect.x = (listEntryRect.x + listEntryRect.w ) - pokeSpriteSurface->w * 1.3;
+    pokeSpriteRect.x = static_cast<int>((listEntryRect.x + listEntryRect.w ) - pokeSpriteSurface->w * 1.3);
     pokeSpriteRect.y = listEntryRect.y + 10;
     pokeSpriteRect.w = pokeSpriteSurface->w;
     pokeSpriteRect.h = pokeSpriteSurface->h;
@@ -162,8 +162,8 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     SDL_Rect pokeIDRect;
     pokeIDRect.x = listEntryRect.x + 60;
     pokeIDRect.y = listEntryRect.y + 30;
-    pokeIDRect.w = pokeIDSurface->w * .8;
-    pokeIDRect.h = pokeIDSurface->h * .8;
+    pokeIDRect.w = static_cast<int>(pokeIDSurface->w * .8);
+    pokeIDRect.h = static_cast<int>(pokeIDSurface->h * .8);
     PokeSurface::onDrawScaled(surf_display, pokeIDSurface, &pokeIDRect);
     SDL_FreeSurface(pokeIDSurface);
 
@@ -183,8 +183,8 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     SDL_Rect pokeNameRect;
     pokeNameRect.x = listEntryRect.x + 10;
     pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 5;
-    pokeNameRect.w = pokeNameSurface->w * 0.8;
-    pokeNameRect.h = pokeNameSurface->h * 0.8;
+    pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
+    pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
 
     PokeSurface::onDrawScaled(surf_display, pokeNameSurface, &pokeNameRect);
     SDL_FreeSurface(pokeNameSurface);
@@ -290,8 +290,8 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     SDL_Rect pokeNameRect;
     pokeNameRect.x = pokeIDRect.x;
     pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 10;
-    pokeNameRect.w = pokeNameSurface->w * 0.8;
-    pokeNameRect.h = pokeNameSurface->h * 0.8;
+    pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
+    pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
 
     PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
     SDL_FreeSurface(pokeNameSurface);
@@ -320,8 +320,8 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     SDL_Rect pokeMethodRect;
     pokeMethodRect.x = pokeNameRect.x;
     pokeMethodRect.y = pokeNameRect.y + pokeNameRect.h + 30;
-    pokeMethodRect.w = pokeMethodSurface->w * 0.8;
-    pokeMethodRect.h = pokeMethodSurface->h * 0.8;
+    pokeMethodRect.w = static_cast<int>(pokeMethodSurface->w * 0.8);
+    pokeMethodRect.h = static_cast<int>(pokeMethodSurface->h * 0.8);
 
     PokeSurface::onDraw(surf_display, pokeMethodSurface, &pokeMethodRect);
     SDL_FreeSurface(pokeMethodSurface);

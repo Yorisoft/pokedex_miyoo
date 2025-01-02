@@ -72,6 +72,9 @@ void PokedexActivityMenu::onDeactivate() {
 }
 
 void PokedexActivityMenu::onLoop() {
+    //Set Game version and regional pokedex ID for PokedexDB
+    game = (*dbResults)[selectedIndex];
+
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
@@ -98,7 +101,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
 
     // Render List Items
     for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
-        game = (*dbResults)[offset + i];
+        //game = (*dbResults)[offset + i];
         // Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
@@ -127,7 +130,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     //List item title
     gameNameSurface = TTF_RenderText_Blended(
         fontSurface,
-        game[2].c_str(),
+        (*dbResults)[offset + i][2].c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
     if (gameNameSurface == NULL) {
@@ -172,9 +175,6 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
-    //Set Game version and regional pokedex ID for PokedexDB
-    game = (*dbResults)[selectedIndex];
-
     PokedexDB::setGameIdentifier(game[1]);
     PokedexDB::setRegionID(std::stoi(game[3]));
     PokedexDB::setGenerationID(std::stoi(game[5]));
