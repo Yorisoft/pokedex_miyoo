@@ -84,11 +84,6 @@ void PokedexActivitySetting::onActivate() {
 
 /// set selected setting/settingOption END
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivitySetting::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
-
     std::cout << "PokedexActivitySetting::onActivate END \n";
 }
 
@@ -150,8 +145,6 @@ void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
 }
 
 void PokedexActivitySetting::onDeactivate() {
-    // closing font
-    TTF_CloseFont(fontSurface);
     delete settings;
     delete optionItems;
     audioOptions.clear();
@@ -205,14 +198,14 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
     //// Render List Items
     // MAX_ITEMS = 7
     for (int i = 0; i < 7 && static_cast<std::size_t>(offset + i) < settings->size(); i++) {
-        if (!renderListItems(surf_display, i)) {
+        if (!renderListItems(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
 
 }
 
-bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
+bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
     if (offset + i == selectedSettingIndex) {
         std::string ListackgroundImageFile = "res/icons/icon/setting_item_background.png";
         listEntrySurface = PokeSurface::onLoadImg(ListackgroundImageFile);
@@ -249,7 +242,7 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
 
     // Render Setting Name
     optionNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         (*settings)[offset + i].c_str(),
         offset + i == selectedSettingIndex ? highlightColor : color
     );
@@ -270,14 +263,14 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, int i) {
     // //// Render List Items list 
     // MAX_ITEMS = 1
     for (int j = i; j == i && static_cast<std::size_t>(offset + j) < (*optionItems)[offset + i].size(); j++) {
-        if (!renderSettingOptions(surf_display, &settingNameRect, j)) {
+        if (!renderSettingOptions(surf_display, &settingNameRect, font, j)) {
             exit(EXIT_FAILURE);
         }
     }
 
     return true;
 }
-bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* setting_rect, int i) {
+bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* setting_rect, TTF_Font* font, int i) {
     // Render Setting Option
     std::string target = std::to_string(userSettingMap[(*settings)[offset + i]]);
     const std::vector<std::vector<std::string>> currentOptions = (*optionItems)[offset + i];
@@ -294,7 +287,7 @@ bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL
         std::string selectedSetting = currentOptions[index][1];
 
         settingOptionsSurface = TTF_RenderUTF8_Blended(
-            fontSurface,
+            font,
             selectedSetting.c_str(),
             offset + i == selectedSettingIndex ? highlightColor : color
         );

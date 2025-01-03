@@ -26,8 +26,8 @@ private:
     std::vector<std::vector<std::vector<std::string>>>* optionItems;
     std::vector<std::vector<std::string>> settingOptions;
      
-    bool renderListItems(SDL_Surface* surf_display, int i);
-    bool renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* settingRect, int i);
+    bool renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i);
+    bool renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* settingRect, TTF_Font* font, int i);
     void loadUserConfig(const std::string&);
     void setUserConfig(const std::string&);
     

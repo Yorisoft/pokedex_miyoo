@@ -38,14 +38,7 @@ void PokedexActivity_PokemonView_Location::onActivate() {
     routes = pokemon->getRoutes();
     printPokeInfo();
 
-
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Location::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
-
     std::cout << "PokedexActivity_PokemonView_Location::onActivate END \n";
-
 }
 
 void PokedexActivity_PokemonView_Location::printPokeInfo() {
@@ -80,12 +73,7 @@ void PokedexActivity_PokemonView_Location::onDeactivate() {
 
     selectedIndex = 0, offset = 0;
 
-    // closing font
-    TTF_CloseFont(fontSurface);
-
-
     std::cout << "PokedexActivity_PokemonView_Location::onActivate END \n";
-
 }
 
 void PokedexActivity_PokemonView_Location::onLoop() {
@@ -113,7 +101,7 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
     PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
     SDL_FreeSurface(backgroundSurface);
 
-    if (!renderPokeInfo(surf_display)) {
+    if (!renderPokeInfo(surf_display, font)) {
         std::cout << "Unable to load surface! SDL Error: renderPokeInfo " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -123,13 +111,13 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
         route = (*routes)[offset + i];
 
         // Render list items
-        if (!renderListItems(surf_display, renderer, i)) {
+        if (!renderListItems(surf_display, renderer, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
 }
 
-bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_display) {
+bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font) {
     //Render pokedmon info
     // render poke icon
     std::string iconPath = PokedexDB::getPokemonIdentifier();
@@ -155,7 +143,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
     // Render Name
     std::string pokeName = pokemon->getName();
     pokeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeName.c_str(),
         color
     );
@@ -214,7 +202,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
     return true;
 }
 
-bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i) {
+bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i) {
     //Render list item background/surface
     listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
         0,
@@ -252,7 +240,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
         moveName[i] = std::toupper(moveName[i]);
     }
     routeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         moveName.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
@@ -273,7 +261,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     // Render method
     std::string methodString = route[2];
     routeMethodSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         methodString.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
@@ -294,7 +282,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     // Render rate
     std::string rateString =  (std::to_string((std::stoi(route[5])) / 2) + '%');
     routeRateSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         rateString.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
@@ -315,7 +303,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     // Render selected Item details
     if (offset + i == selectedIndex) {
         //redern item details
-        if (!renderItemDetails(surf_display, i)) {
+        if (!renderItemDetails(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
@@ -324,12 +312,12 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
 
 }
 
-bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_display, int i) {
+bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i) {
     /////////////////////////////////////////////////////////////////////////////
     // Render levels - min
     std::string lvlString = route[3];
     routeLvlSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         lvlString.c_str(),
         color
     );
@@ -350,7 +338,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
     // Render levels - max
     lvlString = route[4];
     routeLvlSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         lvlString.c_str(),
         color
     );
@@ -374,7 +362,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
         route[2] + '\n' + 
         (std::to_string((std::stoi(route[5])) / 2) + '%');
     routeSmrySurface = TTF_RenderUTF8_Blended_Wrapped(
-        fontSurface,
+        font,
         effect.c_str(),
         color,
         320

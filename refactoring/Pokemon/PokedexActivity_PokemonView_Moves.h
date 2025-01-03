@@ -27,8 +27,8 @@ private:
 
     PokedexActivity_PokemonView_Moves();
 
-    bool renderItemDetails(SDL_Surface* surf_display, int i);
-    bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i);
+    bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);
+    bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
     std::string cleanString(std::string str);
 
     

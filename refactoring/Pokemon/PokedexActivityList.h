@@ -25,10 +25,10 @@ private:
     PokedexActivityList();
     ~PokedexActivityList();
 
-    bool renderListItems(SDL_Surface* surf_display, int i);
+    bool renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i);
     SDL_Rect renderItemBackground(SDL_Surface* surf_display, int i);
     bool renderItemSprites(SDL_Surface* surf_display, int i);
-    bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i);
+    bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, TTF_Font* font, int i);
 
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);

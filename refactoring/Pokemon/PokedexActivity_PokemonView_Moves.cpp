@@ -47,11 +47,6 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
     }
     move = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Moves::onRender: Failed to load font: " << TTF_GetError() << std::endl;
-    }
-
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
 }
 
@@ -59,10 +54,6 @@ void PokedexActivity_PokemonView_Moves::onDeactivate() {
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
 
     selectedIndex = 0, offset = 0;
-
-    // closing font
-    TTF_CloseFont(fontSurface);
-
 
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
 }
@@ -97,14 +88,14 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
         move = (*dbResults)[offset + i];
 
         // Render list items
-        if (!renderListItems(surf_display, renderer, i)) {
+        if (!renderListItems(surf_display, renderer, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
 
 }
 
-bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i) {
+bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i) {
     // Fill the surface with transparent color
     //SDL_FillRect(listEntrySurface, NULL, SDL_MapRGBA(listEntrySurface->format, 150, 150, 150, 255));
 
@@ -163,7 +154,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     //    moveName[i] = std::toupper(moveName[i]);
     //}
     moveNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         moveName.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
@@ -186,14 +177,14 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     if (methodString == "level-up") {
         methodString = "LV." + move[8];
         moveMethodSurface = TTF_RenderUTF8_Blended(
-            fontSurface,
+            font,
             methodString.c_str(),
             offset + i == selectedIndex ? highlightColor : color
         );
     }
     else {
         moveMethodSurface = TTF_RenderUTF8_Blended(
-            fontSurface,
+            font,
             methodString.c_str(),
             offset + i == selectedIndex ? highlightColor : color
         );
@@ -216,7 +207,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     // load font
     std::string ppString = move[3] + '/' + move[3];
     movePPSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         ppString.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
@@ -237,7 +228,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     // Render selected Item details
     if (offset + i == selectedIndex) {
         //redern item details
-        if (!renderItemDetails(surf_display, i)) {
+        if (!renderItemDetails(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
@@ -245,7 +236,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     return true;
 }
 
-bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, int i) {
+bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i) {
     // render poke icon
     std::string iconPath = PokedexDB::getPokemonIdentifier();
     iconPath = "res/icons/" + iconPath + ".png";
@@ -270,7 +261,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     // Render Name
     std::string pokeName = pokemon->getName();
     pokeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeName.c_str(),
         color
     );
@@ -331,7 +322,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     // Render Power
     
     movePwrSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         (move[5] == "NULL" ? "--" : move[5]).c_str(),
         color
     );
@@ -369,7 +360,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     //////////////////////////////////////////////////////////////////////////////////
     // Render Accuracy
     moveAcrySurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         (move[6] == "NULL" ? "--" : move[6]).c_str(),
         color
     );
@@ -390,7 +381,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     // Render Effect
     std::string effect = cleanString(move[7]);
     moveEffectSurface = TTF_RenderUTF8_Blended_Wrapped(
-        fontSurface,
+        font,
         effect.c_str(),
         color,
         320

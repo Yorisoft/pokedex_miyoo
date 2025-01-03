@@ -28,9 +28,9 @@ private:
 
     void printPokeInfo();
 
-    bool renderPokeInfo(SDL_Surface* surf_display);
-    bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, int i);
-    bool renderItemDetails(SDL_Surface* surf_display, int i);
+    bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font);
+    bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
+    bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);
     
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);

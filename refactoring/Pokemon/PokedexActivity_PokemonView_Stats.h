@@ -35,9 +35,9 @@ public:
 
     bool renderSprites(SDL_Surface* surf_display);
 
-    bool renderNameID(SDL_Surface* surf_display);
+    bool renderNameID(SDL_Surface* surf_display, TTF_Font* font);
 
-    bool renderStats(SDL_Surface* surf_display);
+    bool renderStats(SDL_Surface* surf_display, TTF_Font* font);
 
     bool renderFlavorText(SDL_Surface* surf_display);
 

@@ -22,8 +22,8 @@ private:
     SDL_Color color, highlightColor;
 
     void printPokeInfo();
-    bool renderPokeInfo(SDL_Surface* surf_display, int i);
-    bool renderListItems(SDL_Surface* surf_display, int i);
+    bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i);
+    bool renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i);
 
 public:
     PokedexActivity_PokemonView_Evolution();

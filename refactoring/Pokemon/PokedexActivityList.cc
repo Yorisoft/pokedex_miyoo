@@ -40,15 +40,10 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivityList::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
     std::cout << "PokedexActivityList::onActivate END \n";
 }
 
 void PokedexActivityList::onDeactivate() {
-    TTF_CloseFont(fontSurface);
 
     pokeNameSurface = nullptr,
         pokeIconSurface = nullptr,
@@ -106,7 +101,7 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     // Render List Items
     for (int i = 0; i < MAX_VISIBLE_ITEMS && static_cast<std::size_t>(offset + i) < dbResults->size(); i++) {
         // Render list items
-        if (!renderListItems(surf_display, i)) {
+        if (!renderListItems(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
@@ -120,7 +115,7 @@ PokedexActivityList* PokedexActivityList::getInstance() {
     return &instance;
 }
 
-bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, int i) {
+bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
     //List item background
     SDL_Rect listEntryRect = renderItemBackground(surf_display, i);
 
@@ -134,7 +129,7 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, int i) {
         }
     }
     //List pokemon id
-    if (!renderItemEntry(surf_display, &listEntryRect, i)) {
+    if (!renderItemEntry(surf_display, &listEntryRect, font, i)) {
         std::cout << "Error in renderItemEntry! SDL Error: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
 
@@ -218,9 +213,9 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     return true;
 }
 
-bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, int i) {
+bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, TTF_Font* font, int i) {
     pokeIDSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokemon[0].c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
@@ -245,7 +240,7 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
     }
 
     pokeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         name.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );

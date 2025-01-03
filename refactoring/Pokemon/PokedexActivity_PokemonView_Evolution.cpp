@@ -29,11 +29,6 @@ void PokedexActivity_PokemonView_Evolution::onActivate() {
     printPokeInfo();
     evo = (*evoChain)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Evolution::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
-
     std::cout << "PokedexActivity_PokemonView_Evolution::onActivate END \n";
 }
 
@@ -66,8 +61,6 @@ void PokedexActivity_PokemonView_Evolution::printPokeInfo() {
 }
 void PokedexActivity_PokemonView_Evolution::onDeactivate() {
     selectedIndex = 0, offset = 0;
-    // closing font
-    TTF_CloseFont(fontSurface);
 }
 void PokedexActivity_PokemonView_Evolution::onLoop() {}
 void PokedexActivity_PokemonView_Evolution::onFreeze() {}
@@ -98,14 +91,14 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
             continue;
         //evo = (*evoChain)[offset + i];
         // Render list items
-        if (!renderListItems(surf_display, i)) {
+        if (!renderListItems(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
 
 }
 
-bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_display, int i) {
+bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
     std::string listEntryImageFile = "res/icons/icon/evolution_item_background_";
     offset + i == selectedIndex ? listEntryImageFile.append("selected.png") : listEntryImageFile.append("default.png");
     listEntrySurface = PokeSurface::onLoadImg(listEntryImageFile);
@@ -150,7 +143,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     std::string pokeID = formattedID.str();
 
     pokeIDSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeID.c_str(),
         { 96, 96, 96 }
     );
@@ -171,7 +164,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     //// Render poke name
     std::string pokeName = (*evoChain)[offset + i][4];
     pokeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeName.c_str(),
         { 96, 96, 96 }
     );
@@ -191,7 +184,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
 
     if (offset + i == selectedIndex) {
-        if (!renderPokeInfo(surf_display, i)) {
+        if (!renderPokeInfo(surf_display, font, i)) {
             std::cout << "Unable to load surface! SDL Error: renderPokeInfo " << SDL_GetError() << std::endl;
             exit(EXIT_FAILURE);
         }
@@ -206,7 +199,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     //}
     //pokeMethodSurface = TTF_RenderUTF8_Blended(
-    //    fontSurface,
+    //    font,
     //    pokeMethod.c_str(),
     //    { 96, 96, 96 }
     //);
@@ -227,7 +220,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     return true;
 }
 
-bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, int i) {
+bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i) {
     //Render pokedmon info
     // render poke sprite
     std::string spritePath = (*evoChain)[offset + i][2];
@@ -257,7 +250,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     std::string pokeID = formattedID.str();
 
     pokeIDSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeID.c_str(),
         { 96, 96, 96 }
     );
@@ -278,7 +271,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     //// Render poke name
     std::string pokeName = (*evoChain)[offset + i][4];
     pokeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeName.c_str(),
         { 96, 96, 96 }
     );
@@ -308,7 +301,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
 
     }
     pokeMethodSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeMethod.c_str(),
         { 96, 96, 96 }
     );

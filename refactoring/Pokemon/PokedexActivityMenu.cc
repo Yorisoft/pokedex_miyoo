@@ -45,13 +45,15 @@ void PokedexActivityMenu::onActivate() {
 }
 
 void PokedexActivityMenu::onDeactivate() {
-    TTF_CloseFont(fontSurface);
+    if (fontSurface) {
+        TTF_CloseFont(fontSurface);
+    }
+    fontSurface = nullptr;
 
     gameNameSurface = nullptr, 
         listEntrySurface = nullptr, 
         listBackgroundSurface = nullptr;
 
-    fontSurface = nullptr;
 
     color = { }, 
         highlightColor = { };

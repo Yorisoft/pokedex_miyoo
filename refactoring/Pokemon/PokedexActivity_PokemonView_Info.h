@@ -35,11 +35,11 @@ public:
 
     bool renderSprites(SDL_Surface* surf_display);
 
-    bool renderNameID(SDL_Surface* surf_display);
+    bool renderNameID(SDL_Surface* surf_display, TTF_Font* font);
 
-    bool renderHW(SDL_Surface* surf_display);
+    bool renderHW(SDL_Surface* surf_display, TTF_Font* font);
 
-    bool renderFlavorText(SDL_Surface* surf_display);
+    bool renderFlavorText(SDL_Surface* surf_display, TTF_Font* font);
 
     void onFreeze();
 

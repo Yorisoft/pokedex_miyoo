@@ -45,18 +45,10 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
     std::cout << "Special Deffense: " << stats[4] << '\n';
     std::cout << "Speed: " << stats[5] << '\n';
 
-
-
-
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 22);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivity_PokemonView_Info::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
 }
 
 void PokedexActivity_PokemonView_Stats::onDeactivate() {
-    // closing font
-    TTF_CloseFont(fontSurface);
+    delete pokemon;
 }
 
 void PokedexActivity_PokemonView_Stats::onLoop() {
@@ -90,12 +82,12 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
         exit(EXIT_FAILURE);
     }
 
-    if (!renderNameID(surf_display)) {
+    if (!renderNameID(surf_display, font)) {
         std::cout << "Unable to render item name and ID! SDL Error: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    if (!renderStats(surf_display)) {
+    if (!renderStats(surf_display, font)) {
         std::cout << "Unable to render item stats! SDL Error: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -128,7 +120,7 @@ bool PokedexActivity_PokemonView_Stats::renderSprites(SDL_Surface* surf_display)
     return true;
 }
 
-bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
+bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display, TTF_Font* font){
     // Render Item ID
     // make it a 3 digit
     std::stringstream formattedID;
@@ -136,7 +128,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
     std::string pokeID = formattedID.str();
 
     pokeIDSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeID.c_str(),
         { 96, 96, 96 }
     );
@@ -156,7 +148,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
     // Render Item ID
     std::string pokeName = pokemon->getName();
     pokeNameSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
+        font,
         pokeName.c_str(),
         { 96, 96, 96 }
     );
@@ -177,7 +169,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display){
     return true;
 }
 
-bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display) {
+bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, TTF_Font* font) {
     std::stringstream iss;
     std::vector<unsigned short> stats = pokemon->getBasicStats();
 
@@ -185,7 +177,7 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display) {
         std::string statsToString = std::to_string(stats[i]);
 
         statsSurface = TTF_RenderUTF8_Blended(
-            fontSurface,
+            font,
             statsToString.c_str(),
             { 96, 96, 96 }
         );
