@@ -47,7 +47,7 @@ void PokedexActivityMenu::onActivate() {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
-    Mix_Volume(-1, 54);
+    Mix_Volume(-1, 44);
 
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }
@@ -178,10 +178,8 @@ void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
         if (selectedIndex < offset) {
             offset--;
         }
-
         // Play the sound effect
         Mix_PlayChannel(1, sEffect, 0);
-        //SDL_Delay(30);
     }
 }
 
@@ -191,10 +189,8 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
-
         // Play the sound effect
         Mix_PlayChannel(1, sEffect, 0);
-        //SDL_Delay(30);
     }
 }
 
@@ -224,6 +220,8 @@ void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
                 offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
             }
         }
+        // Play the sound effect
+        Mix_PlayChannel(1, sEffect, 0);
     }
     else {
         // If we exceed the last item, set selectedIndex to the last item visible
@@ -242,6 +240,8 @@ void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
                 offset = 0;  // Cap offset to zero
             }
         }
+        // Play the sound effect
+        Mix_PlayChannel(1, sEffect, 0);
     }
     else {
         selectedIndex = 0; // Ensure selectedIndex doesn't go below zero

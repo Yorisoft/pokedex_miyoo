@@ -46,7 +46,7 @@ void PokedexActivityList::onActivate() {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
-    Mix_Volume(-1, 54);
+    Mix_Volume(-1, 44);
 
     std::cout << "PokedexActivityList::onActivate END \n";
 }
@@ -278,11 +278,9 @@ void PokedexActivityList::onButtonUp(SDL_Keycode sym, Uint16 mod) {
         if (selectedIndex < offset) {
             offset--;
         }
+        // Play the sound effect
+        Mix_PlayChannel(-1, sEffect, 0);
     }
-
-    // Play the sound effect
-    std::cout << "Playing sound effect..." << std::endl;
-    Mix_PlayChannel(-1, sEffect, 0);
 }
 
 void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
@@ -291,12 +289,9 @@ void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
+        // Play the sound effect
+        Mix_PlayChannel(-1, sEffect, 0);
     }
-
-    // Play the sound effect
-    std::cout << "Playing sound effect..." << std::endl;
-    Mix_PlayChannel(-1, sEffect, 0);
-
 }
 
 void PokedexActivityList::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
@@ -330,6 +325,8 @@ void PokedexActivityList::onButtonR(SDL_Keycode sym, Uint16 mod) {
                 offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
             }
         }
+        // Play the sound effect
+        Mix_PlayChannel(-1, sEffect, 0);
     }
     else {
         // If we exceed the last item, set selectedIndex to the last item visible
@@ -348,6 +345,8 @@ void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod) {
                 offset = 0;  // Cap offset to zero
             }
         }
+        // Play the sound effect
+        Mix_PlayChannel(-1, sEffect, 0);
     }else {
         selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
         offset = 0;  // Cap offset to zero
