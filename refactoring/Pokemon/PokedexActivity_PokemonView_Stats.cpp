@@ -172,8 +172,28 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display, 
 bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, TTF_Font* font) {
     std::stringstream iss;
     std::vector<unsigned short> stats = pokemon->getBasicStats();
+    std::vector<std::string> statNames = { "HP", "Attack", "Defense", "Special_Attack", "Special_Defense", "Speed" };
 
     for (int i = 0; i < stats.size(); ++i) {
+        std::string statIconPath = "res/icons/icon/" + statNames[i] + "_icon_HOME.png";
+        SDL_Surface* statIcon = PokeSurface::onLoadImg(statIconPath);
+        if(!statIcon){
+            std::cout << "Unable to load statIcon! SDL Error: statIcon " << SDL_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        int topBorder = 80, spacing = 14;
+        SDL_Rect statIconRect;
+        statIconRect.x = WINDOW_WIDTH/2 + 150;
+        statIconRect.y = static_cast<int>(topBorder + (i * (statIcon->h*.5 + spacing)));
+        statIconRect.w = static_cast<int>(statIcon->w * .5);
+        statIconRect.h = static_cast<int>(statIcon->w * .5);
+        
+        PokeSurface::onDrawScaled(surf_display, statIcon, &statIconRect);
+        SDL_FreeSurface(statIcon);
+
+        ////////////////////////////////////////////////
+
         std::string statsToString = std::to_string(stats[i]);
 
         statsSurface = TTF_RenderUTF8_Blended(
