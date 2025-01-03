@@ -85,7 +85,7 @@ void PokedexActivityIntro::loadUserConfig(const std::string& file_name) {
     inputFile.close();
 }
 
-void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
+void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
     // Clear the display surface
     if (splashSurface) {
         SDL_SetTextureAlphaMod(texture, logoAlpha); // Apply the current alpha for fade-in

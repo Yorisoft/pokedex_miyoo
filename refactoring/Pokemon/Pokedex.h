@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>                   	
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "PokedexActivityManager.h"
 #include "PokedexActivityEvent.h"
 #include "PokeSurface.h"
@@ -23,6 +24,7 @@ private:
     SDL_Texture* texture;
     SDL_Renderer* renderer;
     TTF_Font* font;
+    Mix_Chunk* sEffect;
 
 public:
 

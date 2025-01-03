@@ -18,6 +18,7 @@ Pokedex::Pokedex() {
     texture = NULL;
     renderer = NULL;
     font = NULL;
+    sEffect = NULL;
 
     // Variables for FPS calculation
     frameCount = 0;
@@ -133,9 +134,9 @@ bool Pokedex::onSDLInit() {
         SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00)
     );
 
-    /*if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
         printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-    }*/
+    }
 
     std::cout << "onSDLInit: end" << std::endl;
 
@@ -177,7 +178,7 @@ void Pokedex::onLoop() {
 void Pokedex::onRender() {
     ////std::cout << "onRender: start" << std::endl;
     SDL_RenderClear(renderer);
-    PokedexActivityManager::onRender(screen, renderer, texture);
+    PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -216,9 +217,11 @@ void Pokedex::onCleanup() {
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    Mix_FreeChunk(sEffect);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
+    Mix_CloseAudio();
     //Mix_Quit();
 
     std::cout << "onCleanUp: end" << std::endl;

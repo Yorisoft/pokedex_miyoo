@@ -21,7 +21,7 @@ public:
 
     virtual void onFreeze() = 0;
 
-    virtual void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) = 0;
+    virtual void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) = 0;
 };
 
 #endif

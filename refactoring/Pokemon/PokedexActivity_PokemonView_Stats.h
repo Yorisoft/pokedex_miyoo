@@ -31,7 +31,7 @@ public:
 
     void onLoop();
 
-    void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
+    void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect);
 
     bool renderSprites(SDL_Surface* surf_display);
 

@@ -28,7 +28,7 @@ public:
 
     static void onLoop();
 
-    static void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture);
+    static void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect);
 
     static void setActiveState(int AppStateID);
 

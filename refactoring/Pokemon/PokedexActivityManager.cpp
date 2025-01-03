@@ -25,9 +25,9 @@ void PokedexActivityManager::onLoop() {
     }
 }
 
-void PokedexActivityManager::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
+void PokedexActivityManager::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
     if (activity) {
-        activity->onRender(surf_display, renderer, texture);
+        activity->onRender(surf_display, renderer, texture, font, sEffect);
     }
 }
 

@@ -62,7 +62,7 @@ void PokedexActivity_PokemonView_Stats::onDeactivate() {
 void PokedexActivity_PokemonView_Stats::onLoop() {
 }
 
-void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture) {
+void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
     //std::cout << "PokedexActivityMenu::onRender START \n";
     // Clear the display surface
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
