@@ -172,25 +172,47 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display, 
 bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, TTF_Font* font) {
     std::stringstream iss;
     std::vector<unsigned short> stats = pokemon->getBasicStats();
-    std::vector<std::string> statNames = { "HP", "Attack", "Defense", "Special_Attack", "Special_Defense", "Speed" };
+    std::vector<std::string> statFileNames = { "HP", "Attack", "Defense", "Special_Attack", "Special_Defense", "Speed" };
+    std::vector<std::vector<std::string>>* statNames = PokedexDB::executeSQL(&SQL_getStatNames);
 
     for (int i = 0; i < stats.size(); ++i) {
-        std::string statIconPath = "res/icons/icon/" + statNames[i] + "_icon_HOME.png";
-        SDL_Surface* statIcon = PokeSurface::onLoadImg(statIconPath);
-        if(!statIcon){
-            std::cout << "Unable to load statIcon! SDL Error: statIcon " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
+        ////////////////////////////////////////////////
+
+        std::string statsName = (*statNames)[i][2];
+
+        SDL_Surface* statsNameSurface = TTF_RenderUTF8_Blended(
+            font,
+            statsName.c_str(),
+            { 248, 248, 248 }
+        );
 
         int topBorder = 80, spacing = 14;
-        SDL_Rect statIconRect;
-        statIconRect.x = WINDOW_WIDTH/2 + 150;
-        statIconRect.y = static_cast<int>(topBorder + (i * (statIcon->h*.5 + spacing)));
-        statIconRect.w = static_cast<int>(statIcon->w * .5);
-        statIconRect.h = static_cast<int>(statIcon->w * .5);
-        
-        PokeSurface::onDrawScaled(surf_display, statIcon, &statIconRect);
-        SDL_FreeSurface(statIcon);
+        SDL_Rect statsNameRect;
+        statsNameRect.x = (WINDOW_WIDTH / 2) + 20;
+        statsNameRect.y = ((statsNameSurface->h + 5) * i) + topBorder;
+        statsNameRect.w = statsNameSurface->w;
+        statsNameRect.h = statsNameSurface->h;
+
+        PokeSurface::onDrawScaled(surf_display, statsNameSurface, &statsNameRect);
+        SDL_FreeSurface(statsNameSurface);
+
+        /////////////////////////////////////////////
+        //std::string statIconPath = "res/icons/icon/" + statFileNames[i] + "_icon_HOME.png";
+        //SDL_Surface* statIcon = PokeSurface::onLoadImg(statIconPath);
+        //if(!statIcon){
+        //    std::cout << "Unable to load statIcon! SDL Error: statIcon " << SDL_GetError() << std::endl;
+        //    exit(EXIT_FAILURE);
+        //}
+
+        ////int topBorder = 80, spacing = 14;
+        //SDL_Rect statIconRect;
+        //statIconRect.x = WINDOW_WIDTH/2 + 150;
+        //statIconRect.y = static_cast<int>(topBorder + (i * (statIcon->h*.5 + spacing)));
+        //statIconRect.w = static_cast<int>(statIcon->w * .5);
+        //statIconRect.h = static_cast<int>(statIcon->w * .5);
+        //
+        //PokeSurface::onDrawScaled(surf_display, statIcon, &statIconRect);
+        //SDL_FreeSurface(statIcon);
 
         ////////////////////////////////////////////////
 
@@ -203,7 +225,7 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, T
         );
 
         SDL_Rect statsRect;
-        statsRect.x = (WINDOW_WIDTH - statsSurface->w) - 60;
+        statsRect.x = (WINDOW_WIDTH - statsSurface->w) - 10;
         statsRect.y = (38 * i) + 80;
         statsRect.w = statsSurface->w;
         statsRect.h = statsSurface->h;
