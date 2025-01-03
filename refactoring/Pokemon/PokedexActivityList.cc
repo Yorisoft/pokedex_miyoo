@@ -12,6 +12,7 @@ PokedexActivityList::PokedexActivityList() :
     listEntrySurface(nullptr),
     listBackgroundSurface(nullptr),
     fontSurface(nullptr),
+    sEffect(nullptr),
     dbResults(nullptr),
     selectedIndex(0),
     offset(0)
@@ -40,10 +41,21 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
+    sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    if (!sEffect) {
+        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    Mix_Volume(-1, 54);
+
     std::cout << "PokedexActivityList::onActivate END \n";
 }
 
 void PokedexActivityList::onDeactivate() {
+
+    if(sEffect)
+        Mix_FreeChunk(sEffect);
+    sEffect = nullptr;
 
     pokeNameSurface = nullptr,
         pokeIconSurface = nullptr,
@@ -267,6 +279,10 @@ void PokedexActivityList::onButtonUp(SDL_Keycode sym, Uint16 mod) {
             offset--;
         }
     }
+
+    // Play the sound effect
+    std::cout << "Playing sound effect..." << std::endl;
+    Mix_PlayChannel(-1, sEffect, 0);
 }
 
 void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
@@ -276,6 +292,11 @@ void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
             offset++;
         }
     }
+
+    // Play the sound effect
+    std::cout << "Playing sound effect..." << std::endl;
+    Mix_PlayChannel(-1, sEffect, 0);
+
 }
 
 void PokedexActivityList::onButtonLeft(SDL_Keycode sym, Uint16 mod) {

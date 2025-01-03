@@ -15,9 +15,11 @@ private:
 
     TTF_Font* fontSurface;
 
+    Mix_Chunk* sEffect;
+
     SDL_Color color;
     SDL_Color highlightColor;
-    
+
     std::string fontPath;
     int selectedIndex, offset, itemHeight;
 

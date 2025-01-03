@@ -8,6 +8,7 @@ PokedexActivityMenu::PokedexActivityMenu() :
     listEntrySurface(nullptr),
     listBackgroundSurface(nullptr),
     fontSurface(nullptr),
+    sEffect(nullptr),
     dbResults(nullptr),
     selectedIndex(0),
     offset(0)
@@ -41,6 +42,13 @@ void PokedexActivityMenu::onActivate() {
         std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
 
+    sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    if (!sEffect) {
+        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    Mix_Volume(-1, 54);
+
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }
 
@@ -49,6 +57,11 @@ void PokedexActivityMenu::onDeactivate() {
         TTF_CloseFont(fontSurface);
     }
     fontSurface = nullptr;
+
+    // Free the sound effect and close SDL_mixer
+    if(sEffect)
+        Mix_FreeChunk(sEffect);
+    sEffect = nullptr;
 
     gameNameSurface = nullptr, 
         listEntrySurface = nullptr, 
@@ -165,16 +178,23 @@ void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
         if (selectedIndex < offset) {
             offset--;
         }
+
+        // Play the sound effect
+        Mix_PlayChannel(1, sEffect, 0);
+        //SDL_Delay(30);
     }
 }
 
 void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
-    Mix_Chunk* effect = Mix_LoadWAV("effect.wav");
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
+
+        // Play the sound effect
+        Mix_PlayChannel(1, sEffect, 0);
+        //SDL_Delay(30);
     }
 }
 

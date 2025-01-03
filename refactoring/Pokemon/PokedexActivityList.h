@@ -16,6 +16,9 @@ private:
     *listBackgroundSurface;
 
     TTF_Font* fontSurface;
+
+    Mix_Chunk* sEffect;
+
     SDL_Color color, highlightColor;
 
     int selectedIndex, offset, itemHeight;

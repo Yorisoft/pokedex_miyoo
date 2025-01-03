@@ -134,7 +134,7 @@ bool Pokedex::onSDLInit() {
         SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00)
     );
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
         printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
     }
 
