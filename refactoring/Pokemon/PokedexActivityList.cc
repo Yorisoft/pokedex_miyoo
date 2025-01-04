@@ -311,7 +311,6 @@ void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
 
     ////Call next activity
     PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_INFO);
-
 }
 
 void PokedexActivityList::onButtonB(SDL_Keycode sym, Uint16 mod) {
@@ -358,7 +357,8 @@ void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod) {
         }
         // Play the sound effect
         Mix_PlayChannel(-1, sEffect, 0);
-    }else {
+    }
+    else {
         selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
         offset = 0;  // Cap offset to zero
     }

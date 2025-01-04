@@ -92,7 +92,7 @@ void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* ren
         SDL_Rect splashScreenRect = {
             0, 0, WINDOW_WIDTH, WINDOW_HEIGHT
         };
-        PokeSurface::onDraw(surf_display, splashSurface, &splashScreenRect);
+        PokeSurface::onDrawScaled(surf_display, splashSurface, &splashScreenRect);
     }
 }
 

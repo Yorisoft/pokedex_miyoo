@@ -21,7 +21,7 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 void PokedexActivityMenu::onActivate() {
     color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
 
-    fontPath = "res/font/pokemon-frlg/pokemon-frlg.ttf";
+    fontPath = "res/font/pokemon-dppt/pokemon-dppt.ttf";
 
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
