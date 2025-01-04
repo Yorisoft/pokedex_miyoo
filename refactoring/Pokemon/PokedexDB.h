@@ -26,6 +26,7 @@ private:
     static int moveID;
 	static int evoChainID;
 	static std::string pokemonIdentifier;
+	static int audioID;
 
 	static const std::string getDBpath();
 	static int openDB();
@@ -47,6 +48,8 @@ public:
 	static void setVersionGroupID(int);
 	static void setMoveID(int);
 	static void setEvoChainID(int);
+	static void setAudioID(int);
+	static int getAudioID();
 };
 
 #endif

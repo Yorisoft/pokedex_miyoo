@@ -43,6 +43,20 @@ void PokedexActivity_PokemonView_Info::onActivate() {
     std::cout << "Male: " << (*genderRates)[0] << '\n';
     std::cout << "Female: " << (*genderRates)[1] << '\n';
 
+
+    // make it a 3 digit
+    std::stringstream formattedID;
+    formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
+    std::string pokeID = formattedID.str();
+    std::string pokeCryPath = "res/audio/pokecry/" + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
+    Mix_Chunk* pokeCry = Mix_LoadWAV(pokeCryPath.c_str());
+    if (!pokeCry) {
+        std::cerr << "Failed to load sound pokeCry: " << Mix_GetError() << std::endl;
+    }
+
+    // Play the sound effect
+    Mix_PlayChannel(-1, pokeCry, 0);
+
     std::cout << "PokedexActivity_PokemonView_Info::onActivate END \n";
 
 }
@@ -334,11 +348,20 @@ void PokedexActivity_PokemonView_Info::onButtonUp(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivity_PokemonView_Info::onButtonDown(SDL_Keycode sym, Uint16 mod) {}
 
 void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+    // Play the sound effect
+    //Mix_PlayChannel(1, sEffect, 0);
     PokedexActivityManager::back();
     //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
 }
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    Mix_Chunk* sEffect = Mix_LoadWAV(sEffectPath.c_str());
+    if (!sEffect) {
+        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
+    }
+    // Play the sound effect
+    Mix_PlayChannel(1, sEffect, 0);
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_STATS);
     //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_STATS);
 }

@@ -12,6 +12,7 @@ private:
 
     Pokemon* pokemon;
 
+    Mix_Chunk* pokeCry, * sEffect;
     TTF_Font* fontSurface;
     SDL_Surface* pokeNameSurface, * pokeIDSurface,
         * pokeIconSurface, * backgroundSurface,

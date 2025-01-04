@@ -29,6 +29,12 @@ void PokedexActivity_PokemonView_Evolution::onActivate() {
     printPokeInfo();
     evo = (*evoChain)[selectedIndex];
 
+    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    sEffect = Mix_LoadWAV(sEffectPath.c_str());
+    if (!sEffect) {
+        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
+    }
+
     std::cout << "PokedexActivity_PokemonView_Evolution::onActivate END \n";
 }
 
@@ -346,6 +352,8 @@ void PokedexActivity_PokemonView_Evolution::onButtonDown(SDL_Keycode sym, Uint16
     }
 }
 void PokedexActivity_PokemonView_Evolution::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+    // Play the sound effect
+    Mix_PlayChannel(1, sEffect, 0);
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_LOCATION);
 }
 void PokedexActivity_PokemonView_Evolution::onButtonRight(SDL_Keycode sym, Uint16 mod) {}

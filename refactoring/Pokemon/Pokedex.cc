@@ -122,7 +122,7 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
 
-    this->font = TTF_OpenFont("res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf", 22);
+    this->font = TTF_OpenFont("res/font/pokemon-frlg/pokemon-frlg.ttf", 34);
     if (this->font == NULL) {
         std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -134,9 +134,10 @@ bool Pokedex::onSDLInit() {
         SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00)
     );
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
-        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-    }
+    //if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+    //    printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+    //}
+    //Mix_Volume(-1, 32); 
 
     std::cout << "onSDLInit: end" << std::endl;
 

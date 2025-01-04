@@ -20,6 +20,7 @@ private:
         * pokeHeightSurface, * pokeWeightSurface,
         * flavorTextSurface, * pokeGenusSurface;
     TTF_Font* fontSurface;
+    
 
 private:
     PokedexActivity_PokemonView_Info();

@@ -17,7 +17,7 @@ private:
 
     TTF_Font* fontSurface;
 
-    Mix_Chunk* sEffect;
+    Mix_Chunk* sEffect, sEffect_OnB;
 
     SDL_Color color, highlightColor;
 

@@ -41,12 +41,17 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
+    Mix_Chunk* sEffect_OnStart = Mix_LoadWAV("res/audio/sound_effects/list_start.wav");
+    if (!sEffect_OnStart) {
+        std::cerr << "Failed to load sound sEffect_OnStart: " << Mix_GetError() << std::endl;
+    }
+    // Play the sound effect
+    Mix_PlayChannel(-1, sEffect_OnStart, 0);
+
     sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
-        exit(EXIT_FAILURE);
     }
-    Mix_Volume(-1, 44);
 
     std::cout << "PokedexActivityList::onActivate END \n";
 }
@@ -310,8 +315,14 @@ void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityList::onButtonB(SDL_Keycode sym, Uint16 mod) {
-    ////Set pokemon identifier for PokedexDB
+    Mix_Chunk* sEffect_OnBack = Mix_LoadWAV("res/audio/sound_effects/list_back.wav");
+    if (!sEffect_OnBack) {
+        std::cerr << "Failed to load sound sEffect_OnBack: " << Mix_GetError() << std::endl;
+    }
+    // Play the sound effect
+    Mix_PlayChannel(-1, sEffect_OnBack, 0);
 
+    ////Set pokemon identifier for PokedexDB
     PokedexActivityManager::back();
 }
 

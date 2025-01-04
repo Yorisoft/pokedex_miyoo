@@ -15,6 +15,8 @@ private:
     int selectedIndex, offset, itemHeight;
     std::string fontPath;
 
+
+    Mix_Chunk* pokeCry, * sEffect;
     SDL_Surface* backgroundSurface,
         * pokeSpriteSurface, * pokeIDSurface, * pokeNameSurface,
         * pokeMethodSurface, * listEntrySurface ;

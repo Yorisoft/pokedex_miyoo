@@ -21,7 +21,7 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 void PokedexActivityMenu::onActivate() {
     color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
 
-    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
+    fontPath = "res/font/pokemon-frlg/pokemon-frlg.ttf";
 
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
@@ -37,7 +37,7 @@ void PokedexActivityMenu::onActivate() {
     }
     game = (*dbResults)[selectedIndex];
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 32);
+    fontSurface = TTF_OpenFont(fontPath.c_str(), 46);
     if (!fontSurface) {
         std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -45,9 +45,7 @@ void PokedexActivityMenu::onActivate() {
     sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
-        exit(EXIT_FAILURE);
     }
-    Mix_Volume(-1, 44);
 
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }

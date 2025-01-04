@@ -16,7 +16,7 @@ PokedexActivitySetting::PokedexActivitySetting() :
     optionItems(nullptr),
     optionNameSurface(nullptr),
     settingOptionsSurface(nullptr),
-    fontPath("res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf"),
+    fontPath("res/font/pokemon-frlg/pokemon-frlg.ttf"),
     selectedSettingIndex(0),
     selectedOptionIndex(0),
     offset(0),
@@ -343,6 +343,17 @@ void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
 
     // set glabal variables based on user config
     PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
+
+    //PokedexDB::setAudioID(userSettingMap["AUDIO"]);
+    if (userSettingMap["AUDIO"] == 1) {
+        Mix_CloseAudio();
+    }
+    else {
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+            printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        }
+        Mix_Volume(-1, 32);
+    }
 
     PokedexActivityManager::back();
 }
