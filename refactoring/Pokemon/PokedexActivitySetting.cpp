@@ -42,7 +42,7 @@ void PokedexActivitySetting::onActivate() {
     languages = PokedexDB::executeSQL(&SQL_getLanguageVersion);
 
     // TODO - COMMENT OUT WHEN DONE TESTING
-    languages->insert(languages->begin(), { "0", "SELECT" });
+    //languages->insert(languages->begin(), { "0", "SELECT" });
 
     // SETTING OPTIONS: audioOptions
     audioOptions.push_back({ "0", "ON" });

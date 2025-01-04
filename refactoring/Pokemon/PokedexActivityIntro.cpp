@@ -50,6 +50,16 @@ void PokedexActivityIntro::onLoop() {
             loadUserConfig(userConfigFile);
              //set glabal variables based on user config
             PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
+
+            if (userSettingMap["AUDIO"] == 1) {
+                Mix_CloseAudio();
+            }
+            else {
+                if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+                    printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+                }
+                Mix_Volume(-1, 32);
+            }
              
              //call next activity
             PokedexActivityManager::push(APPSTATE_POKEDEX_MENU);
