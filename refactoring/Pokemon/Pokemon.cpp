@@ -12,7 +12,11 @@ Pokemon::Pokemon() {
 
 	// set id
 	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
-	setID(std::stoi((*results)[0][1]));
+	setID(std::stoi((*results)[0][0]));
+
+	// set regionalID
+	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
+	setRegionalID(std::stoi((*results)[0][1]));
 
 	// set name;
 	results = PokedexDB::executeSQL(&SQL_getPokeName);
@@ -171,6 +175,14 @@ void Pokemon::setID(const int ID) {
 
 unsigned short Pokemon::getID() const {
 	return this->id;
+}
+
+void Pokemon::setRegionalID(const int regional_id) {
+	this->regionalID = static_cast<unsigned short>(regional_id);
+}
+
+unsigned short Pokemon::getRegionalID() const {
+	return this->regionalID;
 }
 
 void Pokemon::setName(const std::string& name) {

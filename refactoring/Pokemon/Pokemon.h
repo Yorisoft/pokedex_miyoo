@@ -16,7 +16,7 @@ private:
 		typeA, typeB,	
 		flavorText;
 	unsigned short
-		id, 
+		id, regionalID, 
 		healthPoint, attack, defense,
 		specialAttack, specialDefense, speed,
 		evolutionChainID, evolvesFromSpeciesID;
@@ -37,6 +37,7 @@ public:
 
 	// setters
 	void setID(const int);
+	void setRegionalID(const int);
 	void setName(const std::string&);
 	void setGenus(const std::string&);
 	void setTypes(const std::vector<std::string>&);
@@ -59,6 +60,7 @@ public:
 
 	// getters
 	unsigned short getID() const;
+	unsigned short getRegionalID() const;
 	std::string getName() const;
 	std::string getGenus() const;
 	std::vector<std::string> getTypes();
