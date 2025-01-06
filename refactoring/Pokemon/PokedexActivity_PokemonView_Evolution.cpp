@@ -298,12 +298,20 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke method
     std::string pokeMethod = (*evoChain)[offset + i][4];
-    if (pokeMethod == "level-up") {
+    if (pokeMethod == "level-up" && (*evoChain)[offset + i][5] != "NULL") {
         pokeMethod = "Lv. " + (*evoChain)[offset + i][5];
 
     }
     if (pokeMethod == "use-item") {
-        pokeMethod = (*evoChain)[offset + i][6];
+        pokeMethod = "Item:" + (*evoChain)[offset + i][6];
+
+    }
+    if (pokeMethod == "level-up" && (*evoChain)[offset + i][7] != "NULL") {
+        pokeMethod = "Time: " + (*evoChain)[offset + i][7];
+
+    }
+    if (pokeMethod == "level-up" && (*evoChain)[offset + i][8] != "NULL") {
+        pokeMethod = "Happiness: " + (*evoChain)[offset + i][8];
 
     }
     pokeMethodSurface = TTF_RenderUTF8_Blended(
