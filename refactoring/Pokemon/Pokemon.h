@@ -22,7 +22,7 @@ private:
 		evolutionChainID, evolvesFromSpeciesID;
 
 	std::vector<double>* genderRates;	
-	std::vector<std::string> *abilities;
+	std::vector<std::vector<std::string>>* abilities;
 	std::vector<std::vector<std::string>>* routes;
 	std::vector<std::vector<std::string>>* evoChain;
 	
@@ -52,7 +52,7 @@ public:
 	void setSpecialAttack(const unsigned short);
 	void setSpecialDefense(const unsigned short);
 	void setSpeed(const unsigned short);
-	void setAbilities(const std::vector<std::string>);
+	void setAbilities(std::vector<std::vector<std::string>>&);
 	void setRoutes(const std::vector<std::vector<std::string>>);
 	void setEvolutionChainID(const unsigned short);
 	void setEvolutionChain(const std::vector<std::vector<std::string>>);
@@ -75,7 +75,7 @@ public:
 	unsigned short getSpecialAttack() const;
 	unsigned short getSpecialDefense() const;
 	unsigned short getSpeed() const;
-	std::vector<std::string>* getAbilities() const;
+	std::vector<std::vector<std::string>>* getAbilities() const;
 	std::vector<std::vector<std::string>>* getRoutes() const;
 	unsigned short getEvolutionChainID() const;
 	std::vector<std::vector<std::string>>* getEvolutionChain() const;

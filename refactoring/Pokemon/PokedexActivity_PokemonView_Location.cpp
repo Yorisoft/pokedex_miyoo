@@ -264,6 +264,32 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     SDL_FreeSurface(routeNameSurface);
 
     /////////////////////////////////////////////////////////////////////////////
+    //Render item subTitle
+    
+    // make all upper case
+    std::string encounterSubLocation = route[7];
+    for (int i = 0; i < encounterSubLocation.size(); i++) {
+        encounterSubLocation[i] = std::toupper(encounterSubLocation[i]);
+    }
+    SDL_Surface* routeSubLocationSurface = TTF_RenderUTF8_Blended(
+        font,
+        encounterSubLocation.c_str(),
+        offset + i == selectedIndex ? highlightColor : color
+    );
+    if (routeSubLocationSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: routeSubLocationSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect routeSubLocRect;
+    routeSubLocRect.x = listEntryRect.x + (listEntryRect.w / 2) - (routeSubLocationSurface->w / 2);
+    routeSubLocRect.y = moveNameRect.y + moveNameRect.h;
+    routeSubLocRect.w = static_cast<int>(routeSubLocationSurface->w);
+    routeSubLocRect.h = static_cast<int>(routeSubLocationSurface->h);
+    PokeSurface::onDrawScaled(surf_display, routeSubLocationSurface, &routeSubLocRect);
+    SDL_FreeSurface(routeSubLocationSurface);
+
+    /////////////////////////////////////////////////////////////////////////////
     // Render method
     std::string methodString = route[2];
     routeMethodSurface = TTF_RenderUTF8_Blended(
@@ -285,8 +311,8 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     SDL_FreeSurface(routeMethodSurface);
  
     /////////////////////////////////////////////////////////////////////////////
-    // Render rate
-    std::string rateString =  (std::to_string((std::stoi(route[5])) / 2) + '%');
+    // Encounter rate
+    std::string rateString =  route[5] + '%';
     routeRateSurface = TTF_RenderUTF8_Blended(
         font,
         rateString.c_str(),

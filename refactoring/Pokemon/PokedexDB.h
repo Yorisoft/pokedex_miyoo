@@ -22,7 +22,9 @@ private:
 	static std::string gameIdentifier;
 	static int regionID;
 	static int versionGroupID;
+	static int versionID;
 	static int generationID;
+    static int pokemonID;
     static int moveID;
 	static int evoChainID;
 	static std::string pokemonIdentifier;
@@ -46,6 +48,8 @@ public:
 	static void setRegionID(int);
 	static void setGenerationID(int);
 	static void setVersionGroupID(int);
+	static void setVersionID(int);
+	static void setPokemonID(int);
 	static void setMoveID(int);
 	static void setEvoChainID(int);
 	static void setAudioID(int);

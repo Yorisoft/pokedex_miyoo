@@ -30,6 +30,7 @@ void PokedexActivity_PokemonView_Info::onActivate() {
     std::vector<double>* genderRates = pokemon->getGenderRates();
 
     std::cout << "ID: " << pokemon->getID() << '\n';
+    std::cout << "Regional ID: " << pokemon->getRegionalID() << '\n';
     std::cout << "Name: " << pokemon->getName() << '\n';
     std::cout << "Types: " << pokemon->getTypes()[0] << " | " << pokemon->getTypes()[1] << '\n';
     std::cout << "Genus: " << pokemon->getGenus() << '\n';
@@ -40,8 +41,8 @@ void PokedexActivity_PokemonView_Info::onActivate() {
 
 
     std::cout << "Gender Ratio: " << '\n';
-    std::cout << "Male: " << (*genderRates)[0] << '\n';
-    std::cout << "Female: " << (*genderRates)[1] << '\n';
+    std::cout << "Female: " << (*genderRates)[0] << '\n';
+    std::cout << "Male: " << (*genderRates)[1] << '\n';
 
 
     // make it a 3 digit
@@ -181,7 +182,7 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display, T
     // Render Item ID
     // make it a 3 digit
     std::stringstream formattedID;
-    formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
+    formattedID << std::setw(3) << std::setfill('0') << pokemon->getRegionalID();
     std::string pokeID = formattedID.str();
 
     pokeIDSurface = TTF_RenderUTF8_Blended(
@@ -273,7 +274,7 @@ bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display, TTF_F
     std::vector<double>* genderRates = pokemon->getGenderRates();
 
     std::stringstream iss;
-    iss << (*genderRates)[0] << "/" << (*genderRates)[1];
+    iss << (*genderRates)[1] << "/" << (*genderRates)[0];
     std::string genderRatesStr = iss.str();
     SDL_Surface* pokeGenderSurface = TTF_RenderUTF8_Blended(
         font,

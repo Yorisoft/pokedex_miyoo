@@ -6,16 +6,14 @@ Pokemon::Pokemon() {
 	std::vector<std::vector<std::string>>* results;
 
 	this->genderRates = new std::vector<double>();
-	this->abilities = new std::vector<std::string>();
+	this->abilities = new std::vector<std::vector<std::string>>();
 	this->routes = new std::vector<std::vector<std::string>>();
 	this->evoChain = new std::vector<std::vector<std::string>>();
 
 	// set id
 	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
 	setID(std::stoi((*results)[0][0]));
-
 	// set regionalID
-	results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
 	setRegionalID(std::stoi((*results)[0][1]));
 
 	// set name;
@@ -51,12 +49,9 @@ Pokemon::Pokemon() {
 	}
 	setBasicStats(stats);
 
-	// set abilities;
-	//results = PokedexDB::executeSQL(&SQL_getPokeGenderRates);
-	//for (std::vector<std::string> stat : *results) {
-	//	stats->push_back(std::stoi(stat[0]));
-	//}
-	//setGenderRates(std::stoi((*results)[0][0]));
+	// //set abilities;
+	results = PokedexDB::executeSQL(&SQL_getPokeAbilities);
+	setAbilities(*results);
 
 	// set routes;
 	results = PokedexDB::executeSQL(&SQL_getPokeRoutes);
@@ -121,15 +116,15 @@ void Pokemon::setMemberVaribles(std::vector<std::vector<std::string>>* pokemon, 
 	if((*pokemon)[0][6] != "NULL" && (*pokemon)[0][6] != "None" )
 		this->setHeight(std::stoi((*pokemon)[0][6]));
 
-	//set abilities
-	std::vector<std::string> pAbilities;
-	for (int i = 7; i <= 9; i++) {	
-		if ((*pokemon)[0][i] != "NULL" && (*pokemon)[0][i] != "None") {
-			pAbilities.push_back((*pokemon)[0][i]);
-		}
-	}
-	//abilities(new std::vector<std::string>());
-	this->setAbilities(pAbilities);
+	////set abilities
+	//std::vector<std::vector<std::string>>* pAbilities;
+	//for (int i = 7; i <= 9; i++) {	
+	//	if ((*pokemon)[0][i] != "NULL" && (*pokemon)[0][i] != "None") {
+	//		pAbilities.push_back((*pokemon)[0][i]);
+	//	}
+	//}
+	////abilities(new std::vector<std::string>());
+	//this->setAbilities(pAbilities);
 
 	//set pokemon gender rates
 	//pass gender rate ID
@@ -254,17 +249,34 @@ std::string Pokemon::getHeight() const {
 	return this->height;
 }
 
-void Pokemon::setAbilities(const std::vector<std::string> a) {
-	if (!(*this->abilities).empty()) {
-		(*this->abilities).clear();
-	}
-
+void Pokemon::setAbilities(std::vector<std::vector<std::string>>& a) {
+	abilities->clear();
 	for (int i = 0; i < a.size(); i++) {
-		(*this->abilities).push_back(a[i]);
+        std::string replacement = " "; 
+        std::string result = a[i][1];
+        size_t pos = 0;
+        while ((pos = result.find("\n", pos)) != std::string::npos) {
+            result.replace(pos, 1, replacement);
+            pos += replacement.length();
+        }
+
+        pos = 0;
+        while ((pos = result.find("\r", pos)) != std::string::npos) {
+            result.replace(pos, 1, replacement);
+            pos += replacement.length();
+        }
+
+        pos = 0;
+        while ((pos = result.find("\f", pos)) != std::string::npos) {
+            result.replace(pos, 1, replacement);
+            pos += replacement.length();
+        }
+		a[i][1] = result;
 	}
+	(*abilities) = a;
 }
 
-std::vector<std::string>* Pokemon::getAbilities() const {
+std::vector<std::vector<std::string>>* Pokemon::getAbilities() const {
 	return this->abilities;
 }
 

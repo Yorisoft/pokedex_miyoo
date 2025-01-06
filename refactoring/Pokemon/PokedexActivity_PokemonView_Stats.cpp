@@ -177,7 +177,6 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display, 
 bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, TTF_Font* font) {
     std::stringstream iss;
     std::vector<unsigned short> stats = pokemon->getBasicStats();
-    std::vector<std::string> statFileNames = { "HP", "Attack", "Defense", "Special_Attack", "Special_Defense", "Speed" };
     std::vector<std::vector<std::string>>* statNames = PokedexDB::executeSQL(&SQL_getStatNames);
 
     for (int i = 0; i < stats.size(); ++i) {
@@ -238,6 +237,48 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, T
         PokeSurface::onDrawScaled(surf_display, statsSurface, &statsRect);
         SDL_FreeSurface(statsSurface);
 
+    }
+
+    std::vector<std::vector<std::string>>* abilities = pokemon->getAbilities();
+    if (!abilities->empty()) {
+        std::string ability = (*abilities)[0][0] + "    " + (*abilities)[0][1];
+        SDL_Surface* abilitySurface = TTF_RenderUTF8_Blended_Wrapped(
+            font,
+            ability.c_str(),
+            { 96, 96, 96 },
+            520
+        );
+
+        int topBorder = 80, spacing = 14;
+        SDL_Rect abilityRect;
+        abilityRect.x = 130;
+        abilityRect.y = WINDOW_HEIGHT/2 + 80;
+        abilityRect.w = abilitySurface->w;
+        abilityRect.h = abilitySurface->h;
+
+        PokeSurface::onDrawScaled(surf_display, abilitySurface, &abilityRect);
+        SDL_FreeSurface(abilitySurface);
+
+        if (abilities->size() > 1) { // has hidden ability
+            ability = (*abilities)[1][0] + "    " + (*abilities)[1][1];
+            SDL_Surface* H_AbilitySurface = TTF_RenderUTF8_Blended_Wrapped(
+                font,
+                ability.c_str(),
+                { 96, 96, 96 },
+                620
+            );
+
+            int topBorder = 80, spacing = 14;
+            SDL_Rect h_abilityRect;
+            h_abilityRect.x = abilityRect.x;
+            h_abilityRect.y = WINDOW_HEIGHT - 80;
+            h_abilityRect.w = H_AbilitySurface->w;
+            h_abilityRect.h = H_AbilitySurface->h;
+
+            PokeSurface::onDrawScaled(surf_display, H_AbilitySurface, &h_abilityRect);
+            SDL_FreeSurface(H_AbilitySurface);
+
+        }
     }
 
     return true;

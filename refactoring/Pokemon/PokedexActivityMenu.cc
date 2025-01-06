@@ -197,6 +197,7 @@ void PokedexActivityMenu::onButtonLeft(SDL_Keycode sym, Uint16 mod) {}
 void PokedexActivityMenu::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
 
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
+    PokedexDB::setVersionID(std::stoi(game[0]));
     PokedexDB::setGameIdentifier(game[1]);
     PokedexDB::setRegionID(std::stoi(game[3]));
     PokedexDB::setGenerationID(std::stoi(game[5]));

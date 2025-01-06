@@ -307,6 +307,7 @@ void PokedexActivityList::onButtonRight(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
     pokemon = (*dbResults)[selectedIndex];
+    PokedexDB::setPokemonID(std::stoi(pokemon[0]));
     PokedexDB::setPokemonIdentifier(pokemon[1]);
 
     ////Call next activity
