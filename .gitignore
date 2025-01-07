@@ -1,20 +1,5 @@
-#	ignore pokemore artwork
-**.png
-**.gif
-**libSDL2**
-**libcurl.**
-**/curl-7.64.0
-
+#	ignore user_congif
 **/user_config
-!refactoring/Pokemon/res/
-refactoring/Pokemon/res/animated
-!Source/union-miyoomini-toolchain/workspace/pokedex/res/types/*.png
-!Source/union-miyoomini-toolchain/workspace/pokedex/res/icons/icon/*.png
-!Source/windows-visual-studio/Pokedex/res/types/*.png
-!Source/windows-visual-studio/Pokedex/res/icons/icon/*.png
-!Source/union-miyoomini-toolchain/workspace/build/lib/
-!App/Pokedex/res/types/*.png
-!App/Pokedex/res/icons/icon/*.png
 
 
 #	ignore build files
@@ -34,22 +19,8 @@ refactoring/Pokemon/res/animated
 **packages.config
 **/gtest
 **/src
+**libSDL2**
+**/logs
 
-# Source/union-miyoomini-toolchain/workspace/pokedex/build/*
-# Source/windows-visual-studio/Pokedex/Debug/*
-# Source/windows-visual-studio/Pokedex/.vs/*
-# Source/windows-visual-studio/Pokedex/x64/*
-# Source/union-miyoomini-toolchain/workspace/curl-7.64.0/out/
-# Source/union-miyoomini-toolchain/workspace/pokedex/out/
-# .vs
-# Source/union-miyoomini-toolchain/.build
-Source/union-miyoomini-toolchain/workspace/pokedex/pokedex-copy.cpp
-Source/union-miyoomini-toolchain/workspace/pokedex/pokedex-copy1.cpp
-
-#ignoring audio files untill ready.
-Source/union-miyoomini-toolchain/workspace/pokedex/DownloadAudio
-Source/union-miyoomini-toolchain/workspace/pokedex/audio_downloader.cpp
-Source/union-miyoomini-toolchain/workspace/pokedex/res/audio/
-Source/windows-visual-studio/Pokedex/res/audio/
-**/test.cpp
-
+#ignore gifs/webm untill ready
+**.gif
