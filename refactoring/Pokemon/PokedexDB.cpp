@@ -1,19 +1,20 @@
 #include "PokedexDB.h"
 
 bool PokedexDB::isTestMode = false;
+
 const std::string PokedexDB::MAIN_DB_PATH = "res/db/pokedex.sqlite";
 const std::string PokedexDB::TEST_DB_PATH = "../res/db/pokedex.sqlite";
-std::string PokedexDB::gameIdentifier = "red";
+
 std::string PokedexDB::pokemonIdentifier = "charmander";
 int PokedexDB::languageID = 9;
-int PokedexDB::regionID = 1;
-int PokedexDB::generationID = 1;
 int PokedexDB::versionID = 1;
 int PokedexDB::versionGroupID = 1;
+int PokedexDB::generationID = 1;
 int PokedexDB::pokemonID = 1;
 int PokedexDB::moveID = 1;
 int PokedexDB::evoChainID = 1;
 int PokedexDB::audioID = 0;
+
 std::vector<std::vector<std::string>>* PokedexDB::results;
 sqlite3* PokedexDB::db;
 int PokedexDB::rc;   
@@ -46,17 +47,16 @@ void PokedexDB::enableTestMode(bool isTest) { // Used for changing directory pat
     isTestMode = isTest;
 }
 
+// online docs say this is the modern and improved way of querying db using c++/sqlite
 std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* SQL_STATEMENT) {
     std::string SQLstatement = *SQL_STATEMENT;
 
-    // Open SQLite database
     rc = openDB();
     if (rc != SQLITE_OK) {
         std::cerr << "Failed to open database: " << sqlite3_errmsg(db) << std::endl;
         return {};
     }
 
-    // Prepare the statement
     sqlite3_stmt* stmt;
     rc = sqlite3_prepare_v2(db, SQL_STATEMENT->c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -68,15 +68,11 @@ std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* 
     // Bind parameters
     sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":language_id"), languageID);
     sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":generation_id"), generationID);
-    sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":region_id"), regionID);
     sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":version_id"), versionID);
     sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":version_group_id"), versionGroupID);
-    sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":game_version"), gameIdentifier.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":pokemon_id"), pokemonID);
-    sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":pokemon_identifier"), pokemonIdentifier.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, ":evo_chain_id"), evoChainID);
 
-    // Ensure results is initialized
     if (!results) {
         results = new std::vector<std::vector<std::string>>();
     }
@@ -105,6 +101,7 @@ std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* 
     return results;
 }
 
+// keeping my way of doing it untill I fully understand both methods
 //std::vector<std::vector<std::string>>* PokedexDB::executeSQL(const std::string* SQL_STATEMENT) {
 //    // change sql statement to be language specific
 //    // find position of string to replace with languageVersion
@@ -219,14 +216,6 @@ void PokedexDB::setLanguageID(int version_id) {
     languageID = version_id;
 }
 
-void PokedexDB::setGameIdentifier(std::string& version_name) {
-    gameIdentifier = version_name;
-}
-
-void PokedexDB::setRegionID(int region_id) {
-    regionID = region_id;
-}
-
 void PokedexDB::setVersionID(int version_id) {
     versionID = version_id;
 }
@@ -241,6 +230,7 @@ void PokedexDB::setVersionGroupID(int group_version_id) {
 void PokedexDB::setPokemonID(int pokemon_id) {
     pokemonID = pokemon_id;
 }
+
 void PokedexDB::setMoveID(int move_ID) {
     moveID = move_ID;
 }

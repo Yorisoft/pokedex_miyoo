@@ -4,14 +4,12 @@
 PokedexActivityMenu PokedexActivityMenu::instance;
 
 PokedexActivityMenu::PokedexActivityMenu() :
-    gameNameSurface(nullptr),
-    listEntrySurface(nullptr),
-    listBackgroundSurface(nullptr),
+    dbResults(nullptr),
     fontSurface(nullptr),
     sEffect(nullptr),
-    dbResults(nullptr),
     selectedIndex(0),
-    offset(0)
+    offset(0),
+    itemHeight(0)
 {
 }
 
@@ -19,14 +17,13 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 }
 
 void PokedexActivityMenu::onActivate() {
+    std::cout << "PokedexActivityMenu::onActivate START \n";
+
     color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
-
-    fontPath = "res/font/pokemon-dppt/pokemon-dppt.ttf";
-
+    
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
-//////////////////////////////////////////////////////////////////////////////////////
-    std::cout << "PokedexActivityMenu::onActivate START \n";
+    fontPath = "res/font/pokemon-dppt/pokemon-dppt.ttf";
 
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
     for (std::vector<std::string>& game : *dbResults) {
@@ -51,43 +48,28 @@ void PokedexActivityMenu::onActivate() {
 }
 
 void PokedexActivityMenu::onDeactivate() {
-    if (fontSurface) {
+    if (fontSurface) 
         TTF_CloseFont(fontSurface);
-    }
     fontSurface = nullptr;
 
-    // Free the sound effect and close SDL_mixer
     if(sEffect)
         Mix_FreeChunk(sEffect);
     sEffect = nullptr;
 
-    gameNameSurface = nullptr, 
-        listEntrySurface = nullptr, 
-        listBackgroundSurface = nullptr;
+    delete dbResults;
+    dbResults = nullptr;
 
-
-    color = { }, 
-        highlightColor = { };
-
-    //if (dbResults) {
-    //    delete dbResults; 
-    //    dbResults = nullptr; 
-    //}
+    color = { }, highlightColor = { };
 
     game.clear();
-
     fontPath.clear();
 
-    selectedIndex = 0,
-        offset = 0;
-
-    itemHeight = 0;
+    selectedIndex = 0, offset = 0, itemHeight = 0;
 }
 
 void PokedexActivityMenu::onLoop() {
     //Set Game version and regional pokedex ID for PokedexDB
     game = (*dbResults)[selectedIndex];
-
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
@@ -95,9 +77,9 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     // Clear the display surface
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-    // Render List Items
+    // Background
     std::string backgroundImageFile = "res/icons/icon/menu_background.png";
-    listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
+    SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listBackgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -112,10 +94,8 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     PokeSurface::onDrawScaled(surf_display, listBackgroundSurface, &backgroundRect);
     SDL_FreeSurface(listBackgroundSurface);
 
-    // Render List Items
+    // List Items
     for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
-        //game = (*dbResults)[offset + i];
-        // Render list items
         if (!renderListItems(surf_display, i)) {
             exit(EXIT_FAILURE);
         }
@@ -126,7 +106,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     //List item background
     std::string backgroundImageFile = "res/icons/icon/menu_item_background_";
     offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
-    listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
+    SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listEntrySurface == NULL) {
         std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -140,25 +120,25 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);
 
-    //List item title
-    gameNameSurface = TTF_RenderUTF8_Blended(
+    //List item title ( Game Title )
+    SDL_Surface* versionTitleSurface = TTF_RenderUTF8_Blended(
         fontSurface,
         (*dbResults)[offset + i][2].c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
-    if (gameNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: gameNameSurface " << TTF_GetError() << std::endl;
+    if (versionTitleSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: versionTitleSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
     int leftBorder = 15;
     SDL_Rect gameVersionRect;
-    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (gameNameSurface->w / 2);
-    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (gameNameSurface->h / 2) - 10;
-    gameVersionRect.w = gameNameSurface->w;
-    gameVersionRect.h = gameNameSurface->h;
-    PokeSurface::onDraw(surf_display, gameNameSurface, &gameVersionRect);
-    SDL_FreeSurface(gameNameSurface);
+    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (versionTitleSurface->w / 2);
+    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (versionTitleSurface->h / 2) - 10;
+    gameVersionRect.w = versionTitleSurface->w;
+    gameVersionRect.h = versionTitleSurface->h;
+    PokeSurface::onDraw(surf_display, versionTitleSurface, &gameVersionRect);
+    SDL_FreeSurface(versionTitleSurface);
 
     return true;
 }
@@ -198,8 +178,6 @@ void PokedexActivityMenu::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
 
 void PokedexActivityMenu::onButtonA(SDL_Keycode sym, Uint16 mod) {
     PokedexDB::setVersionID(std::stoi(game[0]));
-    PokedexDB::setGameIdentifier(game[1]);
-    PokedexDB::setRegionID(std::stoi(game[3]));
     PokedexDB::setGenerationID(std::stoi(game[5]));
     PokedexDB::setVersionGroupID(std::stoi(game[7]));
 
@@ -249,6 +227,7 @@ void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
+
 void PokedexActivityMenu::onButtonStart(SDL_Keycode sym, Uint16 mod) {
     PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
 }

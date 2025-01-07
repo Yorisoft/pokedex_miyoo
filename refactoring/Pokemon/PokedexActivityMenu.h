@@ -7,21 +7,15 @@ class PokedexActivityMenu : public PokedexActivity {
 private:
     static PokedexActivityMenu instance;
 
-    std::vector<std::vector<std::string>>* dbResults;
-    std::vector<std::string> game;
-
-    SDL_Surface* gameNameSurface, *listEntrySurface,
-        *listBackgroundSurface;
-
-    TTF_Font* fontSurface;
-
-    Mix_Chunk* sEffect;
-
-    SDL_Color color;
-    SDL_Color highlightColor;
-
-    std::string fontPath;
     int selectedIndex, offset, itemHeight;
+    std::string fontPath;
+
+    std::vector<std::string> game;
+    std::vector<std::vector<std::string>>* dbResults;
+
+    SDL_Color color, highlightColor;
+    TTF_Font* fontSurface;
+    Mix_Chunk* sEffect;
 
     bool renderListItems(SDL_Surface* surf_display, int i);
 
@@ -41,15 +35,10 @@ public:
     ~PokedexActivityMenu();
 
     void onActivate();
-
     void onDeactivate();
-
     void onLoop();
-
     void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect);
-
     void onFreeze();
-
     static PokedexActivityMenu* getInstance();
 };
 

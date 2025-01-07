@@ -202,7 +202,7 @@ const std::string SQL_getPokeAbilities = R"(
         pa.pokemon_id = :pokemon_id
         AND an.local_language_id = :language_id
         AND aft.language_id = :language_id
-        AND vg.generation_id >= :generation_id  -- Ensure we only query from Generation 3 onwards
+        AND vg.generation_id = :generation_id
     GROUP BY
         an.name;
 )";

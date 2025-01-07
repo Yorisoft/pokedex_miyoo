@@ -7,25 +7,32 @@
 class PokedexActivity_PokemonView_Evolution : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Evolution instance;
-    std::vector<std::vector<std::string>>* evoChain;
-    std::vector<std::string> evo;
-
-    Pokemon* pokemon;
 
     int selectedIndex, offset, itemHeight;
     std::string fontPath;
 
+    std::vector<std::string> evo;
+    std::vector<std::vector<std::string>>* evoChain;
 
-    Mix_Chunk* pokeCry, * sEffect;
-    SDL_Surface* backgroundSurface,
-        * pokeSpriteSurface, * pokeIDSurface, * pokeNameSurface,
-        * pokeMethodSurface, * listEntrySurface ;
-    TTF_Font* fontSurface;
+    Pokemon* pokemon;
+
+    Mix_Chunk* sEffect, * sEffect_UpDown;
     SDL_Color color, highlightColor;
 
     void printPokeInfo();
     bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i);
     bool renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i);
+
+    void onButtonUp(SDL_Keycode, Uint16);
+    void onButtonDown(SDL_Keycode, Uint16);
+    void onButtonLeft(SDL_Keycode, Uint16);
+    void onButtonRight(SDL_Keycode, Uint16);
+    void onButtonA(SDL_Keycode, Uint16);
+    void onButtonB(SDL_Keycode, Uint16);
+    void onButtonR(SDL_Keycode, Uint16);
+    void onButtonL(SDL_Keycode, Uint16);
+    void onButtonSelect(SDL_Keycode, Uint16);
+    void onButtonStart(SDL_Keycode, Uint16);
 
 public:
     PokedexActivity_PokemonView_Evolution();
@@ -38,17 +45,5 @@ public:
     void onFreeze();
 
     static PokedexActivity_PokemonView_Evolution* getInstance();
-
-    void onButtonUp(SDL_Keycode, Uint16);
-    void onButtonDown(SDL_Keycode, Uint16);
-    void onButtonLeft(SDL_Keycode, Uint16);
-    void onButtonRight(SDL_Keycode, Uint16);
-    void onButtonA(SDL_Keycode, Uint16);
-    void onButtonB(SDL_Keycode, Uint16);
-    void onButtonR(SDL_Keycode, Uint16);
-    void onButtonL(SDL_Keycode, Uint16);
-    void onButtonSelect(SDL_Keycode, Uint16);
-    void onButtonStart(SDL_Keycode, Uint16);
 };
-
 #endif

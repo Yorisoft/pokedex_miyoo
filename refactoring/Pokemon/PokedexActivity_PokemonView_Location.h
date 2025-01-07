@@ -17,18 +17,10 @@ private:
     int selectedIndex, offset, itemHeight;
     std::string fontPath;
 
-    Mix_Chunk* pokeCry, * sEffect;
-    TTF_Font* fontSurface;
+    Mix_Chunk* sEffect, * sEffect_UpDown;
     SDL_Color color, highlightColor;
-    SDL_Surface* backgroundSurface,
-        * pokeIconSurface, * pokeNameSurface, 
-        * pokeType1Surface, * pokeType2Surface,
-        * listEntrySurface, 
-        * routeNameSurface, * routeMethodSurface, * routeRateSurface,
-        * routeLvlSurface, * routeSmrySurface;
 
     void printPokeInfo();
-
     bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font);
     bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
     bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);
@@ -55,7 +47,5 @@ public:
     void onFreeze();
 
     static PokedexActivity_PokemonView_Location* getInstance();
-
 };
-
 #endif

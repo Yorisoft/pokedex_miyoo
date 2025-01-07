@@ -19,8 +19,6 @@ private:
 	static const std::string TEST_DB_PATH;
 
 	static int languageID;
-	static std::string gameIdentifier;
-	static int regionID;
 	static int versionGroupID;
 	static int versionID;
 	static int generationID;

@@ -4,33 +4,32 @@
 PokedexActivityList PokedexActivityList::instance;
 
 PokedexActivityList::PokedexActivityList() : 
-    pokeNameSurface(nullptr),
-    pokeIconSurface(nullptr),
-    pokeType1Surface(nullptr),
-    pokeType2Surface(nullptr),
-    pokeIDSurface(nullptr),
-    listEntrySurface(nullptr),
-    listBackgroundSurface(nullptr),
-    fontSurface(nullptr),
-    sEffect(nullptr),
     dbResults(nullptr),
+    sEffect(nullptr),
+    sEffect_OnStart(nullptr),
+    sEffect_OnExit(nullptr),
     selectedIndex(0),
-    offset(0)
+    offset(0),
+    itemHeight(0)
 {
 }
 
 PokedexActivityList::~PokedexActivityList() {
+    //Cant delete in onDeactivate or auido will be cut short
+    // deleting here is not best practice, this will only ever be called once, 
+    // onActivate/Deactivate will be called many times.
+    if(sEffect_OnExit)
+        Mix_FreeChunk(sEffect_OnExit);
+    sEffect_OnExit = nullptr;
+
 }
 
 void PokedexActivityList::onActivate() {
-    itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
+    std::cout << "PokedexActivityList::onActivate START \n";
 
     color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
 
-    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
-
-//////////////////////////////////////////////////////////////////////////////////////
-    std::cout << "PokedexActivityList::onActivate START \n";
+    itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
 
     dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
     for (auto& pokemon : *dbResults) {
@@ -41,12 +40,17 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
-    Mix_Chunk* sEffect_OnStart = Mix_LoadWAV("res/audio/sound_effects/list_start.wav");
+    sEffect_OnStart = Mix_LoadWAV("res/audio/sound_effects/list_start.wav");
     if (!sEffect_OnStart) {
         std::cerr << "Failed to load sound sEffect_OnStart: " << Mix_GetError() << std::endl;
     }
     // Play the sound effect
     Mix_PlayChannel(-1, sEffect_OnStart, 0);
+
+    sEffect_OnExit = Mix_LoadWAV("res/audio/sound_effects/list_back.wav");
+    if (!sEffect_OnExit) {
+        std::cerr << "Failed to load sound sEffect_OnExit: " << Mix_GetError() << std::endl;
+    }
 
     sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
     if (!sEffect) {
@@ -57,37 +61,23 @@ void PokedexActivityList::onActivate() {
 }
 
 void PokedexActivityList::onDeactivate() {
+    if(sEffect_OnStart)
+        Mix_FreeChunk(sEffect_OnStart);
+    sEffect_OnStart = nullptr;
 
     if(sEffect)
         Mix_FreeChunk(sEffect);
     sEffect = nullptr;
 
-    pokeNameSurface = nullptr,
-        pokeIconSurface = nullptr,
-        pokeType1Surface = nullptr,
-        pokeType2Surface = nullptr,
-        pokeIDSurface = nullptr,
-        listEntrySurface = nullptr,
-        listBackgroundSurface = nullptr;
+    color = {  }, highlightColor = {  };
 
-    fontSurface = nullptr;
-
-    color = {  }, 
-        highlightColor = {  };
-
-    //if (dbResults) {
-    //    delete dbResults; 
-    //    dbResults = nullptr; 
-    //}
+    // why cant I delete this here ? 
+    //delete dbResults; 
+    //dbResults = nullptr; 
 
     pokemon.clear();
 
-    fontPath.clear();
-
-    selectedIndex = 0,
-        offset = 0;
-
-    itemHeight = 0;
+    selectedIndex = 0, offset = 0, itemHeight = 0;
 }
 
 void PokedexActivityList::onLoop() {
@@ -100,7 +90,7 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
 
     // Render List Items
     std::string backgroundImageFile = "res/icons/icon/pokedexList_background.png";
-    listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
+    SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listBackgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -157,7 +147,7 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, int i) {
     std::string backgroundImageFile = "res/icons/icon/menu_item_background_";
     offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
-    listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
+    SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
 
     if (listEntrySurface == NULL) {
         std::cout << "Unable to load surface: listEntrySurface " << SDL_GetError() << std::endl;
@@ -177,7 +167,7 @@ SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, in
 bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     std::string pokemonName = pokemon[1];
     std::string iconFile = "res/sprites/" + pokemonName + ".png";
-    pokeIconSurface = PokeSurface::onLoadImg(iconFile);
+    SDL_Surface*pokeIconSurface = PokeSurface::onLoadImg(iconFile);
 
     if (pokeIconSurface == NULL) {
         std::cout << "Unable to load surface: pokeIconSurface " << SDL_GetError() << std::endl;
@@ -194,7 +184,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     //List item types_1
     std::string pokemonType1 = pokemon[3];
     iconFile = "res/types/" + pokemonType1 + ".png";
-    pokeType1Surface = PokeSurface::onLoadImg(iconFile);
+    SDL_Surface* pokeType1Surface = PokeSurface::onLoadImg(iconFile);
 
     if (pokeType1Surface == NULL) {
         std::cout << "Unable to load surface: pokeIconSurface Type 1" << SDL_GetError() << std::endl;
@@ -212,7 +202,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     if (pokemon[4] != "NULL") {
         std::string pokemonType2 = pokemon[4];
         iconFile = "res/types/" + pokemonType2 + ".png";
-        pokeType2Surface = PokeSurface::onLoadImg(iconFile);
+        SDL_Surface* pokeType2Surface = PokeSurface::onLoadImg(iconFile);
 
         if (pokeType2Surface == NULL) {
             std::cout << "Unable to load surface: pokeIconSurface Type 1" << SDL_GetError() << std::endl;
@@ -231,7 +221,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
 }
 
 bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, TTF_Font* font, int i) {
-    pokeIDSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* pokeIDSurface = TTF_RenderUTF8_Blended(
         font,
         pokemon[0].c_str(),
         offset + i == selectedIndex ? highlightColor : color
@@ -252,11 +242,11 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
     
     //List pokemon name
     std::string name = pokemon[2];
-    for (int i = 0; i < name.size(); i++) {
+    /*for (int i = 0; i < name.size(); i++) {
         name[i] = std::toupper(name[i]);
-    }
+    }*/
 
-    pokeNameSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* pokeNameSurface = TTF_RenderUTF8_Blended(
         font,
         name.c_str(),
         offset + i == selectedIndex ? highlightColor : color
@@ -304,6 +294,7 @@ void PokedexActivityList::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
 
 void PokedexActivityList::onButtonRight(SDL_Keycode sym, Uint16 mod) {
 }
+
 void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
     ////Set pokemon identifier for PokedexDB
     pokemon = (*dbResults)[selectedIndex];
@@ -315,13 +306,10 @@ void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityList::onButtonB(SDL_Keycode sym, Uint16 mod) {
-    Mix_Chunk* sEffect_OnBack = Mix_LoadWAV("res/audio/sound_effects/list_back.wav");
-    if (!sEffect_OnBack) {
-        std::cerr << "Failed to load sound sEffect_OnBack: " << Mix_GetError() << std::endl;
-    }
     // Play the sound effect
-    Mix_PlayChannel(-1, sEffect_OnBack, 0);
-
+    Mix_PlayChannel(-1, sEffect_OnExit, 0);
+   // need to find a way to call Mix_CloseChunk() without stopping the audio immediately 
+   
     ////Set pokemon identifier for PokedexDB
     PokedexActivityManager::back();
 }
@@ -338,6 +326,7 @@ void PokedexActivityList::onButtonR(SDL_Keycode sym, Uint16 mod) {
         }
         // Play the sound effect
         Mix_PlayChannel(-1, sEffect, 0);
+        // need to find a way to call Mix_CloseChunk() without stopping the audio immediately 
     }
     else {
         // If we exceed the last item, set selectedIndex to the last item visible
@@ -358,6 +347,7 @@ void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod) {
         }
         // Play the sound effect
         Mix_PlayChannel(-1, sEffect, 0);
+        // need to find a way to call Mix_CloseChunk() without stopping the audio immediately 
     }
     else {
         selectedIndex = 0; // Ensure selectedIndex doesn't go below zero

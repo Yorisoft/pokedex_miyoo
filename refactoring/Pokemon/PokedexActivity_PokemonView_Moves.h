@@ -8,22 +8,15 @@ class PokedexActivity_PokemonView_Moves : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Moves instance;
 
-    Pokemon* pokemon;
-
-    std::vector<std::vector<std::string>>* dbResults;
-    std::vector<std::string> move;
-
     int selectedIndex, offset, itemHeight;
     std::string fontPath;
 
-    Mix_Chunk* pokeCry, * sEffect;
-    SDL_Surface* backgroundSurface, * listEntrySurface,
-        * moveNameSurface, * moveTypeSurface, * movePPSurface,
-        * moveMethodSurface, * pokeIconSurface,
-        * pokeType1Surface, * pokeType2Surface,
-        * pokeNameSurface, * moveClassSurface,
-        * movePwrSurface, * moveAcrySurface, * moveEffectSurface;
-    TTF_Font* fontSurface;
+    std::vector<std::vector<std::string>>* dbResults;
+    std::vector<std::string> move;
+    
+    Pokemon* pokemon;
+
+    Mix_Chunk* sEffect, *sEffect_UpDown;
     SDL_Color color, highlightColor;
 
     PokedexActivity_PokemonView_Moves();
@@ -32,7 +25,6 @@ private:
     bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
     std::string cleanString(std::string str);
 
-    
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);
     void onButtonLeft(SDL_Keycode, Uint16);
@@ -52,7 +44,5 @@ public:
     void onFreeze();
 
     static PokedexActivity_PokemonView_Moves* getInstance();
-
 };
-
 #endif

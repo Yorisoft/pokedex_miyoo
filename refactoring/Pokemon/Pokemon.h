@@ -1,12 +1,11 @@
 #ifndef POKEMON_H
 #define POKEMON_H
 
-#include<iostream>
 #include<iomanip>
 #include<cmath>
 #include<sstream>
-#include<string>
-#include<vector>
+#include"PokedexDB.h"
+#include"SQLstatements.h"
 
 class Pokemon {
 private:
@@ -26,13 +25,8 @@ private:
 	std::vector<std::vector<std::string>>* routes;
 	std::vector<std::vector<std::string>>* evoChain;
 	
-	void setMemberVaribles(std::vector<std::vector<std::string>>*, std::vector<std::vector<std::string>>*);
-
 public:
 	Pokemon();
-	Pokemon(std::string);
-	//Pokemon(std::string*);
-	Pokemon(std::vector<std::vector<std::string>>*);
 	~Pokemon();
 
 	// setters
@@ -80,7 +74,5 @@ public:
 	unsigned short getEvolutionChainID() const;
 	std::vector<std::vector<std::string>>* getEvolutionChain() const;
 	unsigned short getEvolvesFromSpeciesID() const;
-	
 };
-
 #endif // Pokemon.h

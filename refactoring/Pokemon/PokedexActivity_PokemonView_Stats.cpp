@@ -4,25 +4,9 @@
 PokedexActivity_PokemonView_Stats PokedexActivity_PokemonView_Stats::instance;
 
 PokedexActivity_PokemonView_Stats::PokedexActivity_PokemonView_Stats() : 
-pokeIDSurface(nullptr),
-pokeNameSurface(nullptr),
-pokeIconSurface(nullptr),
-backgroundSurface(nullptr),
-abilitySurface1(nullptr),
-abilitySurface2(nullptr),
-abilitySurfaceHidden(nullptr),
-statsSurface(nullptr),
-hpSurface(nullptr),
-atkSurface(nullptr),
-defSurface(nullptr),
-spAtkSurface(nullptr),
-spDefSurface(nullptr),
-spdSurface(nullptr),
 pokemon(nullptr),
-dbResults(nullptr),
-fontSurface(nullptr)
+dbResults(nullptr)
 {
-    fontPath = "res/font/pokemon-advanced-battle/pokemon-advanced-battle.ttf";
 };
 
 void PokedexActivity_PokemonView_Stats::onActivate() {
@@ -54,6 +38,12 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 
 void PokedexActivity_PokemonView_Stats::onDeactivate() {
     delete pokemon;
+    
+    // in order to play sounds asynchrounously with activity, 
+    // we cant call Mix_FreeChunk immediately after playing.. should probably make seperate class for this. 
+    /*if(sEffect)
+        Mix_FreeChunk(sEffect);
+    sEffect = nullptr;*/
 }
 
 void PokedexActivity_PokemonView_Stats::onLoop() {
@@ -67,7 +57,7 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
     // Render item info
     // Render background
     std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_2.png";
-    backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
+    SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -107,7 +97,7 @@ bool PokedexActivity_PokemonView_Stats::renderSprites(SDL_Surface* surf_display)
     // Render Item sprites
     std::string pokeName = PokedexDB::getPokemonIdentifier();
     std::string spritePath = "res/sprites/" + pokeName + ".png";
-    pokeIconSurface = PokeSurface::onLoadImg(spritePath);
+    SDL_Surface* pokeIconSurface = PokeSurface::onLoadImg(spritePath);
     if (pokeIconSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeIconSurface " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
@@ -132,7 +122,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display, 
     formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
     std::string pokeID = formattedID.str();
 
-    pokeIDSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* pokeIDSurface = TTF_RenderUTF8_Blended(
         font,
         pokeID.c_str(),
         { 96, 96, 96 }
@@ -152,7 +142,7 @@ bool PokedexActivity_PokemonView_Stats::renderNameID(SDL_Surface* surf_display, 
 
     // Render Item ID
     std::string pokeName = pokemon->getName();
-    pokeNameSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* pokeNameSurface = TTF_RenderUTF8_Blended(
         font,
         pokeName.c_str(),
         { 96, 96, 96 }
@@ -222,7 +212,7 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, T
 
         std::string statsToString = std::to_string(stats[i]);
 
-        statsSurface = TTF_RenderUTF8_Blended(
+        SDL_Surface* statsSurface = TTF_RenderUTF8_Blended(
             font,
             statsToString.c_str(),
             { 96, 96, 96 }
@@ -313,6 +303,7 @@ void PokedexActivity_PokemonView_Stats::onButtonRight(SDL_Keycode sym, Uint16 mo
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_MOVES);
     //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_MOVES);
 }
+
 void PokedexActivity_PokemonView_Stats::onButtonA(SDL_Keycode sym, Uint16 mod) {}
 
 void PokedexActivity_PokemonView_Stats::onButtonB(SDL_Keycode sym, Uint16 mod){
