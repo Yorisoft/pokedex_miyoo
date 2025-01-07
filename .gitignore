@@ -9,6 +9,7 @@
 **/x64
 **/out
 **/.build
+**.build
 **SDL2**
 !**/mksdl2**
 **.sln
