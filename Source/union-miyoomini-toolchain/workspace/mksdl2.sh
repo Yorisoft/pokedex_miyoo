@@ -198,7 +198,7 @@ cd SDL2_image-2.6.3
 ./autogen.sh
 ./configure CC=$CC --host=$HOST --build=$BUILD --prefix=$FIN_BIN_DIR &
 wait $!
-make clean && make -j$(( $(nproc) - 2 )) && make install -j$(( $(nproc) - 2 )) > ../logs/SDL2_image-2.2.0.txt 2>&1 &
+make clean && make -j$(( $(nproc) - 2 )) && make install -j$(( $(nproc) - 2 )) > ../logs/SDL2_image-2.6.3.txt 2>&1 &
 wait $!
 cd ..
 

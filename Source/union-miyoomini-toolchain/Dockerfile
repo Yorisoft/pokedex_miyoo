@@ -4,8 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=America/New_York
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get -y update && apt-get -y upgrade \
-	&& apt-get -y install \
+RUN apt-get -y update && apt-get -y install \
 	bc \
 	build-essential \
 	bzip2 \
@@ -30,12 +29,6 @@ WORKDIR /root
 COPY support .
 RUN ./setup-toolchain.sh
 RUN cat setup-env.sh >> .bashrc
-
-# Add the new code here
-RUN adduser --gecos "" --disabled-password --quiet jenkins
-RUN echo "jenkins:jenkins" | chpasswd
-RUN chown jenkins:jenkins /home/jenkins
-# End of the new code
 
 VOLUME /root/workspace
 WORKDIR /root/workspace
