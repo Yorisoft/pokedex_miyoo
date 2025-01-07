@@ -1,7 +1,6 @@
 #	ignore user_congif
 **/user_config
 
-
 #	ignore build files
 **/build
 **/Debug
@@ -17,9 +16,9 @@
 **.vcxproj.**
 **.user
 **/packages
-**packages.config
-**/gtest
-**/src
+#**packages.config
+#**/gtest
+#**/src
 **libSDL2**
 !**/App/Retrodex/lib/libSDL2**
 **/logs
