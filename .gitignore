@@ -5,8 +5,9 @@
 **libcurl.**
 **/curl-7.64.0
 
-!refactoring/Pokemon/res/types/*.png
-!refactoring/Pokemon/res/icons/icon/*.png
+**/user_config
+!refactoring/Pokemon/res/
+refactoring/Pokemon/res/animated
 !Source/union-miyoomini-toolchain/workspace/pokedex/res/types/*.png
 !Source/union-miyoomini-toolchain/workspace/pokedex/res/icons/icon/*.png
 !Source/windows-visual-studio/Pokedex/res/types/*.png
@@ -52,4 +53,3 @@ Source/union-miyoomini-toolchain/workspace/pokedex/res/audio/
 Source/windows-visual-studio/Pokedex/res/audio/
 **/test.cpp
 
-**/user_config
