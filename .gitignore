@@ -25,3 +25,5 @@
 
 #ignore gifs/webm untill ready
 **.gif
+
+Jenkinsfile
