@@ -1,22 +1,29 @@
-#	ignore pokemore artwork
-*.png
-*.gif
-
-!Source/union-miyoomini-toolchain/workspace/pokedex/res/types/*.png
-!Source/union-miyoomini-toolchain/workspace/pokedex/res/icons/icon/*.png
-!Source/windows-visual-studio/Pokedex/res/types/*.png
-!Source/windows-visual-studio/Pokedex/res/icons/icon/*.png
-!App/Pokedex/res/types/*.png
-!App/Pokedex/res/icons/icon/*.png
+#	ignore user_congif
+**/user_config
 
 #	ignore build files
-Source/union-miyoomini-toolchain/workspace/pokedex/build/*
-Source/windows-visual-studio/Pokedex/Debug/*
-Source/windows-visual-studio/Pokedex/.vs/*
-Source/windows-visual-studio/Pokedex/x64/*
-Source/union-miyoomini-toolchain/workspace/curl-7.64.0/out/
-Source/union-miyoomini-toolchain/workspace/pokedex/out/
-.vs
-Source/union-miyoomini-toolchain/.build
-Source/union-miyoomini-toolchain/workspace/pokedex/pokedex-copy.cpp
-Source/union-miyoomini-toolchain/workspace/pokedex/pokedex-copy1.cpp
+**/build
+**/Debug
+**/.vs
+**/x64
+**/out
+**/.build
+**.build
+**SDL2**
+!**/mksdl2**
+**.sln
+**.vcxproj
+**.vcxproj.**
+**.user
+**/packages
+#**packages.config
+#**/gtest
+#**/src
+**libSDL2**
+!**/App/Retrodex/lib/libSDL2**
+**/logs
+
+#ignore gifs/webm untill ready
+**.gif
+
+Jenkinsfile

@@ -1,11 +1,11 @@
 .PHONY: shell
 .PHONY: clean
 	
-TOOLCHAIN_NAME=miyoomini-toolchain-pokedex
+TOOLCHAIN_NAME=miyoomini-toolchain-retrodex
 WORKSPACE_DIR := $(shell pwd)/workspace
 
 .build: Dockerfile
-	mkdir -p ./workspace exit 0
+	mkdir -p ./workspace
 	docker build -t $(TOOLCHAIN_NAME) .
 	touch .build
 

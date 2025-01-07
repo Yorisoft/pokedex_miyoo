@@ -34,6 +34,13 @@ This app was made from scratch for the MiyooMini devices. The goal is to design 
 
 ## Compiling and Building
 
+## Dependencies 
+- SDL2 
+- SDL2_image 
+- SDL2_ttf 
+- cURL
+- SQLite
+
 ### Compiling on Windows Visual Studio
 
 1. Open the `Pokedex` folder located in the `Source/windows-visual-studio` directory. In there you will find a project solution for opening in Visual Studios. 
