@@ -21,6 +21,7 @@
 **/gtest
 **/src
 **libSDL2**
+!**/App/Retrodex/lib/libSDL2**
 **/logs
 
 #ignore gifs/webm untill ready
