@@ -25,9 +25,10 @@ This app was made from scratch for the MiyooMini devices. The goal is to design 
 
 1. Connect the Miyoo Mini device to your computer.
   - Refer to the OnionOS wiki for the various ways to do this, e.g., FTP, Webserver, Samba, etc…
-2. Transfer the `Pokedex` folder found in the `App` directory of this repo to the device. Place the `Pokedex` folder in `/mnt/SDCARD/App` folder of the miyoo mini.
+2. Transfer the `res` folder inside `App/Retrodex`
+2. Transfer the `Retrodex` folder found in the `App` directory of this repo to the device.  -Place the `Retrodex` folder in `/mnt/SDCARD/App` folder of the miyoo mini.
 3. On the miyoo mini device, navigate to your Apps list. Refresh your App list by bringing up and exiting the 'search' function - pressing `x`
-4. Navigate to the HelloMiyoo app and launch it. 
+4. Navigate to the `Retrodex` app and launch it. 
 
 </br>
 </br>
@@ -38,13 +39,13 @@ This app was made from scratch for the MiyooMini devices. The goal is to design 
 - SDL2 
 - SDL2_image 
 - SDL2_ttf 
-- cURL
+- SDL2_mixer
 - SQLite
 
 ### Compiling on Windows Visual Studio
 
-1. Open the `Pokedex` folder located in the `Source/windows-visual-studio` directory. In there you will find a project solution for opening in Visual Studios. 
-2. Configure Visual Studios with SDL and SDL_ttf libraries and include directories.
+1. Open the `Source/windows-dev` directory. In there you will find a project solution for opening in Visual Studios. 
+2. Configure Visual Studios with SDL libraries and include directories.
 3. Compile and run the program.
 
 </br>
@@ -56,18 +57,17 @@ This app was made from scratch for the MiyooMini devices. The goal is to design 
    - [union-miyoomini-toolchain](https://github.com/MiyooMini/union-toolchain/tree/main)
 2. Transfer the contents `workspace` folder from the `Source/union-miyoomini-toolchain` directory of this repo to the development environment `/workspace`. 
    - Optionally you could just replace the `workspace` folder with the one from this repo. 
-3. Compile the Pokedex program using the provided CMakeList and Toolchain files:
+3. Compile the Retrodex program using the provided CMakeList and Toolchain files:
      ```
+        cd retrodex
+        touch build
         cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
         make
      ```
-4. The binary should be located in `workspace/build/` </br>
-     `Pokedex DownloadIcons DownloadSprites DownloadAnimatedSprites`
-5. Download artwork by running:
-```
-./DownloadIcons ./DownloadSprites ./DownloadAnimatedSprites
-```
+4. The binary should be located in `workspace/retrodex/build/` </br>
+     `retrodex`
+
 
 </br>
 
@@ -79,6 +79,8 @@ Artwork from [pokemondb.net](https://pokemondb.net/).
 
 SDL Library Install Scripts from [XK9274](https://github.com/XK9274).
 
+Special Thanks to Miguel the Builder on Discord. 
+
 </br>
 
 ## Additional Information
@@ -86,12 +88,10 @@ SDL Library Install Scripts from [XK9274](https://github.com/XK9274).
 
 ### Current Status
 
-The app is currently in the early stages. At the moment, it only contains the Pokedex list with minimal stats. 
+The app is currently in the early stages. At the moment, it only contains the Game version menu, Pokedex list, and a few Pokemon Views ( Basic Info, Stats, Moves, etc..) 
 TODO:
-- Fix: duplicates of genesect when reaching end of list
-- Add: species dex entry.
 - Add: ability to shift through Pokedex list while holding down button.
-- Add: Gen 6 - collect gen 5 style pokemon sprites for gen 6. 
+- Add: Gen 6-9 - collect gen 5 style pokemon sprites for gen 6-9. 
 
 </br>
 
@@ -101,7 +101,6 @@ TODO:
 SDL2
 SDL2_image
 SDL2_image
-CURL
 SQLite
 ```
 
@@ -111,12 +110,14 @@ SQLite
 
 The project has the following directory structure:
 ```
-- Pokedex
+- pokedex_miyoo
     - App
-      - Pokedex
+      - Retrodex
     - Source
-        - Union-miyoomini-toolchain
+        - union-miyoomini-toolchain
             - workspace
+              - retrodex
+    - res
 ```
 
 </br>
@@ -125,7 +126,7 @@ The project has the following directory structure:
 
 Contributions are more than welcome! 
 
-If you encounter any issues or have any questions about the Pokedex app, please open an issue in this repository.
+If you encounter any issues or have any questions about the Retrodex app, please open an issue in this repository.
 
 </br>
 
