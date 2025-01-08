@@ -82,7 +82,15 @@ start_retroDex() {
     set_snd_level "${curvol}" &
     # bin/cpuclock 1700
     # CALL YOUR APP HERE, eg:
-    ./retrodex
+    
+	# Check if terminal is attached
+    if [ -t 0 ]; then
+        # Terminal is attached, output to it
+        ./retrodex > /dev/pts/0 2>&1
+    else
+        # No terminal attached, redirect output to a log file
+        ./retrodex > /mnt/SDCARD/App/Retrodex/retrodex.log 2>&1
+    fi
 }
 
 main() {
