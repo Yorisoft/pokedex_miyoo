@@ -5,9 +5,11 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/885de49c-ab59-470c-b23e-3cd7a26d6fe7" width="400" />
+  <img src="https://github.com/user-attachments/assets/71637941-7f02-4eff-95d4-2c135a2ed765" width="400" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/01d9a77e-0136-4e2a-ba96-3a01bc3fb4e2" width="400" /> 
+  <img src="https://github.com/user-attachments/assets/55c7f33a-0aba-4b2f-a7a7-72b0f1b3492f" width="400" /> 
+   &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/17ef98ed-bccc-4cdb-ab5f-8e61f9e7fd9a" width="400" /> 
 </p>
 
 </br>
