@@ -1,6 +1,10 @@
 #	ignore user_congif
 **/user_config
 
+#	ignore simlink
+Source/union-miyoomini-toolchain/workspace/retrodex/res
+Source/window_dev/res
+
 #	ignore build files
 **/build
 **/Debug
