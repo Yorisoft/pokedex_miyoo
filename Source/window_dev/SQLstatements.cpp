@@ -288,7 +288,7 @@ const std::string SQL_getPokeEvoChain = R"(
         p.id AS pokemon_id,
         p.identifier AS pokemon_identifier,
         psn.name AS localized_name,
-        COALESCE(et.identifier, 'Base') AS evolution_method,
+        COALESCE(etp.name, 'Base') AS evolution_method, -- Localized evolution method
         pe.minimum_level,
         item_locale.name AS trigger_item_name,
         pe.time_of_day,
@@ -309,9 +309,11 @@ const std::string SQL_getPokeEvoChain = R"(
     LEFT JOIN
         evolution_triggers et ON pe.evolution_trigger_id = et.id
     LEFT JOIN
+        evolution_trigger_prose etp ON et.id = etp.evolution_trigger_id AND etp.local_language_id = COALESCE(:language_id, 9) -- Use language ID or default to 9
+    LEFT JOIN
         items i ON pe.trigger_item_id = i.id
     LEFT JOIN
-        item_names item_locale ON i.id = item_locale.item_id AND item_locale.local_language_id = :language_id
+        item_names item_locale ON i.id = item_locale.item_id AND item_locale.local_language_id = COALESCE(:language_id, 9) -- Default to 9 for items too
     LEFT JOIN
         pokemon_game_indices pgi ON p.id = pgi.pokemon_id
     LEFT JOIN
@@ -320,14 +322,14 @@ const std::string SQL_getPokeEvoChain = R"(
         version_groups vg ON v.version_group_id = vg.id
     WHERE
         ps.evolution_chain_id = :evo_chain_id
-        AND psn.local_language_id = :language_id
+        AND psn.local_language_id = COALESCE(:language_id, 9) -- Default to 9 for species names
         AND p.id <= 648
     GROUP BY
         ps.evolution_chain_id,
         p.id,
         p.identifier,
         psn.name,
-        COALESCE(et.identifier, 'Base'), 
+        COALESCE(etp.name, 'Base'), -- Use localized name or fallback
         pe.minimum_level,
         item_locale.name,
         pe.time_of_day,
