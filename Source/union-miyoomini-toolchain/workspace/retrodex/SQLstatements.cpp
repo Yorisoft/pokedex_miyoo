@@ -250,7 +250,8 @@ const std::string SQL_getPokeRoutes = R"(
         MAX(e.max_level) AS max_level,
         SUM(COALESCE(laer.rate, es.rarity, 0)) AS total_encounter_rate,
         COUNT(DISTINCT e.encounter_slot_id) AS total_slot_number,
-        la.identifier AS location_area_name
+        la.identifier AS location_area_name,
+        ecv.identifier AS encounter_conditions
     FROM 
         encounters e
     JOIN 
@@ -267,13 +268,17 @@ const std::string SQL_getPokeRoutes = R"(
         encounter_methods em ON es.encounter_method_id = em.id
     LEFT JOIN 
         location_names ln ON l.id = ln.location_id AND ln.local_language_id = 9 
+    LEFT JOIN 
+        encounter_condition_value_map ecm ON ecm.encounter_id = e.id
+    LEFT JOIN 
+        encounter_condition_values ecv ON ecm.encounter_condition_value_id = ecv.id
     WHERE 
         e.pokemon_id = :pokemon_id
         AND v.id = :version_id
     GROUP BY 
-        v.identifier, ln.name, em.identifier, la.identifier
+        v.identifier, ln.name, em.identifier, la.identifier, ecv.identifier 
     ORDER BY 
-        l.id, v.identifier, ln.name, em.identifier;
+        l.id, v.identifier, ln.name, em.identifier, ecv.identifier;
 )";
 
 const std::string SQL_getPokeEvoID = R"(
