@@ -307,21 +307,21 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     /////////////////////////////////////////////////////////////////////////////
     //// Render poke method
     std::string pokeMethod = (*evoChain)[offset + i][4];
-    if (pokeMethod == "level-up" && (*evoChain)[offset + i][5] != "NULL") {
-        pokeMethod = "Lv. " + (*evoChain)[offset + i][5];
+    if (pokeMethod == "Level up" && (*evoChain)[offset + i][5] != "NULL") {
+        pokeMethod += " " + (*evoChain)[offset + i][5];
+    }
+    if (pokeMethod == "Use item") {
+        pokeMethod += " " + (*evoChain)[offset + i][6];
 
     }
-    if (pokeMethod == "use-item") {
-        pokeMethod = "Item:" + (*evoChain)[offset + i][6];
-
-    }
-    if (pokeMethod == "level-up" && (*evoChain)[offset + i][7] != "NULL") {
+    if (pokeMethod == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
         pokeMethod = "Time: " + (*evoChain)[offset + i][7];
-
+        if ((*evoChain)[offset + i][8] != "NULL") {
+            pokeMethod += " Happiness: " + (*evoChain)[offset + i][8];
+        }
     }
-    if (pokeMethod == "level-up" && (*evoChain)[offset + i][8] != "NULL") {
+    else if (pokeMethod == "Level up" && (*evoChain)[offset + i][8] != "NULL") {
         pokeMethod = "Happiness: " + (*evoChain)[offset + i][8];
-
     }
     SDL_Surface* pokeMethodSurface = TTF_RenderUTF8_Blended(
         font,
@@ -336,10 +336,10 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     SDL_Rect pokeMethodRect;
     pokeMethodRect.x = pokeNameRect.x;
     pokeMethodRect.y = pokeNameRect.y + pokeNameRect.h + 10;
-    pokeMethodRect.w = static_cast<int>(pokeMethodSurface->w);
-    pokeMethodRect.h = static_cast<int>(pokeMethodSurface->h);
+    pokeMethodRect.w = static_cast<int>(pokeMethodSurface->w * .9);
+    pokeMethodRect.h = static_cast<int>(pokeMethodSurface->h * .9);
 
-    PokeSurface::onDraw(surf_display, pokeMethodSurface, &pokeMethodRect);
+    PokeSurface::onDrawScaled(surf_display, pokeMethodSurface, &pokeMethodRect);
     SDL_FreeSurface(pokeMethodSurface);
 
     
