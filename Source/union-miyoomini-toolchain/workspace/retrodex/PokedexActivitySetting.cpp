@@ -45,8 +45,8 @@ void PokedexActivitySetting::onActivate() {
     //languages->insert(languages->begin(), { "0", "SELECT" });
 
     // SETTING OPTIONS: audioOptions
-    audioOptions.push_back({ "0", "ON" });
-    audioOptions.push_back({ "1", "OFF" });
+    audioOptions.push_back({ "0", "OFF" });
+    audioOptions.push_back({ "1", "ON" });
 
     // load all setting options into one vec
     optionItems = new std::vector<std::vector<std::vector<std::string>>>();
@@ -57,7 +57,7 @@ void PokedexActivitySetting::onActivate() {
 
     if (!std::filesystem::exists(userConfigFile)) {
         for (std::string& setting : *settings) {
-            userSettingMap[setting] = 0;
+            userSettingMap[setting] = 1;
         }
         setUserConfig(userConfigFile);
     }
