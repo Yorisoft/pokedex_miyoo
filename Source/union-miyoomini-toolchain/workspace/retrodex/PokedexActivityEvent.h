@@ -27,9 +27,9 @@
 #define SW_BTN_MENU SDLK_ESCAPE
 #define SW_BTN_POWER SDLK_FIRST
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 class PokedexActivityEvent {
 public:
@@ -57,9 +57,9 @@ public:
 
     virtual void onButtonL(SDL_Keycode sym, Uint16 mod);
 
-    virtual void onButtonLT(SDL_Keycode sym, Uint16 mod);
-
     virtual void onButtonR(SDL_Keycode sym, Uint16 mod);
+
+    virtual void onButtonLT(SDL_Keycode sym, Uint16 mod);
 
     virtual void onButtonRT(SDL_Keycode sym, Uint16 mod);
 
