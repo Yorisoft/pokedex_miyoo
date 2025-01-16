@@ -27,9 +27,9 @@
 #define SW_BTN_MENU SDLK_ESCAPE
 #define SW_BTN_POWER SDLK_FIRST
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 class PokedexActivityEvent {
 public:
