@@ -1,0 +1,24 @@
+name: Placeholder Check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - jenkins
+      - refactor
+      - issue_**
+      - prod**
+      - dev**
+      - release**
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Placeholder Test
+        run: |
+          echo "Running placeholder test..."
+          exit 0
