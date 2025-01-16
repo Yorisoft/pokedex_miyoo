@@ -34,4 +34,4 @@ Source/window_dev/res
 Jenkinsfile
 
 #ignore Windows dev env. 
-**/window_dev
+**window_dev/
