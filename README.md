@@ -1,4 +1,4 @@
-# Pokedex for Miyoo Mini! - WIP ![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1)
+# ![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1) &nbsp;&nbsp;&nbsp; Retrodex - WIP 
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/0e377eb6-4161-4e6c-8768-37137e617013" width="300" />
@@ -8,13 +8,14 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/fc62218b-8060-4f21-b715-6c93df469473" width="300" /> 
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/7112b621-fb4d-4824-a54b-7842dd987a1a" width="300" /> 
+  <img src="https://github.com/user-attachments/assets/6ec42b75-6879-4015-afb6-655964f476d6" width="300" /> 
 </p>
+
 
 </br>
 
-<p align="center">This app was made from scratch for the MiyooMini devices running OnionOS. </p>
-<p align="center">The goal is to design a pokedex that targets generations 1 - 5 to help track down all your favorite Pokemon and have their basic information at your finger tips :). </p>
+<p align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </p>
+
 
 ### PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
@@ -96,10 +97,11 @@ Copy `retrodex` executable to App/Retrodex for testing.
 
 ## Current Status
 
-The app is currently in the early stages. At the moment, it contains: 
-    - Game version menu 
-    - Pokedex list
-    - Pokemon Views ( Basic Info, Stats, Moves, Encounters, Evolutions) 
+The app is currently in the early stages. At the moment, it contains:
+- Game version menu
+- Pokedex list
+- Pokemon Views ( Basic Info, Stats, Moves, Encounters, Evolutions) 
+
 
 ### The primary objective is to get a stable app with pleasent UI, more features may come in the future. 
 
@@ -112,13 +114,15 @@ Possible Roadmap:
 
 ## Contributions, Acknowledgements
 
-Dataset from [veekun_pokedex](https://github.com/veekun/veekun-pokedex).
+Toolchain Docker Image: [union-miyoomini-toolchain](https://github.com/shauninman/union-miyoomini-toolchain).
 
-Artwork from [pokemondb.net](https://pokemondb.net/).
+Database: [veekun_pokedex](https://github.com/veekun/veekun-pokedex).
 
-SDL Library Install Scripts from [XK9274](https://github.com/XK9274).
+Pokemon Sprites: [pokemondb.net](https://pokemondb.net/).
 
-Special Thanks to the folks over at #Retro Game Handhelds [Discord](https://discord.gg/retro-game-handhelds-529983248114122762) for their support in bringing this project to life! 
+SDL2 Library Install Script: [XK9274](https://github.com/XK9274).
+
+Special Thanks to the folks over at #Retro Game Handhelds [Discord](https://discord.gg/retro-game-handhelds-529983248114122762)! 
 
 
 </br>
@@ -128,7 +132,9 @@ Special Thanks to the folks over at #Retro Game Handhelds [Discord](https://disc
 ## Contributing
 
 Contributions are more than welcomed! 
-If you encounter any issues or have any questions about the Retrodex app, please open an issue in this repository.
+If you encounter any bugs or have any questions about the app, please open an issue.
+
+For code change suggestions, fork repo and create pr. 
 
 </br>
 </br>
