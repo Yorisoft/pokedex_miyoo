@@ -7,10 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SOURCE_DIR /root/workspace/retrodex)
 
 set(SDL2_INCLUDE_DIRS /root/workspace/build/include)
-set(SDL2_LIBRARIES 
-	/root/workspace/build/lib/libSDL2.so
-	/root/workspace/build/lib/libSDL2main.so
-)
+set(SDL2_LIBRARIES /root/workspace/build/lib/libSDL2.so)
 set(SDL2_IMAGE_LIBRARIES /root/workspace/build/lib/libSDL2_image.so)
 set(SDL2_TTF_LIBRARIES /root/workspace/build/lib/libSDL2_ttf.so)
 set(SDL2_MIXER_LIBRARIES /root/workspace/build/lib/libSDL2_mixer.so)
