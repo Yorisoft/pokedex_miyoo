@@ -1,7 +1,7 @@
 #	ignore user_congif
 **/user_config
 
-#	ignore simlink
+#	ignore simlinks
 Source/union-miyoomini-toolchain/workspace/retrodex/res
 Source/window_dev/res
 
@@ -30,4 +30,8 @@ Source/window_dev/res
 #ignore gifs/webm untill ready
 **.gif
 
+#ignore Jenkinsfile untill ready. Or stick with GitActions? 
 Jenkinsfile
+
+#ignore Windows dev env. 
+**window_dev/
