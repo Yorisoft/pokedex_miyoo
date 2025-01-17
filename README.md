@@ -5,16 +5,17 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/71637941-7f02-4eff-95d4-2c135a2ed765" width="400" />
+  <img src="https://github.com/user-attachments/assets/71637941-7f02-4eff-95d4-2c135a2ed765" width="300" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/55c7f33a-0aba-4b2f-a7a7-72b0f1b3492f" width="400" /> 
+  <img src="https://github.com/user-attachments/assets/55c7f33a-0aba-4b2f-a7a7-72b0f1b3492f" width="300" /> 
    &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/17ef98ed-bccc-4cdb-ab5f-8e61f9e7fd9a" width="400" /> 
+  <img src="https://github.com/user-attachments/assets/17ef98ed-bccc-4cdb-ab5f-8e61f9e7fd9a" width="300" /> 
 </p>
 
 </br>
 
-This app was made from scratch for the MiyooMini devices. The goal is to design it to target gens 1 - 5 to help you track down all your favorite Pokemon and have all their information at your finger tips :) 
+<p align="center">This app was made from scratch for the MiyooMini devices running OnionOS. </p>
+<p align="center">The goal is to design a pokedex that targets generations 1 - 5 to help track down all your favorite Pokemon and have their basic information at your finger tips :). </p>
 
 ### PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
@@ -23,13 +24,11 @@ This app was made from scratch for the MiyooMini devices. The goal is to design 
 
 ## Installation
 
-### Transferring the App to the Miyoo Mini Device
-
-1. Connect the Miyoo Mini device to your computer.
-  - Refer to the OnionOS wiki for the various ways to do this, e.g., FTP, Webserver, Samba, etc…
-2. Transfer the `res` folder inside `App/Retrodex`
-2. Transfer the `Retrodex` folder found in the `App` directory of this repo to the device.  -Place the `Retrodex` folder in `/mnt/SDCARD/App` folder of the miyoo mini.
-3. On the miyoo mini device, navigate to your Apps list. Refresh your App list by bringing up and exiting the 'search' function - pressing `x`
+1. Connect the Miyoo Mini device to a computer.
+    - Refer to the OnionOS wiki for the various ways to do this, e.g., FTP, Webserver, Samba, etc…
+2. Copy `App/Retrodex` to `/mnt/SDCARD/App` on the Miyoo Mini. Restart the device if it's turned off.
+3. On the Miyoo Mini, navigate to Apps list. 
+    - Refresh App list by using the 'search' function - press `x`
 4. Navigate to the `Retrodex` app and launch it. 
 
 </br>
@@ -37,43 +36,82 @@ This app was made from scratch for the MiyooMini devices. The goal is to design 
 
 ## Compiling and Building
 
-## Dependencies 
-- SDL2 
-- SDL2_image 
-- SDL2_ttf 
-- SDL2_mixer
-- SQLite
+### Dependencies (included)
+```
+SDL2 
+SDL2_image 
+SDL2_ttf 
+SDL2_mixer
+SQLite
+```
 
-### Compiling on Windows Visual Studio
+### Directory Structure
+```
+.
+├── App
+│   └── Retrodex
+│       ├── config.json
+│       ├── lib
+│       ├── res
+│       ├── retrodex
+│       ├── script
+│       └── sqlite
+├── Jenkinsfile
+├── README.md
+└── Source
+    └── union-miyoomini-toolchain
+        ├── Dockerfile
+        ├── Makefile
+        ├── README.md
+        ├── support
+        └── workspace
+            ├── retrodex
+            └── support
+```
 
-1. Open the `Source/windows-dev` directory. In there you will find a project solution for opening in Visual Studios. 
-2. Configure Visual Studios with SDL libraries and include directories.
-3. Compile and run the program.
 
-</br>
+### Compiling on union-miyoomini-toolchain
 
-### Compiling on Union-miyoomini-toolchain
-
-1. Clone and start the docker container for the union-miyoomini-toolchain. 
-   - Read the `README.md` located in the `Source/union-miyoomini-toolchain` directory for instructions on how to get started with union-miyoomini-toolchain, or refer to their GitHub README. 
-   - [union-miyoomini-toolchain](https://github.com/MiyooMini/union-toolchain/tree/main)
-2. Transfer the contents `workspace` folder from the `Source/union-miyoomini-toolchain` directory of this repo to the development environment `/workspace`. 
-   - Optionally you could just replace the `workspace` folder with the one from this repo. 
+1. Clone, navigate to `Source/union-miyoomini-toolchain`, and start the docker container for the union-miyoomini-toolchain. 
+   - Read the `README.md` located in the `Source/union-miyoomini-toolchain` directory for instructions on how to get started with union-miyoomini-toolchain, or refer to their GitHub README. [union-miyoomini-toolchain repo](https://github.com/MiyooMini/union-toolchain/tree/main)
+2. Run `mksdl2.sh` script to build SDL2 dependencies.
+    ```
+    ./mksdl2.sh
+    ```
 3. Compile the Retrodex program using the provided CMakeList and Toolchain files:
-     ```
-        cd retrodex
-        touch build
-        cd build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
-        make
-     ```
-4. The binary should be located in `workspace/retrodex/build/` </br>
-     `retrodex`
+    ```
+    cd retrodex \
+    mkdir build \
+    cd build \
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake \
+    make
+    ```
+4. The executable should be located in `workspace/retrodex/build/`
+    - `retrodex`
 
+Copy `retrodex` executable to App/Retrodex for testing. 
 
 </br>
+</br>
 
-## Data, Assets, Contributions
+
+## Current Status
+
+The app is currently in the early stages. At the moment, it contains: 
+    - Game version menu 
+    - Pokedex list
+    - Pokemon Views ( Basic Info, Stats, Moves, Encounters, Evolutions) 
+
+### The primary objective is to get a stable app with pleasent UI, more features may come in the future. 
+
+Possible Roadmap:
+- [ ] Support for animated Pokemon sprites. 
+- [ ] Support for Gen 6-9. Require collecting Gen 5 style sprites for Gen 6-9. 
+
+</br>
+</br>
+
+## Contributions, Acknowledgements
 
 Dataset from [veekun_pokedex](https://github.com/veekun/veekun-pokedex).
 
@@ -81,57 +119,17 @@ Artwork from [pokemondb.net](https://pokemondb.net/).
 
 SDL Library Install Scripts from [XK9274](https://github.com/XK9274).
 
-Special Thanks to Miguel the Builder on Discord. 
+Special Thanks to the folks over at #Retro Game Handhelds [Discord](https://discord.gg/retro-game-handhelds-529983248114122762) for their support in bringing this project to life! 
+
 
 </br>
-
-## Additional Information
-
-
-### Current Status
-
-The app is currently in the early stages. At the moment, it only contains the Game version menu, Pokedex list, and a few Pokemon Views ( Basic Info, Stats, Moves, etc..) 
-TODO:
-- Add: ability to shift through Pokedex list while holding down button.
-- Add: Gen 6-9 - collect gen 5 style pokemon sprites for gen 6-9. 
-
 </br>
 
-### Dependencies
-
-```
-SDL2
-SDL2_image
-SDL2_image
-SQLite
-```
-
-</br>
-
-### Directory Structure
-
-The project has the following directory structure:
-```
-- pokedex_miyoo
-    - App
-      - Retrodex
-    - Source
-        - union-miyoomini-toolchain
-            - workspace
-              - retrodex
-    - res
-```
-
-</br>
 
 ## Contributing
 
-Contributions are more than welcome! 
-
+Contributions are more than welcomed! 
 If you encounter any issues or have any questions about the Retrodex app, please open an issue in this repository.
 
-</br>
 
-## Acknowledgements
-
-I thank the Miyoo Mini discord community for their support and contributing to bringing this project to life!
+Made with :heart: and C++
