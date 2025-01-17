@@ -4,12 +4,21 @@
  <img src="https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1" width="80" />
 </p>
 
+
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/71637941-7f02-4eff-95d4-2c135a2ed765" width="300" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/55c7f33a-0aba-4b2f-a7a7-72b0f1b3492f" width="300" /> 
-   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/17ef98ed-bccc-4cdb-ab5f-8e61f9e7fd9a" width="300" /> 
+  <img src="https://github.com/user-attachments/assets/0e377eb6-4161-4e6c-8768-37137e617013" width="300" />
+
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/846d7a34-04d1-4e66-b88a-7b00f24651a3" width="300" /> 
+
+  <img src="https://github.com/user-attachments/assets/fc62218b-8060-4f21-b715-6c93df469473" width="300" /> 
+
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e4dbabb7-9d0a-4d37-9692-7611204dc510" width="300" /> 
+
+  <img src="https://github.com/user-attachments/assets/7112b621-fb4d-4824-a54b-7842dd987a1a" width="300" /> 
 </p>
 
 </br>
@@ -131,5 +140,7 @@ Special Thanks to the folks over at #Retro Game Handhelds [Discord](https://disc
 Contributions are more than welcomed! 
 If you encounter any issues or have any questions about the Retrodex app, please open an issue in this repository.
 
+</br>
+</br>
 
 Made with :heart: and C++
