@@ -38,9 +38,17 @@ int Pokedex::onExecute() {
 
     while (running) {
         while (SDL_PollEvent(&event)) {
-            onEvent(&event);
+            switch (event.key.keysym.sym) {
+            case SDL_SYSWMEVENT:
+            case SDLK_ESCAPE:
+                onExit();
+                break;
+            default:
+                onEvent(&event);
+                //onUser(event.user.type, event.user.code, event.user.data1, event.user.data2);
+                break;  
+            }
         }
-
         onLoop();
         onRender();
     }
