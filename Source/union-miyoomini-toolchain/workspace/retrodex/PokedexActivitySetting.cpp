@@ -345,7 +345,7 @@ void PokedexActivitySetting::onButtonA(SDL_Keycode sym, Uint16 mod) {
     PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
 
     //PokedexDB::setAudioID(userSettingMap["AUDIO"]);
-    if (userSettingMap["AUDIO"] == 1) {
+    if (userSettingMap["AUDIO"] == 0) {
         Mix_CloseAudio();
     }
     else {

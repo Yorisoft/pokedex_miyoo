@@ -51,7 +51,7 @@ void PokedexActivityIntro::onLoop() {
              //set glabal variables based on user config
             PokedexDB::setLanguageID(userSettingMap["LANGUAGE"]);
 
-            if (userSettingMap["AUDIO"] == 1) {
+            if (userSettingMap["AUDIO"] == 0) {
                 Mix_CloseAudio();
             }
             else {

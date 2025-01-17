@@ -54,7 +54,7 @@ int Pokedex::onExecute() {
 bool Pokedex::onSDLInit() {
     std::cout << "onSDLInit: start" << std::endl;
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) < 0) {
         std::cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
