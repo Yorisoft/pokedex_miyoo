@@ -1,7 +1,7 @@
-# ![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1) &nbsp;&nbsp; Retrodex - WIP 
+#  <img align="center" width="400" src="https://github.com/user-attachments/assets/98177822-b80d-4bb4-838e-54ce235cdd4e"/>
 
 <p align="center">
-<img align="center" width="300" src="https://github.com/user-attachments/assets/7080b6cd-66a1-4a10-88d9-bf5364bdd3cc"/>
+<img align="center" width="400" src="https://github.com/user-attachments/assets/7080b6cd-66a1-4a10-88d9-bf5364bdd3cc"/>
 </p>
 
 </br>
