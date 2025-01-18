@@ -1,16 +1,8 @@
-# ![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1) &nbsp;&nbsp;&nbsp; Retrodex - WIP 
+# ![image](https://github.com/Yorisoft/pokedex_miyoo/assets/27126548/11b8ac44-8e78-4b9f-8af1-bf8f633434f1) &nbsp;&nbsp; Retrodex - WIP 
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/0e377eb6-4161-4e6c-8768-37137e617013" width="300" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/846d7a34-04d1-4e66-b88a-7b00f24651a3" width="300" /> 
+<img align="center" width="300" src="https://github.com/user-attachments/assets/7080b6cd-66a1-4a10-88d9-bf5364bdd3cc"/>
 </p>
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/fc62218b-8060-4f21-b715-6c93df469473" width="300" /> 
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/6ec42b75-6879-4015-afb6-655964f476d6" width="300" /> 
-</p>
-
 
 </br>
 
@@ -93,6 +85,7 @@ Copy `retrodex` executable to App/Retrodex for testing.
 
 </br>
 </br>
+
 
 
 ## Current Status
