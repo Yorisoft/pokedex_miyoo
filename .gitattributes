@@ -1,2 +1,3 @@
-App/Retrodex/sqlite/* linguist-vendored
-Source/union-miyoomini-toolchain/workspace/retrodex/{sqlite,include/sqlite}/* linguist-vendored
+App/Retrodex/sqlite/* linguist-detectable=false
+Source/union-miyoomini-toolchain/workspace/retrodex/sqlite/* linguist-detectable=false
+Source/union-miyoomini-toolchain/workspace/retrodex/include/sqlite/* linguist-detectable=false
