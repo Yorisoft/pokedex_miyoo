@@ -391,7 +391,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
         font,
         effect.c_str(),
         color,
-        320
+        295
     );
     if (moveEffectSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: moveEffectSurface " << TTF_GetError() << std::endl;
