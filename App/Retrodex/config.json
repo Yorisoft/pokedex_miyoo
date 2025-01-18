@@ -1,6 +1,0 @@
-{
-	"label": "Retrodex",
-	"icon":	"res/icons/icon/Pokedex.png",
-	"launch":	"script/launch.sh",
-	"description":	"Simple Pokedex"
-}
