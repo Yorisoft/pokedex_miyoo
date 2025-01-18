@@ -5,13 +5,13 @@
 </p>
 
 </br>
+</br>
 
 <p align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </p>
 
 
 ### PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
-</br>
 </br>
 
 ## Installation
