@@ -34,7 +34,7 @@ Source/window_dev/res
 Jenkinsfile
 
 #Windows dev environment. 
-**window_dev/
+Source/window_dev
 
 #gtest unittest, untill ready. 
 Source/union-miyoomini-toolchain/workspace/retrodex/unittest

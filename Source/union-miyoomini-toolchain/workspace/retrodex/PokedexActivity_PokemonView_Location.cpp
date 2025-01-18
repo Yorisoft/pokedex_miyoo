@@ -95,7 +95,10 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect backgroundRect;
+    SDL_Rect backgroundRect = {
+        0, 0,
+        surf_display->w, surf_display->h
+    };
     backgroundRect.x = 0;
     backgroundRect.y = 0;
     backgroundRect.w = surf_display->w;
@@ -121,85 +124,74 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
 }
 
 bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font) {
-    //Render pokedmon info
-    // render poke icon
+    // Render icon
     std::string iconPath = PokedexDB::getPokemonIdentifier();
     iconPath = "res/icons/" + iconPath + ".png";
 
-    SDL_Surface* pokeIconSurface = PokeSurface::onLoadImg(iconPath);
-    if (pokeIconSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeIconSurface " << TTF_GetError() << std::endl;
+    SDL_Surface* iconSurface = PokeSurface::onLoadImg(iconPath);
+    if (iconSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: iconSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeIconRect;
-    pokeIconRect.x = 0;
-    pokeIconRect.y = 55;
-    pokeIconRect.w = pokeIconSurface->w * 2;
-    pokeIconRect.h = pokeIconSurface->h * 2;
-
-    PokeSurface::onDrawScaled(surf_display, pokeIconSurface, &pokeIconRect);
-    SDL_FreeSurface(pokeIconSurface);
+    SDL_Rect pokeIconRect = {
+        0, 55,
+        iconSurface->w * 2, iconSurface->h * 2
+    };
+    PokeSurface::onDrawScaled(surf_display, iconSurface, &pokeIconRect);
+    SDL_FreeSurface(iconSurface);
     
-    /////////////////////////////////////////////////////////////////////////////
-
     // Render Name
-    std::string pokeName = pokemon->getName();
-    SDL_Surface* pokeNameSurface = TTF_RenderUTF8_Blended(
+    std::string name = pokemon->getName();
+    SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
         font,
-        pokeName.c_str(),
+        name.c_str(),
         color
     );
-    if (pokeNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeNameSurface " << TTF_GetError() << std::endl;
+    if (nameSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: nameSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeNameRect;
-    pokeNameRect.x = (pokeIconRect.x + pokeIconRect.w);
-    pokeNameRect.y = pokeIconRect.y + 10;
-    pokeNameRect.w = pokeNameSurface->w;
-    pokeNameRect.h = pokeNameSurface->h;
-    PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
-    SDL_FreeSurface(pokeNameSurface);
-
-    ////////////////////////////////////////////////////////////////////////////
-
+    SDL_Rect nameRect = {
+        (pokeIconRect.x + pokeIconRect.w), pokeIconRect.y + 10,
+        nameSurface->w, nameSurface->h
+    };
+    PokeSurface::onDraw(surf_display, nameSurface, &nameRect);
+    SDL_FreeSurface(nameSurface);
 
     // render poke types
-    std::vector<std::string> pokemonTypes = pokemon->getTypes();
-    iconPath = "res/types/" + pokemonTypes[0] + ".png";
-    SDL_Surface* pokeType1Surface = PokeSurface::onLoadImg(iconPath);
+    std::vector<std::string> types = pokemon->getTypes();
+    iconPath = "res/types/" + types[0] + ".png";
 
-    if (pokeType1Surface == NULL) {
-        std::cout << "Unable to load surface: pokeType1Surface Type 1" << SDL_GetError() << std::endl;
+    SDL_Surface* typeASurface = PokeSurface::onLoadImg(iconPath);
+    if (typeASurface == NULL) {
+        std::cout << "Unable to load surface: typeASurface Type 1" << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
-    SDL_Rect pokeType1Rect;
-    pokeType1Rect.x = pokeIconRect.x + pokeIconRect.w;
-    pokeType1Rect.y = (pokeNameRect.y + pokeNameRect.h ) + 5;
-    pokeType1Rect.w = pokeType1Surface->w * 2;
-    pokeType1Rect.h = pokeType1Surface->h * 2;
-    PokeSurface::onDrawScaled(surf_display, pokeType1Surface, &pokeType1Rect);
-    SDL_FreeSurface(pokeType1Surface);
+
+    SDL_Rect typeARect = {
+        pokeIconRect.x + pokeIconRect.w, (nameRect.y + nameRect.h ) + 5,
+        typeASurface->w * 2, typeASurface->h * 2
+    };
+    PokeSurface::onDrawScaled(surf_display, typeASurface, &typeARect);
+    SDL_FreeSurface(typeASurface);
 
     //List item types_2
-    if (pokemonTypes[1] != "NULL") { 
-        iconPath = "res/types/" + pokemonTypes[1] + ".png";
-        SDL_Surface* pokeType2Surface = PokeSurface::onLoadImg(iconPath);
-        if (pokeType2Surface == NULL) {
-            std::cout << "Unable to render text! SDL Error: pokeType2Surface " << SDL_GetError() << std::endl;
+    if (types[1] != "NULL") { 
+        iconPath = "res/types/" + types[1] + ".png";
+        SDL_Surface* typeBSurface = PokeSurface::onLoadImg(iconPath);
+        if (typeBSurface == NULL) {
+            std::cout << "Unable to render text! SDL Error: typeBSurface " << SDL_GetError() << std::endl;
             exit(EXIT_FAILURE);
         };
 
-        SDL_Rect pokeType2Rect;
-        pokeType2Rect.x = pokeType1Rect.x + pokeType1Rect.w + 5;
-        pokeType2Rect.y = pokeType1Rect.y;
-        pokeType2Rect.w = pokeType2Surface->w * 2;
-        pokeType2Rect.h = pokeType2Surface->h * 2;
-
-        PokeSurface::onDrawScaled(surf_display, pokeType2Surface, &pokeType2Rect);
-        SDL_FreeSurface(pokeType2Surface);
+        SDL_Rect typeBRect = {
+            typeARect.x + typeARect.w + 5, typeBRect.y = typeARect.y,
+            typeBSurface->w * 2, typeBRect.h = typeBSurface->h * 2
+        };
+        PokeSurface::onDrawScaled(surf_display, typeBSurface, &typeBRect);
+        SDL_FreeSurface(typeBSurface);
     }
 
     return true;
@@ -220,11 +212,12 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     }
 
     int spacing = 18; 
-    SDL_Rect listEntryRect;
-    listEntryRect.x = static_cast<int>(surf_display->w - (surf_display->w * 0.45) - 8);
-    listEntryRect.y = 65 + (i * (itemHeight + spacing));
-    listEntryRect.w = static_cast<int>(surf_display->w * 0.45);
-    listEntryRect.h = itemHeight;
+    SDL_Rect listEntryRect = {
+        static_cast<int>(surf_display->w - (surf_display->w * 0.45) - 8), 
+        65 + (i * (itemHeight + spacing)), 
+        static_cast<int>(surf_display->w * 0.45), 
+        itemHeight
+    };
     if (offset + i == selectedIndex) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black
         SDL_RenderDrawRect(renderer, &listEntryRect);
@@ -234,183 +227,223 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     }
     SDL_FreeSurface(listEntrySurface);
 
-    /////////////////////////////////////////////////////////////////////////////
-    //Render item title/name
-    
+    //Render name
     // make all upper case
-    std::string moveName = route[1];
-    for (int i = 0; i < moveName.size(); i++) {
-        moveName[i] = std::toupper(moveName[i]);
+    std::string name = route[1];
+    for (int i = 0; i < name.size(); i++) {
+        name[i] = std::toupper(name[i]);
     }
-    SDL_Surface* routeNameSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
         font,
-        moveName.c_str(),
+        name.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
-    if (routeNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: routeNameSurface " << TTF_GetError() << std::endl;
+    if (nameSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: nameSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect moveNameRect;
-    moveNameRect.x = listEntryRect.x + (listEntryRect.w / 2) - (routeNameSurface->w / 2);
-    moveNameRect.y = listEntryRect.y;
-    moveNameRect.w = static_cast<int>(routeNameSurface->w);
-    moveNameRect.h = static_cast<int>(routeNameSurface->h);
-    PokeSurface::onDrawScaled(surf_display, routeNameSurface, &moveNameRect);
-    SDL_FreeSurface(routeNameSurface);
+    SDL_Rect nameRect = {
+        listEntryRect.x + (listEntryRect.w / 2) - (nameSurface->w / 2), 
+        listEntryRect.y, 
+        static_cast<int>(nameSurface->w), 
+        static_cast<int>(nameSurface->h)
+    };
+    PokeSurface::onDrawScaled(surf_display, nameSurface, &nameRect);
+    SDL_FreeSurface(nameSurface);
 
-    /////////////////////////////////////////////////////////////////////////////
-    //Render item subTitle
+    //Render  condition
     if (route[7] != "NULL") {
-        // make all upper case
-        std::string encounterSubLocation = route[7];
-        for (int i = 0; i < encounterSubLocation.size(); i++) {
-            encounterSubLocation[i] = std::toupper(encounterSubLocation[i]);
-        }
-        SDL_Surface* routeSubLocationSurface = TTF_RenderUTF8_Blended(
-            font,
-            encounterSubLocation.c_str(),
-            offset + i == selectedIndex ? highlightColor : color
-        );
-        if (routeSubLocationSurface == NULL) {
-            std::cout << "Unable to render text! SDL Error: routeSubLocationSurface " << TTF_GetError() << std::endl;
+        std::string condition = route[7];
+        std::string iconPath = "res/icons/encounters/" + condition + ".png";
+        SDL_Surface* conditionSurface = PokeSurface::onLoadImg(iconPath);
+        if (conditionSurface == NULL) {
+            std::cout << "Unable to render text! SDL Error: conditionSurface " << TTF_GetError() << std::endl;
             exit(EXIT_FAILURE);
         };
 
-        SDL_Rect routeSubLocRect;
-        routeSubLocRect.x = listEntryRect.x + (listEntryRect.w / 2) - (routeSubLocationSurface->w / 2);
-        routeSubLocRect.y = moveNameRect.y + moveNameRect.h;
-        routeSubLocRect.w = static_cast<int>(routeSubLocationSurface->w);
-        routeSubLocRect.h = static_cast<int>(routeSubLocationSurface->h);
-        PokeSurface::onDrawScaled(surf_display, routeSubLocationSurface, &routeSubLocRect);
-        SDL_FreeSurface(routeSubLocationSurface);
+        double scaling = 1.5;
+        SDL_Rect conditionRect = {
+            listEntryRect.x, 
+            listEntryRect.y, 
+            static_cast<int>(conditionSurface->w * scaling), 
+            static_cast<int>(conditionSurface->h * scaling)
+        };
+        PokeSurface::onDrawScaled(surf_display, conditionSurface, &conditionRect);
+        SDL_FreeSurface(conditionSurface);
     }
 
-    /////////////////////////////////////////////////////////////////////////////
     // Render method
-    std::string methodString = route[2];
-    SDL_Surface* routeMethodSurface = TTF_RenderUTF8_Blended(
-        font,
-        methodString.c_str(),
-        offset + i == selectedIndex ? highlightColor : color
-    );
-    if (routeMethodSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: routeMethodSurface " << TTF_GetError() << std::endl;
+    std::string method = route[2];
+    method = method == "walk" ? "grass" : method;
+    method = method == "gift-egg" ? "egg" : method;
+    std::string iconPath = "res/icons/encounters/" + method + ".png";
+
+    SDL_Surface* methodSurface = PokeSurface::onLoadImg(iconPath);
+    if (methodSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: methodSurface  " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect routeMethodRect;
-    routeMethodRect.x = listEntryRect.x;
-    routeMethodRect.y = (listEntryRect.y + listEntryRect.h ) - routeMethodSurface->h;
-    routeMethodRect.w = routeMethodSurface->w;
-    routeMethodRect.h = routeMethodSurface->h;
-    PokeSurface::onDraw(surf_display, routeMethodSurface, &routeMethodRect);
-    SDL_FreeSurface(routeMethodSurface);
+    double scaling = 1.5;
+    SDL_Rect methodRect = {
+            listEntryRect.x, 
+            (listEntryRect.y + listEntryRect.h ) - (methodSurface->h * scaling), 
+            (methodSurface->w * scaling), 
+            (methodSurface->h * scaling)
+        };
+    PokeSurface::onDrawScaled(surf_display, methodSurface, &methodRect);
+    SDL_FreeSurface(methodSurface);
  
-    /////////////////////////////////////////////////////////////////////////////
-    // Encounter rate
-    std::string rateString =  route[5] + '%';
-    SDL_Surface* routeRateSurface = TTF_RenderUTF8_Blended(
+    // Render rate
+    std::string rate =  route[5] + '%';
+    SDL_Surface* rateSurface = TTF_RenderUTF8_Blended(
         font,
-        rateString.c_str(),
+        rate.c_str(),
         offset + i == selectedIndex ? highlightColor : color
     );
-    if (routeRateSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: routeRateSurface " << TTF_GetError() << std::endl;
+    if (rateSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: rateSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect routeRateRect;
-    routeRateRect.x = (listEntryRect.x + listEntryRect.w) - routeRateSurface->w;
-    routeRateRect.y = (listEntryRect.y + listEntryRect.h ) - routeRateSurface->h;
-    routeRateRect.w = routeRateSurface->w;
-    routeRateRect.h = routeRateSurface->h;
-    PokeSurface::onDraw(surf_display, routeRateSurface, &routeRateRect);
-    SDL_FreeSurface(routeRateSurface);
+    SDL_Rect routeRateRect{
+        (listEntryRect.x + listEntryRect.w) - rateSurface->w, 
+        (listEntryRect.y + listEntryRect.h ) - rateSurface->h, 
+        rateSurface->w, 
+        rateSurface->h
+    };
+    PokeSurface::onDraw(surf_display, rateSurface, &routeRateRect);
+    SDL_FreeSurface(rateSurface);
 
-    /////////////////////////////////////////////////////////////////////////////
     // Render selected Item details
     if (offset + i == selectedIndex) {
-        //redern item details
         if (!renderItemDetails(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
 
     return true;
-
 }
 
 bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i) {
-    /////////////////////////////////////////////////////////////////////////////
     // Render levels - min
-    std::string lvlString = route[3];
-    SDL_Surface* routeLvlSurface = TTF_RenderUTF8_Blended(
+    std::string level = route[3];
+    SDL_Surface* levelSurface = TTF_RenderUTF8_Blended(
         font,
-        lvlString.c_str(),
+        level.c_str(),
         color
     );
-    if (routeLvlSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: routeLvlSurface " << TTF_GetError() << std::endl;
+    if (levelSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: levelSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect routeMinLvlRect;
-    routeMinLvlRect.x = 155;
-    routeMinLvlRect.y = 175;
-    routeMinLvlRect.w = routeLvlSurface->w;
-    routeMinLvlRect.h = routeLvlSurface->h;
-    PokeSurface::onDraw(surf_display, routeLvlSurface, &routeMinLvlRect);
-    SDL_FreeSurface(routeLvlSurface);
+    SDL_Rect minLevelRect = {
+        155, 175, 
+        levelSurface->w, levelSurface->h
+    };
+    PokeSurface::onDraw(surf_display, levelSurface, &minLevelRect);
+    SDL_FreeSurface(levelSurface);
  
-    /////////////////////////////////////////////////////////////////////////////
     // Render levels - max
-    lvlString = route[4];
-    routeLvlSurface = TTF_RenderUTF8_Blended(
+    level = route[4];
+    levelSurface = TTF_RenderUTF8_Blended(
         font,
-        lvlString.c_str(),
+        level.c_str(),
         color
     );
-    if (routeLvlSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: routeLvlSurface " << TTF_GetError() << std::endl;
+    if (levelSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: levelSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect routeMaxLvlRect;
-    routeMaxLvlRect.x = routeMinLvlRect.x;
-    routeMaxLvlRect.y = (routeMinLvlRect.y + routeMinLvlRect.h ) + 10;
-    routeMaxLvlRect.w = routeLvlSurface->w;
-    routeMaxLvlRect.h = routeLvlSurface->h;
-    PokeSurface::onDraw(surf_display, routeLvlSurface, &routeMaxLvlRect);
-    SDL_FreeSurface(routeLvlSurface);
+    SDL_Rect maxLevelRect = {
+        minLevelRect.x, (minLevelRect.y + minLevelRect.h ) + 10,
+        levelSurface->w, levelSurface->h
+    };
+    PokeSurface::onDraw(surf_display, levelSurface, &maxLevelRect);
+    SDL_FreeSurface(levelSurface);
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Render 
-    std::string effect = 
-        route[1] + '\n' +
-        route[2] + '\n' + 
-        (std::to_string((std::stoi(route[5])) / 2) + '%');
-    SDL_Surface* routeSmrySurface = TTF_RenderUTF8_Blended_Wrapped(
+    // Render location
+    std::string location = route[1];
+    SDL_Surface* locationSurface = TTF_RenderUTF8_Blended_Wrapped(
         font,
-        effect.c_str(),
-        color,
+        location.c_str(),
+        offset + i == selectedIndex ? highlightColor : color,
         320
     );
-    if (routeSmrySurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: routeSmrySurface " << TTF_GetError() << std::endl;
+    if (locationSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: locationSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect moveEffectRect;
-    moveEffectRect.x = 15;
-    moveEffectRect.y = (WINDOW_HEIGHT / 2 ) + 50;
-    moveEffectRect.w = routeSmrySurface->w;
-    moveEffectRect.h = routeSmrySurface->h;
-    PokeSurface::onDraw(surf_display, routeSmrySurface, &moveEffectRect);
-    SDL_FreeSurface(routeSmrySurface);
+    SDL_Rect locationRect = {
+        15, (WINDOW_HEIGHT / 2 ) + 60,
+        locationSurface->w, locationSurface->h
+    };
+    PokeSurface::onDraw(surf_display, locationSurface, &locationRect);
+    SDL_FreeSurface(locationSurface);
 
-    ////////////////////////////////////////////////////////////////////////////
+    // Render method
+    std::string method = route[2];
+    method = method == "walk" ? "grass" : method;
+    method = method == "gift-egg" ? "egg" : method;
+    std::string methodIconPath = "res/icons/encounters/" + method + ".png";
+
+    SDL_Surface* methodSurface = PokeSurface::onLoadImg(methodIconPath);
+    if (methodSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: methodSurface  " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    double scaling = 1.5;
+    SDL_Rect methodRect = {
+        locationRect.x, locationRect.y + locationRect.h,
+        static_cast<int>(methodSurface->w * scaling), static_cast<int>(methodSurface->h * scaling)
+    };
+    PokeSurface::onDrawScaled(surf_display, methodSurface, &methodRect);
+    SDL_FreeSurface(methodSurface);
+
+    // Render item condition
+    if (route[7] != "NULL") {
+        std::string condition = route[7];
+        std::string conditionIconPath = "res/icons/encounters/" + condition + ".png";
+        SDL_Surface* conditionSurface = PokeSurface::onLoadImg(conditionIconPath);
+        if (conditionSurface == NULL) {
+            std::cout << "Unable to render text! SDL Error: conditionSurface " << TTF_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        };
+
+        int border = 10;
+        SDL_Rect conditionRect = {
+            methodRect.x + methodRect.w + border, locationRect.y + locationRect.h,
+            static_cast<int>(conditionSurface->w * scaling), static_cast<int>(conditionSurface->h * scaling)
+        };
+        PokeSurface::onDrawScaled(surf_display, conditionSurface, &conditionRect);
+        SDL_FreeSurface(conditionSurface);
+    }
+ 
+    // Render rate 
+    std::string rate = route[5] + '%';
+    SDL_Surface* rateSurface = TTF_RenderUTF8_Blended_Wrapped(
+        font,
+        rate.c_str(),
+        offset + i == selectedIndex ? highlightColor : color,
+        320
+    );
+    if (rateSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: rateSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    SDL_Rect rateRect = {
+        250, locationRect.y + locationRect.h + 5,
+        rateSurface->w, rateSurface->h
+    };
+    PokeSurface::onDraw(surf_display, rateSurface, &rateRect);
+    SDL_FreeSurface(rateSurface);
+
     return true;
 }
 
@@ -427,7 +460,6 @@ void PokedexActivity_PokemonView_Location::onButtonUp(SDL_Keycode sym, Uint16 mo
         if (selectedIndex < offset) {
             offset--;
         }
-        // Play the sound effect
         Mix_PlayChannel(1, sEffect_UpDown, 0);
     }
 }
@@ -438,19 +470,16 @@ void PokedexActivity_PokemonView_Location::onButtonDown(SDL_Keycode sym, Uint16 
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
-        // Play the sound effect
         Mix_PlayChannel(1, sEffect_UpDown, 0);
     }
 }
 
 void PokedexActivity_PokemonView_Location::onButtonLeft(SDL_Keycode sym, Uint16 mod){
-    // Play the sound effect
     Mix_PlayChannel(1, sEffect, 0);
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_MOVES);
 }
 
 void PokedexActivity_PokemonView_Location::onButtonRight(SDL_Keycode sym, Uint16 mod){
-    // Play the sound effect
     Mix_PlayChannel(1, sEffect, 0);
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_EVOLUTION);
 }
@@ -466,16 +495,14 @@ void PokedexActivity_PokemonView_Location::onButtonR(SDL_Keycode sym, Uint16 mod
         selectedIndex += MAX_VISIBLE_ITEMS;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset += MAX_VISIBLE_ITEMS;
-            // Ensure offset doesn't go out of bounds
             if (offset > routes->size() - MAX_VISIBLE_ITEMS) {
-                offset = routes->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+                offset = routes->size() - MAX_VISIBLE_ITEMS; 
             }
         }
     }
     else {
-        // If we exceed the last item, set selectedIndex to the last item visible
         selectedIndex = routes->size() - 1;
-        offset = routes->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
+        offset = routes->size() - MAX_VISIBLE_ITEMS; 
     }
 }
 
@@ -483,16 +510,15 @@ void PokedexActivity_PokemonView_Location::onButtonL(SDL_Keycode sym, Uint16 mod
     if (selectedIndex >= MAX_VISIBLE_ITEMS) {
         selectedIndex -= MAX_VISIBLE_ITEMS;
         if (selectedIndex < offset) {
-            offset -= MAX_VISIBLE_ITEMS; // Reduce offset accordingly
-            // Ensure offset doesn't go negative
+            offset -= MAX_VISIBLE_ITEMS; 
             if (offset < 0) {
-                offset = 0;  // Cap offset to zero
+                offset = 0;  
             }
         }
     }
     else {
-        selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
-        offset = 0;  // Cap offset to zero
+        selectedIndex = 0; 
+        offset = 0;  
     }
 }
 
