@@ -30,8 +30,11 @@ Source/window_dev/res
 #ignore gifs/webm untill ready
 **.gif
 
-#ignore Jenkinsfile untill ready. Or stick with GitActions? 
+#Jenkinsfile, untill ready. Or stick with GitActions? 
 Jenkinsfile
 
-#ignore Windows dev env. 
+#Windows dev environment. 
 **window_dev/
+
+#gtest unittest, untill ready. 
+Source/union-miyoomini-toolchain/workspace/retrodex/unittest
