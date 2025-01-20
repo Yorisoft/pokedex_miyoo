@@ -37,10 +37,7 @@ int Pokedex::onExecute() {
     SDL_Event event;
 
     while (running) {
-        while (SDL_PollEvent(&event)) {
-            onEvent(&event);
-        }
-
+        onEvent(&event);
         onLoop();
         onRender();
     }
@@ -50,6 +47,7 @@ int Pokedex::onExecute() {
     std::cout << "onExecute: end" << std::endl;
     return 0;
 }
+
 
 bool Pokedex::onSDLInit() {
     std::cout << "onSDLInit: start" << std::endl;
