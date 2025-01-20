@@ -4,59 +4,70 @@ PokedexActivityEvent::PokedexActivityEvent() {
 }
 
 PokedexActivityEvent::~PokedexActivityEvent() {
-    //Do nothing
+
 }
 
 void PokedexActivityEvent::onEvent(SDL_Event* event) {
+    while (SDL_PollEvent(event)) {
+        if (event->type == SDL_QUIT || event->type == SDL_SYSWMEVENT ) {
+            onExit();
+        }
+        else if (event->type == SDL_KEYDOWN) {
+            switch (event->key.keysym.sym) {
+            default:
+                onUser(event->user.type, event->user.code, event->user.data1, event->user.data2);
+                break;  
+            }
+        }   
+    }
+
     static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-
-    if (event->type == SDL_QUIT) {
-        onExit();
-    }
-    else if (event->type == SDL_KEYDOWN) {
-        if (event->key.keysym.sym == SW_BTN_SELECT) {
-            onButtonSelect(event->key.keysym.sym, event->key.keysym.mod);
-        }
-        else if (event->key.keysym.sym == SW_BTN_START) {
-            onButtonStart(event->key.keysym.sym, event->key.keysym.mod);
-        }
-    }
-
     if (currentKeyStates[SDL_SCANCODE_UP]) {
-        onButtonUp(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonUp(SW_BTN_UP, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-        onButtonDown(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonDown(SW_BTN_DOWN, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_LEFT]) {
-        onButtonLeft(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonLeft(SW_BTN_LEFT, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
-        onButtonRight(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonRight(SW_BTN_RIGHT, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_SPACE]) {
-        onButtonA(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonA(SW_BTN_A, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_LCTRL]) {
-        onButtonB(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonB(SW_BTN_B, event->key.keysym.mod);
     }
-    /*if (currentKeyStates[SDL_SCANCODE_SPACE]) {
-        onButtonX(event->key.keysym.sym, event->key.keysym.mod);
+    if (currentKeyStates[SDL_SCANCODE_LSHIFT]) {
+        onButtonX(SW_BTN_X, event->key.keysym.mod);
     }
-    if (currentKeyStates[SDL_SCANCODE_LCTRL]) {
-        onButtonY(event->key.keysym.sym, event->key.keysym.mod);
-    }*/
+    if (currentKeyStates[SDL_SCANCODE_LALT]) {
+        onButtonY(SW_BTN_Y, event->key.keysym.mod);
+    }
     if (currentKeyStates[SDL_SCANCODE_E]) {
-        onButtonL(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonL(SW_BTN_L1, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_T]) {
-        onButtonR(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonR(SW_BTN_R1, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_TAB]) {
-        onButtonLT(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonLT(SW_BTN_L2, event->key.keysym.mod);
     }
     if (currentKeyStates[SDL_SCANCODE_BACKSPACE]) {
-        onButtonRT(event->key.keysym.sym, event->key.keysym.mod);
+        onButtonRT(SW_BTN_R2, event->key.keysym.mod);
+    }
+    
+    if (currentKeyStates[SDL_SCANCODE_RCTRL]) {
+        onButtonSelect(SW_BTN_SELECT, event->key.keysym.mod);
+    }
+    if (currentKeyStates[SDL_SCANCODE_RETURN]) {
+        onButtonStart(SW_BTN_START, event->key.keysym.mod);
+    }
+
+    if ( currentKeyStates[SDL_SCANCODE_ESCAPE] ) {
+        onExit();
     }
 }
 

@@ -37,18 +37,7 @@ int Pokedex::onExecute() {
     SDL_Event event;
 
     while (running) {
-        while (SDL_PollEvent(&event)) {
-            switch (event.key.keysym.sym) {
-            case SDL_SYSWMEVENT:
-            case SDLK_ESCAPE:
-                onExit();
-                break;
-            default:
-                onEvent(&event);
-                //onUser(event.user.type, event.user.code, event.user.data1, event.user.data2);
-                break;  
-            }
-        }
+        onEvent(&event);
         onLoop();
         onRender();
     }
@@ -58,6 +47,7 @@ int Pokedex::onExecute() {
     std::cout << "onExecute: end" << std::endl;
     return 0;
 }
+
 
 bool Pokedex::onSDLInit() {
     std::cout << "onSDLInit: start" << std::endl;
