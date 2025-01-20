@@ -6,9 +6,11 @@ PokedexActivity_PokemonView_Evolution PokedexActivity_PokemonView_Evolution::ins
 PokedexActivity_PokemonView_Evolution::PokedexActivity_PokemonView_Evolution() :
 pokemon(nullptr),
 sEffect(nullptr),
+color({ 64, 64, 64 }),
+highlightColor({ 255, 0, 0 }),
 selectedIndex(0),
 offset(0),
-itemHeight(0)
+itemHeight(static_cast<int>((WINDOW_HEIGHT / 3) * 0.7))
 {
 }
 
@@ -17,10 +19,6 @@ PokedexActivity_PokemonView_Evolution::~PokedexActivity_PokemonView_Evolution() 
 
 void PokedexActivity_PokemonView_Evolution::onActivate() {
     std::cout << "PokedexActivity_PokemonView_Evolution::onActivate START \n";
-
-    color = { 64, 64, 64}, highlightColor = { 255, 0, 0 };
-
-    itemHeight = static_cast<int>((WINDOW_HEIGHT / 3) * 0.7);
 
     pokemon = new Pokemon();
 	evoChain = pokemon->getEvolutionChain();
@@ -72,7 +70,7 @@ void PokedexActivity_PokemonView_Evolution::onDeactivate() {
     delete pokemon;
     pokemon = nullptr;
 
-    selectedIndex = 0, offset = 0, itemHeight = 0;
+    selectedIndex = 0, offset = 0;
 }
 
 void PokedexActivity_PokemonView_Evolution::onLoop() {}
@@ -82,7 +80,6 @@ void PokedexActivity_PokemonView_Evolution::onFreeze() {}
 void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-    // Render _PokemonView_Location Items
     //Render background
     std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_5.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
@@ -91,31 +88,37 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect backgroundRect;
-    backgroundRect.x = 0;
-    backgroundRect.y = 0;
-    backgroundRect.w = surf_display->w;
-    backgroundRect.h = surf_display->h;
-
+    SDL_Rect backgroundRect = {
+        0,
+        0,
+        surf_display->w,
+        surf_display->h
+    };
     PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
     SDL_FreeSurface(backgroundSurface);
 
-    //// Render List Items
     for (int i = 0; i < 3 && static_cast<std::size_t>(offset + i) < evoChain->size(); i++) {
-        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1] ) // < -- skip forms. for now..
+        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1]){ // < -- skip forms. for now..
+            if (selectedIndex == evoChain->size() - 1) {
+                selectedIndex--;
+                if (selectedIndex - offset >= 3) {
+                    offset--;
+                }
+            }
             continue;
-        //evo = (*evoChain)[offset + i];
+        }
+
         // Render list items
         if (!renderListItems(surf_display, font, i)) {
             exit(EXIT_FAILURE);
         }
     }
-
 }
 
 bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
     std::string listEntryImageFile = "res/icons/icon/evolution_item_background_";
     offset + i == selectedIndex ? listEntryImageFile.append("selected.png") : listEntryImageFile.append("default.png");
+
     SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(listEntryImageFile);
     if (listEntrySurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
@@ -123,80 +126,79 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
     };
 
     int spacing = 15; 
-    SDL_Rect listEntryRect;
-    listEntryRect.x = static_cast<int>(surf_display->w - (surf_display->w * 0.5));
-    listEntryRect.y = 65 + (i * (itemHeight + spacing));
-    listEntryRect.w = static_cast<int>(surf_display->w * 0.50);
-    listEntryRect.h = itemHeight;
+    SDL_Rect listEntryRect = {
+        static_cast<int>(surf_display->w - (surf_display->w * 0.5)),
+        65 + (i * (itemHeight + spacing)),
+        static_cast<int>(surf_display->w * 0.50),
+        itemHeight
+    };
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
     SDL_FreeSurface(listEntrySurface);
 
-    /////////////////////////////////////////////////////////////////////////////
     // render poke sprite
-    std::string spritePath = (*evoChain)[offset + i][2];
-    spritePath = "res/sprites/" + spritePath + ".png";
+    std::string poke = (*evoChain)[offset + i][2];
+    poke = "res/sprites/" + poke + ".png";
 
-    SDL_Surface* pokeSpriteSurface = PokeSurface::onLoadImg(spritePath);
-    if (pokeSpriteSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeSpriteSurface " << TTF_GetError() << std::endl;
+    SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
+    if (pokeSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: pokeSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeSpriteRect;
-    pokeSpriteRect.x = static_cast<int>((listEntryRect.x + listEntryRect.w ) - pokeSpriteSurface->w * 1.3);
-    pokeSpriteRect.y = listEntryRect.y + 10;
-    pokeSpriteRect.w = pokeSpriteSurface->w;
-    pokeSpriteRect.h = pokeSpriteSurface->h;
-
-    PokeSurface::onDrawScaled(surf_display, pokeSpriteSurface, &pokeSpriteRect);
-    SDL_FreeSurface(pokeSpriteSurface);
+    SDL_Rect pokeRect = {
+        static_cast<int>((listEntryRect.x + listEntryRect.w ) - pokeSurface->w * 1.3),
+        listEntryRect.y + 10,
+        pokeSurface->w,
+        pokeSurface->h
+    };
+    PokeSurface::onDrawScaled(surf_display, pokeSurface, &pokeRect);
+    SDL_FreeSurface(pokeSurface);
 
     // Render Item ID
     // make it a 3 digit
     std::stringstream formattedID;
     formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[offset + i][1];
-    std::string pokeID = formattedID.str();
+    std::string id = formattedID.str();
 
-    SDL_Surface* pokeIDSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* idSurface = TTF_RenderUTF8_Blended(
         font,
-        pokeID.c_str(),
+        id.c_str(),
         { 96, 96, 96 }
     );
-    if (pokeIDSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeIDSurface " << TTF_GetError() << std::endl;
+    if (idSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: idSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeIDRect;
-    pokeIDRect.x = listEntryRect.x + 60;
-    pokeIDRect.y = listEntryRect.y + 20;
-    pokeIDRect.w = static_cast<int>(pokeIDSurface->w * .8);
-    pokeIDRect.h = static_cast<int>(pokeIDSurface->h * .8);
-    PokeSurface::onDrawScaled(surf_display, pokeIDSurface, &pokeIDRect);
-    SDL_FreeSurface(pokeIDSurface);
+    SDL_Rect idRect = {
+        listEntryRect.x + 60,
+        listEntryRect.y + 20,
+        static_cast<int>(idSurface->w * .8),
+        static_cast<int>(idSurface->h * .8)
+    };
+    PokeSurface::onDrawScaled(surf_display, idSurface, &idRect);
+    SDL_FreeSurface(idSurface);
 
-    /////////////////////////////////////////////////////////////////////////////
-    //// Render poke name
-    std::string pokeName = (*evoChain)[offset + i][4];
-    SDL_Surface* pokeNameSurface = TTF_RenderUTF8_Blended(
+    //// Render poke name( level or item)
+    std::string name = (*evoChain)[offset + i][3];
+    SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
         font,
-        pokeName.c_str(),
+        name.c_str(),
         { 96, 96, 96 }
     );
-    if (pokeNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeNameSurface " << TTF_GetError() << std::endl;
+    if (nameSurface == NULL ) {
+        std::cout << "Unable to render text! SDL Error: nameSurface" << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeNameRect;
-    pokeNameRect.x = listEntryRect.x + 10;
-    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 20;
-    pokeNameRect.w = static_cast<int>(pokeNameSurface->w * 0.8);
-    pokeNameRect.h = static_cast<int>(pokeNameSurface->h * 0.8);
-
-    PokeSurface::onDrawScaled(surf_display, pokeNameSurface, &pokeNameRect);
-    SDL_FreeSurface(pokeNameSurface);
-
+    SDL_Rect nameRect = {
+        listEntryRect.x + 10,
+        idRect.y + idRect.h + 20,
+        static_cast<int>(nameSurface->w * 0.8),
+        static_cast<int>(nameSurface->h * 0.8)
+    };
+    PokeSurface::onDrawScaled(surf_display, nameSurface, &nameRect);
+    SDL_FreeSurface(nameSurface);
 
     if (offset + i == selectedIndex) {
         if (!renderPokeInfo(surf_display, font, i)) {
@@ -205,144 +207,161 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
         }
     }
 
-
-    ///////////////////////////////////////////////////////////////////////////////
-    ////// Render poke method
-    //std::string pokeMethod = (*evoChain)[offset + i][5];
-    //if (pokeMethod == "level-up") {
-    //    pokeMethod = "Lv. " + (*evoChain)[offset + i][6];
-
-    //}
-    //pokeMethodSurface = TTF_RenderUTF8_Blended(
-    //    font,
-    //    pokeMethod.c_str(),
-    //    { 96, 96, 96 }
-    //);
-    //if (pokeMethodSurface == NULL) {
-    //    std::cout << "Unable to render text! SDL Error: pokeMethodSurface " << TTF_GetError() << std::endl;
-    //    exit(EXIT_FAILURE);
-    //};
-
-    //SDL_Rect pokeMethodRect;
-    //pokeMethodRect.x = pokeNameRect.x;
-    //pokeMethodRect.y = pokeNameRect.y + pokeNameRect.h + 30;
-    //pokeMethodRect.w = pokeMethodSurface->w * 0.8;
-    //pokeMethodRect.h = pokeMethodSurface->h * 0.8;
-
-    //PokeSurface::onDraw(surf_display, pokeMethodSurface, &pokeMethodRect);
-    //SDL_FreeSurface(pokeMethodSurface);
-
     return true;
 }
 
 bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i) {
-    //Render pokedmon info
     // render poke sprite
-    std::string spritePath = (*evoChain)[offset + i][2];
-    spritePath = "res/sprites/" + spritePath + ".png";
+    std::string poke = (*evoChain)[offset + i][2];
+    poke = "res/sprites/" + poke + ".png";
 
-    SDL_Surface* pokeSpriteSurface = PokeSurface::onLoadImg(spritePath);
-    if (pokeSpriteSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeSpriteSurface " << TTF_GetError() << std::endl;
+    SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
+    if (pokeSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: pokeSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeSpriteRect;
-    pokeSpriteRect.x = 50;
-    pokeSpriteRect.y = 90;
-    pokeSpriteRect.w = pokeSpriteSurface->w * 2;
-    pokeSpriteRect.h = pokeSpriteSurface->h * 2;
-
-    PokeSurface::onDrawScaled(surf_display, pokeSpriteSurface, &pokeSpriteRect);
-    SDL_FreeSurface(pokeSpriteSurface);
+    SDL_Rect pokeRect= {
+        50,
+        90,
+        pokeSurface->w * 2,
+        pokeSurface->h * 2
+    };
+    PokeSurface::onDrawScaled(surf_display, pokeSurface, &pokeRect);
+    SDL_FreeSurface(pokeSurface);
     
-    /////////////////////////////////////////////////////////////////////////////
-
     // Render Item ID
     // make it a 3 digit
     std::stringstream formattedID;
     formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[offset + i][1];
-    std::string pokeID = formattedID.str();
+    std::string id = formattedID.str();
 
-    SDL_Surface* pokeIDSurface = TTF_RenderUTF8_Blended(
+    SDL_Surface* idSurface = TTF_RenderUTF8_Blended(
         font,
-        pokeID.c_str(),
+        id.c_str(),
         { 96, 96, 96 }
     );
-    if (pokeIDSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeIDSurface " << TTF_GetError() << std::endl;
+    if (idSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: idSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeIDRect;
-    pokeIDRect.x = 20;
-    pokeIDRect.y = WINDOW_HEIGHT/2 + 45;
-    pokeIDRect.w = pokeIDSurface->w;
-    pokeIDRect.h = pokeIDSurface->h;
-    PokeSurface::onDraw(surf_display, pokeIDSurface, &pokeIDRect);
-    SDL_FreeSurface(pokeIDSurface);
+    SDL_Rect idRect = {
+        20,
+        WINDOW_HEIGHT/2 + 45,
+        idSurface->w,
+        idSurface->h
+    };
+    PokeSurface::onDraw(surf_display, idSurface, &idRect);
+    SDL_FreeSurface(idSurface);
 
-    /////////////////////////////////////////////////////////////////////////////
     //// Render poke name
-    std::string pokeName = (*evoChain)[offset + i][3];
-    SDL_Surface* pokeNameSurface = TTF_RenderUTF8_Blended(
+    std::string name = (*evoChain)[offset + i][3];
+    SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
         font,
-        pokeName.c_str(),
+        name.c_str(),
         { 96, 96, 96 }
     );
-    if (pokeNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeNameSurface " << TTF_GetError() << std::endl;
+    if (nameSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: nameSurface " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     };
 
-    SDL_Rect pokeNameRect;
-    pokeNameRect.x = pokeIDRect.x;
-    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 10;
-    pokeNameRect.w = static_cast<int>(pokeNameSurface->w);
-    pokeNameRect.h = static_cast<int>(pokeNameSurface->h);
-
-    PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
-    SDL_FreeSurface(pokeNameSurface);
-
-    /////////////////////////////////////////////////////////////////////////////
-    //// Render poke method
-    std::string pokeMethod = (*evoChain)[offset + i][4];
-    if (pokeMethod == "Level up" && (*evoChain)[offset + i][5] != "NULL") {
-        pokeMethod += " " + (*evoChain)[offset + i][5];
-    }
-    if (pokeMethod == "Use item") {
-        pokeMethod += " " + (*evoChain)[offset + i][6];
-
-    }
-    if (pokeMethod == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
-        pokeMethod = "Time: " + (*evoChain)[offset + i][7];
-        if ((*evoChain)[offset + i][8] != "NULL") {
-            pokeMethod += " Happiness: " + (*evoChain)[offset + i][8];
-        }
-    }
-    else if (pokeMethod == "Level up" && (*evoChain)[offset + i][8] != "NULL") {
-        pokeMethod = "Happiness: " + (*evoChain)[offset + i][8];
-    }
-    SDL_Surface* pokeMethodSurface = TTF_RenderUTF8_Blended(
-        font,
-        pokeMethod.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeMethodSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeMethodSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
+    SDL_Rect nameRect = {
+        idRect.x,
+        idRect.y + idRect.h + 10,
+        static_cast<int>(nameSurface->w),
+        static_cast<int>(nameSurface->h)
     };
-
-    SDL_Rect pokeMethodRect;
-    pokeMethodRect.x = pokeNameRect.x;
-    pokeMethodRect.y = pokeNameRect.y + pokeNameRect.h + 10;
-    pokeMethodRect.w = static_cast<int>(pokeMethodSurface->w * .9);
-    pokeMethodRect.h = static_cast<int>(pokeMethodSurface->h * .9);
-
-    PokeSurface::onDrawScaled(surf_display, pokeMethodSurface, &pokeMethodRect);
-    SDL_FreeSurface(pokeMethodSurface);
-
+    PokeSurface::onDraw(surf_display, nameSurface, &nameRect);
+    SDL_FreeSurface(nameSurface);
     
+    //// Render poke method( level or item)
+    std::string method = (*evoChain)[offset + i][4];
+    if (method == "NULL") {
+        method = "--";
+    }
+    else if (method == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL
+        method = "res/icons/encounters/" + method + ".png";
+    }
+    else if (method == "use-item") { // BY ITEM
+        method = "res/icons/items/" + (*evoChain)[offset + i][6] + ".png";
+    }
+    else if (method == "trade") { // BY ITEM
+        method = "res/icons/encounters/" + method + ".png";
+    }
+    else if ((*evoChain)[offset + i][8] != "NULL") { // BY HAPPYNESS
+        method = "happiness";
+        method = "res/icons/encounters/" + method + ".png";
+    }
+    //else if (method == "level-up" && (*evoChain)[offset + i][7] != "NULL") { // BY TIME OF DAY
+    //    method = "res/icons/encounters/" + method + ".png";
+    //}
+    //if (method == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
+    //    method = "Time: " + (*evoChain)[offset + i][7];
+    //    if ((*evoChain)[offset + i][8] != "NULL") {
+    //        method += " Happiness: " + (*evoChain)[offset + i][8];
+    //    }
+    //}
+    //else if (method == "Level up" && (*evoChain)[offset + i][8] != "NULL") {
+    //    method = "Happiness: " + (*evoChain)[offset + i][8];
+    //}
+    SDL_Surface* methodSurface;
+    SDL_Surface* methodSurfaceInfo;
+    SDL_Rect methodRect;
+    if (method == "--") {
+        methodSurface = TTF_RenderUTF8_Blended(
+            font,
+            method.c_str(),
+            { 96, 96, 96 }
+        );
+        methodRect = {
+            nameRect.x,
+            nameRect.y + nameRect.h + 5,
+            static_cast<int>(methodSurface->w ),
+            static_cast<int>(methodSurface->h )
+        };
+    }
+    else {
+        methodSurface = PokeSurface::onLoadImg(method);
+        methodRect = {
+            nameRect.x,
+            nameRect.y + nameRect.h + 5,
+            static_cast<int>(methodSurface->w * 1.5),
+            static_cast<int>(methodSurface->h * 1.5)
+        };
+    }
+    if (methodSurface == NULL ) {
+        std::cout << "Unable to render text! SDL Error: methodSurface" << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    PokeSurface::onDrawScaled(surf_display, methodSurface, &methodRect);
+    SDL_FreeSurface(methodSurface);
+
+    //
+    if ((*evoChain)[offset + i][5] != "NULL" || (*evoChain)[offset + i][8] != "NULL") {
+        std::string methodInfo = (*evoChain)[offset + i][5] != "NULL" ? (*evoChain)[offset + i][5] : (*evoChain)[offset + i][8];
+        methodSurfaceInfo = TTF_RenderUTF8_Blended(
+            font,
+            methodInfo.c_str(),
+            { 96, 96, 96 }
+        );
+        if (methodSurfaceInfo == NULL ) {
+            std::cout << "Unable to render text! SDL Error: methodSurfaceInfo" << TTF_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        };
+
+        SDL_Rect pokeMethodInfoRect = {
+            methodRect.x + methodRect.w,
+            nameRect.y + nameRect.h + 10,
+            static_cast<int>(methodSurfaceInfo->w * .9),
+            static_cast<int>(methodSurfaceInfo->h * .9)
+        };
+        PokeSurface::onDrawScaled(surf_display, methodSurfaceInfo, &pokeMethodInfoRect);
+        SDL_FreeSurface(methodSurfaceInfo);
+    }
+
     return true;
 }
 
@@ -366,7 +385,7 @@ void PokedexActivity_PokemonView_Evolution::onButtonDown(SDL_Keycode sym, Uint16
     if (selectedIndex < evoChain->size() - 1) {
         selectedIndex++;
         evo = (*evoChain)[selectedIndex];
-        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
+        if (selectedIndex - offset >= 3) {
             offset++;
         }
         // Play the sound effect
