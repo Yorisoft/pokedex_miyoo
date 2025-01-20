@@ -279,7 +279,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     //// Render poke method( level or item)
     std::string method = (*evoChain)[offset + i][4];
     if (method == "NULL") {
-        method = "--";
+        method = "__";
     }
     else if (method == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL
         method = "res/icons/encounters/" + method + ".png";
@@ -309,7 +309,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
     SDL_Surface* methodSurface;
     SDL_Surface* methodSurfaceInfo;
     SDL_Rect methodRect;
-    if (method == "--") {
+    if (method == "__") {
         methodSurface = TTF_RenderUTF8_Blended(
             font,
             method.c_str(),
