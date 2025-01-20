@@ -285,14 +285,14 @@ const std::string SQL_getPokeEvoID = R"(
 )";
 
 const std::string SQL_getPokeEvoChain = R"(
-    SELECT
+    SELECT DISTINCT
         ps.evolution_chain_id,
         p.id AS pokemon_id,
         p.identifier AS pokemon_identifier,
         psn.name AS localized_name,
-        COALESCE(etp.name, 'Base') AS evolution_method, -- Localized evolution method
+        et.identifier AS evolution_trigger_identifier,
         pe.minimum_level,
-        item_locale.name AS trigger_item_name,
+        COALESCE(i.identifier, (SELECT identifier FROM items WHERE id = pe.trigger_item_id AND local_language_id = 9)) AS trigger_item_identifier,
         pe.time_of_day,
         pe.minimum_happiness,
         pe.minimum_affection,
@@ -305,17 +305,13 @@ const std::string SQL_getPokeEvoChain = R"(
     JOIN
         pokemon p ON ps.id = p.species_id
     LEFT JOIN
-        pokemon_species_names psn ON ps.id = psn.pokemon_species_id
+        pokemon_species_names psn ON ps.id = psn.pokemon_species_id AND psn.local_language_id = :language_id
     LEFT JOIN
         pokemon_evolution pe ON ps.id = pe.evolved_species_id
     LEFT JOIN
         evolution_triggers et ON pe.evolution_trigger_id = et.id
     LEFT JOIN
-        evolution_trigger_prose etp ON et.id = etp.evolution_trigger_id AND etp.local_language_id = COALESCE(:language_id, 9) -- Use language ID or default to 9
-    LEFT JOIN
         items i ON pe.trigger_item_id = i.id
-    LEFT JOIN
-        item_names item_locale ON i.id = item_locale.item_id AND item_locale.local_language_id = COALESCE(:language_id, 9) -- Default to 9 for items too
     LEFT JOIN
         pokemon_game_indices pgi ON p.id = pgi.pokemon_id
     LEFT JOIN
@@ -324,20 +320,24 @@ const std::string SQL_getPokeEvoChain = R"(
         version_groups vg ON v.version_group_id = vg.id
     WHERE
         ps.evolution_chain_id = :evo_chain_id
-        AND psn.local_language_id = COALESCE(:language_id, 9) -- Default to 9 for species names
+        AND psn.local_language_id = :language_id
         AND p.id <= 648
     GROUP BY
         ps.evolution_chain_id,
         p.id,
         p.identifier,
         psn.name,
-        COALESCE(etp.name, 'Base'), -- Use localized name or fallback
+        et.identifier,
         pe.minimum_level,
-        item_locale.name,
+        i.identifier,
         pe.time_of_day,
         pe.minimum_happiness,
         pe.minimum_affection,
-        pe.known_move_type_id;
+        pe.known_move_type_id
+    HAVING
+        ps.id IN (
+            SELECT id FROM pokemon_species WHERE evolution_chain_id = :evo_chain_id
+    );
 )";
 
 const std::string SQL_getPokeMovesDetail = R"(
