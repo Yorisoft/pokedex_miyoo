@@ -1,4 +1,4 @@
-﻿#include "PokedexActivitySetting.h"
+#include "PokedexActivitySetting.h"
 #include "PokedexActivityManager.h"
 #include <algorithm>
 #include <fstream>
