@@ -12,8 +12,8 @@ set(SDL2_IMAGE_LIBRARIES /root/workspace/build/lib/libSDL2_image.so)
 set(SDL2_TTF_LIBRARIES /root/workspace/build/lib/libSDL2_ttf.so)
 set(SDL2_MIXER_LIBRARIES /root/workspace/build/lib/libSDL2_mixer.so)
 
-set(SQLITE_INCLUDE_DIRS ${SOURCE_DIR}/sqlite)
-set(SQLITE_SOURCE ${SOURCE_DIR}/sqlite/sqlite3.c)
+set(SQLITE_INCLUDE_DIRS ${SOURCE_DIR}/include/sqlite)
+set(SQLITE_SOURCE ${SOURCE_DIR}/include/sqlite/sqlite3.c)
 
 include_directories(${SDL2_INCLUDE_DIRS} ${SOURCE_DIR} ${SQLITE_INCLUDE_DIRS})
 
