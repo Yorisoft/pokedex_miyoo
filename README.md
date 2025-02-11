@@ -14,51 +14,65 @@
 
 </br>
 
-## Installation
+## Install on Miyoo Mini
 
 1. Connect the Miyoo Mini device to a computer.
     - Refer to the OnionOS wiki for the various ways to do this, e.g., FTP, Webserver, Samba, etc…
 2. Copy `App/Retrodex` to `/mnt/SDCARD/App` on the Miyoo Mini. Restart the device if it's turned off.
-3. On the Miyoo Mini, navigate to Apps list. 
+3. On the Miyoo Mini, navigate to Apps list.
     - Refresh App list by using the 'search' function - press `x`
 4. Navigate to the `Retrodex` app and launch it. 
 
 </br>
 </br>
 
-## Compiling and Building
 
-### Dependencies (included)
-```
-SDL2 
-SDL2_image 
-SDL2_ttf 
-SDL2_mixer
-SQLite
-```
+## Install locally
+
+1. Install cmake \
+   `apt-get install cmake`
+2. Install SDL2 dependencies \
+   `apt-get install ibsdl2-dev ibsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev`
+3. Install sqlite amalgamation 
+   - Download [here](https://www.sqlite.org/download.html). Learn about sqlite amalgamation [here](https://www.sqlite.org/amalgamation.html)
+   - Place sqlite amalgamation folder in `Source/union-miyoomini-toolchain/workspace/retrodex/include/sqlite` \
+       Make sure sqlite folder contains the following
+   ```
+       sqlite
+       ├── sqlite3.h
+       └── sqlite3.c
+   ```
+4. Run cmake 
+   > **Tip:** Working dir: Source/union-miyoomini-toolchain/workspace/retrodex
+   ```
+       cd buil
+       cmake ..
+   ```
+5. Binary should be in `build/bin`
+    - retrodex
+
+
+</br>
+</br>
+
 
 ### Directory Structure
 ```
+# tree
 .
 ├── App
-│   └── Retrodex
-│       ├── config.json
-│       ├── lib
-│       ├── res
-│       ├── retrodex
-│       ├── script
-│       └── sqlite
-├── Jenkinsfile
-├── README.md
+│   └── Retrodex
 └── Source
     └── union-miyoomini-toolchain
-        ├── Dockerfile
-        ├── Makefile
-        ├── README.md
-        ├── support
-        └── workspace
-            ├── retrodex
-            └── support
+       ├── support
+       └── workspace
+           └── retrodex
+              ├── build
+              ├── include
+              ├── res -> symlink
+              └── target
+                   └── local
+                   └── miyoo
 ```
 
 
