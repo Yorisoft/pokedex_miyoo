@@ -38,3 +38,6 @@ Source/window_dev
 
 #gtest unittest, untill ready. 
 Source/union-miyoomini-toolchain/workspace/retrodex/unittest
+
+# Local build folder
+**linux_build
