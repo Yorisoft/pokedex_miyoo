@@ -22,7 +22,8 @@ include_directories(
 )
 
 # Define source files
-file(GLOB SOURCES "*.cc")
+file(GLOB_RECURSE SOURCES "*.cc")
+# Add sqlite algamation file to source files
 list(APPEND SOURCES "include/sqlite/sqlite3.c")
 
 # Add executable
