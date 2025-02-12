@@ -5,7 +5,7 @@
 #include "Pokemon.h"
 
 class PokedexActivity_PokemonView_Location : public PokedexActivity {
-private: 
+private:
     static PokedexActivity_PokemonView_Location instance;
 
     Pokemon* pokemon;
@@ -13,7 +13,7 @@ private:
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::vector<std::string>>* routes;
     std::vector<std::string> route;
-    
+
     int selectedIndex, offset, itemHeight;
     std::string fontPath;
 
@@ -22,13 +22,13 @@ private:
 
     void printPokeInfo();
     bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font);
-    bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
-    bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);
-    
+	bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
+	bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);
+
     void onButtonUp(SDL_Keycode, Uint16);
-    void onButtonDown(SDL_Keycode, Uint16);
-    void onButtonLeft(SDL_Keycode, Uint16);
-    void onButtonRight(SDL_Keycode, Uint16);
+	void onButtonDown(SDL_Keycode, Uint16);
+	void onButtonLeft(SDL_Keycode, Uint16);
+	void onButtonRight(SDL_Keycode, Uint16);
     void onButtonA(SDL_Keycode, Uint16);
     void onButtonB(SDL_Keycode, Uint16);
     void onButtonR(SDL_Keycode, Uint16);

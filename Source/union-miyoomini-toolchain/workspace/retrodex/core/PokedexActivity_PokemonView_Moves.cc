@@ -167,7 +167,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
 
     SDL_Rect methodRect = {
         listEntryRect.x,
-        (listEntryRect.y + listEntryRect.h ) - methodSurface->h * 1.5,
+        (listEntryRect.y + listEntryRect.h ) - methodSurface->h * static_cast<int>(1.5),
         static_cast<int>(methodSurface->w * 1.5),
         static_cast<int>(methodSurface->h * 1.5)
     };

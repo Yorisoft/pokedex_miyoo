@@ -284,9 +284,9 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     double scaling = 1.5;
     SDL_Rect methodRect = {
             listEntryRect.x, 
-            (listEntryRect.y + listEntryRect.h ) - (methodSurface->h * scaling), 
-            (methodSurface->w * scaling), 
-            (methodSurface->h * scaling)
+            (listEntryRect.y + listEntryRect.h ) - static_cast<int>(methodSurface->h * scaling), 
+            static_cast<int>(methodSurface->w * scaling),
+            static_cast<int>(methodSurface->h * scaling)
         };
     PokeSurface::onDrawScaled(surf_display, methodSurface, &methodRect);
     SDL_FreeSurface(methodSurface);
