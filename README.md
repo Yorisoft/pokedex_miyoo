@@ -24,37 +24,67 @@
 4. Navigate to the `Retrodex` app and launch it. 
 
 </br>
-</br>
-
 
 ## Install locally
 
-1. Install cmake \
+1. Install cmake: \
    `apt-get install cmake`
-2. Install SDL2 dependencies \
+2. Install SDL2 dependencies: \
    `apt-get install ibsdl2-dev ibsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev`
 3. Install sqlite amalgamation 
    - Download [here](https://www.sqlite.org/download.html). Learn about sqlite amalgamation [here](https://www.sqlite.org/amalgamation.html)
-   - Place sqlite amalgamation folder in `Source/union-miyoomini-toolchain/workspace/retrodex/include/sqlite` \
+   - Place sqlite amalgamation folder in `Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite` \
        Make sure sqlite folder contains the following
    ```
        sqlite
        ├── sqlite3.h
        └── sqlite3.c
    ```
-4. Run cmake 
-   > **Tip:** Working dir: Source/union-miyoomini-toolchain/workspace/retrodex
+4. Create a symlink from to res: 
    ```
-       cd buil
+   cd Source/union-miyoomini-toolchain/workspace/retrodex
+   ln -s ../../../../App/Retrodex/res res
+   ```
+   - This contains the app resource like sprites, icons, db, etc..
+5. Copy CMakeList.txt to projet dir:
+   ```
+   cp -v targets/local/CMakeLists.txt .
+   ```
+5. Run cmake: 
+   ```
+       mkdir build
+       cd build
        cmake ..
+       make
    ```
-5. Binary should be in `build/bin`
-    - retrodex
-
+6. Binary should be in `build/bin`. Copy it to `retrodex/` and run: \
+   `./retrodex`
 
 </br>
-</br>
 
+## Compiling on union-miyoomini-toolchain
+
+1. Clone, navigate to `Source/union-miyoomini-toolchain`, and start the docker container for the union-miyoomini-toolchain. 
+   - Read the `README.md` located in the `Source/union-miyoomini-toolchain` directory for instructions on how to get started with union-miyoomini-toolchain, or refer to their GitHub README. [union-miyoomini-toolchain repo](https://github.com/MiyooMini/union-toolchain/tree/main)
+2. Run `mksdl2.sh` script to build SDL2 dependencies.
+    ```
+    ./mksdl2.sh
+    ```
+3. Compile the Retrodex program using the provided CMakeList and Toolchain files:
+    ```
+    cd retrodex 
+    cp -v targets/miyoo/* . 
+    mkdir build 
+    cd build 
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake 
+    make
+    ```
+4. The executable should be located in `workspace/retrodex/build/`
+    - `retrodex`
+
+Copy `retrodex` executable to App/Retrodex for testing. 
+
+</br>
 
 ### Directory Structure
 ```
@@ -74,33 +104,6 @@
                    └── local
                    └── miyoo
 ```
-
-
-### Compiling on union-miyoomini-toolchain
-
-1. Clone, navigate to `Source/union-miyoomini-toolchain`, and start the docker container for the union-miyoomini-toolchain. 
-   - Read the `README.md` located in the `Source/union-miyoomini-toolchain` directory for instructions on how to get started with union-miyoomini-toolchain, or refer to their GitHub README. [union-miyoomini-toolchain repo](https://github.com/MiyooMini/union-toolchain/tree/main)
-2. Run `mksdl2.sh` script to build SDL2 dependencies.
-    ```
-    ./mksdl2.sh
-    ```
-3. Compile the Retrodex program using the provided CMakeList and Toolchain files:
-    ```
-    cd retrodex \
-    mkdir build \
-    cd build \
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake \
-    make
-    ```
-4. The executable should be located in `workspace/retrodex/build/`
-    - `retrodex`
-
-Copy `retrodex` executable to App/Retrodex for testing. 
-
-</br>
-</br>
-
-
 
 ## Current Status
 
