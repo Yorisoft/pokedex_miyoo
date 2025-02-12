@@ -14,55 +14,55 @@
 
 </br>
 
-## Installation
+## Install on Miyoo Mini
 
 1. Connect the Miyoo Mini device to a computer.
     - Refer to the OnionOS wiki for the various ways to do this, e.g., FTP, Webserver, Samba, etc…
 2. Copy `App/Retrodex` to `/mnt/SDCARD/App` on the Miyoo Mini. Restart the device if it's turned off.
-3. On the Miyoo Mini, navigate to Apps list. 
+3. On the Miyoo Mini, navigate to Apps list.
     - Refresh App list by using the 'search' function - press `x`
 4. Navigate to the `Retrodex` app and launch it. 
 
 </br>
+
+## Install locally
+
+1. Install cmake: \
+   `apt-get install cmake`
+2. Install SDL2 dependencies: \
+   `apt-get install ibsdl2-dev ibsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev`
+3. Install sqlite amalgamation 
+   - Download [here](https://www.sqlite.org/download.html). Learn about sqlite amalgamation [here](https://www.sqlite.org/amalgamation.html)
+   - Place sqlite amalgamation folder in `Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite` \
+       Make sure sqlite folder contains the following
+   ```
+       sqlite
+       ├── sqlite3.h
+       └── sqlite3.c
+   ```
+4. Create a symlink from to res: 
+   ```
+   cd Source/union-miyoomini-toolchain/workspace/retrodex
+   ln -s ../../../../App/Retrodex/res res
+   ```
+   - This contains the app resource like sprites, icons, db, etc..
+5. Copy CMakeList.txt to projet dir:
+   ```
+   cp -v targets/local/CMakeLists.txt .
+   ```
+5. Run cmake: 
+   ```
+       mkdir build
+       cd build
+       cmake ..
+       make
+   ```
+6. Binary should be in `build/bin`. Copy it to `retrodex/` and run: \
+   `./retrodex`
+
 </br>
 
-## Compiling and Building
-
-### Dependencies (included)
-```
-SDL2 
-SDL2_image 
-SDL2_ttf 
-SDL2_mixer
-SQLite
-```
-
-### Directory Structure
-```
-.
-├── App
-│   └── Retrodex
-│       ├── config.json
-│       ├── lib
-│       ├── res
-│       ├── retrodex
-│       ├── script
-│       └── sqlite
-├── Jenkinsfile
-├── README.md
-└── Source
-    └── union-miyoomini-toolchain
-        ├── Dockerfile
-        ├── Makefile
-        ├── README.md
-        ├── support
-        └── workspace
-            ├── retrodex
-            └── support
-```
-
-
-### Compiling on union-miyoomini-toolchain
+## Compiling on union-miyoomini-toolchain
 
 1. Clone, navigate to `Source/union-miyoomini-toolchain`, and start the docker container for the union-miyoomini-toolchain. 
    - Read the `README.md` located in the `Source/union-miyoomini-toolchain` directory for instructions on how to get started with union-miyoomini-toolchain, or refer to their GitHub README. [union-miyoomini-toolchain repo](https://github.com/MiyooMini/union-toolchain/tree/main)
@@ -72,10 +72,11 @@ SQLite
     ```
 3. Compile the Retrodex program using the provided CMakeList and Toolchain files:
     ```
-    cd retrodex \
-    mkdir build \
-    cd build \
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake \
+    cd retrodex 
+    cp -v targets/miyoo/* . 
+    mkdir build 
+    cd build 
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake 
     make
     ```
 4. The executable should be located in `workspace/retrodex/build/`
@@ -84,9 +85,25 @@ SQLite
 Copy `retrodex` executable to App/Retrodex for testing. 
 
 </br>
-</br>
 
-
+### Directory Structure
+```
+# tree
+.
+├── App
+│   └── Retrodex
+└── Source
+    └── union-miyoomini-toolchain
+       ├── support
+       └── workspace
+           └── retrodex
+              ├── build
+              ├── include
+              ├── res -> symlink
+              └── target
+                   └── local
+                   └── miyoo
+```
 
 ## Current Status
 

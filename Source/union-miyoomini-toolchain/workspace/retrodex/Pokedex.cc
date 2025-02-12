@@ -8,7 +8,7 @@
 #include<vector>
 #include<string>
 #include<iomanip>
-#include"sqlite/sqlite3.h"
+#include<sqlite/sqlite3.h>
 #include"Pokedex.h"
 
 Pokedex::Pokedex() {
