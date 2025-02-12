@@ -13,8 +13,8 @@ pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include/sqlite
+    ${CMAKE_SOURCE_DIR}/core/include
+    ${CMAKE_SOURCE_DIR}/core/include/sqlite
     ${SDL2_INCLUDE_DIRS}
     ${SDL2_IMAGE_INCLUDE_DIRS}
     ${SDL2_TTF_INCLUDE_DIRS}
@@ -24,7 +24,7 @@ include_directories(
 # Define source files
 file(GLOB_RECURSE SOURCES "*.cc")
 # Add sqlite algamation file to source files
-list(APPEND SOURCES "include/sqlite/sqlite3.c")
+list(APPEND SOURCES "core/include/sqlite/sqlite3.c")
 
 # Add executable
 add_executable(retrodex ${SOURCES})
