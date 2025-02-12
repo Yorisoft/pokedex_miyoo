@@ -158,12 +158,8 @@ void Pokedex::onLoop() {
     //std::cout << "onLoop: start" << std::endl;
 
     // Calculate and print FPS
-    calculateFPS(frameCount, lastTime, fps);
-    const int width = 100; // Total width allocated for FPS output
-    std::cout << std::fixed << std::setprecision(2);
-
-    // Right-align the output by setting fill to spaces and width
-    std::cout << "FPS: " << fps << "\r";
+	// Uncomment this line during debug. Causes large log files otherwise.
+    //calculateFPS(frameCount, lastTime, fps);
 
     PokedexActivityManager::onLoop();
     //std::cout << "onLoop: end" << std::endl;
@@ -197,6 +193,12 @@ void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
         frameCount = 0;
         lastTime = currentTime;
     }
+
+    const int width = 100; // Total width allocated for FPS output
+    std::cout << std::fixed << std::setprecision(2);
+
+    // Right-align the output by setting fill to spaces and width
+    std::cout << "FPS: " << fps << "\r";
 }
 
 void Pokedex::onExit() {
