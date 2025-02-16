@@ -35,7 +35,6 @@ int main(int argc, char* argv[]) {
 Pokedex::Pokedex() {
     window = NULL;
     screen = NULL;
-    screenTest = NULL;
     texture = NULL;
     renderer = NULL;
     font = NULL;
@@ -230,7 +229,6 @@ void Pokedex::onCleanup() {
     std::cout << "onCleanUp: start" << std::endl;
 
     SDL_FreeSurface(screen);
-    SDL_FreeSurface(screenTest);
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
