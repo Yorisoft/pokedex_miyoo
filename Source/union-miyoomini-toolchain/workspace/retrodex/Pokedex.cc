@@ -11,6 +11,27 @@
 #include<sqlite/sqlite3.h>
 #include"Pokedex.h"
 
+int main(int argc, char* argv[]) {
+    std::cout << "main: start" << std::endl;
+/* 
+    BASIC GAME LOOP
+	Initialize();
+
+	while (true) {
+		Events();
+		Loop();
+		Render();
+	}
+
+	Cleanup();
+*/
+	Pokedex pokedexApp;
+
+	return pokedexApp.onExecute();
+
+    std::cout << "main: end" << std::endl;
+}
+
 Pokedex::Pokedex() {
     window = NULL;
     screen = NULL;
@@ -221,25 +242,4 @@ void Pokedex::onCleanup() {
     //Mix_Quit();
 
     std::cout << "onCleanUp: end" << std::endl;
-}
-
-int main(int argc, char* argv[]) {
-    std::cout << "main: start" << std::endl;
-/* 
-    BASIC GAME LOOP
-	Initialize();
-
-	while (true) {
-		Events();
-		Loop();
-		Render();
-	}
-
-	Cleanup();
-*/
-	Pokedex pokedexApp;
-
-	return pokedexApp.onExecute();
-
-    std::cout << "main: end" << std::endl;
 }
