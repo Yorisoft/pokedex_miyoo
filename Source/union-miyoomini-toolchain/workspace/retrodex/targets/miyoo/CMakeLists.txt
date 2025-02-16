@@ -3,6 +3,8 @@ project(retrodex)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Usefull for vim and other processes
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SDL2_INCLUDE_DIRS /root/workspace/build/include)
 

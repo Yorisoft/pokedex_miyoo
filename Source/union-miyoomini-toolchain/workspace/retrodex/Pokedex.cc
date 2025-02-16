@@ -176,11 +176,6 @@ void Pokedex::onEvent(SDL_Event* event) {
 
 void Pokedex::onLoop() {
     //std::cout << "onLoop: start" << std::endl;
-
-    // Calculate and print FPS
-	// Uncomment this line during debug. Causes large log files otherwise.
-    //calculateFPS(frameCount, lastTime, fps);
-
     PokedexActivityManager::onLoop();
     //std::cout << "onLoop: end" << std::endl;
 }
@@ -189,6 +184,10 @@ void Pokedex::onRender() {
     ////std::cout << "onRender: start" << std::endl;
     SDL_RenderClear(renderer);
     PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
+    // Calculate and print FPS
+	// Uncomment this line during debug. Causes large log files otherwise.
+    calculateFPS(frameCount, lastTime, fps);
+
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -198,27 +197,37 @@ void Pokedex::onRender() {
 }
 
 void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
-    // Increment the frame count
     frameCount++;
-
-    // Get the current time in milliseconds
     Uint32 currentTime = SDL_GetTicks();
-
-    // Calculate elapsed time since last FPS calculation
     Uint32 elapsedTime = currentTime - lastTime;
 
-    // Update FPS every 1 second
     if (elapsedTime >= 1000) {
         fps = frameCount / (elapsedTime / 1000.0f);
         frameCount = 0;
         lastTime = currentTime;
     }
 
-    const int width = 100; // Total width allocated for FPS output
-    std::cout << std::fixed << std::setprecision(2);
+	std::stringstream iss;
+	iss << std::fixed << std::setprecision(2);
+    iss << fps;
 
-    // Right-align the output by setting fill to spaces and width
-    std::cout << "FPS: " << fps << "\r";
+    SDL_Surface* fpsSurface = TTF_RenderUTF8_Blended(
+        font,
+        iss.str().c_str(),
+        { 0, 128, 0 }
+    );
+    if (fpsSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+    SDL_Rect fpsRect;
+    fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
+    fpsRect.y = 0;
+    fpsRect.w = fpsSurface->w;
+    fpsRect.h = fpsSurface->h;
+
+    PokeSurface::onDraw(screen, fpsSurface, &fpsRect);
+    SDL_FreeSurface(fpsSurface);
 }
 
 void Pokedex::onExit() {
