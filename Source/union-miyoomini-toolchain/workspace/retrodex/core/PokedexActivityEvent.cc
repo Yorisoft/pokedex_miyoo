@@ -1,4 +1,5 @@
 #include "PokedexActivityEvent.h"
+#include <iostream>
 
 PokedexActivityEvent::PokedexActivityEvent() {
 }
@@ -7,68 +8,125 @@ PokedexActivityEvent::~PokedexActivityEvent() {
 }
 
 void PokedexActivityEvent::onEvent(SDL_Event* event) {
-    while (SDL_PollEvent(event)) {
-        if (event->type == SDL_QUIT || event->type == SDL_SYSWMEVENT ) {
-            onExit();
+	SDL_Keycode key = event->key.keysym.sym;
+
+	switch (event->type) {
+	case SDL_QUIT:
+	case SDLK_ESCAPE:
+		onExit();
+	break;
+	case SDL_KEYDOWN:
+		std::cout << "Keydown" << std::endl;
+		if(keystates[key] != RELEASED){
+			keystates[key] = REPEATING;
+			onKeyHold(key, event->key.keysym.mod);
+			std::cout << "called onKeyHold" << std::endl;
+		}
+		else{
+			keystates[key] = PRESSED;
+			onKeyPress(key, event->key.keysym.mod);
+			currentTime = SDL_GetTicks();
+			std::cout << "called onKeyPress" << std::endl;
+		}
+	break;
+	case SDL_KEYUP:
+		std::cout << "KeyUp" << std::endl;
+		keystates[key] = RELEASED;
+		onKeyRelease(key, event->key.keysym.mod);
+		currentTime = SDL_GetTicks();
+		std::cout << "called onKeyRelease" << std::endl;
+	break;
+	default:
+		onUser(event->user.type, event->user.code, event->user.data1, event->user.data2);
+		break;  
+	}
+}
+
+// this will be called when a key is pressed
+// only runs once when the key is pressed
+void PokedexActivityEvent::onKeyPress(SDL_Keycode key, Uint16 mod) {
+	std::cout << "Key: " << key << std::endl;
+	std::cout << "SW_BTN_UP: " << SW_BTN_UP << std::endl;
+	
+	switch(key){
+	case SW_BTN_UP:
+		onButtonUp(key, mod);
+		std::cout << "Called up" << std::endl;
+		break;
+	case SW_BTN_DOWN:
+		onButtonDown(key, mod);
+		std::cout << "Called down" << std::endl;
+		break;
+	case SW_BTN_A:
+		onButtonA(key, mod);
+		std::cout << "Called Button A" << std::endl;
+		break;
+	case SW_BTN_B:
+		onButtonB(key, mod);
+		break;
+	default:
+		break;
+	}
+}
+
+// this will be called when a key is released
+// only runs once when the key is released
+void PokedexActivityEvent::onKeyRelease(SDL_Keycode key, Uint16 mod) {
+    // Exactly when the key is released
+}
+
+// this will be called when a key is held down
+// runs every frame when the key is held down
+// or you can use the timer to check if the key is held down for a certain amount of time
+void PokedexActivityEvent::onKeyHold(SDL_Keycode key, Uint16 mod) {
+	//currentTime = SDL_GetTicks();
+    currentTime = SDL_GetTicks();
+	Uint32 elapsedTime = currentTime - lastTime; 
+	
+	std::cout << "Elapsed Time: " << elapsedTime << std::endl;
+
+	if(elapsedTime >= 100){
+		// examples
+		// A btn run every frame
+		if (key == SW_BTN_UP)
+			onButtonUp(key, mod);
+
+		// examples
+		// A btn run every frame
+		if (key == SW_BTN_DOWN)
+			onButtonDown(key, mod);
+
+		lastTime = currentTime;
+	}
+
+    // examples
+    // A btn run every frame
+    if (key == SW_BTN_A) {
+        // do something
+    }
+
+    // B btn run every other frame
+    if (key == SW_BTN_B) {
+        if (elapsedTime % 2 == 0) {
+            // do something
         }
-        else if (event->type == SDL_KEYDOWN) {
-            switch (event->key.keysym.sym) {
-            default:
-                onUser(event->user.type, event->user.code, event->user.data1, event->user.data2);
-                break;  
-            }
-        }   
     }
 
-    static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-    if (currentKeyStates[SDL_SCANCODE_UP]) {
-        onButtonUp(SW_BTN_UP, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-        onButtonDown(SW_BTN_DOWN, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_LEFT]) {
-        onButtonLeft(SW_BTN_LEFT, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
-        onButtonRight(SW_BTN_RIGHT, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_SPACE]) {
-        onButtonA(SW_BTN_A, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_LCTRL]) {
-        onButtonB(SW_BTN_B, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_LSHIFT]) {
-        onButtonX(SW_BTN_X, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_LALT]) {
-        onButtonY(SW_BTN_Y, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_E]) {
-        onButtonL(SW_BTN_L1, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_T]) {
-        onButtonR(SW_BTN_R1, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_TAB]) {
-        onButtonLT(SW_BTN_L2, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_BACKSPACE]) {
-        onButtonRT(SW_BTN_R2, event->key.keysym.mod);
-    }
-    
-    if (currentKeyStates[SDL_SCANCODE_RCTRL]) {
-        onButtonSelect(SW_BTN_SELECT, event->key.keysym.mod);
-    }
-    if (currentKeyStates[SDL_SCANCODE_RETURN]) {
-        onButtonStart(SW_BTN_START, event->key.keysym.mod);
+    // X btn run continuously after 500
+    if (key == SW_BTN_X) {
+        if (elapsedTime > 500) {
+            // do something
+        }
     }
 
-    if ( currentKeyStates[SDL_SCANCODE_ESCAPE] ) {
-        onExit();
+    // Y btn run continously after 1000 but register every 10 frame
+    if (key == SW_BTN_Y) {
+        if (elapsedTime > 1000 && elapsedTime % 10 == 0) {
+            // do something
+        }
     }
 }
+
 
 void PokedexActivityEvent::onButtonUp(SDL_Keycode sym,Uint16 mod) {
     //Pure virtual, do nothing

@@ -30,12 +30,32 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include <map>
+
+typedef enum {
+	RELEASED,
+	PRESSED,
+	REPEATING
+} KeyStates;
+
+// Would work in SDL1 with SDLKey
+//static KeyStates keystate[320] = {RELEASED};
+static std::map<SDL_Keycode, KeyStates> keystates;
 
 class PokedexActivityEvent {
+private: 
+Uint32 currentTime, lastTime;
+
 public:
     PokedexActivityEvent();
 
     virtual ~PokedexActivityEvent();
+
+	void onKeyPress(SDL_Keycode sym, Uint16 mod);
+
+	void onKeyHold(SDL_Keycode sym, Uint16 mod);
+
+	void onKeyRelease(SDL_Keycode sym, Uint16 mod);
 
     virtual void onEvent(SDL_Event* Event);
 

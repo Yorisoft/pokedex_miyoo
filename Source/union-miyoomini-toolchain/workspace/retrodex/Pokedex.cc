@@ -5,8 +5,6 @@
 #define MAX_VISIBLE_ITEMS 5                 // Set the maximum number of visible
 
 #include<iostream>
-#include<vector>
-#include<string>
 #include<iomanip>
 #include<sqlite/sqlite3.h>
 #include"Pokedex.h"
@@ -56,7 +54,9 @@ int Pokedex::onExecute() {
 
     SDL_Event event;
     while (running) {
-        onEvent(&event);
+    	while (SDL_PollEvent(&event)) {
+        	onEvent(&event);
+		}
         onLoop();
         onRender();
     }
