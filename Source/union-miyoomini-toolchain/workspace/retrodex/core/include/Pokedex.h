@@ -36,7 +36,8 @@ public:
     void onRender();
     void onExit();
     void onCleanup();
-    void calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps);
+    void calculateFPS();
+	void renderFPS();
 };
 
 #endif

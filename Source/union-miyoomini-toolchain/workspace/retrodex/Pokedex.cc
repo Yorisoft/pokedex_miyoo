@@ -170,21 +170,26 @@ void Pokedex::onEvent(SDL_Event* event) {
 
 void Pokedex::onLoop() {
     PokedexActivityManager::onLoop();
+
+    // Calculate and print FPS
+	// Uncomment this line during debug. Not ready to roll out.
+    // calculateFPS();
 }
 
 void Pokedex::onRender() {
     SDL_RenderClear(renderer);
-    PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
-    // Calculate and print FPS
-	// Uncomment this line during debug. Not ready to roll out.
-    // calculateFPS(frameCount, lastTime, fps);
 
+    PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
+
+    // Calculate and print FPS
+	// Uncomment this line during debug. Not ready to roll out.
+	// renderFPS();
 }
 
-void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
+void Pokedex::calculateFPS() {
     frameCount++;
     Uint32 currentTime = SDL_GetTicks();
     Uint32 elapsedTime = currentTime - lastTime;
@@ -194,7 +199,9 @@ void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
         frameCount = 0;
         lastTime = currentTime;
     }
+}
 
+void Pokedex::renderFPS(){
 	std::stringstream iss;
 	iss << std::fixed << std::setprecision(2);
     iss << fps;
