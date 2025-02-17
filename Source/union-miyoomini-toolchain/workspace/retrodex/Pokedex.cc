@@ -1,5 +1,4 @@
 // Window Settings
-#include "SDL_ttf.h"
 #define WINDOW_HEIGHT 480                   // window height in pixels
 #define WINDOW_WIDTH 640                    // window width in pixels
 #define DEPTH 16                            // window depth in pixels
