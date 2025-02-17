@@ -45,5 +45,6 @@ sqlite/
 # Move build config files to retrodex workspace to use but dont push
 # For edits to build config edit target/<target>/<build_config_files>
 Source/union-miyoomini-toolchain/workspace/retrodex/CMakeLists.txt
+Source/union-miyoomini-toolchain/workspace/retrodex/Makefile
 Source/union-miyoomini-toolchain/workspace/retrodex/ToolChain.cmake
 
