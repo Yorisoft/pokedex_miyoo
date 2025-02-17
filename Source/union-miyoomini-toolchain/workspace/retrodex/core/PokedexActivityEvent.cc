@@ -4,7 +4,6 @@ PokedexActivityEvent::PokedexActivityEvent() {
 }
 
 PokedexActivityEvent::~PokedexActivityEvent() {
-
 }
 
 void PokedexActivityEvent::onEvent(SDL_Event* event) {

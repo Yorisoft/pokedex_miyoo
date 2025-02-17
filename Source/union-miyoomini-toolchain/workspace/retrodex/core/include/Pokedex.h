@@ -11,41 +11,31 @@
 
 class Pokedex : public PokedexActivityEvent {
 private:
-	bool running;
-
     // Variables for FPS calculation
     Uint32 frameCount;
     Uint32 lastTime;
     float fps;
 
+	bool running;
+
     SDL_Window* window;
-    SDL_Surface* screen;
-    SDL_Surface* screenTest;
-    SDL_Texture* texture;
     SDL_Renderer* renderer;
+    SDL_Texture* texture;
+    SDL_Surface* screen;
     TTF_Font* font;
     Mix_Chunk* sEffect;
 
 public:
-
     Pokedex();
 
     int onExecute();
-
     bool onInit();
-
     bool onSDLInit();
-
     void onEvent(SDL_Event* event);
-
     void onLoop();
-
     void onRender();
-
     void onExit();
-
     void onCleanup();
-
     void calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps);
 };
 

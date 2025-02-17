@@ -1,4 +1,5 @@
 // Window Settings
+#include "SDL_ttf.h"
 #define WINDOW_HEIGHT 480                   // window height in pixels
 #define WINDOW_WIDTH 640                    // window width in pixels
 #define DEPTH 16                            // window depth in pixels
@@ -12,9 +13,9 @@
 #include"Pokedex.h"
 
 int main(int argc, char* argv[]) {
-    std::cout << "main: start" << std::endl;
-/* 
-    BASIC GAME LOOP
+    std::cout << "main: START" << std::endl;
+ 
+ /* BASIC GAME LOOP
 	Initialize();
 
 	while (true) {
@@ -22,55 +23,53 @@ int main(int argc, char* argv[]) {
 		Loop();
 		Render();
 	}
+ 	Cleanup(); */
 
-	Cleanup();
-*/
 	Pokedex pokedexApp;
 
 	return pokedexApp.onExecute();
 
-    std::cout << "main: end" << std::endl;
+    std::cout << "main: END" << std::endl;
 }
 
 Pokedex::Pokedex() {
-    window = NULL;
-    screen = NULL;
-    texture = NULL;
-    renderer = NULL;
-    font = NULL;
-    sEffect = NULL;
-
     // Variables for FPS calculation
     frameCount = 0;
     lastTime = SDL_GetTicks();
     fps = 0.0f;
 
     running = true;
+
+    window = NULL;
+    renderer = NULL;
+    texture = NULL;
+    screen = NULL;
+    font = NULL;
+    sEffect = NULL;
 }
 
 int Pokedex::onExecute() {
-    std::cout << "onExecute: start" << std::endl;
+    std::cout << "Pokedex::onExecute: START" << std::endl;
+
     if (onSDLInit() == false || onInit() == false) {
         return -1;
     }
 
     SDL_Event event;
-
     while (running) {
         onEvent(&event);
         onLoop();
         onRender();
     }
-
     onCleanup(); 
 
-    std::cout << "onExecute: end" << std::endl;
+    std::cout << "Pokedex::onExecute: END" << std::endl;
+
     return 0;
 }
 
-
 bool Pokedex::onSDLInit() {
-    std::cout << "onSDLInit: start" << std::endl;
+    std::cout << "Pokedex::onSDLInit: START" << std::endl;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) < 0) {
         std::cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
@@ -152,48 +151,38 @@ bool Pokedex::onSDLInit() {
         SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00)
     );
 
-    std::cout << "onSDLInit: end" << std::endl;
+    std::cout << "Pokedex::onSDLInit: END" << std::endl;
 
     return true;
 }
 
 bool Pokedex::onInit() {
-    std::cout << "onInit: start" << std::endl;
+    std::cout << "Pokedex::onInit: START" << std::endl;
     PokedexActivityManager::setActiveState(APPSTATE_INTRO);
 
-    std::cout << "onInit: end" << std::endl;
+    std::cout << "Pokedex::onInit: END" << std::endl;
 	return true;
 }
 
 void Pokedex::onEvent(SDL_Event* event) {
-    //std::cout << "onEvent: start" << std::endl;
-
     PokedexActivityEvent::onEvent(event);
     PokedexActivityManager::onEvent(event);
-
-    //std::cout << "onEvent: end" << std::endl;
 }
 
 void Pokedex::onLoop() {
-    //std::cout << "onLoop: start" << std::endl;
     PokedexActivityManager::onLoop();
-    //std::cout << "onLoop: end" << std::endl;
 }
 
 void Pokedex::onRender() {
-    ////std::cout << "onRender: start" << std::endl;
     SDL_RenderClear(renderer);
     PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
     // Calculate and print FPS
-	// Uncomment this line during debug. Causes large log files otherwise.
-    calculateFPS(frameCount, lastTime, fps);
-
+	// Uncomment this line during debug. Not ready to roll out.
+    // calculateFPS(frameCount, lastTime, fps);
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
-
-    //std::cout << "onRender: end" << std::endl;
 }
 
 void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
@@ -231,22 +220,29 @@ void Pokedex::calculateFPS(Uint32& frameCount, Uint32& lastTime, float& fps) {
 }
 
 void Pokedex::onExit() {
+    std::cout << "Pokedex::onExit: START" << std::endl;
+
     running = false;
+
+    std::cout << "Pokedex::onExit: END" << std::endl;
 }
 
 void Pokedex::onCleanup() {
-    std::cout << "onCleanUp: start" << std::endl;
+    std::cout << "Pokedex::onCleanUp: START" << std::endl;
 
+	TTF_CloseFont(font);
     SDL_FreeSurface(screen);
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     Mix_FreeChunk(sEffect);
+    Mix_CloseAudio();
     TTF_Quit();
     IMG_Quit();
-    SDL_Quit();
-    Mix_CloseAudio();
-    //Mix_Quit();
+	Mix_Quit();
+	SDL_VideoQuit();
 
-    std::cout << "onCleanUp: end" << std::endl;
+    SDL_Quit();
+	
+    std::cout << "Pokedex::onCleanUp: END" << std::endl;
 }
