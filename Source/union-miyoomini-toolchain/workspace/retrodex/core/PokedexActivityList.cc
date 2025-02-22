@@ -183,7 +183,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
 
     //List item types_1
     std::string pokemonType1 = pokemon[3];
-    iconFile = "res/types/" + pokemonType1 + ".png";
+    iconFile = "res/assets/pokemons/types/" + pokemonType1 + ".png";
     SDL_Surface* pokeType1Surface = PokeSurface::onLoadImg(iconFile);
 
     if (pokeType1Surface == NULL) {
@@ -201,7 +201,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     //List item types_2
     if (pokemon[4] != "NULL") {
         std::string pokemonType2 = pokemon[4];
-        iconFile = "res/types/" + pokemonType2 + ".png";
+        iconFile = "res/assets/pokemons/types/" + pokemonType2 + ".png";
         SDL_Surface* pokeType2Surface = PokeSurface::onLoadImg(iconFile);
 
         if (pokeType2Surface == NULL) {

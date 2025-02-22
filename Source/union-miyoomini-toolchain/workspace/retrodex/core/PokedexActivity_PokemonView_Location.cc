@@ -157,7 +157,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
 
     // render poke types
     std::vector<std::string> types = pokemon->getTypes();
-    iconPath = "res/types/" + types[0] + ".png";
+    iconPath = "res/assets/pokemons/types/" + types[0] + ".png";
 
     SDL_Surface* typeASurface = PokeSurface::onLoadImg(iconPath);
     if (typeASurface == NULL) {
@@ -174,7 +174,7 @@ bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_disp
 
     //List item types_2
     if (types[1] != "NULL") { 
-        iconPath = "res/types/" + types[1] + ".png";
+        iconPath = "res/assets/pokemons/types/" + types[1] + ".png";
         SDL_Surface* typeBSurface = PokeSurface::onLoadImg(iconPath);
         if (typeBSurface == NULL) {
             std::cout << "Unable to render text! SDL Error: typeBSurface " << SDL_GetError() << std::endl;
@@ -250,7 +250,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     //Render  condition
     if (route[7] != "NULL") {
         std::string condition = route[7];
-        std::string iconPath = "res/icons/encounters/" + condition + ".png";
+        std::string iconPath = "res/assets/encounters/" + condition + ".png";
         SDL_Surface* conditionSurface = PokeSurface::onLoadImg(iconPath);
         if (conditionSurface == NULL) {
             std::cout << "Unable to render text! SDL Error: conditionSurface " << TTF_GetError() << std::endl;
@@ -273,7 +273,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     method = method == "walk" ? "grass" : method;
     method = method == "gift-egg" ? "egg" : method;
     method = method == "surf" ? "water" : method;
-    std::string iconPath = "res/icons/encounters/" + method + ".png";
+    std::string iconPath = "res/assets/encounters/" + method + ".png";
 
     SDL_Surface* methodSurface = PokeSurface::onLoadImg(iconPath);
     if (methodSurface == NULL) {
@@ -390,7 +390,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
     method = method == "walk" ? "grass" : method;
     method = method == "gift-egg" ? "egg" : method;
     method = method == "surf" ? "water" : method;
-    std::string methodIconPath = "res/icons/encounters/" + method + ".png";
+    std::string methodIconPath = "res/assets/encounters/" + method + ".png";
 
     SDL_Surface* methodSurface = PokeSurface::onLoadImg(methodIconPath);
     if (methodSurface == NULL) {
@@ -412,7 +412,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface* surf_d
     // Render item condition
     if (route[7] != "NULL") {
         std::string condition = route[7];
-        std::string conditionIconPath = "res/icons/encounters/" + condition + ".png";
+        std::string conditionIconPath = "res/assets/encounters/" + condition + ".png";
         SDL_Surface* conditionSurface = PokeSurface::onLoadImg(conditionIconPath);
         if (conditionSurface == NULL) {
             std::cout << "Unable to render text! SDL Error: conditionSurface " << TTF_GetError() << std::endl;

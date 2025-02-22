@@ -282,20 +282,20 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
         method = "__";
     }
     else if (method == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL
-        method = "res/icons/encounters/" + method + ".png";
+        method = "res/assets/encounters/" + method + ".png";
     }
     else if (method == "use-item") { // BY ITEM
         method = "res/icons/items/" + (*evoChain)[offset + i][6] + ".png";
     }
     else if (method == "trade") { // BY ITEM
-        method = "res/icons/encounters/" + method + ".png";
+        method = "res/assets/encounters/" + method + ".png";
     }
     else if ((*evoChain)[offset + i][8] != "NULL") { // BY HAPPYNESS
         method = "happiness";
-        method = "res/icons/encounters/" + method + ".png";
+        method = "res/assets/encounters/" + method + ".png";
     }
     //else if (method == "level-up" && (*evoChain)[offset + i][7] != "NULL") { // BY TIME OF DAY
-    //    method = "res/icons/encounters/" + method + ".png";
+    //    method = "res/assets/encounters/" + method + ".png";
     //}
     //if (method == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
     //    method = "Time: " + (*evoChain)[offset + i][7];

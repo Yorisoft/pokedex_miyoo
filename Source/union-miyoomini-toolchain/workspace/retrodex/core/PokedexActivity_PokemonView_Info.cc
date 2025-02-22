@@ -123,7 +123,7 @@ bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) 
 
     // Render Item types 
     std::vector<std::string> pokeTypes = pokemon->getTypes();
-    spritePath = "res/types/" + pokeTypes[0] + ".png";
+    spritePath = "res/assets/pokemons/types/" + pokeTypes[0] + ".png";
     SDL_Surface* pokeType1Surface = PokeSurface::onLoadImg(spritePath);
     if (pokeType1Surface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeType1Surface " << SDL_GetError() << std::endl;
@@ -141,7 +141,7 @@ bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) 
 
     if (pokeTypes[1] != "NULL") {
         // Render Item types 
-        spritePath = "res/types/" + pokeTypes[1] + ".png";
+        spritePath = "res/assets/pokemons/types/" + pokeTypes[1] + ".png";
         SDL_Surface* pokeType2Surface = PokeSurface::onLoadImg(spritePath);
         if (pokeType2Surface == NULL) {
             std::cout << "Unable to render text! SDL Error: pokeType2Surface " << SDL_GetError() << std::endl;

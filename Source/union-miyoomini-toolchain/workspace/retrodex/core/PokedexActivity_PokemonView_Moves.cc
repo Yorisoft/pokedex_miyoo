@@ -120,7 +120,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_FreeSurface(listEntrySurface);
 
     //Render item type
-    std::string type = "res/types/" + move[2] + ".png";
+    std::string type = "res/assets/pokemons/types/" + move[2] + ".png";
     SDL_Surface* typeSurface = PokeSurface::onLoadImg(type);
     if (typeSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: typeSurface " << TTF_GetError() << std::endl;
@@ -158,7 +158,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_FreeSurface(nameSurface);
 
     // Render method
-    std::string method = "res/icons/encounters/" + move[9] + ".png";
+    std::string method = "res/assets/encounters/" + move[9] + ".png";
     SDL_Surface* methodSurface = PokeSurface::onLoadImg(method);
     if (methodSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: methodSurface " << TTF_GetError() << std::endl;
@@ -270,7 +270,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     // render poke types
     std::vector<std::string> types = pokemon->getTypes();
-    std::string typeA = "res/types/" + types[0] + ".png";
+    std::string typeA = "res/assets/pokemons/types/" + types[0] + ".png";
     SDL_Surface* typeASurface = PokeSurface::onLoadImg(typeA);
 
     if (typeASurface == NULL) {
@@ -288,7 +288,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     //List item types_2
     if (types[1] != "NULL") { 
-        std::string typeB = "res/types/" + types[1] + ".png";
+        std::string typeB = "res/assets/pokemons/types/" + types[1] + ".png";
         SDL_Surface* typeBSurface = PokeSurface::onLoadImg(typeB);
         if (typeBSurface == NULL) {
             std::cout << "Unable to render text! SDL Error: typeBSurface " << SDL_GetError() << std::endl;
@@ -326,7 +326,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     SDL_FreeSurface(pwrSurface);
 
     //List item category/class
-    std::string moveClass = "res/types/" + move[4] + ".png";
+    std::string moveClass = "res/assets/pokemons/types/" + move[4] + ".png";
     SDL_Surface* classSurface = PokeSurface::onLoadImg(moveClass);
     if (classSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: classSurface " << SDL_GetError() << std::endl;
