@@ -158,7 +158,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_FreeSurface(nameSurface);
 
     // Render method
-    std::string method = "res/assets/encounters/" + move[9] + ".png";
+    std::string method = "res/assets/pokemons/encounters/" + move[9] + ".png";
     SDL_Surface* methodSurface = PokeSurface::onLoadImg(method);
     if (methodSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: methodSurface " << TTF_GetError() << std::endl;
