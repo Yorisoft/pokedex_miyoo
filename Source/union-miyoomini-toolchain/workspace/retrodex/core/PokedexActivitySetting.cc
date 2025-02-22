@@ -16,7 +16,7 @@ PokedexActivitySetting::PokedexActivitySetting() :
     optionItems(nullptr),
     optionNameSurface(nullptr),
     settingOptionsSurface(nullptr),
-    fontPath("res/font/pokemon-frlg/pokemon-frlg.ttf"),
+    fontPath("res/assets/font/pokemon-frlg/pokemon-frlg.ttf"),
     selectedSettingIndex(0),
     selectedOptionIndex(0),
     offset(0),

@@ -152,7 +152,7 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
 
-    this->font = TTF_OpenFont("res/font/pokemon-dppt/pokemon-dppt.ttf", 34);
+    this->font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
     if (this->font == NULL) {
         std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);

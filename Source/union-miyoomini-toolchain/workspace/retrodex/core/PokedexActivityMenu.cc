@@ -23,7 +23,7 @@ void PokedexActivityMenu::onActivate() {
     
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
-    fontPath = "res/font/pokemon-dppt/pokemon-dppt.ttf";
+    fontPath = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf";
 
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
     for (std::vector<std::string>& game : *dbResults) {
