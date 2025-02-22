@@ -285,7 +285,7 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
         method = "res/assets/encounters/" + method + ".png";
     }
     else if (method == "use-item") { // BY ITEM
-        method = "res/icons/items/" + (*evoChain)[offset + i][6] + ".png";
+        method = "res/assets/items/" + (*evoChain)[offset + i][6] + ".png";
     }
     else if (method == "trade") { // BY ITEM
         method = "res/assets/encounters/" + method + ".png";
