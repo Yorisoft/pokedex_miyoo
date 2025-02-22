@@ -63,7 +63,7 @@ int Pokedex::onExecute() {
 
 		Uint32 cur_ButtonPressTick = SDL_GetTicks();
 		Uint32 elapsedTime = cur_ButtonPressTick - prev_ButtonPressTick;
-		if(elapsedTime >= 150){
+		if(elapsedTime >= 100){
 			//SDL_PumpEvents();
 			static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 			PokedexActivityManager::onKeyHold(currentKeyStates, &event);

@@ -13,6 +13,7 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
 	}
 	else if (event->type == SDL_KEYDOWN) {
 		switch(event->key.keysym.sym){
+		// DPAD
 		case SW_BTN_UP:
 			onButtonUp(SW_BTN_UP, event->key.keysym.mod);
 			break;
@@ -25,6 +26,7 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
 		case SW_BTN_RIGHT:
 			onButtonRight(SW_BTN_RIGHT, event->key.keysym.mod);
 			break;
+		// FACE BUTTON
 		case SW_BTN_A:
 			onButtonA(SW_BTN_A, event->key.keysym.mod);
 			break;
@@ -37,6 +39,20 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
 		case SW_BTN_Y:
 			onButtonY(SW_BTN_Y, event->key.keysym.mod);
 			break;
+		// BACK BUTTONS
+		case SW_BTN_R1:
+			onButtonR(SW_BTN_R1, event->key.keysym.mod);
+			break;
+		case SW_BTN_L1:
+			onButtonL(SW_BTN_L1, event->key.keysym.mod);
+			break;
+		case SW_BTN_R2:
+			onButtonRT(SW_BTN_R2, event->key.keysym.mod);
+			break;
+		case SW_BTN_L2:
+			onButtonLT(SW_BTN_L2, event->key.keysym.mod);
+			break;
+		// MENU BUTTONS
 		case SW_BTN_START:
 			onButtonStart(SW_BTN_START, event->key.keysym.mod);
 			break;
@@ -46,7 +62,6 @@ void PokedexActivityEvent::onEvent(SDL_Event* event) {
 		default:
 			break;
 		}
-			
 	}
 }
 
