@@ -335,7 +335,7 @@ void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod)
 }
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     Mix_Chunk* sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;

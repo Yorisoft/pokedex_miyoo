@@ -29,7 +29,7 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
     std::cout << "Special Deffense: " << stats[4] << '\n';
     std::cout << "Speed: " << stats[5] << '\n';
 
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;

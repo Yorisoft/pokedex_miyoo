@@ -25,13 +25,13 @@ void PokedexActivity_PokemonView_Location::onActivate() {
     routes = pokemon->getRoutes();
     printPokeInfo();
 
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
 
-    sEffect_UpDown = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    sEffect_UpDown = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }

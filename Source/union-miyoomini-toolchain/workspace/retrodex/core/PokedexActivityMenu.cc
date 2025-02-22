@@ -39,7 +39,7 @@ void PokedexActivityMenu::onActivate() {
         std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
 
-    sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    sEffect = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
