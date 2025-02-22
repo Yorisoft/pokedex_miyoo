@@ -16,7 +16,7 @@ PokedexActivitySetting::PokedexActivitySetting() :
     optionItems(nullptr),
     optionNameSurface(nullptr),
     settingOptionsSurface(nullptr),
-    fontPath("res/font/pokemon-frlg/pokemon-frlg.ttf"),
+    fontPath("res/assets/font/pokemon-frlg/pokemon-frlg.ttf"),
     selectedSettingIndex(0),
     selectedOptionIndex(0),
     offset(0),
@@ -179,7 +179,7 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
 
     // Render _PokemonView_Location Items
     //Render background
-    std::string backgroundImageFile = "res/icons/icon/settings_background.png";
+    std::string backgroundImageFile = "res/assets/misc/settings_background.png";
     backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
@@ -207,7 +207,7 @@ void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* r
 
 bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
     if (offset + i == selectedSettingIndex) {
-        std::string ListackgroundImageFile = "res/icons/icon/setting_item_background.png";
+        std::string ListackgroundImageFile = "res/assets/misc/setting_item_background.png";
         listEntrySurface = PokeSurface::onLoadImg(ListackgroundImageFile);
         if (listEntrySurface == NULL) {
             std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;

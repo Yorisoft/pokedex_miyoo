@@ -25,13 +25,13 @@ void PokedexActivity_PokemonView_Evolution::onActivate() {
     printPokeInfo();
     evo = (*evoChain)[selectedIndex];
 
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
 
-    sEffect_UpDown = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    sEffect_UpDown = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
@@ -81,7 +81,7 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     //Render background
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_5.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_5.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
@@ -116,7 +116,7 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
 }
 
 bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
-    std::string listEntryImageFile = "res/icons/icon/evolution_item_background_";
+    std::string listEntryImageFile = "res/assets/misc/evolution_item_background_";
     offset + i == selectedIndex ? listEntryImageFile.append("selected.png") : listEntryImageFile.append("default.png");
 
     SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(listEntryImageFile);
@@ -137,7 +137,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     // render poke sprite
     std::string poke = (*evoChain)[offset + i][2];
-    poke = "res/sprites/" + poke + ".png";
+    poke = "res/assets/pokemons/sprites/" + poke + ".png";
 
     SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
     if (pokeSurface == NULL) {
@@ -213,7 +213,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i) {
     // render poke sprite
     std::string poke = (*evoChain)[offset + i][2];
-    poke = "res/sprites/" + poke + ".png";
+    poke = "res/assets/pokemons/sprites/" + poke + ".png";
 
     SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
     if (pokeSurface == NULL) {
@@ -282,20 +282,20 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
         method = "__";
     }
     else if (method == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL
-        method = "res/icons/encounters/" + method + ".png";
+        method = "res/assets/pokemons/encounters/" + method + ".png";
     }
     else if (method == "use-item") { // BY ITEM
-        method = "res/icons/items/" + (*evoChain)[offset + i][6] + ".png";
+        method = "res/assets/items/" + (*evoChain)[offset + i][6] + ".png";
     }
     else if (method == "trade") { // BY ITEM
-        method = "res/icons/encounters/" + method + ".png";
+        method = "res/assets/pokemons/encounters/" + method + ".png";
     }
     else if ((*evoChain)[offset + i][8] != "NULL") { // BY HAPPYNESS
         method = "happiness";
-        method = "res/icons/encounters/" + method + ".png";
+        method = "res/assets/pokemons/encounters/" + method + ".png";
     }
     //else if (method == "level-up" && (*evoChain)[offset + i][7] != "NULL") { // BY TIME OF DAY
-    //    method = "res/icons/encounters/" + method + ".png";
+    //    method = "res/assets/pokemons/encounters/" + method + ".png";
     //}
     //if (method == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
     //    method = "Time: " + (*evoChain)[offset + i][7];

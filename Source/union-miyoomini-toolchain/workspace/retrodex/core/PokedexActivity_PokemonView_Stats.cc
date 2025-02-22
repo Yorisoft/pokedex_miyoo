@@ -29,7 +29,7 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
     std::cout << "Special Deffense: " << stats[4] << '\n';
     std::cout << "Speed: " << stats[5] << '\n';
 
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
@@ -56,7 +56,7 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
 
     // Render item info
     // Render background
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_2.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_2.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
@@ -96,7 +96,7 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
 bool PokedexActivity_PokemonView_Stats::renderSprites(SDL_Surface* surf_display) {
     // Render Item sprites
     std::string pokeName = PokedexDB::getPokemonIdentifier();
-    std::string spritePath = "res/sprites/" + pokeName + ".png";
+    std::string spritePath = "res/assets/pokemons/sprites/" + pokeName + ".png";
     SDL_Surface* pokeIconSurface = PokeSurface::onLoadImg(spritePath);
     if (pokeIconSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeIconSurface " << SDL_GetError() << std::endl;
@@ -191,7 +191,7 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, T
         SDL_FreeSurface(statsNameSurface);
 
         /////////////////////////////////////////////
-        //std::string statIconPath = "res/icons/icon/" + statFileNames[i] + "_icon_HOME.png";
+        //std::string statIconPath = "res/assets/misc/" + statFileNames[i] + "_icon_HOME.png";
         //SDL_Surface* statIcon = PokeSurface::onLoadImg(statIconPath);
         //if(!statIcon){
         //    std::cout << "Unable to load statIcon! SDL Error: statIcon " << SDL_GetError() << std::endl;

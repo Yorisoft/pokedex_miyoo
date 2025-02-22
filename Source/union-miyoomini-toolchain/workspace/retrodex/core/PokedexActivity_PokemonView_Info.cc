@@ -33,7 +33,7 @@ void PokedexActivity_PokemonView_Info::onActivate() {
     formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
     std::string pokeID = formattedID.str();
 
-    std::string pokeCryPath = "res/audio/pokecry/" + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
+    std::string pokeCryPath = "res/assets/pokemons/cry/" + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
     Mix_Chunk* pokeCry = Mix_LoadWAV(pokeCryPath.c_str());
     if (!pokeCry) {
         std::cerr << "Failed to load sound pokeCry: " << Mix_GetError() << std::endl;
@@ -57,7 +57,7 @@ void PokedexActivity_PokemonView_Info::onRender(SDL_Surface* surf_display, SDL_R
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     // Render List Items
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_1.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_1.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
@@ -105,7 +105,7 @@ PokedexActivity_PokemonView_Info* PokedexActivity_PokemonView_Info::getInstance(
 bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) {
     // Render Item sprites
     std::string pokeName = PokedexDB::getPokemonIdentifier();
-    std::string spritePath = "res/sprites/" + pokeName + ".png";
+    std::string spritePath = "res/assets/pokemons/sprites/" + pokeName + ".png";
     SDL_Surface* pokeIconSurface = PokeSurface::onLoadImg(spritePath);
     if (pokeIconSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeIconSurface " << SDL_GetError() << std::endl;
@@ -123,7 +123,7 @@ bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) 
 
     // Render Item types 
     std::vector<std::string> pokeTypes = pokemon->getTypes();
-    spritePath = "res/types/" + pokeTypes[0] + ".png";
+    spritePath = "res/assets/pokemons/types/" + pokeTypes[0] + ".png";
     SDL_Surface* pokeType1Surface = PokeSurface::onLoadImg(spritePath);
     if (pokeType1Surface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeType1Surface " << SDL_GetError() << std::endl;
@@ -141,7 +141,7 @@ bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) 
 
     if (pokeTypes[1] != "NULL") {
         // Render Item types 
-        spritePath = "res/types/" + pokeTypes[1] + ".png";
+        spritePath = "res/assets/pokemons/types/" + pokeTypes[1] + ".png";
         SDL_Surface* pokeType2Surface = PokeSurface::onLoadImg(spritePath);
         if (pokeType2Surface == NULL) {
             std::cout << "Unable to render text! SDL Error: pokeType2Surface " << SDL_GetError() << std::endl;
@@ -335,7 +335,7 @@ void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod)
 }
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; // <- empty char is standin for form variant
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     Mix_Chunk* sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;

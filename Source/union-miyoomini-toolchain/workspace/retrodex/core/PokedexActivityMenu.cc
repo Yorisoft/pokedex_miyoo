@@ -23,7 +23,7 @@ void PokedexActivityMenu::onActivate() {
     
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
-    fontPath = "res/font/pokemon-dppt/pokemon-dppt.ttf";
+    fontPath = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf";
 
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
     for (std::vector<std::string>& game : *dbResults) {
@@ -39,7 +39,7 @@ void PokedexActivityMenu::onActivate() {
         std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
     }
 
-    sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    sEffect = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
@@ -78,7 +78,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     // Background
-    std::string backgroundImageFile = "res/icons/icon/menu_background.png";
+    std::string backgroundImageFile = "res/assets/misc/menu_background.png";
     SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listBackgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
@@ -104,7 +104,7 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
 
 bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     //List item background
-    std::string backgroundImageFile = "res/icons/icon/menu_item_background_";
+    std::string backgroundImageFile = "res/assets/misc/menu_item_background_";
     offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
     SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listEntrySurface == NULL) {

@@ -28,13 +28,13 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
     }
     move = (*dbResults)[selectedIndex];
 
-    std::string sEffectPath = "res/audio/sound_effects/left_right.wav"; 
+    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; 
     sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
 
-    sEffect_UpDown = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    sEffect_UpDown = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
@@ -64,7 +64,7 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     // Render _PokemonView_Moves Items
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_3.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_3.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
@@ -120,7 +120,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_FreeSurface(listEntrySurface);
 
     //Render item type
-    std::string type = "res/types/" + move[2] + ".png";
+    std::string type = "res/assets/pokemons/types/" + move[2] + ".png";
     SDL_Surface* typeSurface = PokeSurface::onLoadImg(type);
     if (typeSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: typeSurface " << TTF_GetError() << std::endl;
@@ -158,7 +158,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
     SDL_FreeSurface(nameSurface);
 
     // Render method
-    std::string method = "res/icons/encounters/" + move[9] + ".png";
+    std::string method = "res/assets/pokemons/encounters/" + move[9] + ".png";
     SDL_Surface* methodSurface = PokeSurface::onLoadImg(method);
     if (methodSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: methodSurface " << TTF_GetError() << std::endl;
@@ -230,7 +230,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
 bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i) {
     // render poke icon
     std::string pokemonIcon = PokedexDB::getPokemonIdentifier();
-    pokemonIcon = "res/icons/" + pokemonIcon + ".png";
+    pokemonIcon = "res/assets/pokemons/icons/" + pokemonIcon + ".png";
 
     SDL_Surface* pokeSurface = PokeSurface::onLoadImg(pokemonIcon);
     if (pokeSurface == NULL) {
@@ -270,7 +270,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     // render poke types
     std::vector<std::string> types = pokemon->getTypes();
-    std::string typeA = "res/types/" + types[0] + ".png";
+    std::string typeA = "res/assets/pokemons/types/" + types[0] + ".png";
     SDL_Surface* typeASurface = PokeSurface::onLoadImg(typeA);
 
     if (typeASurface == NULL) {
@@ -288,7 +288,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
 
     //List item types_2
     if (types[1] != "NULL") { 
-        std::string typeB = "res/types/" + types[1] + ".png";
+        std::string typeB = "res/assets/pokemons/types/" + types[1] + ".png";
         SDL_Surface* typeBSurface = PokeSurface::onLoadImg(typeB);
         if (typeBSurface == NULL) {
             std::cout << "Unable to render text! SDL Error: typeBSurface " << SDL_GetError() << std::endl;
@@ -326,7 +326,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_disp
     SDL_FreeSurface(pwrSurface);
 
     //List item category/class
-    std::string moveClass = "res/types/" + move[4] + ".png";
+    std::string moveClass = "res/assets/pokemons/types/" + move[4] + ".png";
     SDL_Surface* classSurface = PokeSurface::onLoadImg(moveClass);
     if (classSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: classSurface " << SDL_GetError() << std::endl;

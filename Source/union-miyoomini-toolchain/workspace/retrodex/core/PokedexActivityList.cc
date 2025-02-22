@@ -40,19 +40,19 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
-    sEffect_OnStart = Mix_LoadWAV("res/audio/sound_effects/list_start.wav");
+    sEffect_OnStart = Mix_LoadWAV("res/assets/sound_effects/list_start.wav");
     if (!sEffect_OnStart) {
         std::cerr << "Failed to load sound sEffect_OnStart: " << Mix_GetError() << std::endl;
     }
     // Play the sound effect
     Mix_PlayChannel(-1, sEffect_OnStart, 0);
 
-    sEffect_OnExit = Mix_LoadWAV("res/audio/sound_effects/list_back.wav");
+    sEffect_OnExit = Mix_LoadWAV("res/assets/sound_effects/list_back.wav");
     if (!sEffect_OnExit) {
         std::cerr << "Failed to load sound sEffect_OnExit: " << Mix_GetError() << std::endl;
     }
 
-    sEffect = Mix_LoadWAV("res/audio/sound_effects/up_down.wav");
+    sEffect = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
     if (!sEffect) {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
@@ -89,7 +89,7 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     // Render List Items
-    std::string backgroundImageFile = "res/icons/icon/pokedexList_background.png";
+    std::string backgroundImageFile = "res/assets/misc/pokedexList_background.png";
     SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listBackgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
@@ -145,7 +145,7 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
 }
 
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, int i) {
-    std::string backgroundImageFile = "res/icons/icon/menu_item_background_";
+    std::string backgroundImageFile = "res/assets/misc/menu_item_background_";
     offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
     SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
 
@@ -166,7 +166,7 @@ SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, in
 
 bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     std::string pokemonName = pokemon[1];
-    std::string iconFile = "res/sprites/" + pokemonName + ".png";
+    std::string iconFile = "res/assets/pokemons/sprites/" + pokemonName + ".png";
     SDL_Surface*pokeIconSurface = PokeSurface::onLoadImg(iconFile);
 
     if (pokeIconSurface == NULL) {
@@ -183,7 +183,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
 
     //List item types_1
     std::string pokemonType1 = pokemon[3];
-    iconFile = "res/types/" + pokemonType1 + ".png";
+    iconFile = "res/assets/pokemons/types/" + pokemonType1 + ".png";
     SDL_Surface* pokeType1Surface = PokeSurface::onLoadImg(iconFile);
 
     if (pokeType1Surface == NULL) {
@@ -201,7 +201,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     //List item types_2
     if (pokemon[4] != "NULL") {
         std::string pokemonType2 = pokemon[4];
-        iconFile = "res/types/" + pokemonType2 + ".png";
+        iconFile = "res/assets/pokemons/types/" + pokemonType2 + ".png";
         SDL_Surface* pokeType2Surface = PokeSurface::onLoadImg(iconFile);
 
         if (pokeType2Surface == NULL) {
