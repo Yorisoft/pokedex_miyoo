@@ -88,7 +88,7 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
 
     // Render _PokemonView_Location Items
     //Render background
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_4.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_4.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;

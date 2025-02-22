@@ -89,7 +89,7 @@ void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     // Render List Items
-    std::string backgroundImageFile = "res/icons/icon/pokedexList_background.png";
+    std::string backgroundImageFile = "res/assets/misc/pokedexList_background.png";
     SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (listBackgroundSurface == NULL) {
         std::cout << "Unable to load surface! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
@@ -145,7 +145,7 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
 }
 
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, int i) {
-    std::string backgroundImageFile = "res/icons/icon/menu_item_background_";
+    std::string backgroundImageFile = "res/assets/misc/menu_item_background_";
     offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
     SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
 

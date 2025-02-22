@@ -56,7 +56,7 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
 
     // Render item info
     // Render background
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_2.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_2.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
@@ -191,7 +191,7 @@ bool PokedexActivity_PokemonView_Stats::renderStats(SDL_Surface* surf_display, T
         SDL_FreeSurface(statsNameSurface);
 
         /////////////////////////////////////////////
-        //std::string statIconPath = "res/icons/icon/" + statFileNames[i] + "_icon_HOME.png";
+        //std::string statIconPath = "res/assets/misc/" + statFileNames[i] + "_icon_HOME.png";
         //SDL_Surface* statIcon = PokeSurface::onLoadImg(statIconPath);
         //if(!statIcon){
         //    std::cout << "Unable to load statIcon! SDL Error: statIcon " << SDL_GetError() << std::endl;

@@ -57,7 +57,7 @@ void PokedexActivity_PokemonView_Info::onRender(SDL_Surface* surf_display, SDL_R
     SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
     // Render List Items
-    std::string backgroundImageFile = "res/icons/icon/pokemon_fr_view_1.png";
+    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_1.png";
     SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
     if (backgroundSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
