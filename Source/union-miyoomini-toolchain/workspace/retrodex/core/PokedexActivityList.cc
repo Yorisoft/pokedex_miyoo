@@ -166,7 +166,7 @@ SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, in
 
 bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
     std::string pokemonName = pokemon[1];
-    std::string iconFile = "res/sprites/" + pokemonName + ".png";
+    std::string iconFile = "res/assets/pokemons/sprites/" + pokemonName + ".png";
     SDL_Surface*pokeIconSurface = PokeSurface::onLoadImg(iconFile);
 
     if (pokeIconSurface == NULL) {

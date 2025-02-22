@@ -105,7 +105,7 @@ PokedexActivity_PokemonView_Info* PokedexActivity_PokemonView_Info::getInstance(
 bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) {
     // Render Item sprites
     std::string pokeName = PokedexDB::getPokemonIdentifier();
-    std::string spritePath = "res/sprites/" + pokeName + ".png";
+    std::string spritePath = "res/assets/pokemons/sprites/" + pokeName + ".png";
     SDL_Surface* pokeIconSurface = PokeSurface::onLoadImg(spritePath);
     if (pokeIconSurface == NULL) {
         std::cout << "Unable to render text! SDL Error: pokeIconSurface " << SDL_GetError() << std::endl;

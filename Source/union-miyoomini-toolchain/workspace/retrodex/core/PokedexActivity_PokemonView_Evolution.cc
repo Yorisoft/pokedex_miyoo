@@ -137,7 +137,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
     // render poke sprite
     std::string poke = (*evoChain)[offset + i][2];
-    poke = "res/sprites/" + poke + ".png";
+    poke = "res/assets/pokemons/sprites/" + poke + ".png";
 
     SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
     if (pokeSurface == NULL) {
@@ -213,7 +213,7 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i) {
     // render poke sprite
     std::string poke = (*evoChain)[offset + i][2];
-    poke = "res/sprites/" + poke + ".png";
+    poke = "res/assets/pokemons/sprites/" + poke + ".png";
 
     SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
     if (pokeSurface == NULL) {
