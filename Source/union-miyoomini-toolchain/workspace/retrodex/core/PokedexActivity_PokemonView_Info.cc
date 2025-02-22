@@ -33,7 +33,7 @@ void PokedexActivity_PokemonView_Info::onActivate() {
     formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
     std::string pokeID = formattedID.str();
 
-    std::string pokeCryPath = "res/audio/pokecry/" + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
+    std::string pokeCryPath = "res/assets/pokemons/cry/" + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
     Mix_Chunk* pokeCry = Mix_LoadWAV(pokeCryPath.c_str());
     if (!pokeCry) {
         std::cerr << "Failed to load sound pokeCry: " << Mix_GetError() << std::endl;
