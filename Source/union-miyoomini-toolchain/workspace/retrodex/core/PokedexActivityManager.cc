@@ -19,6 +19,12 @@ void PokedexActivityManager::onEvent(SDL_Event* event) {
     }
 }
 
+void PokedexActivityManager::onKeyHold(const Uint8* currentKeyStates, SDL_Event* event) {
+    if (activity) {
+        activity->onKeyHold(currentKeyStates, event);
+    }
+}
+
 void PokedexActivityManager::onLoop() {
     if (activity) {
         activity->onLoop();

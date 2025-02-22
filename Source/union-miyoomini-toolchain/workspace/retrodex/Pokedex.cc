@@ -52,11 +52,25 @@ int Pokedex::onExecute() {
         return -1;
     }
 
-    SDL_Event event;
+	Uint32 prev_ButtonPressTick;
+	static SDL_Event event;
     while (running) {
-    	while (SDL_PollEvent(&event)) {
-        	onEvent(&event);
+		while(SDL_PollEvent(&event)){
+			prev_ButtonPressTick = SDL_GetTicks();
+
+			onEvent(&event);
 		}
+
+		Uint32 cur_ButtonPressTick = SDL_GetTicks();
+		Uint32 elapsedTime = cur_ButtonPressTick - prev_ButtonPressTick;
+		if(elapsedTime >= 150){
+			//SDL_PumpEvents();
+			static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+			PokedexActivityManager::onKeyHold(currentKeyStates, &event);
+
+			prev_ButtonPressTick = cur_ButtonPressTick;
+		}
+
         onLoop();
         onRender();
     }
