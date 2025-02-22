@@ -26,6 +26,8 @@ private:
 public:
     static void onEvent(SDL_Event* Event);
 
+    static void onKeyHold(const Uint8* currentKeyStates, SDL_Event* event);
+
     static void onLoop();
 
     static void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect);
