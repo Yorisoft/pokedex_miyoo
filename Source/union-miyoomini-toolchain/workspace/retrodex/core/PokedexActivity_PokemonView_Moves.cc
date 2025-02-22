@@ -230,7 +230,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
 bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i) {
     // render poke icon
     std::string pokemonIcon = PokedexDB::getPokemonIdentifier();
-    pokemonIcon = "res/icons/" + pokemonIcon + ".png";
+    pokemonIcon = "res/assets/pokemons/icons/" + pokemonIcon + ".png";
 
     SDL_Surface* pokeSurface = PokeSurface::onLoadImg(pokemonIcon);
     if (pokeSurface == NULL) {

@@ -121,7 +121,7 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
 bool PokedexActivity_PokemonView_Location::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font) {
     // Render icon
     std::string iconPath = PokedexDB::getPokemonIdentifier();
-    iconPath = "res/icons/" + iconPath + ".png";
+    iconPath = "res/assets/pokemons/icons/" + iconPath + ".png";
 
     SDL_Surface* iconSurface = PokeSurface::onLoadImg(iconPath);
     if (iconSurface == NULL) {
