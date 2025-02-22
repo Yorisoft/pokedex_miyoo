@@ -14,7 +14,7 @@ PokedexActivityIntro::PokedexActivityIntro() {
 
 void PokedexActivityIntro::onActivate() {
     // Load Simple Logo
-    std::string file = "res/img/splash.png";
+    std::string file = "res/assets/splash/splash.png";
     splashSurface = PokeSurface::onLoadImg(file);
 }
 
