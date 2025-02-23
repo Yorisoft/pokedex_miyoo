@@ -73,12 +73,12 @@ void PokedexActivityEvent::onKeyHold(const Uint8* currentKeyStates, SDL_Event* e
 	if (currentKeyStates[SDL_SCANCODE_DOWN]) {
 		onButtonDown(SW_BTN_DOWN, event->key.keysym.mod);
 	}
-	if (currentKeyStates[SDL_SCANCODE_LEFT]) {
-		onButtonLeft(SW_BTN_LEFT, event->key.keysym.mod);
-	}
-	if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
-		onButtonRight(SW_BTN_RIGHT, event->key.keysym.mod);
-	}
+	/* if (currentKeyStates[SDL_SCANCODE_LEFT]) { */
+	/* 	onButtonLeft(SW_BTN_LEFT, event->key.keysym.mod); */
+	/* } */
+	/* if (currentKeyStates[SDL_SCANCODE_RIGHT]) { */
+	/* 	onButtonRight(SW_BTN_RIGHT, event->key.keysym.mod); */
+	/* } */
 }
 
 void PokedexActivityEvent::onButtonUp(SDL_Keycode sym,Uint16 mod) {

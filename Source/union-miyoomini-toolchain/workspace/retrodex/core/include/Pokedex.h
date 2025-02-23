@@ -15,8 +15,12 @@ private:
     Uint32 frameCount;
     Uint32 lastTime;
     float fps;
+	
+    // Variables for frame delay calculation
+	const int FPS = 30;
+	const int frameDelay = 1000 / FPS;
 
-	bool running;
+	bool running, needRedraw;
 
     SDL_Window* window;
     SDL_Renderer* renderer;

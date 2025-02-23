@@ -36,6 +36,7 @@ Pokedex::Pokedex() {
     fps = 0.0f;
 
     running = true;
+	needRedraw = false;
 
     window = NULL;
     renderer = NULL;
@@ -55,24 +56,33 @@ int Pokedex::onExecute() {
 	Uint32 prev_ButtonPressTick;
 	static SDL_Event event;
     while (running) {
+		Uint32 frameStart = SDL_GetTicks();
+
 		while(SDL_PollEvent(&event)){
 			prev_ButtonPressTick = SDL_GetTicks();
 
 			onEvent(&event);
+			needRedraw = true;
 		}
 
 		Uint32 cur_ButtonPressTick = SDL_GetTicks();
 		Uint32 elapsedTime = cur_ButtonPressTick - prev_ButtonPressTick;
-		if(elapsedTime >= 100){
+		if(elapsedTime >= 150){
 			//SDL_PumpEvents();
 			static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 			PokedexActivityManager::onKeyHold(currentKeyStates, &event);
 
 			prev_ButtonPressTick = cur_ButtonPressTick;
+			//needRedraw = true;
 		}
 
         onLoop();
         onRender();
+
+		Uint32 frameTime = SDL_GetTicks() - frameStart;
+		if(frameTime < frameDelay){
+			SDL_Delay(frameDelay - frameTime);
+		}
     }
     onCleanup(); 
 
@@ -187,20 +197,23 @@ void Pokedex::onLoop() {
 
     // Calculate and print FPS
 	// Uncomment this line during debug. Not ready to roll out.
-    // calculateFPS();
+    calculateFPS();
 }
 
 void Pokedex::onRender() {
+    //std::cout << "Pokedex::onRender: START" << std::endl;
     SDL_RenderClear(renderer);
 
     PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
-    SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);
 
     // Calculate and print FPS
 	// Uncomment this line during debug. Not ready to roll out.
-	// renderFPS();
+	renderFPS();
+
+    SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);
+    //std::cout << "Pokedex::onRender: START" << std::endl;
 }
 
 void Pokedex::calculateFPS() {
@@ -210,6 +223,8 @@ void Pokedex::calculateFPS() {
 
     if (elapsedTime >= 1000) {
         fps = frameCount / (elapsedTime / 1000.0f);
+		// divide fps count by number of times we render
+		//fps = fps/1125;
         frameCount = 0;
         lastTime = currentTime;
     }
