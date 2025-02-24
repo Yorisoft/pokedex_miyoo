@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Usefull for vim and other processes
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Build Type
+set(CMAKE_BUILD_TYPE Debug)
 
 find_package(PkgConfig REQUIRED)
 

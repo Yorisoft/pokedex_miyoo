@@ -30,11 +30,6 @@ int main(int argc, char* argv[]) {
 }
 
 Pokedex::Pokedex() {
-    // Variables for FPS calculation
-    frameCount = 0;
-    lastTime = SDL_GetTicks();
-    fps = 0.0f;
-
     running = true;
 	needRedraw = false;
 
@@ -44,6 +39,13 @@ Pokedex::Pokedex() {
     screen = NULL;
     font = NULL;
     sEffect = NULL;
+	
+    // Variables for FPS calculation
+    frameCount = 0;
+    lastTime = SDL_GetTicks();
+    fps = 0.0f;
+	fpsSurface = nullptr;
+	fpsRect = {};
 }
 
 int Pokedex::onExecute() {
@@ -53,27 +55,41 @@ int Pokedex::onExecute() {
         return -1;
     }
 
+	fpsSurface = TTF_RenderUTF8_Blended(
+		font,
+		"0",
+		{ 0, 128, 0 }
+	);
+	if (fpsSurface == NULL) {
+		std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
+		exit(EXIT_FAILURE);
+	};
+
 	Uint32 prev_ButtonPressTick;
 	static SDL_Event event;
     while (running) {
 		Uint32 frameStart = SDL_GetTicks();
 
+		calculateFPS();
+		fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
+		fpsRect.y = 0;
+		fpsRect.w = fpsSurface->w;
+		fpsRect.h = fpsSurface->h;
+
 		while(SDL_PollEvent(&event)){
 			prev_ButtonPressTick = SDL_GetTicks();
 
 			onEvent(&event);
-			needRedraw = true;
 		}
 
 		Uint32 cur_ButtonPressTick = SDL_GetTicks();
 		Uint32 elapsedTime = cur_ButtonPressTick - prev_ButtonPressTick;
 		if(elapsedTime >= 150){
-			//SDL_PumpEvents();
+			SDL_PumpEvents();
 			static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 			PokedexActivityManager::onKeyHold(currentKeyStates, &event);
 
 			prev_ButtonPressTick = cur_ButtonPressTick;
-			//needRedraw = true;
 		}
 
         onLoop();
@@ -83,6 +99,10 @@ int Pokedex::onExecute() {
 		if(frameTime < frameDelay){
 			SDL_Delay(frameDelay - frameTime);
 		}
+		else {
+            // If frameTime exceeds frameDelay, log a warning (optional)
+            std::cout << "Frame time exceeded! (" << frameTime << "ms)" << std::endl;
+        }
     }
     onCleanup(); 
 
@@ -194,10 +214,6 @@ void Pokedex::onEvent(SDL_Event* event) {
 
 void Pokedex::onLoop() {
     PokedexActivityManager::onLoop();
-
-    // Calculate and print FPS
-	// Uncomment this line during debug. Not ready to roll out.
-    calculateFPS();
 }
 
 void Pokedex::onRender() {
@@ -223,8 +239,6 @@ void Pokedex::calculateFPS() {
 
     if (elapsedTime >= 1000) {
         fps = frameCount / (elapsedTime / 1000.0f);
-		// divide fps count by number of times we render
-		//fps = fps/1125;
         frameCount = 0;
         lastTime = currentTime;
     }
@@ -235,23 +249,32 @@ void Pokedex::renderFPS(){
 	iss << std::fixed << std::setprecision(2);
     iss << fps;
 
-    SDL_Surface* fpsSurface = TTF_RenderUTF8_Blended(
-        font,
-        iss.str().c_str(),
-        { 0, 128, 0 }
-    );
-    if (fpsSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-    SDL_Rect fpsRect;
-    fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
-    fpsRect.y = 0;
-    fpsRect.w = fpsSurface->w;
-    fpsRect.h = fpsSurface->h;
+	static std::string lastFPS = "";
+	std::string currentFPS = iss.str();
+	
+	if (currentFPS != lastFPS) {
+        // Free the old surface if it exists
+        if (fpsSurface) {
+            SDL_FreeSurface(fpsSurface);
+            fpsSurface = nullptr;
+        }
+	
+		fpsSurface = TTF_RenderUTF8_Blended(
+			font,
+			iss.str().c_str(),
+			{ 0, 128, 0 }
+		);
+		if (fpsSurface == NULL) {
+			std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		};
+		
+		lastFPS = currentFPS;
+	}
+
+	SDL_FillRect(screen, &fpsRect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
 
     PokeSurface::onDraw(screen, fpsSurface, &fpsRect);
-    SDL_FreeSurface(fpsSurface);
 }
 
 void Pokedex::onExit() {
@@ -267,6 +290,7 @@ void Pokedex::onCleanup() {
 
 	TTF_CloseFont(font);
     SDL_FreeSurface(screen);
+    SDL_FreeSurface(fpsSurface);
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

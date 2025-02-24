@@ -25,9 +25,10 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* texture;
-    SDL_Surface* screen;
+    SDL_Surface* screen, *fpsSurface;
     TTF_Font* font;
     Mix_Chunk* sEffect;
+	SDL_Rect fpsRect;
 
 public:
     Pokedex();

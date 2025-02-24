@@ -2,6 +2,7 @@
 #include "PokedexActivityManager.h"
 
 PokedexActivityMenu PokedexActivityMenu::instance;
+bool PokedexActivityMenu::needRedraw = true;
 
 PokedexActivityMenu::PokedexActivityMenu() :
     dbResults(nullptr),
@@ -19,12 +20,15 @@ PokedexActivityMenu::~PokedexActivityMenu() {
 void PokedexActivityMenu::onActivate() {
     std::cout << "PokedexActivityMenu::onActivate START \n";
 
+	PokedexActivityMenu::needRedraw = true;
+
     color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
     
     itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
 
     fontPath = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf";
 
+	
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
     for (std::vector<std::string>& game : *dbResults) {
         for (auto& col : game) {
@@ -44,6 +48,58 @@ void PokedexActivityMenu::onActivate() {
         std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
     }
 
+	///////////////////////////
+	
+	std::string 
+		BACKGROUND_IMG_PATH = "res/assets/misc/menu_background.png",
+		LIST_BACKGROUND_IMG_PATH = "res/assets/misc/menu_item_background_";
+
+    // Background
+    backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
+    if (backgroundSurface == NULL) {
+        std::cout << "Unable to render text! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    backgroundRect.x = 0;
+    backgroundRect.y = 0;
+    backgroundRect.w = WINDOW_WIDTH;
+    backgroundRect.h = WINDOW_HEIGHT;
+
+    //List item background
+    std::string listBackgroundImageFile_default = LIST_BACKGROUND_IMG_PATH + "default.png";
+    listEntrySurface_default = PokeSurface::onLoadImg(listBackgroundImageFile_default);
+    if (listEntrySurface_default == NULL) {
+        std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    std::string listBackgroundImageFile_selected = LIST_BACKGROUND_IMG_PATH + "selected.png";
+    listEntrySurface_selected = PokeSurface::onLoadImg(listBackgroundImageFile_selected);
+    if (listEntrySurface_selected == NULL) {
+        std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+	cachedTextSurfaces.clear();
+	cachedHighlightTextSurfaces.clear();
+	for (const auto& game_name : *dbResults) {
+		SDL_Surface* normal = TTF_RenderUTF8_Solid(fontSurface, game_name[2].c_str(), color);
+		if (normal == NULL) {
+			std::cout << "Unable to render text! SDL Error: SDL_Surface Version Name Normal " << TTF_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		};
+
+		SDL_Surface* highlight = TTF_RenderUTF8_Solid(fontSurface, game_name[2].c_str(), highlightColor);
+		if (highlight == NULL) {
+			std::cout << "Unable to render text! SDL Error: SDL_Surface Version Name Highlight " << TTF_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		};
+		cachedTextSurfaces.push_back(normal);
+		cachedHighlightTextSurfaces.push_back(highlight);
+	}
+	///////
+
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }
 
@@ -55,6 +111,29 @@ void PokedexActivityMenu::onDeactivate() {
     if(sEffect)
         Mix_FreeChunk(sEffect);
     sEffect = nullptr;
+
+    if(backgroundSurface)
+    	SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
+
+    if(listEntrySurface_default)
+    	SDL_FreeSurface(listEntrySurface_default);
+	listEntrySurface_default = nullptr;
+
+    if(listEntrySurface_selected)
+    	SDL_FreeSurface(listEntrySurface_selected);
+	listEntrySurface_selected = nullptr;
+
+	for(auto& surface : cachedHighlightTextSurfaces){
+		if(surface)
+			SDL_FreeSurface(surface);
+		surface = nullptr;
+	}
+	for(auto& surface : cachedTextSurfaces){
+		if(surface)
+			SDL_FreeSurface(surface);
+		surface = nullptr;
+	}
 
     delete dbResults;
     dbResults = nullptr;
@@ -69,76 +148,47 @@ void PokedexActivityMenu::onDeactivate() {
 
 void PokedexActivityMenu::onLoop() {
     //Set Game version and regional pokedex ID for PokedexDB
-    game = (*dbResults)[selectedIndex];
+    // game = (*dbResults)[selectedIndex];
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
-    //std::cout << "PokedexActivityMenu::onRender START \n";
-    // Clear the display surface
-    SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
+	if(needRedraw){
+		SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
+		//std::cout << "PokedexActivityMenu::onRender START \n";
+		PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
 
-    // Background
-    std::string backgroundImageFile = "res/assets/misc/menu_background.png";
-    SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (listBackgroundSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+		// List Items
+		for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
+			if (!renderListItems(surf_display, i)) {
+				exit(EXIT_FAILURE);
+			}
+		}
 
-    SDL_Rect backgroundRect;
-    backgroundRect.x = 0;
-    backgroundRect.y = 0;
-    backgroundRect.w = surf_display->w;
-    backgroundRect.h = surf_display->h;
-
-    PokeSurface::onDrawScaled(surf_display, listBackgroundSurface, &backgroundRect);
-    SDL_FreeSurface(listBackgroundSurface);
-
-    // List Items
-    for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
-        if (!renderListItems(surf_display, i)) {
-            exit(EXIT_FAILURE);
-        }
-    }
+		PokedexActivityMenu::needRedraw = false;
+	}
 }
 
 bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     //List item background
-    std::string backgroundImageFile = "res/assets/misc/menu_item_background_";
-    offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
-    SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (listEntrySurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect listEntryRect;
     listEntryRect.x = 0;
     listEntryRect.y = (i * itemHeight);
     listEntryRect.w = surf_display->w;
     listEntryRect.h = itemHeight;
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
-    SDL_FreeSurface(listEntrySurface);
-
-    //List item title ( Game Title )
-    SDL_Surface* versionTitleSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
-        (*dbResults)[offset + i][2].c_str(),
-        offset + i == selectedIndex ? highlightColor : color
-    );
-    if (versionTitleSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: versionTitleSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
 
     int leftBorder = 15;
-    SDL_Rect gameVersionRect;
-    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (versionTitleSurface->w / 2);
-    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (versionTitleSurface->h / 2) - 10;
-    gameVersionRect.w = versionTitleSurface->w;
-    gameVersionRect.h = versionTitleSurface->h;
-    PokeSurface::onDraw(surf_display, versionTitleSurface, &gameVersionRect);
-    SDL_FreeSurface(versionTitleSurface);
+    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (cachedTextSurfaces[offset + i]->w / 2);
+    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (cachedTextSurfaces[offset + i]->h / 2) - 10;
+    gameVersionRect.w = cachedTextSurfaces[offset + i]->w;
+    gameVersionRect.h = cachedTextSurfaces[offset + i]->h;
+
+	if(offset + i == selectedIndex){
+		PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
+		PokeSurface::onDrawScaled(surf_display, cachedHighlightTextSurfaces[offset + i], &gameVersionRect);
+	}
+	else {
+		PokeSurface::onDrawScaled(surf_display, listEntrySurface_default, &listEntryRect);
+		PokeSurface::onDrawScaled(surf_display, cachedTextSurfaces[offset + i], &gameVersionRect);
+	}
 
     return true;
 }
@@ -151,6 +201,8 @@ PokedexActivityMenu* PokedexActivityMenu::getInstance() {
 }
 
 void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
+	PokedexActivityMenu::needRedraw = true;
+
     if (selectedIndex > 0) {
         selectedIndex--;
         if (selectedIndex < offset) {
@@ -162,6 +214,8 @@ void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
+	PokedexActivityMenu::needRedraw = true;
+
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
@@ -188,6 +242,8 @@ void PokedexActivityMenu::onButtonB(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
+	PokedexActivityMenu::needRedraw = true;
+
     if (selectedIndex < dbResults->size() - 3) {
         selectedIndex += 3;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
@@ -208,6 +264,8 @@ void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
+	PokedexActivityMenu::needRedraw = true;
+
     if (selectedIndex >= 3) {
         selectedIndex -= 3;
         if (selectedIndex < offset) {
