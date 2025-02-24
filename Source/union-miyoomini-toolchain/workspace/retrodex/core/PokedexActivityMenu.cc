@@ -148,7 +148,7 @@ void PokedexActivityMenu::onDeactivate() {
 
 void PokedexActivityMenu::onLoop() {
     //Set Game version and regional pokedex ID for PokedexDB
-    // game = (*dbResults)[selectedIndex];
+    game = (*dbResults)[selectedIndex];
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {

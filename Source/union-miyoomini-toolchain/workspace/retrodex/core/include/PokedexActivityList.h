@@ -7,19 +7,26 @@ class PokedexActivityList : public PokedexActivity {
 private:
     static PokedexActivityList instance;
 
-    int selectedIndex, offset, itemHeight;
-	bool needRedraw;
-
 	const std::string 
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokedexList_background.png",
 		LIST_BACKGROUND_IMG_PATH_DEFAULT = "res/assets/misc/menu_item_background_default.png",
 		LIST_BACKGROUND_IMG_PATH_SELECTED = "res/assets/misc/menu_item_background_selected.png";
 
+    int selectedIndex, offset, itemHeight;
+	bool needRedraw;
+
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> pokemon;
 
-	SDL_Surface* backgroundSurface, *listBackgroundSurface_default, *listBackgroundSurface_selected;
-    SDL_Rect backgroundRect, listBackgroundRect;
+	std::vector<SDL_Surface*> pokemonIconSurface_cache;
+	std::vector<std::vector<SDL_Surface*>> pokemonTypeSurface_cache;
+	std::vector<std::vector<SDL_Surface*>> pokemonIDNameSurface_cache;
+
+	SDL_Surface* backgroundSurface, *listBackgroundSurface_default, 
+		*listBackgroundSurface_selected;
+    SDL_Rect backgroundRect, listBackgroundRect,
+			 pokeEntryRect, pokeEntryType1Rect, 
+			 pokeEntryType2Rect, pokeIDRect, pokeNameRect;
     Mix_Chunk* sEffect, *sEffect_OnStart, *sEffect_OnExit;
     SDL_Color color, highlightColor;
 
@@ -31,6 +38,8 @@ private:
 private:
     PokedexActivityList();
     ~PokedexActivityList();
+
+	void initSDL();
 
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);
