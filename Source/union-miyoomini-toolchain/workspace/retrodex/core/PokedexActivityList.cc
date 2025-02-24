@@ -232,10 +232,6 @@ void PokedexActivityList::onDeactivate() {
 
     color = {  }, highlightColor = {  };
 
-    // why cant I delete this here ? 
-    //delete dbResults; 
-    //dbResults = nullptr; 
-
     pokemon.clear();
 
     selectedIndex = 0, offset = 0, itemHeight = 0;
