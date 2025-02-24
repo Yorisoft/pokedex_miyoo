@@ -8,10 +8,18 @@ private:
     static PokedexActivityList instance;
 
     int selectedIndex, offset, itemHeight;
+	bool needRedraw;
+
+	const std::string 
+		BACKGROUND_IMG_PATH = "res/assets/misc/pokedexList_background.png",
+		LIST_BACKGROUND_IMG_PATH_DEFAULT = "res/assets/misc/menu_item_background_default.png",
+		LIST_BACKGROUND_IMG_PATH_SELECTED = "res/assets/misc/menu_item_background_selected.png";
 
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> pokemon;
 
+	SDL_Surface* backgroundSurface, *listBackgroundSurface_default, *listBackgroundSurface_selected;
+    SDL_Rect backgroundRect, listBackgroundRect;
     Mix_Chunk* sEffect, *sEffect_OnStart, *sEffect_OnExit;
     SDL_Color color, highlightColor;
 

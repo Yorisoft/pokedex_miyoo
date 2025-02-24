@@ -5,9 +5,13 @@ PokedexActivityList PokedexActivityList::instance;
 
 PokedexActivityList::PokedexActivityList() : 
     dbResults(nullptr),
+    backgroundSurface(nullptr),
+    listBackgroundSurface_default(nullptr),
+    listBackgroundSurface_selected(nullptr),
     sEffect(nullptr),
     sEffect_OnStart(nullptr),
     sEffect_OnExit(nullptr),
+    needRedraw(true),
     selectedIndex(0),
     offset(0),
     itemHeight(0)
@@ -31,6 +35,7 @@ void PokedexActivityList::onActivate() {
 
     itemHeight = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
 
+	// Pokemon List DB Results
     dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
     for (auto& pokemon : *dbResults) {
         for (auto& col : pokemon) {
@@ -40,6 +45,36 @@ void PokedexActivityList::onActivate() {
     }
     pokemon = (*dbResults)[selectedIndex];
 
+
+	//Background Surface
+	// Render List Items
+	backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
+	if (backgroundSurface == NULL) {
+		std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
+		exit(EXIT_FAILURE);
+	};
+	backgroundRect.x = 0;
+	backgroundRect.y = 0;
+	backgroundRect.w = WINDOW_WIDTH;
+	backgroundRect.h = WINDOW_HEIGHT;
+
+
+	// List Item Background
+    listBackgroundSurface_default = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_DEFAULT);
+    if (listBackgroundSurface_default == NULL) {
+        std::cout << "Unable to load surface: listBackgroundSurface_default " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+    listBackgroundSurface_selected = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_SELECTED);
+    if (listBackgroundSurface_selected == NULL) {
+        std::cout << "Unable to load surface: listBackgroundSurface_selected " << SDL_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
+
+    listBackgroundRect.x = static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * 0.5));
+    listBackgroundRect.w = static_cast<int>(WINDOW_WIDTH * 0.5);
+
+	// Sound Effects
     sEffect_OnStart = Mix_LoadWAV("res/assets/sound_effects/list_start.wav");
     if (!sEffect_OnStart) {
         std::cerr << "Failed to load sound sEffect_OnStart: " << Mix_GetError() << std::endl;
@@ -61,6 +96,15 @@ void PokedexActivityList::onActivate() {
 }
 
 void PokedexActivityList::onDeactivate() {
+	if(backgroundSurface)
+    	SDL_FreeSurface(backgroundSurface);
+
+	if(listBackgroundSurface_default)
+		SDL_FreeSurface(listBackgroundSurface_default);
+
+	if(listBackgroundSurface_selected)
+		SDL_FreeSurface(listBackgroundSurface_selected);
+
     if(sEffect_OnStart)
         Mix_FreeChunk(sEffect_OnStart);
     sEffect_OnStart = nullptr;
@@ -85,33 +129,21 @@ void PokedexActivityList::onLoop() {
 
 void PokedexActivityList::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
     //std::cout << "PokedexActivityList::onRender START \n";
-    // Clear the display surface
-    SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
+	if(needRedraw){
+		// Clear the display surface
+		SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-    // Render List Items
-    std::string backgroundImageFile = "res/assets/misc/pokedexList_background.png";
-    SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (listBackgroundSurface == NULL) {
-        std::cout << "Unable to load surface! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+		PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
 
-    SDL_Rect backgroundRect;
-    backgroundRect.x = 0;
-    backgroundRect.y = 0;
-    backgroundRect.w = surf_display->w;
-    backgroundRect.h = surf_display->h;
-
-    PokeSurface::onDrawScaled(surf_display, listBackgroundSurface, &backgroundRect);
-    SDL_FreeSurface(listBackgroundSurface);
-
-    // Render List Items
-    for (int i = 0; i < MAX_VISIBLE_ITEMS && static_cast<std::size_t>(offset + i) < dbResults->size(); i++) {
-        // Render list items
-        if (!renderListItems(surf_display, font, i)) {
-            exit(EXIT_FAILURE);
-        }
-    }
+		// Render List Items
+		for (int i = 0; i < MAX_VISIBLE_ITEMS && static_cast<std::size_t>(offset + i) < dbResults->size(); i++) {
+			// Render list items
+			if (!renderListItems(surf_display, font, i)) {
+				exit(EXIT_FAILURE);
+			}
+		}
+		needRedraw = false;
+	}
 }
 
 void PokedexActivityList::onFreeze() {
@@ -124,7 +156,7 @@ PokedexActivityList* PokedexActivityList::getInstance() {
 
 bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
     //List item background
-    SDL_Rect listEntryRect = renderItemBackground(surf_display, i);
+    listBackgroundRect = renderItemBackground(surf_display, i);
 
     pokemon = (*dbResults)[offset + i];
     if (offset + i == selectedIndex) {
@@ -136,7 +168,7 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
         }
     }
     //List pokemon id
-    if (!renderItemEntry(surf_display, &listEntryRect, font, i)) {
+    if (!renderItemEntry(surf_display, &listBackgroundRect, font, i)) {
         std::cout << "Error in renderItemEntry! SDL Error: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
 
@@ -145,23 +177,17 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
 }
 
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, int i) {
-    std::string backgroundImageFile = "res/assets/misc/menu_item_background_";
-    offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
-    SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
+    listBackgroundRect.y = (i * itemHeight + 70);
+    listBackgroundRect.h = itemHeight;
 
-    if (listEntrySurface == NULL) {
-        std::cout << "Unable to load surface: listEntrySurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-    SDL_Rect listEntryRect;
-    listEntryRect.x = static_cast<int>(surf_display->w - (surf_display->w * 0.5));
-    listEntryRect.y = (i * itemHeight + 70);
-    listEntryRect.w = static_cast<int>(surf_display->w * 0.5);
-    listEntryRect.h = itemHeight;
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
-    SDL_FreeSurface(listEntrySurface);
-    
-    return listEntryRect;
+	if(offset + i == selectedIndex){
+    	PokeSurface::onDrawScaled(surf_display, listBackgroundSurface_selected, &listBackgroundRect);
+	} 
+	else {
+    	PokeSurface::onDrawScaled(surf_display, listBackgroundSurface_default, &listBackgroundRect);
+	}
+
+    return listBackgroundRect;
 }
 
 bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
@@ -268,6 +294,8 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* r
 }
 
 void PokedexActivityList::onButtonUp(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex > 0) {
         selectedIndex--;
         if (selectedIndex < offset) {
@@ -279,6 +307,8 @@ void PokedexActivityList::onButtonUp(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
@@ -315,6 +345,8 @@ void PokedexActivityList::onButtonB(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityList::onButtonR(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex < dbResults->size() - MAX_VISIBLE_ITEMS) {
         selectedIndex += MAX_VISIBLE_ITEMS;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
@@ -336,6 +368,8 @@ void PokedexActivityList::onButtonR(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex >= MAX_VISIBLE_ITEMS) {
         selectedIndex -= MAX_VISIBLE_ITEMS;
         if (selectedIndex < offset) {
