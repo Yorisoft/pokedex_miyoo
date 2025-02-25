@@ -17,8 +17,8 @@ private:
     float fps;
 	
     // Variables for frame delay calculation
-	const int FPS = 60;
-	const int frameDelay = 1000 / FPS;
+	const float FPS = 60.0f;
+	const Uint32 frameDelay = 1000 / FPS;
 
 	bool running, needRedraw;
 

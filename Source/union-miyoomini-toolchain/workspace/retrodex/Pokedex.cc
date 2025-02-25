@@ -55,27 +55,13 @@ int Pokedex::onExecute() {
         return -1;
     }
 
-	fpsSurface = TTF_RenderUTF8_Blended(
-		font,
-		"0",
-		{ 0, 128, 0 }
-	);
-	if (fpsSurface == NULL) {
-		std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
-		exit(EXIT_FAILURE);
-	};
-
-	Uint32 prev_ButtonPressTick;
 	static SDL_Event event;
     while (running) {
 		Uint32 frameStart = SDL_GetTicks();
 
 		calculateFPS();
-		fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
-		fpsRect.y = 0;
-		fpsRect.w = fpsSurface->w;
-		fpsRect.h = fpsSurface->h;
 
+		Uint32 prev_ButtonPressTick;
 		while(SDL_PollEvent(&event)){
 			prev_ButtonPressTick = SDL_GetTicks();
 
@@ -99,10 +85,6 @@ int Pokedex::onExecute() {
 		if(frameTime < frameDelay){
 			SDL_Delay(frameDelay - frameTime);
 		}
-		else {
-            // If frameTime exceeds frameDelay, log a warning (optional)
-            std::cout << "Frame time exceeded! (" << frameTime << "ms)" << std::endl;
-        }
     }
     onCleanup(); 
 
@@ -188,6 +170,17 @@ bool Pokedex::onSDLInit() {
         exit(EXIT_FAILURE);
     }
 
+	fpsSurface = TTF_RenderUTF8_Blended(
+		font,
+		"0",
+		{ 0, 128, 0 }
+	);
+	if (fpsSurface == NULL) {
+		std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
+		exit(EXIT_FAILURE);
+	};
+
+
     SDL_FillRect(
         this->screen,
         &(this->screen)->clip_rect,
@@ -269,6 +262,10 @@ void Pokedex::renderFPS(){
 			exit(EXIT_FAILURE);
 		};
 		
+		fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
+		fpsRect.y = 0;
+		fpsRect.w = fpsSurface->w;
+		fpsRect.h = fpsSurface->h;
 		lastFPS = currentFPS;
 	}
 
