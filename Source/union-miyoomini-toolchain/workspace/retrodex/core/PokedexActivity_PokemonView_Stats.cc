@@ -52,13 +52,12 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 		std::string path = SOUND_EFFECT_PATH;
 		sEffect = Mix_LoadWAV(path.c_str());
 		if (!sEffect) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Stats::initSDL() Unable to load sEffect mix! SDL Error:  ") + Mix_GetError());
+			std::cerr << "Warning: PokedexActivity_PokemonView_Stats::initSDL() Unable to load sEffect mix! SDL Error:  " << + Mix_GetError();
 		}
 
 		TTF_Font* temp_font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
 		if (temp_font == NULL) {
-			std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
-			exit(EXIT_FAILURE);
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Stats::initSDL() Unable to render temp_font! SDL Error:  ") + TTF_GetError());
 		}
 
 		// Background Surface
@@ -207,7 +206,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 	} 
 	catch(const std::runtime_error& e){
 		std::cerr << e.what() << std::endl;
-		return -1;
+		return false;
 	}
 
 	return true;

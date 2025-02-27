@@ -112,14 +112,8 @@ void Pokemon::setTypes(const std::vector<std::string>& types) {
 }
 std::vector<std::string> Pokemon::getTypes() {
 	std::vector<std::string> types;
-
-	if (typeB.size() < 1 ) {
-		types.push_back(typeA);			
-	}
-	else {
-		types.push_back(typeA);	
-		types.push_back(typeB);
-	}
+	types.push_back(typeA);	
+	types.push_back(typeB);
 
 	return types;
 }
