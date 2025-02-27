@@ -226,7 +226,13 @@ bool PokedexActivity_PokemonView_Info::initSDL(){
     fTextRect.w = flavorTextSurface->w;
     fTextRect.h = flavorTextSurface->h;
 
+	if(temp_font)
+		TTF_CloseFont(temp_font);
+	temp_font = nullptr;
+
 	return true;
+
+
 }
 
 void PokedexActivity_PokemonView_Info::onActivate() {
@@ -256,35 +262,47 @@ void PokedexActivity_PokemonView_Info::onDeactivate() {
 
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
 
 	if(pokeIconSurface)
     	SDL_FreeSurface(pokeIconSurface);
+	pokeIconSurface = nullptr;
 	
 	if(pokeType1Surface)
     	SDL_FreeSurface(pokeType1Surface);
+	pokeType1Surface = nullptr;
 	if(pokeType2Surface)
         SDL_FreeSurface(pokeType2Surface);
+	pokeType2Surface = nullptr;
 
 	if(pokeIDSurface)
     	SDL_FreeSurface(pokeIDSurface);
+	pokeIDSurface = nullptr;
 	if(pokeNameSurface)
     	SDL_FreeSurface(pokeNameSurface);
+	pokeNameSurface = nullptr;
 
 	if(pokeHeightSurface)
     	SDL_FreeSurface(pokeHeightSurface);
+	pokeHeightSurface = nullptr;
 	if(pokeWeightSurface)
     	SDL_FreeSurface(pokeWeightSurface);
+	pokeWeightSurface = nullptr;
 
 	if(pokeGenderSurface)
     	SDL_FreeSurface(pokeGenderSurface);
+	pokeGenderSurface = nullptr;
 
 	if(pokeGenusSurface)
     	SDL_FreeSurface(pokeGenusSurface);
+	pokeGenderSurface = nullptr;
 
 	if(flavorTextSurface)
 		SDL_FreeSurface(flavorTextSurface);
+	flavorTextSurface = nullptr;
 
     delete pokemon;
+	pokemon = nullptr;
 }
 
 void PokedexActivity_PokemonView_Info::onLoop() {

@@ -165,6 +165,9 @@ void PokedexActivityList::initSDL(){
 		pokemonIDNameSurface_cache.emplace_back(temp);
 	}
 
+	if(temp_font)
+		TTF_CloseFont(temp_font);
+	temp_font = nullptr;
 }
 
 void PokedexActivityList::onActivate() {
@@ -197,26 +200,35 @@ void PokedexActivityList::onActivate() {
 void PokedexActivityList::onDeactivate() {
 	if(backgroundSurface)
     	SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
 
 	if(listBackgroundSurface_default)
 		SDL_FreeSurface(listBackgroundSurface_default);
+	 	listBackgroundSurface_default = nullptr;
 
 	if(listBackgroundSurface_selected)
 		SDL_FreeSurface(listBackgroundSurface_selected);
+	listBackgroundSurface_default = nullptr;
 
 	for(SDL_Surface* icon : pokemonIconSurface_cache)
-		if(icon)
+		if(icon){
     		SDL_FreeSurface(icon);
+			icon = nullptr;
+		}
 
 	for(std::vector<SDL_Surface*> types : pokemonTypeSurface_cache)
 		for(SDL_Surface* type : types)
-			if(type)
+			if(type){
 				SDL_FreeSurface(type);
+				type = nullptr;
+			}
 
 	for(std::vector<SDL_Surface*> ids_names : pokemonIDNameSurface_cache)
 		for(SDL_Surface* id_name : ids_names)
-			if(id_name)
+			if(id_name){
 				SDL_FreeSurface(id_name);
+				id_name = nullptr;
+			}
 
     if(sEffect_OnStart)
         Mix_FreeChunk(sEffect_OnStart);

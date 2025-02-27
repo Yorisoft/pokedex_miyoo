@@ -9,7 +9,7 @@ private:
     static PokedexActivity_PokemonView_Moves instance;
 
     int selectedIndex, offset, itemHeight;
-	bool needRedraw;
+	bool needRedraw, needInit;
 
 	const std::string 
 		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",

@@ -6,6 +6,14 @@ PokedexActivity_PokemonView_Moves PokedexActivity_PokemonView_Moves::instance;
 PokedexActivity_PokemonView_Moves::PokedexActivity_PokemonView_Moves() :
 dbResults(nullptr),
 pokemon(nullptr),
+needRedraw(true),
+needInit(true),
+backgroundSurface(nullptr), 
+listEntrySurface(nullptr),
+pokeIconSurface(nullptr), 
+pokeNameSurface(nullptr), 
+typeASurface(nullptr), 
+typeBSurface(nullptr),
 selectedIndex(0),
 offset(0),
 color({ 64, 64, 64}),
@@ -18,12 +26,12 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 	try{
 		sound_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
 		if (!sound_left_right) {
-			std::cerr << "Warning: PokedexActivity_PokemonView_Stats::initSDL() Unable to load sound_left_right mix! SDL Error:  " << + Mix_GetError() << std::endl;
+			std::cerr << "Warning: PokedexActivity_PokemonView_Moves::initSDL() Unable to load sound_left_right mix! SDL Error:  " << + Mix_GetError() << std::endl;
 		}
 
 		sound_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
 		if (!sound_up_down) {
-			std::cerr << "Warning: PokedexActivity_PokemonView_Stats::initSDL() Unable to load sound_up_down mix! SDL Error:  " << + Mix_GetError() << std::endl;
+			std::cerr << "Warning: PokedexActivity_PokemonView_Moves::initSDL() Unable to load sound_up_down mix! SDL Error:  " << + Mix_GetError() << std::endl;
 		}
 
 		TTF_Font* temp_font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
@@ -78,7 +86,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			color
 		);
 		if (pokeNameSurface == NULL) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load typeSurface! SDL Error:  ") + SDL_GetError());
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load pokeNameSurface! SDL Error:  ") + SDL_GetError());
 		}
 
 		pokeNameRect = {
@@ -123,35 +131,35 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			};
 		}
 
-		// Move Type
+		// Moves
 		for(size_t i = 0; i < dbResults->size(); i++){
 			std::vector<std::string> move = (*dbResults)[i];
 
-			std::string type = TYPE_IMG_BASE_PATH + move[2] + ".png";
-			SDL_Surface* typeSurface = PokeSurface::onLoadImg(type);
+			std::string typePath = TYPE_IMG_BASE_PATH + (*dbResults)[i][2] + ".png";
+			SDL_Surface* typeSurface = PokeSurface::onLoadImg(typePath);
 			if (typeSurface == NULL) {
 				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load typeSurface! SDL Error:  ") + SDL_GetError());
 			}
 
 			SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
 				temp_font,
-				move[1].c_str(),
-				offset + i == selectedIndex ? highlightColor : color
+				(*dbResults)[i][1].c_str(),
+				color
 			);
 			if (nameSurface == NULL) {
 				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load nameSurface! SDL Error:  ") + SDL_GetError());
 			}
 
-			std::string method = METHOD_IMG_BASE_PATH + move[9] + ".png";
+			std::string method = METHOD_IMG_BASE_PATH + (*dbResults)[i][9] + ".png";
 			SDL_Surface* methodSurface = PokeSurface::onLoadImg(method);
 			if (methodSurface == NULL) {
 				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load methodSurface! SDL Error:  ") + SDL_GetError());
 			}
 
-			if (move[9] == "level-up") {
+			if ((*dbResults)[i][9] == "level-up") {
 				SDL_Surface* levelSurface = TTF_RenderUTF8_Blended(
 					temp_font,
-					move[8].c_str(),
+					(*dbResults)[i][8].c_str(),
 					offset + i == selectedIndex ? highlightColor : color
 				);
 				if (levelSurface == NULL) {
@@ -161,7 +169,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 				levelSurface_cache.push_back(levelSurface);
 			}
 
-			std::string pp = move[3] + '/' + move[3];
+			std::string pp = (*dbResults)[i][3] + '/' + (*dbResults)[i][3];
 			SDL_Surface* ppSurface = TTF_RenderUTF8_Blended(
 				temp_font,
 				pp.c_str(),
@@ -246,6 +254,9 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			accrySurface_cache.push_back(accrySurface);
 			summarySurface_cache.push_back(summarySurface);
 		}
+		if(temp_font)
+			TTF_CloseFont(temp_font);
+		temp_font = nullptr;
 	} 
 	catch(const std::runtime_error& e){
 		std::cerr << e.what() << std::endl;
@@ -280,11 +291,10 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
 	accrySurface_cache.clear();
 	summarySurface_cache.clear();
 
-
-	if(!initSDL()){
-		std::cout << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: " << std::endl;
-		exit(EXIT_FAILURE);
-	}
+		if(!initSDL()){
+			std::cout << "PokedexActivity_PokemonView_Moves::onActivate - Error in initSDL(), SDL Error: " << std::endl;
+			exit(EXIT_FAILURE);
+		}
 	
     move = (*dbResults)[selectedIndex];
 
@@ -294,55 +304,94 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Moves::onDeactivate() {
-    std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
+    std::cout << "PokedexActivity_PokemonView_Moves::onDeactivate START \n";
 
-    // why cant I delete this here ? 
-    //delete dbResults; 
-    //dbResults = nullptr; 
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
 
 	if(pokeIconSurface)
 		SDL_FreeSurface(pokeIconSurface);
+	pokeIconSurface = nullptr;
 
 	if(pokeNameSurface)
 		SDL_FreeSurface(pokeNameSurface);
+	pokeNameSurface = nullptr;
 
 	if(typeASurface)
 		SDL_FreeSurface(typeASurface);
+	typeASurface = nullptr;
 
 	if(typeBSurface)
 		SDL_FreeSurface(typeBSurface);
+	typeBSurface = nullptr;
 
 	if(listEntrySurface)
     	SDL_FreeSurface(listEntrySurface);
+	listEntrySurface = nullptr;
 
-	for(SDL_Surface* surface : typeSurface_cache)
-    	SDL_FreeSurface(surface);
+	for(SDL_Surface* surface : typeSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface : nameSurface_cache)
-		SDL_FreeSurface(surface);
+	for(SDL_Surface* surface : nameSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface : methodSurface_cache)
-    	SDL_FreeSurface(surface);
+	for(SDL_Surface* surface : methodSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface : levelSurface_cache)
-        SDL_FreeSurface(surface);
+	for(SDL_Surface* surface : levelSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface : ppSurface_cache)
-    	SDL_FreeSurface(surface);
+	for(SDL_Surface* surface : ppSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface: pwrSurface_cache)
-		SDL_FreeSurface(surface);
+	for(SDL_Surface* surface: pwrSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface: classSurface_cache)
-		SDL_FreeSurface(surface);
+	for(SDL_Surface* surface: classSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface: accrySurface_cache)
-		SDL_FreeSurface(surface);
+	for(SDL_Surface* surface: accrySurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
-	for(SDL_Surface* surface: summarySurface_cache)
-		SDL_FreeSurface(surface);
+	for(SDL_Surface* surface: summarySurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
 	typeSurface_cache.clear();
 	nameSurface_cache.clear();
@@ -355,11 +404,13 @@ void PokedexActivity_PokemonView_Moves::onDeactivate() {
 	summarySurface_cache.clear();
 
     delete pokemon;
-    pokemon = nullptr;
+    //pokemon = nullptr;
 
     selectedIndex = 0, offset = 0;
 
-    std::cout << "PokedexActivity_PokemonView_Moves::onActivate END \n";
+	needInit = true;
+
+    std::cout << "PokedexActivity_PokemonView_Moves::onDeactivate END \n";
 }
 
 void PokedexActivity_PokemonView_Moves::onLoop() {
@@ -369,18 +420,23 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
 	if(needRedraw){
 		SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
+    	std::cout << "Rendering backgroundSurface \n";
 		// Render Background
 		PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
 
+    	std::cout << "Rendering pokeIconSurface \n";
 		// Render Poke Icon
 		PokeSurface::onDrawScaled(surf_display, pokeIconSurface, &pokeIconRect);
 		
+    	std::cout << "Rendering pokeNameSurface \n";
 		// Render Name
 		PokeSurface::onDraw(surf_display, pokeNameSurface, &pokeNameRect);
 
+    	std::cout << "Rendering typeASurface \n";
 		// render poke types
 		PokeSurface::onDrawScaled(surf_display, typeASurface, &typeARect);
 
+    	std::cout << "Rendering typeBSurface \n";
 		//__builtin_trap();
 		//List item types_2
 		if (pokemon->getTypes()[1] != "NULL") { 
@@ -400,6 +456,7 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
 }
 
 bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i) {
+    	std::cout << "Rendering listItems \n";
     if (offset + i == selectedIndex) {
         if (!renderItemDetails(surf_display, font, i)) {
             exit(EXIT_FAILURE);
@@ -490,6 +547,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_displa
 }
 
 bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i) {
+    	std::cout << "Rendering listItemDetails \n";
     // Render Power
     PokeSurface::onDraw(surf_display, pwrSurface_cache[i + offset], &pwrRect);
 

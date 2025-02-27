@@ -223,6 +223,9 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
 		levelSurface_cache.push_back({minLevelSurface, maxLevelSurface});
 		detailLocationNameSurface_cache.push_back(detailLocationNameSurface);
 	}
+		if(temp_font)
+			TTF_CloseFont(temp_font);
+		temp_font = nullptr;
   } 
   catch (const std::runtime_error &e) {
     std::cerr << e.what() << std::endl;
@@ -267,12 +270,12 @@ void PokedexActivity_PokemonView_Location::onActivate() {
     routes = pokemon->getRoutes();
     printPokeInfo();
 
-	locationNameSurface_cache.clear();
-	conditionSurface_cache.clear();
-	methodSurface_cache.clear();
-	rateSurface_cache.clear();
-	levelSurface_cache.clear();
-	detailLocationNameSurface_cache.clear();
+	/* locationNameSurface_cache.clear(); */
+	/* conditionSurface_cache.clear(); */
+	/* methodSurface_cache.clear(); */
+	/* rateSurface_cache.clear(); */
+	/* levelSurface_cache.clear(); */
+	/* detailLocationNameSurface_cache.clear(); */
 
 	if(!initSDL()){
 		std::cout << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: " << std::endl;
@@ -289,44 +292,63 @@ void PokedexActivity_PokemonView_Location::onDeactivate() {
 
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
 
 	if(iconSurface)
 		SDL_FreeSurface(iconSurface);
+	iconSurface = nullptr;
 
 	if(pokeNameSurface)
 		SDL_FreeSurface(pokeNameSurface);
+	pokeNameSurface = nullptr;
 
 	if(typeASurface)
 		SDL_FreeSurface(typeASurface);
+	typeASurface = nullptr;
 
 	if(typeBSurface)
 		SDL_FreeSurface(typeBSurface);
+	typeBSurface = nullptr;
 
 	if(listEntrySurface)
 		SDL_FreeSurface(listEntrySurface);
+	listEntrySurface = nullptr;
 
 	for(SDL_Surface* surface : locationNameSurface_cache)
-		if(surface)
+		if(surface){
 			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	
 
 	for(SDL_Surface* surface : conditionSurface_cache)
-		if(surface)
+		if(surface){
 			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
 
 	for(SDL_Surface* surface : rateSurface_cache)
-		if(surface)
+		if(surface){
 			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
 
 	for(std::pair<SDL_Surface*, SDL_Surface*> surfaces: levelSurface_cache){
-		if(surfaces.first)
+		if(surfaces.first){
 			SDL_FreeSurface(surfaces.first);
-		if(surfaces.second)
+			surfaces.first = nullptr;
+		}
+		if(surfaces.second){
 			SDL_FreeSurface(surfaces.second);
+			surfaces.second = nullptr;
+		}
 	}
 
 	for(SDL_Surface* surface : detailLocationNameSurface_cache)
-		if(surface)
+		if(surface){
 			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
 
 	locationNameSurface_cache.clear();
 	conditionSurface_cache.clear();

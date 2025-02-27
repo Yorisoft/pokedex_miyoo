@@ -203,6 +203,10 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 				h_abilityRect.h = h_abilitySurface->h;
 			}
 		}
+		
+		if(temp_font)
+			TTF_CloseFont(temp_font);
+		temp_font = nullptr;
 	} 
 	catch(const std::runtime_error& e){
 		std::cerr << e.what() << std::endl;
@@ -223,6 +227,9 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 
 	statNames = PokedexDB::executeSQL(&SQL_getStatNames);
     
+	statsNameSurface_cache.clear();
+	statsSurface_cache.clear();
+
 	if(!initSDL()){
 		std::cout << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: " << std::endl;
 		exit(EXIT_FAILURE);
@@ -236,32 +243,42 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 void PokedexActivity_PokemonView_Stats::onDeactivate() {
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
 
 	if(iconSurface)
     	SDL_FreeSurface(iconSurface);
+	iconSurface = nullptr;
 
 	if(idSurface)
     	SDL_FreeSurface(idSurface);
+	idSurface = nullptr;
 
 	if(nameSurface)
 		SDL_FreeSurface(nameSurface);
+	nameSurface = nullptr;
 	
 	for(SDL_Surface* surface : statsNameSurface_cache)
-		if(surface)
+		if(surface){
 			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
 
 	for(SDL_Surface* surface : statsSurface_cache)
-		if(surface)
+		if(surface){
 			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
 
 	statsNameSurface_cache.clear();
 	statsSurface_cache.clear();
 
 	if(abilitySurface)
 		SDL_FreeSurface(abilitySurface);
+	abilitySurface = nullptr;
 
 	if(h_abilitySurface)
 		SDL_FreeSurface(h_abilitySurface);
+	h_abilitySurface = nullptr;
 
     delete pokemon;
 	pokemon = nullptr;

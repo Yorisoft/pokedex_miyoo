@@ -46,6 +46,7 @@ Pokemon::Pokemon() {
 		stats->push_back(std::stoi(stat[0]));
 	}
 	setBasicStats(stats);
+	delete stats;
 
 	// //set abilities;
 	results = PokedexDB::executeSQL(&SQL_getPokeAbilities);
@@ -112,8 +113,14 @@ void Pokemon::setTypes(const std::vector<std::string>& types) {
 }
 std::vector<std::string> Pokemon::getTypes() {
 	std::vector<std::string> types;
-	types.push_back(typeA);	
-	types.push_back(typeB);
+
+	if (typeB.size() < 1 ) {
+		types.push_back(typeA);			
+	}
+	else {
+		types.push_back(typeA);	
+		types.push_back(typeB);
+	}
 
 	return types;
 }
