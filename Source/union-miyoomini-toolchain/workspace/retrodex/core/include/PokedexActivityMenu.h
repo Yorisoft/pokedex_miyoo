@@ -7,24 +7,37 @@ class PokedexActivityMenu : public PokedexActivity {
 private:
     static PokedexActivityMenu instance;
 
-    int selectedIndex, offset, itemHeight;
-    std::string fontPath;
+	const int 
+		ITEM_HEIGHT = (static_cast<int>(WINDOW_HEIGHT / 5));
 
-	static bool needRedraw;
+	const std::string 
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
+		BACKGROUND_IMG_PATH = "res/assets/misc/menu_background.png",
+		LIST_BACKGROUND_IMG_PATH_DEFAULT = "res/assets/misc/menu_item_background_default.png",
+		LIST_BACKGROUND_IMG_PATH_SELECTED = "res/assets/misc/menu_item_background_selected.png";
+
+
+    const SDL_Color 
+		COLOR = { 248, 248, 248 },
+		HIGHLIGHT_COLOR = { 255, 0, 0 };
+
+    int selectedIndex, offset;
+	bool needRedraw;
 
     std::vector<std::string> game;
     std::vector<std::vector<std::string>>* dbResults;
 	
-	// In PokedexActivityMenu.h
 	std::vector<SDL_Surface*> cachedTextSurfaces;
 	std::vector<SDL_Surface*> cachedHighlightTextSurfaces;
 
 	SDL_Surface* backgroundSurface, *listEntrySurface_default, 
 		*listEntrySurface_selected;
-    SDL_Rect backgroundRect, listEntryRect,gameVersionRect;
-    SDL_Color color, highlightColor;
+    SDL_Rect backgroundRect, listEntryRect, gameVersionRect;
     TTF_Font* fontSurface;
     Mix_Chunk* sEffect;
+
+	bool initSDL();
+	void printMenuInfo();
 
     bool renderListItems(SDL_Surface* surf_display, int i);
 
