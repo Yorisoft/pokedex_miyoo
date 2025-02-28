@@ -6,17 +6,18 @@ PokedexActivity_PokemonView_Info PokedexActivity_PokemonView_Info::instance;
 PokedexActivity_PokemonView_Info::PokedexActivity_PokemonView_Info() : 
 dbResults(nullptr),
 pokemon(nullptr),
-pokeCry(nullptr),
+fontSurface(nullptr),
+se_poke_cry(nullptr),
 backgroundSurface(nullptr),
-pokeIconSurface(nullptr),
-pokeType1Surface(nullptr),
-pokeType2Surface(nullptr),
-pokeIDSurface(nullptr),
-pokeNameSurface(nullptr),
-pokeHeightSurface(nullptr),
-pokeWeightSurface(nullptr),
-pokeGenderSurface(nullptr),
-pokeGenusSurface(nullptr),
+iconSurface(nullptr),
+typeASurface(nullptr),
+typeBSurface(nullptr),
+idSurface(nullptr),
+nameSurface(nullptr),
+heightSurface(nullptr),
+weightSurface(nullptr),
+genderSurface(nullptr),
+genusSurface(nullptr),
 flavorTextSurface(nullptr)
 {
 }
@@ -39,200 +40,187 @@ void PokedexActivity_PokemonView_Info::printPokeInfo(){
 }
 
 bool PokedexActivity_PokemonView_Info::initSDL(){
-	TTF_Font* temp_font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
-	if (temp_font == NULL) {
-		std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
-		return -1;
-	}
-
-    // make it a 3 digit
-    std::stringstream formattedID;
-    formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
-    std::string pokeID = formattedID.str();
-
-    std::string pokeCryPath = "res/assets/pokemons/cry/" + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
-    pokeCry = Mix_LoadWAV(pokeCryPath.c_str());
-    if (!pokeCry) {
-        std::cerr << "Failed to load sound pokeCry: " << Mix_GetError() << std::endl;
-    }
-
-	// Background Surface
-	backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
-	if (backgroundSurface == NULL) {
-		std::cout << "Unable to render text! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
-		return -1;
-	};
-	backgroundRect.x = 0;
-	backgroundRect.y = 0;
-	backgroundRect.w = WINDOW_WIDTH;
-	backgroundRect.h = WINDOW_HEIGHT;
-
-    // Pokemon Sprite
-    std::string pokeIdentifier = PokedexDB::getPokemonIdentifier();
-    std::string path = SPRITES_IMG_BASE_PATH + pokeIdentifier + ".png";
-    pokeIconSurface = PokeSurface::onLoadImg(path);
-    if (pokeIconSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeIconSurface " << SDL_GetError() << std::endl;
-		return -1;
-    };
-    pokeIconRect.x = 50;
-    pokeIconRect.y = 100;   
-    pokeIconRect.w = pokeIconSurface->w * 2;
-    pokeIconRect.h = pokeIconSurface->h * 2;
-
-	// Pokemon Types
-    std::vector<std::string> pokeTypes = pokemon->getTypes();
-    path = TYPES_IMG_BASE_PATH + pokeTypes[0] + ".png";
-    pokeType1Surface = PokeSurface::onLoadImg(path);
-    if (pokeType1Surface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeType1Surface " << SDL_GetError() << std::endl;
-		return -1;
-    };
-    pokeType1Rect.x = WINDOW_WIDTH - 15 - (pokeType1Surface->w * 2) * 2;
-    pokeType1Rect.y = 155;
-    pokeType1Rect.w = pokeType1Surface->w * 2;
-    pokeType1Rect.h = pokeType1Surface->h * 2;
-
-
-    if (pokeTypes[1] != "NULL") {
-        // Pokemnon Type 2 
-        path = TYPES_IMG_BASE_PATH + pokeTypes[1] + ".png";
-        pokeType2Surface = PokeSurface::onLoadImg(path);
-        if (pokeType2Surface == NULL) {
-            std::cout << "Unable to render text! SDL Error: pokeType2Surface " << SDL_GetError() << std::endl;
+	try{
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
+		if (fontSurface == NULL) {
+			std::cerr << "TTF_OpenFont: " << TTF_GetError() << std::endl;
 			return -1;
-        };
-        pokeType2Rect.x = pokeType1Rect.x + pokeType1Rect.w + 5;
-        pokeType2Rect.y = pokeType1Rect.y;
-        pokeType2Rect.w = pokeType2Surface->w * 2;
-        pokeType2Rect.h = pokeType2Surface->h * 2;
+		}
+
+		// make it a 3 digit
+		std::stringstream formattedID;
+		formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
+		std::string pokeID = formattedID.str();
+
+		std::string pokeCryPath = SOUND_EFFECT_CRY_PATH + pokeID + ' ' + ".wav"; // <- empty char is standin for form variant
+		se_poke_cry = Mix_LoadWAV(pokeCryPath.c_str());
+		if (!se_poke_cry) {
+			std::cerr << "Failed to load sound pokeCry: " << Mix_GetError() << std::endl;
+		}
+
+		// Background Surface
+		backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
+		if (backgroundSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load backgroundSurface! SDL Error:  ") + SDL_GetError());
+		};
+		backgroundRect.x = 0;
+		backgroundRect.y = 0;
+		backgroundRect.w = WINDOW_WIDTH;
+		backgroundRect.h = WINDOW_HEIGHT;
+
+		// Pokemon Sprite
+		std::string spritePath = SPRITES_IMG_BASE_PATH + PokedexDB::getPokemonIdentifier() + ".png";
+		iconSurface = PokeSurface::onLoadImg(spritePath);
+		if (iconSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeIconSurface! SDL Error:  ") + SDL_GetError());
+		};
+		pokeIconRect.x = 50;
+		pokeIconRect.y = 100;   
+		pokeIconRect.w = iconSurface->w * 2;
+		pokeIconRect.h = iconSurface->h * 2;
+
+		// Pokemon Types
+		std::vector<std::string> pokeTypes = pokemon->getTypes();
+		std::string typePath = TYPES_IMG_BASE_PATH + pokeTypes[0] + ".png";
+		typeASurface = PokeSurface::onLoadImg(typePath);
+		if (typeASurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeType1Surface! SDL Error:  ") + SDL_GetError());
+		};
+		pokeType1Rect.x = WINDOW_WIDTH - 15 - (typeASurface->w * 2) * 2;
+		pokeType1Rect.y = 155;
+		pokeType1Rect.w = typeASurface->w * 2;
+		pokeType1Rect.h = typeASurface->h * 2;
+
+		if (pokeTypes[1] != "NULL") {
+			// Pokemnon Type 2 
+			typePath = TYPES_IMG_BASE_PATH + pokeTypes[1] + ".png";
+			typeBSurface = PokeSurface::onLoadImg(typePath);
+			if (typeBSurface == NULL) {
+				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeType2Surface! SDL Error:  ") + SDL_GetError());
+			};
+			pokeType2Rect.x = pokeType1Rect.x + pokeType1Rect.w + 5;
+			pokeType2Rect.y = pokeType1Rect.y;
+			pokeType2Rect.w = typeBSurface->w * 2;
+			pokeType2Rect.h = typeBSurface->h * 2;
+		}
+
+		// Pokemon ID
+		idSurface = TTF_RenderUTF8_Blended(
+			fontSurface,
+			pokeID.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (idSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeIDSurface! SDL Error:  ") + SDL_GetError());
+		};
+		pokeIDRect.x = WINDOW_WIDTH/2 + 125;
+		pokeIDRect.y = 65;
+		pokeIDRect.w = idSurface->w;
+		pokeIDRect.h = idSurface->h;
+
+		// Pokemon Name
+		std::string pokeName = pokemon->getName();
+		nameSurface = TTF_RenderUTF8_Blended(
+			fontSurface,
+			pokeName.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (nameSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeNameSurface! SDL Error:  ") + SDL_GetError());
+		};
+		pokeNameRect.x = pokeIDRect.x;
+		pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 15;
+		pokeNameRect.w = static_cast<int>(nameSurface->w);
+		pokeNameRect.h = static_cast<int>(nameSurface->h);
+
+		// Pokemon Height && Weight
+		std::string height = pokemon->getHeight();
+		std::string weight = pokemon->getWeight();
+
+		heightSurface = TTF_RenderUTF8_Blended(
+			fontSurface,
+			height.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (heightSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeHeightSurface! SDL Error:  ") + SDL_GetError());
+		};
+
+		weightSurface = TTF_RenderUTF8_Blended(
+			fontSurface,
+			weight.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (weightSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeWeightSurface! SDL Error:  ") + SDL_GetError());
+		};
+
+		heightRect.x = WINDOW_WIDTH/2 + 125;
+		heightRect.y = WINDOW_HEIGHT/2 - 35;
+		heightRect.w = heightSurface->w;
+		heightRect.h = heightSurface->h;
+
+		weightRect.x = heightRect.x;
+		weightRect.y = 10 + heightRect.y + heightRect.h;
+		weightRect.w = weightSurface->w;
+		weightRect.h = weightSurface->h;
+
+		// Pokemon Gender Rate
+		std::vector<double>* genderRates = pokemon->getGenderRates();
+		std::stringstream iss;
+		iss << (*genderRates)[1] << "/" << (*genderRates)[0];
+		std::string genderRatesStr = iss.str();
+
+		genderSurface = TTF_RenderUTF8_Blended(
+			fontSurface,
+			genderRatesStr.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (genderSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeGenderSurface! SDL Error:  ") + SDL_GetError());
+		};
+		genderRect.x = weightRect.x;
+		genderRect.y = 15 + weightRect.y + weightRect.h;
+		genderRect.w = genderSurface->w;
+		genderRect.h = genderSurface->h;
+
+		// Pokemon Genus
+		std::string pokeGenus = pokemon->getGenus();
+		genusSurface = TTF_RenderUTF8_Blended(
+			fontSurface,
+			pokeGenus.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (genusSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load pokeGenusSurface! SDL Error:  ") + SDL_GetError());
+		};
+		genusRect.x = 10;
+		genusRect.y = 60;
+		genusRect.w = genusSurface->w;
+		genusRect.h = genusSurface->h;
+
+		// Pokemon Flavor Text
+		std::string pokeFlavorText = pokemon->getFlavorText();
+		flavorTextSurface = TTF_RenderUTF8_Blended_Wrapped(
+			fontSurface,
+			pokeFlavorText.c_str(),
+			{ 96, 96, 96 },
+			620 
+		);
+		if (flavorTextSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load flavorTextSurface! SDL Error:  ") + SDL_GetError());
+		};
+		fTextRect.x = 25;
+		fTextRect.y = WINDOW_HEIGHT/2 + 100;
+		fTextRect.w = flavorTextSurface->w;
+		fTextRect.h = flavorTextSurface->h;
+	} 
+	catch(const std::runtime_error& e){
+		std::cerr << e.what() << std::endl;
+		return false;
 	}
-
-	// Pokemon ID
-    pokeIDSurface = TTF_RenderUTF8_Blended(
-        temp_font,
-        pokeID.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeIDSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeIDSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-    pokeIDRect.x = WINDOW_WIDTH/2 + 125;
-    pokeIDRect.y = 65;
-    pokeIDRect.w = pokeIDSurface->w;
-    pokeIDRect.h = pokeIDSurface->h;
-
-	// Pokemon Name
-    std::string pokeName = pokemon->getName();
-    pokeNameSurface = TTF_RenderUTF8_Blended(
-        temp_font,
-        pokeName.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeNameSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-    pokeNameRect.x = pokeIDRect.x;
-    pokeNameRect.y = pokeIDRect.y + pokeIDRect.h + 15;
-    pokeNameRect.w = static_cast<int>(pokeNameSurface->w);
-    pokeNameRect.h = static_cast<int>(pokeNameSurface->h);
-
-	// Pokemon Height && Weight
-    std::string height = pokemon->getHeight();
-    std::string weight = pokemon->getWeight();
-
-    pokeHeightSurface = TTF_RenderUTF8_Blended(
-        temp_font,
-        height.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeHeightSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeHeightSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-
-    pokeWeightSurface = TTF_RenderUTF8_Blended(
-        temp_font,
-        weight.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeWeightSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeWeightSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-
-    heightRect.x = WINDOW_WIDTH/2 + 125;
-    heightRect.y = WINDOW_HEIGHT/2 - 35;
-    heightRect.w = pokeHeightSurface->w;
-    heightRect.h = pokeHeightSurface->h;
-
-    weightRect.x = heightRect.x;
-    weightRect.y = 10 + heightRect.y + heightRect.h;
-    weightRect.w = pokeWeightSurface->w;
-    weightRect.h = pokeWeightSurface->h;
-
-	// Pokemon Gender Rate
-    std::vector<double>* genderRates = pokemon->getGenderRates();
-    std::stringstream iss;
-    iss << (*genderRates)[1] << "/" << (*genderRates)[0];
-    std::string genderRatesStr = iss.str();
-
-    pokeGenderSurface = TTF_RenderUTF8_Blended(
-        temp_font,
-        genderRatesStr.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeGenderSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeGenderSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-    genderRect.x = weightRect.x;
-    genderRect.y = 15 + weightRect.y + weightRect.h;
-    genderRect.w = pokeGenderSurface->w;
-    genderRect.h = pokeGenderSurface->h;
-
-    // Pokemon Genus
-    std::string pokeGenus = pokemon->getGenus();
-    pokeGenusSurface = TTF_RenderUTF8_Blended(
-        temp_font,
-        pokeGenus.c_str(),
-        { 96, 96, 96 }
-    );
-    if (pokeGenusSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeGenusSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-    genusRect.x = 10;
-    genusRect.y = 60;
-    genusRect.w = pokeGenusSurface->w;
-    genusRect.h = pokeGenusSurface->h;
-
-    // Pokemon Flavor Text
-    std::string pokeFlavorText = pokemon->getFlavorText();
-    flavorTextSurface = TTF_RenderUTF8_Blended_Wrapped(
-        temp_font,
-        pokeFlavorText.c_str(),
-        { 96, 96, 96 },
-        620 
-    );
-    if (flavorTextSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: flavorTextSurface " << TTF_GetError() << std::endl;
-		return -1;
-    };
-    fTextRect.x = 25;
-    fTextRect.y = WINDOW_HEIGHT/2 + 100;
-    fTextRect.w = flavorTextSurface->w;
-    fTextRect.h = flavorTextSurface->h;
-
-	if(temp_font)
-		TTF_CloseFont(temp_font);
-	temp_font = nullptr;
 
 	return true;
-
-
 }
 
 void PokedexActivity_PokemonView_Info::onActivate() {
@@ -249,7 +237,7 @@ void PokedexActivity_PokemonView_Info::onActivate() {
 	}
 
     // Play the sound effect
-    Mix_PlayChannel(-1, pokeCry, 0);
+    Mix_PlayChannel(-1, se_poke_cry, 0);
 
 	needRedraw = true;
 
@@ -257,45 +245,49 @@ void PokedexActivity_PokemonView_Info::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Info::onDeactivate() {
-	if(pokeCry)
-		Mix_FreeChunk(pokeCry);
+	if(se_poke_cry)
+		Mix_FreeChunk(se_poke_cry);
+
+	if(fontSurface)
+		TTF_CloseFont(fontSurface);
+	fontSurface = nullptr;
 
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
 	backgroundSurface = nullptr;
 
-	if(pokeIconSurface)
-    	SDL_FreeSurface(pokeIconSurface);
-	pokeIconSurface = nullptr;
+	if(iconSurface)
+    	SDL_FreeSurface(iconSurface);
+	iconSurface = nullptr;
 	
-	if(pokeType1Surface)
-    	SDL_FreeSurface(pokeType1Surface);
-	pokeType1Surface = nullptr;
-	if(pokeType2Surface)
-        SDL_FreeSurface(pokeType2Surface);
-	pokeType2Surface = nullptr;
+	if(typeASurface)
+    	SDL_FreeSurface(typeASurface);
+	typeASurface = nullptr;
+	if(typeBSurface)
+        SDL_FreeSurface(typeBSurface);
+	typeBSurface = nullptr;
 
-	if(pokeIDSurface)
-    	SDL_FreeSurface(pokeIDSurface);
-	pokeIDSurface = nullptr;
-	if(pokeNameSurface)
-    	SDL_FreeSurface(pokeNameSurface);
-	pokeNameSurface = nullptr;
+	if(idSurface)
+    	SDL_FreeSurface(idSurface);
+	idSurface = nullptr;
+	if(nameSurface)
+    	SDL_FreeSurface(nameSurface);
+	nameSurface = nullptr;
 
-	if(pokeHeightSurface)
-    	SDL_FreeSurface(pokeHeightSurface);
-	pokeHeightSurface = nullptr;
-	if(pokeWeightSurface)
-    	SDL_FreeSurface(pokeWeightSurface);
-	pokeWeightSurface = nullptr;
+	if(heightSurface)
+    	SDL_FreeSurface(heightSurface);
+	heightSurface = nullptr;
+	if(weightSurface)
+    	SDL_FreeSurface(weightSurface);
+	weightSurface = nullptr;
 
-	if(pokeGenderSurface)
-    	SDL_FreeSurface(pokeGenderSurface);
-	pokeGenderSurface = nullptr;
+	if(genderSurface)
+    	SDL_FreeSurface(genderSurface);
+	genderSurface = nullptr;
 
-	if(pokeGenusSurface)
-    	SDL_FreeSurface(pokeGenusSurface);
-	pokeGenderSurface = nullptr;
+	if(genusSurface)
+    	SDL_FreeSurface(genusSurface);
+	genderSurface = nullptr;
 
 	if(flavorTextSurface)
 		SDL_FreeSurface(flavorTextSurface);
@@ -349,14 +341,14 @@ PokedexActivity_PokemonView_Info* PokedexActivity_PokemonView_Info::getInstance(
 
 bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) {
 	// Render Pokemon Sprite
-    PokeSurface::onDrawScaled(surf_display, pokeIconSurface, &pokeIconRect);
+    PokeSurface::onDrawScaled(surf_display, iconSurface, &pokeIconRect);
 
     // Render Pokemon Type 1 
-    PokeSurface::onDrawScaled(surf_display, pokeType1Surface, &pokeType1Rect);
+    PokeSurface::onDrawScaled(surf_display, typeASurface, &pokeType1Rect);
 
 	// Render Pokemon Type 2
-    if (pokeType2Surface != nullptr) {
-        PokeSurface::onDrawScaled(surf_display, pokeType2Surface, &pokeType2Rect);
+    if (typeBSurface != nullptr) {
+        PokeSurface::onDrawScaled(surf_display, typeBSurface, &pokeType2Rect);
     }
 
     return true;
@@ -364,10 +356,10 @@ bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface* surf_display) 
 
 bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display, TTF_Font* font) {
     // Render Item ID
-    PokeSurface::onDraw(surf_display, pokeIDSurface, &pokeIDRect);
+    PokeSurface::onDraw(surf_display, idSurface, &pokeIDRect);
 
     // Render Pokemon Name
-    PokeSurface::onDrawScaled(surf_display, pokeNameSurface, &pokeNameRect);
+    PokeSurface::onDrawScaled(surf_display, nameSurface, &pokeNameRect);
 
     return true;
 }
@@ -375,19 +367,19 @@ bool PokedexActivity_PokemonView_Info::renderNameID(SDL_Surface* surf_display, T
 bool PokedexActivity_PokemonView_Info::renderHW(SDL_Surface* surf_display, TTF_Font* font) {
 
     // Render Pokemon Height & Weight
-    PokeSurface::onDrawScaled(surf_display, pokeHeightSurface, &heightRect);
+    PokeSurface::onDrawScaled(surf_display, heightSurface, &heightRect);
 
-    PokeSurface::onDrawScaled(surf_display, pokeWeightSurface, &weightRect);
+    PokeSurface::onDrawScaled(surf_display, weightSurface, &weightRect);
 
     // Render Pokemon Gender Rates 
-    PokeSurface::onDrawScaled(surf_display, pokeGenderSurface, &genderRect);
+    PokeSurface::onDrawScaled(surf_display, genderSurface, &genderRect);
 
     return true;
 }
 
 bool PokedexActivity_PokemonView_Info::renderFlavorText(SDL_Surface* surf_display, TTF_Font* font) {
     // Render Pokemon Genus
-    PokeSurface::onDrawScaled(surf_display, pokeGenusSurface, &genusRect);
+    PokeSurface::onDrawScaled(surf_display, genusSurface, &genusRect);
 
     // Render Pokemon Flavor Text
     PokeSurface::onDrawScaled(surf_display, flavorTextSurface, &fTextRect);

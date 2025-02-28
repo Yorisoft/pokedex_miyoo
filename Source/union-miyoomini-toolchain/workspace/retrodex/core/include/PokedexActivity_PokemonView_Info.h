@@ -8,9 +8,12 @@ class PokedexActivity_PokemonView_Info : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Info instance; 
 
-	const std::string BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_1.png";
-	const std::string SPRITES_IMG_BASE_PATH = "res/assets/pokemons/sprites/";
-	const std::string TYPES_IMG_BASE_PATH = "res/assets/pokemons/types/";
+	const std::string 
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
+		SOUND_EFFECT_CRY_PATH ="res/assets/pokemons/cry/", 
+		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_1.png",
+		SPRITES_IMG_BASE_PATH = "res/assets/pokemons/sprites/",
+		TYPES_IMG_BASE_PATH = "res/assets/pokemons/types/";
 
 	bool needRedraw;
 
@@ -18,11 +21,11 @@ private:
 
     Pokemon* pokemon;
 
-	SDL_Surface* backgroundSurface, *pokeIconSurface,
-		*pokeType1Surface, *pokeType2Surface,
-		*pokeIDSurface, *pokeNameSurface,
-		*pokeHeightSurface, *pokeWeightSurface,
-		*pokeGenderSurface, *pokeGenusSurface,
+	SDL_Surface* backgroundSurface, *iconSurface,
+		*typeASurface, *typeBSurface,
+		*idSurface, *nameSurface,
+		*heightSurface, *weightSurface,
+		*genderSurface, *genusSurface,
 		*flavorTextSurface;
 	SDL_Rect backgroundRect, pokeIconRect,
 			 pokeType1Rect, pokeType2Rect,
@@ -30,7 +33,9 @@ private:
 			 heightRect, weightRect,
 			 genderRect, genusRect,
 			 fTextRect;
-	Mix_Chunk* pokeCry;
+	Mix_Chunk* se_poke_cry;
+	TTF_Font* fontSurface;
+
 private:
     PokedexActivity_PokemonView_Info();
 	void printPokeInfo();

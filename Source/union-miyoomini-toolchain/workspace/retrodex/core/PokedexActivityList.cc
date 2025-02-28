@@ -32,17 +32,17 @@ bool PokedexActivityList::initSDL(){
 		// Sound Effects
 		se_on_start = Mix_LoadWAV(SOUND_EFFECT_ON_START_PATH.c_str());
 		if (!se_on_start) {
-			std::cerr << "Failed to load sound sEffect_OnStart: " << Mix_GetError() << std::endl;
+			std::cerr << "Failed to load sound se_on_start: " << Mix_GetError() << std::endl;
 		}
 
 		se_on_exit = Mix_LoadWAV(SOUND_EFFECT_ON_EXIT_PATH.c_str());
 		if (!se_on_exit) {
-			std::cerr << "Failed to load sound sEffect_OnExit: " << Mix_GetError() << std::endl;
+			std::cerr << "Failed to load sound se_on_exit: " << Mix_GetError() << std::endl;
 		}
 
 		se_up_down = Mix_LoadWAV(SOUND_EFFECT_UP_DOWN.c_str());
 		if (!se_up_down) {
-			std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
+			std::cerr << "Failed to load sound se_up_down: " << Mix_GetError() << std::endl;
 		}
 
 		fontSurface = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
