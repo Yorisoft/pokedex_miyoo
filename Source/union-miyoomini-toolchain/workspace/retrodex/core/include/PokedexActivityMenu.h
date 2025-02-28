@@ -11,18 +11,18 @@ private:
 		ITEM_HEIGHT = (static_cast<int>(WINDOW_HEIGHT / 5));
 
 	const std::string 
+		SOUND_UP_DOWN_PATH = "res/assets/sound_effects/up_down.wav",
 		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
 		BACKGROUND_IMG_PATH = "res/assets/misc/menu_background.png",
 		LIST_BACKGROUND_IMG_PATH_DEFAULT = "res/assets/misc/menu_item_background_default.png",
 		LIST_BACKGROUND_IMG_PATH_SELECTED = "res/assets/misc/menu_item_background_selected.png";
-
 
     const SDL_Color 
 		COLOR = { 248, 248, 248 },
 		HIGHLIGHT_COLOR = { 255, 0, 0 };
 
     int selectedIndex, offset;
-	bool needRedraw;
+	bool needRedraw, needInit;
 
     std::vector<std::string> game;
     std::vector<std::vector<std::string>>* dbResults;
@@ -34,11 +34,11 @@ private:
 		*listEntrySurface_selected;
     SDL_Rect backgroundRect, listEntryRect, gameVersionRect;
     TTF_Font* fontSurface;
-    Mix_Chunk* sEffect;
+    Mix_Chunk* sound_up_down;
 
 	bool initSDL();
 	void printMenuInfo();
-
+	void clearCacheSurfaces();
     bool renderListItems(SDL_Surface* surf_display, int i);
 
     void onButtonUp(SDL_Keycode, Uint16);
