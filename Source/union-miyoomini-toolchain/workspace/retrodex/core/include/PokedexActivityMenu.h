@@ -37,7 +37,7 @@ private:
     Mix_Chunk* sound_up_down;
 
 	bool initSDL();
-	void printMenuInfo();
+	void print_dbResults();
 	void clearCacheSurfaces();
     bool renderListItems(SDL_Surface* surf_display, int i);
 

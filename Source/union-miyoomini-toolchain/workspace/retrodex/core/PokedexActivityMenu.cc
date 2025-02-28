@@ -55,7 +55,6 @@ bool PokedexActivityMenu::initSDL(){
 		listEntryRect.w = WINDOW_WIDTH;
 		listEntryRect.h = ITEM_HEIGHT;
 
-
 		// GAME NAME
 		for (const auto& game_name : *dbResults) {
 			SDL_Surface* normal = TTF_RenderUTF8_Solid(
@@ -86,9 +85,9 @@ bool PokedexActivityMenu::initSDL(){
 	return true;
 }
 
-void PokedexActivityMenu::printMenuInfo(){
-    for (std::vector<std::string>& g : *dbResults) {
-        for (auto& col : g) {
+void PokedexActivityMenu::print_dbResults(){
+    for (std::vector<std::string>& row : *dbResults) {
+        for (auto& col : row) {
             std::cout << col << " | ";
         }
         std::cout << std::endl;
@@ -119,7 +118,7 @@ void PokedexActivityMenu::onActivate() {
 
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
     game = (*dbResults)[selectedIndex];
-	printMenuInfo();
+	print_dbResults();
 
 	// If I clear here, do the existing surface ptr get deleted or do they dangle
 	// call funciton to free points in cache if cache.size() > 0
