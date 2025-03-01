@@ -7,6 +7,7 @@ PokedexActivity_PokemonView_Info::PokedexActivity_PokemonView_Info() :
 dbResults(nullptr),
 pokemon(nullptr),
 fontSurface(nullptr),
+needRedraw(true),
 se_poke_cry(nullptr),
 backgroundSurface(nullptr),
 iconSurface(nullptr),
@@ -392,10 +393,12 @@ void PokedexActivity_PokemonView_Info::onButtonUp(SDL_Keycode sym, Uint16 mod) {
 void PokedexActivity_PokemonView_Info::onButtonDown(SDL_Keycode sym, Uint16 mod) {}
 
 void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
     PokedexActivityManager::back();
 }
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
     std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
     Mix_Chunk* sEffect = Mix_LoadWAV(sEffectPath.c_str());
     if (!sEffect) {
