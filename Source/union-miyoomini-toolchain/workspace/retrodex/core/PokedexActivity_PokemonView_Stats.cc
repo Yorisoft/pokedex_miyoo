@@ -12,7 +12,7 @@ idSurface(nullptr),
 nameSurface(nullptr),
 abilitySurface(nullptr),
 h_abilitySurface(nullptr),
-sEffect(nullptr),
+se_left_right(nullptr),
 needRedraw(true)
 {
 };
@@ -20,9 +20,9 @@ needRedraw(true)
 PokedexActivity_PokemonView_Stats::~PokedexActivity_PokemonView_Stats(){
     // in order to play sounds asynchrounously with activity, 
     // we cant call Mix_FreeChunk immediately after playing.. should probably make seperate class for this. 
-    if(sEffect)
-        Mix_FreeChunk(sEffect);
-    sEffect = nullptr;
+    if(se_left_right)
+        Mix_FreeChunk(se_left_right);
+    se_left_right = nullptr;
 
 }
 
@@ -50,14 +50,14 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 
 	try {
 		std::string path = SOUND_EFFECT_PATH;
-		sEffect = Mix_LoadWAV(path.c_str());
-		if (!sEffect) {
-			std::cerr << "Warning: PokedexActivity_PokemonView_Stats::initSDL() Unable to load sEffect mix! SDL Error:  " << + Mix_GetError();
+		se_left_right = Mix_LoadWAV(path.c_str());
+		if (!se_left_right) {
+			std::cerr << "Warning: PokedexActivity_PokemonView_Stats::initSDL() Unable to load se_left_right mix! SDL Error:  " << + Mix_GetError();
 		}
 
-		TTF_Font* temp_font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
-		if (temp_font == NULL) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Stats::initSDL() Unable to render temp_font! SDL Error:  ") + TTF_GetError());
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
+		if (fontSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Stats::initSDL() Unable to render fontSurface! SDL Error:  ") + TTF_GetError());
 		}
 
 		// Background Surface
@@ -91,7 +91,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 		std::string pokeID = formattedID.str();
 
 	 	idSurface = TTF_RenderUTF8_Blended(
-			temp_font,
+			fontSurface,
 			pokeID.c_str(),
 			{ 96, 96, 96 }
 		);
@@ -105,7 +105,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 
 		// Pokemon Name
 		nameSurface = TTF_RenderUTF8_Blended(
-			temp_font,
+			fontSurface,
 			pokemon->getName().c_str(),
 			{ 96, 96, 96 }
 		);
@@ -125,7 +125,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 		std::vector<unsigned short> stats = pokemon->getBasicStats();
 		for (size_t i = 0; i < (*statNames).size(); ++i) {
 			SDL_Surface* statNameSurface = TTF_RenderUTF8_Blended(
-				temp_font,
+				fontSurface,
 				(*statNames)[i][2].c_str(),
 				{ 248, 248, 248 }
 			);
@@ -153,7 +153,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 			////////////////////////////////////////////////
 
 			SDL_Surface* statSurface = TTF_RenderUTF8_Blended(
-				temp_font,
+				fontSurface,
 				std::to_string(stats[i]).c_str(),
 				{ 96, 96, 96 }
 			);
@@ -170,7 +170,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 		if (!abilities->empty()) {
 			std::string ability = (*abilities)[0][0] + "    " + (*abilities)[0][1];
 			abilitySurface = TTF_RenderUTF8_Blended_Wrapped(
-				temp_font,
+				fontSurface,
 				ability.c_str(),
 				{ 96, 96, 96 },
 				520
@@ -188,7 +188,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 			if (abilities->size() > 1) { // has hidden ability
 				ability = (*abilities)[1][0] + "    " + (*abilities)[1][1];
 				h_abilitySurface = TTF_RenderUTF8_Blended_Wrapped(
-					temp_font,
+					fontSurface,
 					ability.c_str(),
 					{ 96, 96, 96 },
 					620
@@ -203,10 +203,6 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
 				h_abilityRect.h = h_abilitySurface->h;
 			}
 		}
-		
-		if(temp_font)
-			TTF_CloseFont(temp_font);
-		temp_font = nullptr;
 	} 
 	catch(const std::runtime_error& e){
 		std::cerr << e.what() << std::endl;
@@ -218,6 +214,23 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
     std::cout << "PokedexActivity_PokemonView_Stats::initSDL END \n";
 }
 
+void PokedexActivity_PokemonView_Stats::clearCachedSurfaces(){
+	for(SDL_Surface* surface : statsNameSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : statsSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	statsNameSurface_cache.clear();
+	statsSurface_cache.clear();
+
+}
 void PokedexActivity_PokemonView_Stats::onActivate() {
     std::cout << "PokedexActivity_PokemonView_Stats::onActivate START \n";
 
@@ -227,8 +240,7 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 
 	statNames = PokedexDB::executeSQL(&SQL_getStatNames);
     
-	statsNameSurface_cache.clear();
-	statsSurface_cache.clear();
+	clearCachedSurfaces();
 
 	if(!initSDL()){
 		std::cout << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: " << std::endl;
@@ -241,6 +253,13 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Stats::onDeactivate() {
+	if(fontSurface)
+		TTF_CloseFont(fontSurface);
+	fontSurface = nullptr;
+
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
+
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
 	backgroundSurface = nullptr;
@@ -295,20 +314,15 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
 		try{
 			// Render background
 			PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
-			std::cout << "Rendered Background" << std::endl;
 
 			// Render Pokemon sprites
 			PokeSurface::onDrawScaled(surf_display, iconSurface, &iconRect);
-			std::cout << "Rendered sprite" << std::endl;
 
 			// Render Pokemon ID
 			PokeSurface::onDraw(surf_display, idSurface, &idRect);
-			std::cout << "Rendered id" << std::endl;
-
 
 			// Render Pokemon Name
 			PokeSurface::onDrawScaled(surf_display, nameSurface, &nameRect);
-			std::cout << "Rendered name" << std::endl;
 
 			// Pokemon Stats
 			// When ready, Evasion && Accuracy can be included as part of stats
@@ -331,15 +345,12 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface* surf_display, SDL_
 
 				PokeSurface::onDrawScaled(surf_display, statsSurface_cache[i], &statsRect);
 			}
-			std::cout << "Rendered stats" << std::endl;
 
 			if (!pokemon->getAbilities()->empty()) {
 				PokeSurface::onDrawScaled(surf_display, abilitySurface, &abilityRect);
-				std::cout << "Rendered ability" << std::endl;
 
 				if (pokemon->getAbilities()->size() > 1) {
 					PokeSurface::onDrawScaled(surf_display, h_abilitySurface, &h_abilityRect);
-					std::cout << "Rendered h_ability" << std::endl;
 				}
 			}
 		} 
@@ -364,14 +375,14 @@ void PokedexActivity_PokemonView_Stats::onButtonDown(SDL_Keycode sym, Uint16 mod
 
 void PokedexActivity_PokemonView_Stats::onButtonLeft(SDL_Keycode sym, Uint16 mod){
     // Play the sound effect
-    Mix_PlayChannel(1, sEffect, 0);
+    Mix_PlayChannel(1, se_left_right, 0);
 
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_INFO);
 }
 
 void PokedexActivity_PokemonView_Stats::onButtonRight(SDL_Keycode sym, Uint16 mod){
     // Play the sound effect
-    Mix_PlayChannel(1, sEffect, 0);
+    Mix_PlayChannel(1, se_left_right, 0);
 
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_MOVES);
     //PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_MOVES);

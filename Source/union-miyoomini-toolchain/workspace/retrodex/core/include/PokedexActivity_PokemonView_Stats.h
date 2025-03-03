@@ -9,6 +9,7 @@ private:
     static PokedexActivity_PokemonView_Stats instance;
 
 	const std::string
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
 		SOUND_EFFECT_PATH = "res/assets/sound_effects/left_right.wav",
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_2.png",
 		SPRITE_IMG_BASE_PATH = "res/assets/pokemons/sprites/";
@@ -30,7 +31,8 @@ private:
 			 idRect, nameRect,
 			 statsNameRect, statsRect,
 			 abilityRect, h_abilityRect;
-    Mix_Chunk* sEffect;
+    Mix_Chunk* se_left_right;
+	TTF_Font* fontSurface;
 
 private:
     PokedexActivity_PokemonView_Stats();
@@ -38,6 +40,7 @@ private:
 
 	void printPokeInfo();
 	bool initSDL();
+	void clearCachedSurfaces();
 
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);

@@ -7,7 +7,6 @@ PokedexActivity_PokemonView_Moves::PokedexActivity_PokemonView_Moves() :
 dbResults(nullptr),
 pokemon(nullptr),
 needRedraw(true),
-needInit(true),
 backgroundSurface(nullptr), 
 listEntrySurface(nullptr),
 pokeIconSurface(nullptr), 
@@ -34,10 +33,9 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			std::cerr << "Warning: PokedexActivity_PokemonView_Moves::initSDL() Unable to load sound_up_down mix! SDL Error:  " << + Mix_GetError() << std::endl;
 		}
 
-		TTF_Font* temp_font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
-		if (temp_font == NULL) {
-			std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
-			exit(EXIT_FAILURE);
+		fontSurface = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
+		if (fontSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
 		}
 		// Background
 		backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
@@ -81,7 +79,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 
 		// Pokemon Name 
 		pokeNameSurface = TTF_RenderUTF8_Blended(
-			temp_font,
+			fontSurface,
 			pokemon->getName().c_str(),
 			color
 		);
@@ -142,7 +140,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			}
 
 			SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
-				temp_font,
+				fontSurface,
 				(*dbResults)[i][1].c_str(),
 				color
 			);
@@ -158,7 +156,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 
 			if ((*dbResults)[i][9] == "level-up") {
 				SDL_Surface* levelSurface = TTF_RenderUTF8_Blended(
-					temp_font,
+					fontSurface,
 					(*dbResults)[i][8].c_str(),
 					offset + i == selectedIndex ? highlightColor : color
 				);
@@ -171,7 +169,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 
 			std::string pp = (*dbResults)[i][3] + '/' + (*dbResults)[i][3];
 			SDL_Surface* ppSurface = TTF_RenderUTF8_Blended(
-				temp_font,
+				fontSurface,
 				pp.c_str(),
 				offset + i == selectedIndex ? highlightColor : color
 			);
@@ -180,7 +178,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			};
 
 			SDL_Surface* pwrSurface = TTF_RenderUTF8_Blended(
-				temp_font,
+				fontSurface,
 				((*dbResults)[i][5] == "NULL" ? "--" : (*dbResults)[i][5]).c_str(),
 				color
 			);
@@ -212,7 +210,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			};
 
 			SDL_Surface* accrySurface = TTF_RenderUTF8_Blended(
-				temp_font,
+				fontSurface,
 				((*dbResults)[i][6] == "NULL" ? "--" : (*dbResults)[i][6]).c_str(),
 				color
 			);
@@ -229,7 +227,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 
 			std::string summary = cleanString((*dbResults)[i][7]);
 			SDL_Surface* summarySurface = TTF_RenderUTF8_Blended_Wrapped(
-				temp_font,
+				fontSurface,
 				summary.c_str(),
 				color,
 				295
@@ -254,9 +252,6 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 			accrySurface_cache.push_back(accrySurface);
 			summarySurface_cache.push_back(summarySurface);
 		}
-		if(temp_font)
-			TTF_CloseFont(temp_font);
-		temp_font = nullptr;
 	} 
 	catch(const std::runtime_error& e){
 		std::cerr << e.what() << std::endl;
@@ -265,21 +260,78 @@ bool PokedexActivity_PokemonView_Moves::initSDL(){
 
 	return true;
 }
-void PokedexActivity_PokemonView_Moves::printPokeInfo(){
-}
-
-void PokedexActivity_PokemonView_Moves::onActivate() {
-    std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
-
-    pokemon = new Pokemon();
-
-    dbResults = PokedexDB::executeSQL(&SQL_getPokeMovesDetail);
+void PokedexActivity_PokemonView_Moves::print_dbResults(){
     for (std::vector<std::string>&moves : *dbResults) {
         for (auto& col : moves) {
             std::cout << col << " | ";
         }
         std::cout << std::endl;
     }
+}
+
+void PokedexActivity_PokemonView_Moves::clearCachedSurfaces(){
+	for(SDL_Surface* surface : typeSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface : nameSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface : methodSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface : levelSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface : ppSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface: pwrSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface: classSurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface: accrySurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
+
+	for(SDL_Surface* surface: summarySurface_cache){
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+	}
 
 	typeSurface_cache.clear();
 	nameSurface_cache.clear();
@@ -290,11 +342,20 @@ void PokedexActivity_PokemonView_Moves::onActivate() {
 	classSurface_cache.clear();
 	accrySurface_cache.clear();
 	summarySurface_cache.clear();
+}
 
-		if(!initSDL()){
-			std::cout << "PokedexActivity_PokemonView_Moves::onActivate - Error in initSDL(), SDL Error: " << std::endl;
-			exit(EXIT_FAILURE);
-		}
+void PokedexActivity_PokemonView_Moves::onActivate() {
+    std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
+
+    pokemon = new Pokemon();
+    dbResults = PokedexDB::executeSQL(&SQL_getPokeMovesDetail);
+	print_dbResults();
+
+	clearCachedSurfaces();
+	if(!initSDL()){
+		std::cout << "PokedexActivity_PokemonView_Moves::onActivate - Error in initSDL(), SDL Error: " << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	
     move = (*dbResults)[selectedIndex];
 
@@ -407,8 +468,6 @@ void PokedexActivity_PokemonView_Moves::onDeactivate() {
     //pokemon = nullptr;
 
     selectedIndex = 0, offset = 0;
-
-	needInit = true;
 
     std::cout << "PokedexActivity_PokemonView_Moves::onDeactivate END \n";
 }

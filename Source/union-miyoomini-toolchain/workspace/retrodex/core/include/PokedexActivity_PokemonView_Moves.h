@@ -9,7 +9,7 @@ private:
     static PokedexActivity_PokemonView_Moves instance;
 
     int selectedIndex, offset, itemHeight;
-	bool needRedraw, needInit;
+	bool needRedraw;
 
 	const std::string 
 		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
@@ -44,12 +44,14 @@ private:
 			 classRect, accryRect, summaryRect;
     Mix_Chunk* sound_left_right, *sound_up_down;
     SDL_Color color, highlightColor;
+	TTF_Font *fontSurface;
 
 
     PokedexActivity_PokemonView_Moves();
 
 	bool initSDL();
-	void printPokeInfo();
+	void print_dbResults();
+	void clearCachedSurfaces();
 
     bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);
     bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);

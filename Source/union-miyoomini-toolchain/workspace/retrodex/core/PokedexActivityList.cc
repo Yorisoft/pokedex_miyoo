@@ -318,8 +318,8 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, int i) {
 	listBackgroundRect.x = static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * 0.5));
     listBackgroundRect.y = (i * ITEM_HEIGHT + 70);
-	listBackgroundRect.w = static_cast<int>(WINDOW_WIDTH * 0.5);
     listBackgroundRect.h = ITEM_HEIGHT;
+	listBackgroundRect.w = (listBackgroundRect.h/listBackgroundSurface_default->h) *listBackgroundSurface_default->w;
 
 	if(offset + i == selectedIndex){
     	PokeSurface::onDrawScaled(surf_display, listBackgroundSurface_selected, &listBackgroundRect);
