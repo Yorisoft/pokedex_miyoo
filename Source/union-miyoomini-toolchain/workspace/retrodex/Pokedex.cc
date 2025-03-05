@@ -25,8 +25,6 @@ int main(int argc, char* argv[]) {
 	Pokedex pokedexApp;
 
 	return pokedexApp.onExecute();
-
-    std::cout << "main: END" << std::endl;
 }
 
 Pokedex::Pokedex() {

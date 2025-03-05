@@ -139,25 +139,25 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
 		SDL_Surface* locationNameSurface = TTF_RenderUTF8_Blended(
 			fontSurface,
 			location.c_str(),
-			offset + i == selectedIndex ? HIGHLIGHT_COLOR : COLOR
+			COLOR
 		);
 		if (locationNameSurface == NULL) {
 			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load locationNameSurface! SDL Error:  ") + SDL_GetError());
 		};
 
 		// CONDITION
+		SDL_Surface* conditionSurface = nullptr;
 		if ((*routes)[i][7] != "NULL") {
 			std::string condition = (*routes)[i][7];
 			std::string path = 
 				METHOD_IMG_BASE_PATH + 
 				condition + 
 				".png";
-			SDL_Surface* conditionSurface = PokeSurface::onLoadImg(path);
+			conditionSurface = PokeSurface::onLoadImg(path);
 			if (conditionSurface == NULL) {
 				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load conditionSurface! SDL Error:  ") + SDL_GetError());
 			};
 
-			conditionSurface_cache.push_back(conditionSurface);
 		}
 
 		// METHOD
@@ -180,7 +180,7 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
 		SDL_Surface* rateSurface = TTF_RenderUTF8_Blended(
 			fontSurface,
 			rate.c_str(),
-			offset + i == selectedIndex ? HIGHLIGHT_COLOR : COLOR
+			COLOR
 		);
 		if (rateSurface == NULL) {
 			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load rateSurface! SDL Error:  ") + SDL_GetError());
@@ -209,13 +209,14 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
 		// Detail Location Name
 		location = (*routes)[i][1];
 		std::string subLocation;
+		SDL_Surface* detailLocationNameSurface = nullptr;
 		if ((subLocation = (*routes)[i][6]) != "NULL") {
 			location += '\n' + subLocation;
 		}
-		SDL_Surface* detailLocationNameSurface = TTF_RenderUTF8_Blended_Wrapped(
+		detailLocationNameSurface = TTF_RenderUTF8_Blended_Wrapped(
 			fontSurface,
 			location.c_str(),
-			offset + i == selectedIndex ? HIGHLIGHT_COLOR : COLOR,
+			COLOR,
 			295
 		);
 		if (detailLocationNameSurface == NULL) {
@@ -224,6 +225,7 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
 
 		locationNameSurface_cache.push_back(locationNameSurface);
 		methodSurface_cache.push_back(methodSurface);
+		conditionSurface_cache.push_back(conditionSurface);
 		rateSurface_cache.push_back(rateSurface);
 		levelSurface_cache.push_back({minLevelSurface, maxLevelSurface});
 		detailLocationNameSurface_cache.push_back(detailLocationNameSurface);
@@ -567,9 +569,27 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface* surf_dis
     PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
 
     if (offset + i == selectedIndex) {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Black
-        SDL_RenderDrawRect(renderer, &listEntryRect);
-    }
+        // Set the render draw color
+		// Would prefer a method like this.
+		// Texture gets updates by screen surface, 
+		// Render gets updated by texture. Any changes to either will be overwritten
+        /* SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); */
+		/* SDL_RenderDrawRect(renderer, &listEntryRect); */   
+
+		// Draw red border using SDL_FillRect
+		// TODO: replaces with surface from image
+        const int BORDER_WIDTH = 2;
+        SDL_Rect borderRects[] = {
+            {listEntryRect.x, listEntryRect.y, listEntryRect.w, BORDER_WIDTH},                     // Top
+            {listEntryRect.x, listEntryRect.y + listEntryRect.h - BORDER_WIDTH, listEntryRect.w, BORDER_WIDTH}, // Bottom
+            {listEntryRect.x, listEntryRect.y, BORDER_WIDTH, listEntryRect.h},                      // Left
+            {listEntryRect.x + listEntryRect.w - BORDER_WIDTH, listEntryRect.y, BORDER_WIDTH, listEntryRect.h}  // Right
+        };
+
+        for (const auto& rect : borderRects) {
+            SDL_FillRect(surf_display, &rect, SDL_MapRGB(surf_display->format, 255, 0, 0));
+        }
+	}
 
     //Render name
 	locationNameRect = {
