@@ -515,7 +515,6 @@ void PokedexActivity_PokemonView_Moves::onRender(SDL_Surface* surf_display, SDL_
 }
 
 bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i) {
-    	std::cout << "Rendering listItems \n";
     if (offset + i == selectedIndex) {
         if (!renderItemDetails(surf_display, font, i)) {
             exit(EXIT_FAILURE);

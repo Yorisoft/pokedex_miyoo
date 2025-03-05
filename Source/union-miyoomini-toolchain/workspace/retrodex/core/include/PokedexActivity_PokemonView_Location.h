@@ -8,6 +8,20 @@ class PokedexActivity_PokemonView_Location : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Location instance;
 
+	const int ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.7 / 5);
+
+	const std::string 
+		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
+		SOUND_UP_DOWN_PATH = "res/assets/sound_effects/up_down.wav",
+		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_4.png",
+		TYPE_IMG_BASE_PATH = "res/assets/pokemons/types/",
+		METHOD_IMG_BASE_PATH = "res/assets/pokemons/encounters/",
+		ICON_IMG_BASE_PATH = "res/assets/pokemons/icons/";
+
+	const SDL_Color 
+		COLOR = { 64, 64, 64}, 
+		HIGHLIGHT_COLOR{ 255, 0, 0 };
+
     Pokemon* pokemon;
 
     std::vector<std::vector<std::string>>* dbResults;
@@ -21,21 +35,13 @@ private:
     std::vector<std::pair<SDL_Surface*, SDL_Surface*>> levelSurface_cache;
     std::vector<SDL_Surface*> detailLocationNameSurface_cache;
 
-    int selectedIndex, offset, itemHeight;
-	bool needRedraw;
+    int selectedIndex, offset;
 
-	const std::string 
-		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
-		SOUND_UP_DOWN_PATH = "res/assets/sound_effects/up_down.wav",
-		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_4.png",
-		TYPE_IMG_BASE_PATH = "res/assets/pokemons/types/",
-		METHOD_IMG_BASE_PATH = "res/assets/pokemons/encounters/",
-		ICON_IMG_BASE_PATH = "res/assets/pokemons/icons/";
+	bool needRedraw;
 
     SDL_Surface* backgroundSurface, *listEntrySurface,
 		*iconSurface, *pokeNameSurface, 
-		*typeASurface, *typeBSurface,
-		*locationNameSurface;
+		*typeASurface, *typeBSurface;
     SDL_Rect backgroundRect, listEntryRect, 
 			 iconRect, pokeNameRect,
 			 typeARect, typeBRect,
@@ -43,11 +49,13 @@ private:
 			 conditionRect, rateRect,
 			 minLevelRect, maxLevelRect,
 			 detailLocationRect;
-    Mix_Chunk* sEffect, * sEffect_UpDown;
-    SDL_Color color, highlightColor;
+    Mix_Chunk* se_left_right, *se_up_down;
+	TTF_Font* fontSurface;
 
 	bool initSDL();
     void printPokeInfo();
+	void clearCacheSurfaces();
+
     bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font);
 	bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);
 	bool renderItemDetails(SDL_Surface* surf_display, TTF_Font* font, int i);

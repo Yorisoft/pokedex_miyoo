@@ -316,10 +316,12 @@ bool PokedexActivityList::renderListItems(SDL_Surface* surf_display, TTF_Font* f
 }
 
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface* surf_display, int i) {
+    listBackgroundRect.h = ITEM_HEIGHT;
+	double heightRatio = static_cast<double>(listBackgroundRect.h) / static_cast<double>(listBackgroundSurface_default->h);
+
 	listBackgroundRect.x = static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * 0.5));
     listBackgroundRect.y = (i * ITEM_HEIGHT + 70);
-    listBackgroundRect.h = ITEM_HEIGHT;
-	listBackgroundRect.w = (listBackgroundRect.h/listBackgroundSurface_default->h) *listBackgroundSurface_default->w;
+    listBackgroundRect.w = static_cast<int>(heightRatio * listBackgroundSurface_default->w);
 
 	if(offset + i == selectedIndex){
     	PokeSurface::onDrawScaled(surf_display, listBackgroundSurface_selected, &listBackgroundRect);
@@ -365,7 +367,7 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface* surf_display, int i) {
 bool PokedexActivityList::renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, TTF_Font* font, int i) {
 	int index = offset + i;
 
-    pokeIDRect.x = rect->x + 50;
+    pokeIDRect.x = rect->x + 60;
     pokeIDRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) - (pokemonIDNameSurface_cache[index][0]->h / 2) - 5; // -5 to stay above white line in background
     pokeIDRect.w = pokemonIDNameSurface_cache[index][0]->w;
     pokeIDRect.h = pokemonIDNameSurface_cache[index][0]->h;
