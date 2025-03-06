@@ -4,13 +4,15 @@
 PokedexActivityMenu PokedexActivityMenu::instance;
 
 PokedexActivityMenu::PokedexActivityMenu() :
-dbResults(nullptr),
-fontSurface(nullptr),
-needRedraw(true),
-needInit(true),
-sound_up_down(nullptr),
 selectedIndex(0),
-offset(0)
+offset(0),
+needRedraw(true),
+dbResults(nullptr),
+backgroundSurface(nullptr),
+listEntrySurface_default(nullptr),
+listEntrySurface_selected(nullptr),
+fontSurface(nullptr),
+sound_up_down(nullptr)
 {
 }
 
@@ -28,13 +30,13 @@ bool PokedexActivityMenu::initSDL(){
 		// FONT
 		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 46);
 		if (!fontSurface) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
 		}
 		
 		// Background
 		backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
 		if (backgroundSurface == NULL) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load backgroundSurface! SDL Error:  ") + SDL_GetError());
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load backgroundSurface! SDL Error:  ") + SDL_GetError());
 		};
 		backgroundRect.x = 0;
 		backgroundRect.y = 0;
@@ -45,10 +47,10 @@ bool PokedexActivityMenu::initSDL(){
 		listEntrySurface_default = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_DEFAULT);
 		listEntrySurface_selected = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_SELECTED);
 		if (listEntrySurface_default == NULL) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load listEntrySurface_default! SDL Error:  ") + SDL_GetError());
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load listEntrySurface_default! SDL Error:  ") + SDL_GetError());
 		};
 		if (listEntrySurface_selected == NULL) {
-			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load listEntrySurface_selected! SDL Error:  ") + SDL_GetError());
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load listEntrySurface_selected! SDL Error:  ") + SDL_GetError());
 		};
 		listEntryRect.x = 0;
 		listEntryRect.y = 0;
@@ -68,10 +70,10 @@ bool PokedexActivityMenu::initSDL(){
 				HIGHLIGHT_COLOR
 			);
 			if (normal == NULL) {
-				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load game_name normal Surface! SDL Error:  ") + SDL_GetError());
+				throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load game_name normal Surface! SDL Error:  ") + SDL_GetError());
 			};
 			if (highlight == NULL) {
-				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load game_name highlight Surface! SDL Error:  ") + SDL_GetError());
+				throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load game_name highlight Surface! SDL Error:  ") + SDL_GetError());
 			};
 			cachedTextSurfaces.push_back(normal);
 			cachedHighlightTextSurfaces.push_back(highlight);
@@ -116,21 +118,18 @@ void PokedexActivityMenu::clearCacheSurfaces(){
 void PokedexActivityMenu::onActivate() {
     std::cout << "PokedexActivityMenu::onActivate START \n";
 
+	needRedraw = true;
+
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
     game = (*dbResults)[selectedIndex];
 	print_dbResults();
 
-	// If I clear here, do the existing surface ptr get deleted or do they dangle
-	// call funciton to free points in cache if cache.size() > 0
-	// then clear
 	clearCacheSurfaces();
 
 	if(!initSDL()){
 		std::cout << "PokedexActivityMenu::onActivate - Error in initSDL(), SDL Error: " << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
-	needRedraw = true;
 
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }
@@ -187,7 +186,6 @@ void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* rend
 				exit(EXIT_FAILURE);
 			}
 		}
-
 		needRedraw = false;
 	}
 }
@@ -210,7 +208,6 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
 		PokeSurface::onDrawScaled(surf_display, listEntrySurface_default, &listEntryRect);
 		PokeSurface::onDrawScaled(surf_display, cachedTextSurfaces[offset + i], &gameVersionRect);
 	}
-
     return true;
 }
 

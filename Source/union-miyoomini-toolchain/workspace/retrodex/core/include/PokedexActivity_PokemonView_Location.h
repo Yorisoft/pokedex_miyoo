@@ -13,6 +13,7 @@ private:
 	const std::string 
 		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
 		SOUND_UP_DOWN_PATH = "res/assets/sound_effects/up_down.wav",
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_4.png",
 		TYPE_IMG_BASE_PATH = "res/assets/pokemons/types/",
 		METHOD_IMG_BASE_PATH = "res/assets/pokemons/encounters/",
@@ -22,7 +23,9 @@ private:
 		COLOR = { 64, 64, 64}, 
 		HIGHLIGHT_COLOR{ 255, 0, 0 };
 
-    Pokemon* pokemon;
+    int selectedIndex, offset;
+
+	bool needRedraw;
 
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::vector<std::string>>* routes;
@@ -34,10 +37,6 @@ private:
     std::vector<SDL_Surface*> rateSurface_cache;
     std::vector<std::pair<SDL_Surface*, SDL_Surface*>> levelSurface_cache;
     std::vector<SDL_Surface*> detailLocationNameSurface_cache;
-
-    int selectedIndex, offset;
-
-	bool needRedraw;
 
     SDL_Surface* backgroundSurface, *listEntrySurface,
 		*iconSurface, *pokeNameSurface, 
@@ -52,9 +51,11 @@ private:
     Mix_Chunk* se_left_right, *se_up_down;
 	TTF_Font* fontSurface;
 
+    Pokemon* pokemon;
+
+private:
 	bool initSDL();
     void printPokeInfo();
-	void clearCacheSurfaces();
 
     bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font);
 	bool renderListItems(SDL_Surface* surf_display, SDL_Renderer* renderer, TTF_Font* font, int i);

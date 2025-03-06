@@ -8,18 +8,54 @@ class PokedexActivity_PokemonView_Evolution : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Evolution instance;
 
-    int selectedIndex, offset, itemHeight;
+    Pokemon* pokemon;
+
+	const int ITEM_HEIGHT = static_cast<int>((WINDOW_HEIGHT / 3) * 0.7);
+
+	const std::string 
+		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
+		SOUND_UP_DOWN_PATH = "res/assets/sound_effects/up_down.wav",
+		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_5.png",
+		FONT_PATH ="res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 
+		ENTRY_BACKGROUND_IMAGE_PATH_DEFAULT = "res/assets/misc/evolution_item_background_default.png",
+		ENTRY_BACKGROUND_IMAGE_PATH_SELECTED = "res/assets/misc/evolution_item_background_selected.png",
+		SPRITE_IMG_BASE_PATH = "res/assets/pokemons/sprites/",
+		TYPE_IMG_BASE_PATH = "res/assets/pokemons/types/",
+		METHOD_IMG_BASE_PATH = "res/assets/pokemons/encounters/",
+		ICON_IMG_BASE_PATH = "res/assets/pokemons/icons/";
+
+    const SDL_Color 
+		COLOR = { 64, 64, 64 },
+		HIGHLIGHT_COLOR = { 255, 0, 0 };
+
+    int selectedIndex, offset;
+
+	bool needRedraw;
+
     std::string fontPath;
 
     std::vector<std::string> evo;
     std::vector<std::vector<std::string>>* evoChain;
 
-    Pokemon* pokemon;
+	std::vector<SDL_Surface*> pokeSprite_cache;
+	std::vector<SDL_Surface*> idSurface_cache;
+	std::vector<SDL_Surface*> nameSurface_cache;
+	std::vector<SDL_Surface*> methodSurface_cache;
+	std::vector<SDL_Surface*> methodInfoSurface_cache;
 
-    Mix_Chunk* sEffect, * sEffect_UpDown;
-    SDL_Color color, highlightColor;
 
+	SDL_Surface* backgroundSurface, 
+		*listEntrySurface_default, *listEntrySurface_selected;
+	SDL_Rect backgroundRect, listEntryRect,
+			 pokeRect, idRect, nameRect,
+			 methodRect, methodInfoRect;
+    Mix_Chunk* se_left_right, * se_up_down;
+	TTF_Font* fontSurface;
+
+	bool initSDL();
     void printPokeInfo();
+	void clearCachedSurfaces();
+
     bool renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i);
     bool renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i);
 

@@ -4,11 +4,9 @@
 PokedexActivity_PokemonView_Info PokedexActivity_PokemonView_Info::instance;
 
 PokedexActivity_PokemonView_Info::PokedexActivity_PokemonView_Info() : 
+needRedraw(true),
 dbResults(nullptr),
 pokemon(nullptr),
-fontSurface(nullptr),
-needRedraw(true),
-se_poke_cry(nullptr),
 backgroundSurface(nullptr),
 iconSurface(nullptr),
 typeASurface(nullptr),
@@ -19,7 +17,9 @@ heightSurface(nullptr),
 weightSurface(nullptr),
 genderSurface(nullptr),
 genusSurface(nullptr),
-flavorTextSurface(nullptr)
+flavorTextSurface(nullptr),
+se_poke_cry(nullptr),
+fontSurface(nullptr)
 {
 }
 

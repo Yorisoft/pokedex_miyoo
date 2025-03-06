@@ -178,7 +178,6 @@ bool Pokedex::onSDLInit() {
 		exit(EXIT_FAILURE);
 	};
 
-
     SDL_FillRect(
         this->screen,
         &(this->screen)->clip_rect,

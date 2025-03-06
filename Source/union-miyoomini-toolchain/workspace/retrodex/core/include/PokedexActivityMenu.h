@@ -22,7 +22,8 @@ private:
 		HIGHLIGHT_COLOR = { 255, 0, 0 };
 
     int selectedIndex, offset;
-	bool needRedraw, needInit;
+
+	bool needRedraw;
 
     std::vector<std::string> game;
     std::vector<std::vector<std::string>>* dbResults;
@@ -35,6 +36,10 @@ private:
     SDL_Rect backgroundRect, listEntryRect, gameVersionRect;
     TTF_Font* fontSurface;
     Mix_Chunk* sound_up_down;
+
+private:
+    PokedexActivityMenu();
+    ~PokedexActivityMenu();
 
 	bool initSDL();
 	void print_dbResults();
@@ -53,9 +58,6 @@ private:
     void onButtonStart(SDL_Keycode, Uint16);
 
 public:
-    PokedexActivityMenu();
-    ~PokedexActivityMenu();
-
     void onActivate();
     void onDeactivate();
     void onLoop();

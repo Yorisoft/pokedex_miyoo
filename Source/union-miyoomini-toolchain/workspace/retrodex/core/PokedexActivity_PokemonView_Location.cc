@@ -4,9 +4,11 @@
 PokedexActivity_PokemonView_Location PokedexActivity_PokemonView_Location::instance;
 
 PokedexActivity_PokemonView_Location::PokedexActivity_PokemonView_Location() :
-pokemon(nullptr),
-routes(nullptr),
+selectedIndex(0),
+offset(0),
 needRedraw(true),
+dbResults(nullptr),
+routes(nullptr),
 backgroundSurface(nullptr), 
 listEntrySurface(nullptr),
 iconSurface(nullptr), 
@@ -15,14 +17,14 @@ typeASurface(nullptr),
 typeBSurface(nullptr),
 se_left_right(nullptr),
 se_up_down(nullptr),
-selectedIndex(0),
-offset(0)
+pokemon(nullptr)
 {
 }
 
 PokedexActivity_PokemonView_Location::~PokedexActivity_PokemonView_Location() {}
 
 bool PokedexActivity_PokemonView_Location::initSDL() {
+ std::cout << "PokedexActivity_PokemonView_Location::initSDL START \n";
   try {
     se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
     if (!se_left_right) {
@@ -36,7 +38,7 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
                 << std::endl;
     }
 
-	fontSurface = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
+	fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
 	if (fontSurface == NULL) {
 		std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
 		exit(EXIT_FAILURE);
@@ -236,7 +238,8 @@ bool PokedexActivity_PokemonView_Location::initSDL() {
     return false;
   }
 
-  return true;
+ 	std::cout << "PokedexActivity_PokemonView_Location::initSDL END \n";
+  	return true;
 }
 
 void PokedexActivity_PokemonView_Location::printPokeInfo() {
@@ -263,71 +266,22 @@ void PokedexActivity_PokemonView_Location::printPokeInfo() {
         }
         std::cout << '\n';
     }
+	std::cout << "Done printing routes \n ";
 
-}
-
-void PokedexActivity_PokemonView_Location::clearCacheSurfaces(){
-	for(SDL_Surface* surface : locationNameSurface_cache)
-		if(surface){
-			SDL_FreeSurface(surface);
-			surface = nullptr;
-		}
-	
-	for(SDL_Surface* surface : conditionSurface_cache)
-		if(surface){
-			SDL_FreeSurface(surface);
-			surface = nullptr;
-		}
-
-	for(SDL_Surface* surface : methodSurface_cache)
-		if(surface){
-			SDL_FreeSurface(surface);
-			surface = nullptr;
-		}
-
-	for(SDL_Surface* surface : rateSurface_cache)
-		if(surface){
-			SDL_FreeSurface(surface);
-			surface = nullptr;
-		}
-
-	for(std::pair<SDL_Surface*, SDL_Surface*> surfaces: levelSurface_cache){
-		if(surfaces.first){
-			SDL_FreeSurface(surfaces.first);
-			surfaces.first = nullptr;
-		}
-		if(surfaces.second){
-			SDL_FreeSurface(surfaces.second);
-			surfaces.second = nullptr;
-		}
-	}
-
-	for(SDL_Surface* surface : detailLocationNameSurface_cache)
-		if(surface){
-			SDL_FreeSurface(surface);
-			surface = nullptr;
-		}
-
-	locationNameSurface_cache.clear();
-	conditionSurface_cache.clear();
-	methodSurface_cache.clear();
-	rateSurface_cache.clear();
-	levelSurface_cache.clear();
-	detailLocationNameSurface_cache.clear();
 }
 
 void PokedexActivity_PokemonView_Location::onActivate() {
     std::cout << "PokedexActivity_PokemonView_Location::onActivate START \n";
 
-    // For some reason.. pokemon needs to be created before executeSQL command...
     pokemon = new Pokemon();
     routes = pokemon->getRoutes();
-	route = (*routes)[selectedIndex];
     printPokeInfo();
 
-	clearCacheSurfaces();
+	// Cant call this here? 
+	//route = (*routes)[selectedIndex];
+	
 	if(!initSDL()){
-		std::cout << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: " << std::endl;
+		std::cerr << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: " << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -414,7 +368,14 @@ void PokedexActivity_PokemonView_Location::onDeactivate() {
     delete pokemon;
     pokemon = nullptr;
 
+	//pointer comes from PokedexDB
+	//PokedexDB handles its own pointers
+	/* /1* delete routes; *1/ */
+	routes = nullptr;
+
     selectedIndex = 0, offset = 0;
+
+	route.clear();
 
     std::cout << "PokedexActivity_PokemonView_Location::onActivate END \n";
 }
@@ -426,9 +387,6 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
 	if(needRedraw){
 		try{
 			SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
-			/* std::cout << "Total routes: " << routes->size() << std::endl; */
-            /* std::cout << "Offset: " << offset << std::endl; */
-            /* std::cout << "MAX_VISIBLE_ITEMS: " << MAX_VISIBLE_ITEMS << std::endl; */
 			// Render _PokemonView_Location Items
 			//Render background
 			if(!PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect)){

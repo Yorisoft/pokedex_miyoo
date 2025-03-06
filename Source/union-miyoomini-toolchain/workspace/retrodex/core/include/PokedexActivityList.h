@@ -13,6 +13,7 @@ private:
 		SOUND_EFFECT_ON_START_PATH = "res/assets/sound_effects/list_start.wav",
 		SOUND_EFFECT_ON_EXIT_PATH = "res/assets/sound_effects/list_back.wav",
 		SOUND_EFFECT_UP_DOWN = "res/assets/sound_effects/up_down.wav",
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokedexList_background.png",
 		SPRITES_IMG_BASE_PATH = "res/assets/pokemons/sprites/",
 		TYPES_IMG_BASE_PATH = "res/assets/pokemons/types/",
@@ -24,6 +25,7 @@ private:
 		HIGHLIGHT_COLOR = { 255, 0, 0 };
 
     int selectedIndex, offset;
+
 	bool needRedraw;
 
     std::vector<std::vector<std::string>>* dbResults;

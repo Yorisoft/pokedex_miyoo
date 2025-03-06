@@ -8,22 +8,28 @@ class PokedexActivity_PokemonView_Moves : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Moves instance;
 
-    int selectedIndex, offset, itemHeight;
-	bool needRedraw;
+	const int ITEM_HEIGHT = (static_cast<int>(WINDOW_HEIGHT * 0.7 / 5));
+    const SDL_Color 
+		COLOR = { 64, 64, 64}, 
+		HIGHLIGHT_COLOR = { 255, 0, 0 };
 
 	const std::string 
 		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
 		SOUND_UP_DOWN_PATH = "res/assets/sound_effects/up_down.wav",
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_3.png",
 		TYPE_IMG_BASE_PATH = "res/assets/pokemons/types/",
 		METHOD_IMG_BASE_PATH = "res/assets/pokemons/encounters/",
 		ICON_IMG_BASE_PATH = "res/assets/pokemons/icons/";
 
+    Pokemon* pokemon;
+
+    int selectedIndex, offset;
+	bool needRedraw;
+
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> move;
     
-    Pokemon* pokemon;
-
 	std::vector<SDL_Surface*> typeSurface_cache;
 	std::vector<SDL_Surface*> nameSurface_cache;
 	std::vector<SDL_Surface*> methodSurface_cache;
@@ -42,12 +48,11 @@ private:
 			 levelRect, ppRect, pwrRect, pokeIconRect,
 			 pokeNameRect, typeARect, typeBRect,
 			 classRect, accryRect, summaryRect;
-    Mix_Chunk* sound_left_right, *sound_up_down;
-    SDL_Color color, highlightColor;
+    Mix_Chunk* se_left_right, *se_up_down;
 	TTF_Font *fontSurface;
 
-
     PokedexActivity_PokemonView_Moves();
+    ~PokedexActivity_PokemonView_Moves();
 
 	bool initSDL();
 	void print_dbResults();

@@ -253,13 +253,6 @@ void PokedexActivity_PokemonView_Stats::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Stats::onDeactivate() {
-	if(fontSurface)
-		TTF_CloseFont(fontSurface);
-	fontSurface = nullptr;
-
-	if(se_left_right)
-		Mix_FreeChunk(se_left_right);
-
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
 	backgroundSurface = nullptr;
@@ -276,6 +269,14 @@ void PokedexActivity_PokemonView_Stats::onDeactivate() {
 		SDL_FreeSurface(nameSurface);
 	nameSurface = nullptr;
 	
+	if(abilitySurface)
+		SDL_FreeSurface(abilitySurface);
+	abilitySurface = nullptr;
+
+	if(h_abilitySurface)
+		SDL_FreeSurface(h_abilitySurface);
+	h_abilitySurface = nullptr;
+
 	for(SDL_Surface* surface : statsNameSurface_cache)
 		if(surface){
 			SDL_FreeSurface(surface);
@@ -291,13 +292,13 @@ void PokedexActivity_PokemonView_Stats::onDeactivate() {
 	statsNameSurface_cache.clear();
 	statsSurface_cache.clear();
 
-	if(abilitySurface)
-		SDL_FreeSurface(abilitySurface);
-	abilitySurface = nullptr;
+	if(fontSurface)
+		TTF_CloseFont(fontSurface);
+	fontSurface = nullptr;
 
-	if(h_abilitySurface)
-		SDL_FreeSurface(h_abilitySurface);
-	h_abilitySurface = nullptr;
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
+	se_left_right = nullptr;
 
     delete pokemon;
 	pokemon = nullptr;

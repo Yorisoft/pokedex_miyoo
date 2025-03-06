@@ -4,16 +4,16 @@
 PokedexActivityList PokedexActivityList::instance;
 
 PokedexActivityList::PokedexActivityList() : 
-    dbResults(nullptr),
-    backgroundSurface(nullptr),
-    listBackgroundSurface_default(nullptr),
-    listBackgroundSurface_selected(nullptr),
-    se_up_down(nullptr),
-    se_on_start(nullptr),
-    se_on_exit(nullptr),
-    needRedraw(true),
-    selectedIndex(0),
-    offset(0)
+selectedIndex(0),
+offset(0),
+needRedraw(true),
+dbResults(nullptr),
+backgroundSurface(nullptr),
+listBackgroundSurface_default(nullptr),
+listBackgroundSurface_selected(nullptr),
+se_up_down(nullptr),
+se_on_start(nullptr),
+se_on_exit(nullptr)
 {
 }
 
@@ -45,7 +45,7 @@ bool PokedexActivityList::initSDL(){
 			std::cerr << "Failed to load sound se_up_down: " << Mix_GetError() << std::endl;
 		}
 
-		fontSurface = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
 		if (fontSurface == NULL) {
 			throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
 		}
