@@ -19,8 +19,17 @@ genderSurface(nullptr),
 genusSurface(nullptr),
 flavorTextSurface(nullptr),
 se_poke_cry(nullptr),
+se_left_right(nullptr),
 fontSurface(nullptr)
 {
+}
+
+PokedexActivity_PokemonView_Info::~PokedexActivity_PokemonView_Info(){
+	if(se_poke_cry)
+		Mix_FreeChunk(se_poke_cry);
+
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
 }
 
 void PokedexActivity_PokemonView_Info::printPokeInfo(){
@@ -42,12 +51,6 @@ void PokedexActivity_PokemonView_Info::printPokeInfo(){
 
 bool PokedexActivity_PokemonView_Info::initSDL(){
 	try{
-		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
-		if (fontSurface == NULL) {
-			std::cerr << "TTF_OpenFont: " << TTF_GetError() << std::endl;
-			return -1;
-		}
-
 		// make it a 3 digit
 		std::stringstream formattedID;
 		formattedID << std::setw(3) << std::setfill('0') << pokemon->getID();
@@ -57,6 +60,15 @@ bool PokedexActivity_PokemonView_Info::initSDL(){
 		se_poke_cry = Mix_LoadWAV(pokeCryPath.c_str());
 		if (!se_poke_cry) {
 			std::cerr << "Failed to load sound pokeCry: " << Mix_GetError() << std::endl;
+		}
+		se_left_right = Mix_LoadWAV(SOUND_EFFECT_LEFT_RIGHT_PATH.c_str());
+		if (!se_left_right) {
+			std::cerr << "Failed to load sound se_left_right: " << Mix_GetError() << std::endl;
+		}
+
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
+		if (fontSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Info::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
 		}
 
 		// Background Surface
@@ -68,7 +80,6 @@ bool PokedexActivity_PokemonView_Info::initSDL(){
 		backgroundRect.y = 0;
 		backgroundRect.w = WINDOW_WIDTH;
 		backgroundRect.h = WINDOW_HEIGHT;
-
 		// Pokemon Sprite
 		std::string spritePath = SPRITES_IMG_BASE_PATH + PokedexDB::getPokemonIdentifier() + ".png";
 		iconSurface = PokeSurface::onLoadImg(spritePath);
@@ -246,9 +257,6 @@ void PokedexActivity_PokemonView_Info::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Info::onDeactivate() {
-	if(se_poke_cry)
-		Mix_FreeChunk(se_poke_cry);
-
 	if(fontSurface)
 		TTF_CloseFont(fontSurface);
 	fontSurface = nullptr;
@@ -399,13 +407,9 @@ void PokedexActivity_PokemonView_Info::onButtonLeft(SDL_Keycode sym, Uint16 mod)
 
 void PokedexActivity_PokemonView_Info::onButtonRight(SDL_Keycode sym, Uint16 mod) {
 	needRedraw = true;
-    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
-    Mix_Chunk* sEffect = Mix_LoadWAV(sEffectPath.c_str());
-    if (!sEffect) {
-        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
-    }
+	
     // Play the sound effect
-    Mix_PlayChannel(1, sEffect, 0);
+    Mix_PlayChannel(1, se_left_right, 0);
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_STATS);
 }
 

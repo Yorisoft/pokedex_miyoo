@@ -21,26 +21,32 @@ pokemon(nullptr)
 {
 }
 
-PokedexActivity_PokemonView_Location::~PokedexActivity_PokemonView_Location() {}
+PokedexActivity_PokemonView_Location::~PokedexActivity_PokemonView_Location() {
+	if(se_up_down)
+		Mix_FreeChunk(se_up_down);
+
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
+}
 
 bool PokedexActivity_PokemonView_Location::initSDL() {
  std::cout << "PokedexActivity_PokemonView_Location::initSDL START \n";
   try {
-    se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
-    if (!se_left_right) {
-      std::cerr << "Failed to load sound sEffect: " << Mix_GetError()
-                << std::endl;
-    }
+	se_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
+	if (!se_left_right) {
+	  std::cerr << "Failed to load sound sEffect: " << Mix_GetError()
+				<< std::endl;
+	}
 
-    se_up_down = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
-    if (!se_left_right) {
-      std::cerr << "Failed to load sound sEffect: " << Mix_GetError()
-                << std::endl;
-    }
-
+	se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
+	if (!se_left_right) {
+	  std::cerr << "Failed to load sound sEffect: " << Mix_GetError()
+				<< std::endl;
+	}
+	
 	fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
 	if (fontSurface == NULL) {
-		std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
+		std::cerr << "TTF_OpenFont: " << TTF_GetError() << std::endl;
 		exit(EXIT_FAILURE);
 	}
 

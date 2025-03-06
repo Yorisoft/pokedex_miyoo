@@ -35,7 +35,7 @@ private:
 		*listEntrySurface_selected;
     SDL_Rect backgroundRect, listEntryRect, gameVersionRect;
     TTF_Font* fontSurface;
-    Mix_Chunk* sound_up_down;
+    Mix_Chunk* se_up_down;
 
 private:
     PokedexActivityMenu();

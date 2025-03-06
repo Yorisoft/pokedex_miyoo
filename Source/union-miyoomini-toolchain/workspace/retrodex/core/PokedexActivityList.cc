@@ -21,6 +21,14 @@ PokedexActivityList::~PokedexActivityList() {
     //Cant delete in onDeactivate or auido will be cut short
     // deleting here is not best practice, this will only ever be called once, 
     // onActivate/Deactivate will be called many times.
+    if(se_on_start)
+        Mix_FreeChunk(se_on_start);
+    se_on_start = nullptr;
+
+    if(se_up_down)
+        Mix_FreeChunk(se_up_down);
+    se_up_down = nullptr;
+
     if(se_on_exit)
         Mix_FreeChunk(se_on_exit);
     se_on_exit = nullptr;
@@ -249,14 +257,6 @@ void PokedexActivityList::onDeactivate() {
 				SDL_FreeSurface(id_name);
 				id_name = nullptr;
 			}
-
-    if(se_on_start)
-        Mix_FreeChunk(se_on_start);
-    se_on_start = nullptr;
-
-    if(se_up_down)
-        Mix_FreeChunk(se_up_down);
-    se_up_down = nullptr;
 
 	if(fontSurface)
 		TTF_CloseFont(fontSurface);

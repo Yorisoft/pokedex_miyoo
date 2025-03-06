@@ -22,18 +22,26 @@ offset(0)
 }
 
 PokedexActivity_PokemonView_Moves::~PokedexActivity_PokemonView_Moves(){
+	if(se_up_down)
+		Mix_FreeChunk(se_up_down);
+	se_up_down = nullptr;
+
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
+	se_left_right = nullptr;
+
 }
 
 bool PokedexActivity_PokemonView_Moves::initSDL(){
 	try{
-		se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
-		if (!se_left_right) {
-			std::cerr << "Warning: PokedexActivity_PokemonView_Moves::initSDL() Unable to load sound_left_right mix! SDL Error:  " << + Mix_GetError() << std::endl;
-		}
-
 		se_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
 		if (!se_up_down) {
 			std::cerr << "Warning: PokedexActivity_PokemonView_Moves::initSDL() Unable to load sound_up_down mix! SDL Error:  " << + Mix_GetError() << std::endl;
+		}
+
+		se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
+		if (!se_left_right) {
+			std::cerr << "Warning: PokedexActivity_PokemonView_Moves::initSDL() Unable to load sound_left_right mix! SDL Error:  " << + Mix_GetError() << std::endl;
 		}
 
 		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
@@ -400,14 +408,6 @@ void PokedexActivity_PokemonView_Moves::onDeactivate() {
 	typeBSurface = nullptr;
 
 	clearCachedSurfaces();
-
-	if(se_up_down)
-		Mix_FreeChunk(se_up_down);
-	se_up_down = nullptr;
-
-	if(se_left_right)
-		Mix_FreeChunk(se_left_right);
-	se_left_right = nullptr;
 
 	if(fontSurface)
 		TTF_CloseFont(fontSurface);

@@ -49,8 +49,7 @@ bool PokedexActivity_PokemonView_Stats::initSDL(){
     std::cout << "PokedexActivity_PokemonView_Stats::initSDL END \n";
 
 	try {
-		std::string path = SOUND_EFFECT_PATH;
-		se_left_right = Mix_LoadWAV(path.c_str());
+		se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
 		if (!se_left_right) {
 			std::cerr << "Warning: PokedexActivity_PokemonView_Stats::initSDL() Unable to load se_left_right mix! SDL Error:  " << + Mix_GetError();
 		}
@@ -295,10 +294,6 @@ void PokedexActivity_PokemonView_Stats::onDeactivate() {
 	if(fontSurface)
 		TTF_CloseFont(fontSurface);
 	fontSurface = nullptr;
-
-	if(se_left_right)
-		Mix_FreeChunk(se_left_right);
-	se_left_right = nullptr;
 
     delete pokemon;
 	pokemon = nullptr;

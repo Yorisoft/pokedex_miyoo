@@ -15,6 +15,12 @@ offset(0)
 }
 
 PokedexActivity_PokemonView_Evolution::~PokedexActivity_PokemonView_Evolution() {
+	if(se_up_down)
+		Mix_FreeChunk(se_up_down);
+
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
+
 }
 
 void PokedexActivity_PokemonView_Evolution::printPokeInfo() {
@@ -257,12 +263,6 @@ void PokedexActivity_PokemonView_Evolution::onActivate() {
 }
 
 void PokedexActivity_PokemonView_Evolution::onDeactivate() {
-	if(se_up_down)
-		Mix_FreeChunk(se_up_down);
-
-	if(se_left_right)
-		Mix_FreeChunk(se_left_right);
-
 	if(backgroundSurface)
 		SDL_FreeSurface(backgroundSurface);
 

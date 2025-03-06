@@ -10,7 +10,7 @@ private:
 
 	const std::string
 		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
-		SOUND_EFFECT_PATH = "res/assets/sound_effects/left_right.wav",
+		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_2.png",
 		SPRITE_IMG_BASE_PATH = "res/assets/pokemons/sprites/";
 

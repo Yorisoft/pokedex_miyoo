@@ -12,18 +12,21 @@ backgroundSurface(nullptr),
 listEntrySurface_default(nullptr),
 listEntrySurface_selected(nullptr),
 fontSurface(nullptr),
-sound_up_down(nullptr)
+se_up_down(nullptr)
 {
 }
 
 PokedexActivityMenu::~PokedexActivityMenu() {
+    if(se_up_down)
+        Mix_FreeChunk(se_up_down);
+    se_up_down = nullptr;
 }
 
 bool PokedexActivityMenu::initSDL(){
 	try{
 		// AUDIO
-		sound_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
-		if (!sound_up_down) {
+		se_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
+		if (!se_up_down) {
 			std::cerr << "Failed to load sound sound_up_down: " << Mix_GetError() << std::endl;
 		}
 
@@ -139,10 +142,6 @@ void PokedexActivityMenu::onDeactivate() {
         TTF_CloseFont(fontSurface);
     fontSurface = nullptr;
 
-    if(sound_up_down)
-        Mix_FreeChunk(sound_up_down);
-    sound_up_down = nullptr;
-
     if(backgroundSurface)
     	SDL_FreeSurface(backgroundSurface);
 	backgroundSurface = nullptr;
@@ -227,7 +226,7 @@ void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
             offset--;
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sound_up_down, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
 }
 
@@ -240,7 +239,7 @@ void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
             offset++;
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sound_up_down, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
 }
 
@@ -272,7 +271,7 @@ void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
             }
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sound_up_down, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
     else {
         // If we exceed the last item, set selectedIndex to the last item visible
@@ -294,7 +293,7 @@ void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
             }
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sound_up_down, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
     else {
         selectedIndex = 0; // Ensure selectedIndex doesn't go below zero

@@ -11,6 +11,7 @@ private:
 	const std::string 
 		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
 		SOUND_EFFECT_CRY_PATH ="res/assets/pokemons/cry/", 
+		SOUND_EFFECT_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav", 
 		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_1.png",
 		SPRITES_IMG_BASE_PATH = "res/assets/pokemons/sprites/",
 		TYPES_IMG_BASE_PATH = "res/assets/pokemons/types/";
@@ -33,11 +34,12 @@ private:
 			 heightRect, weightRect,
 			 genderRect, genusRect,
 			 fTextRect;
-	Mix_Chunk* se_poke_cry;
+	Mix_Chunk* se_poke_cry, *se_left_right;
 	TTF_Font* fontSurface;
 
 private:
     PokedexActivity_PokemonView_Info();
+    ~PokedexActivity_PokemonView_Info();
 	void printPokeInfo();
 	bool initSDL();
     bool renderSprites(SDL_Surface* surf_display);
