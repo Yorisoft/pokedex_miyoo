@@ -347,7 +347,6 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, TTF_Font
 
 
     if (offset + i == selectedSettingIndex) {
-		std::cout << "Rendering listEntrySurface_selected \n";
 		// Render ListEntry Background
     	PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
 
@@ -356,7 +355,6 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, TTF_Font
 		settingNameRect.y = listEntryRect.y + (listEntryRect.h/2) - (optionNameSurface_cache[offset + i].second->h/2);
 		settingNameRect.w = optionNameSurface_cache[offset + i].second->w;
 		settingNameRect.h = optionNameSurface_cache[offset + i].second->h;
-		std::cout << "Rendering optionNameSurface_cache \n";
     	PokeSurface::onDraw(surf_display, optionNameSurface_cache[i + offset].second, &settingNameRect);
     }
     else {
