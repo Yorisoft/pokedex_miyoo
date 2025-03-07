@@ -7,22 +7,54 @@ class PokedexActivityList : public PokedexActivity {
 private:
     static PokedexActivityList instance;
 
-    int selectedIndex, offset, itemHeight;
+    const int ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
+
+	const std::string 
+		SOUND_EFFECT_ON_START_PATH = "res/assets/sound_effects/list_start.wav",
+		SOUND_EFFECT_ON_EXIT_PATH = "res/assets/sound_effects/list_back.wav",
+		SOUND_EFFECT_UP_DOWN = "res/assets/sound_effects/up_down.wav",
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
+		BACKGROUND_IMG_PATH = "res/assets/misc/pokedexList_background.png",
+		SPRITES_IMG_BASE_PATH = "res/assets/pokemons/sprites/",
+		TYPES_IMG_BASE_PATH = "res/assets/pokemons/types/",
+		LIST_BACKGROUND_IMG_PATH_DEFAULT = "res/assets/misc/menu_item_background_default.png",
+		LIST_BACKGROUND_IMG_PATH_SELECTED = "res/assets/misc/menu_item_background_selected.png";
+	
+    const SDL_Color 
+		COLOR = { 248, 248, 248 }, 
+		HIGHLIGHT_COLOR = { 255, 0, 0 };
+
+    int selectedIndex, offset;
+
+	bool needRedraw;
 
     std::vector<std::vector<std::string>>* dbResults;
     std::vector<std::string> pokemon;
 
-    Mix_Chunk* sEffect, *sEffect_OnStart, *sEffect_OnExit;
-    SDL_Color color, highlightColor;
+	std::vector<SDL_Surface*> pokemonIconSurface_cache;
+	std::vector<std::vector<SDL_Surface*>> pokemonTypeSurface_cache;
+	std::vector<std::vector<SDL_Surface*>> pokemonIDNameSurface_cache;
+
+	SDL_Surface* backgroundSurface, *listBackgroundSurface_default, 
+		*listBackgroundSurface_selected;
+    SDL_Rect backgroundRect, listBackgroundRect,
+			 pokeEntryRect, pokeEntryType1Rect, 
+			 pokeEntryType2Rect, pokeIDRect, pokeNameRect;
+    Mix_Chunk* se_up_down, *se_on_start, *se_on_exit;
+	TTF_Font* fontSurface;
+
+private:
+    PokedexActivityList();
+    ~PokedexActivityList();
+
+	void print_dbResults();
+	bool initSDL();
+	void clearCacheSurfaces();
 
     bool renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i);
     SDL_Rect renderItemBackground(SDL_Surface* surf_display, int i);
     bool renderItemSprites(SDL_Surface* surf_display, int i);
     bool renderItemEntry(SDL_Surface* surf_display, SDL_Rect* rect, TTF_Font* font, int i);
-
-private:
-    PokedexActivityList();
-    ~PokedexActivityList();
 
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);

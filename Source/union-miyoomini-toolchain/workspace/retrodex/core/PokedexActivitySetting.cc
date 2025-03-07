@@ -10,23 +10,114 @@ PokedexActivitySetting PokedexActivitySetting::instance;
 const std::string PokedexActivitySetting::userConfigFile = "user_config";
 
 PokedexActivitySetting::PokedexActivitySetting() :
-    backgroundSurface(nullptr),
-    fontSurface(nullptr),
-    listEntrySurface(nullptr),
-    optionItems(nullptr),
-    optionNameSurface(nullptr),
-    settingOptionsSurface(nullptr),
-    fontPath("res/assets/font/pokemon-frlg/pokemon-frlg.ttf"),
-    selectedSettingIndex(0),
-    selectedOptionIndex(0),
-    offset(0),
-    itemHeight(static_cast<int>(WINDOW_HEIGHT / 9))
+backgroundSurface(nullptr),
+listEntrySurface_default(nullptr),
+listEntrySurface_selected(nullptr),
+fontSurface(nullptr),
+optionItems(nullptr),
+needRedraw(true),
+selectedSettingIndex(0),
+selectedOptionIndex(0),
+offset(0),
+itemHeight(static_cast<int>(WINDOW_HEIGHT / 9))
 {
-    color = { 0, 0, 0 }, highlightColor = { 248, 184, 112 };
+    COLOR = { 0, 0, 0 }, HIGHLIGHTED_COLOR = { 248, 184, 112 };
 
 }
 
 PokedexActivitySetting::~PokedexActivitySetting() {
+}
+
+bool PokedexActivitySetting::initSDL(){
+	try{
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
+		if (fontSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
+		}
+
+		backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH.c_str());
+		if (backgroundSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load backgroundSurface! SDL Error:  ") + SDL_GetError());
+		};
+
+		backgroundRect.x = 0;
+		backgroundRect.y = 0;
+		backgroundRect.w = WINDOW_WIDTH;
+		backgroundRect.h = WINDOW_HEIGHT;
+
+		
+		//List item background selected 
+		listEntrySurface_selected = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH.c_str());
+		if (listEntrySurface_selected == NULL) {
+			throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load backgroundSurface_selected! SDL Error:  ") + SDL_GetError());
+		};
+
+		//List item background default
+		listEntrySurface_default = SDL_CreateRGBSurfaceWithFormat(
+			0,
+			WINDOW_WIDTH,
+			itemHeight,
+			DEPTH,
+			SDL_PIXELFORMAT_RGBA32
+		);
+		if (!listEntrySurface_default) {
+			throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load backgroundSurface_default! SDL Error:  ") + SDL_GetError());
+		}
+
+		for (int i = 0; i < settings->size(); i++) {
+			SDL_Surface* optionNameSurface_default = TTF_RenderUTF8_Blended(
+				fontSurface,
+				(*settings)[i].c_str(),
+				COLOR
+			);
+			if (optionNameSurface_default == NULL) {
+				throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load optionNameSurface_default! SDL Error:  ") + SDL_GetError());
+			};
+
+			SDL_Surface* optionNameSurface_selected = TTF_RenderUTF8_Blended(
+				fontSurface,
+				(*settings)[i].c_str(),
+				HIGHLIGHTED_COLOR
+			);
+			if (optionNameSurface_selected == NULL) {
+				throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load optionNameSurface_selected! SDL Error:  ") + SDL_GetError());
+			};
+
+
+			std::vector<std::pair<SDL_Surface*, SDL_Surface*>> temp;
+			for (int j = 0; j < (*optionItems)[i].size(); j++) {
+				const std::vector<std::vector<std::string>> currentOptions = (*optionItems)[i];
+				std::string selectedSetting = currentOptions[j][1];
+
+				SDL_Surface* settingOptionsSurface_default = TTF_RenderUTF8_Blended(
+					fontSurface,
+					selectedSetting.c_str(),
+					COLOR
+				);
+				if (settingOptionsSurface_default == NULL) {
+					throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load settingOptionsSurface_default! SDL Error:  ") + SDL_GetError());
+				};
+
+				SDL_Surface* settingOptionsSurface_selected = TTF_RenderUTF8_Blended(
+					fontSurface,
+					selectedSetting.c_str(),
+					HIGHLIGHTED_COLOR
+				);
+				if (settingOptionsSurface_selected == NULL) {
+					throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load settingOptionsSurface_selected! SDL Error:  ") + SDL_GetError());
+				};
+				temp.push_back({settingOptionsSurface_default, settingOptionsSurface_selected});
+			}
+
+			optionNameSurface_cache.push_back({optionNameSurface_default, optionNameSurface_selected});
+			settingOptionsSurface_cache.emplace_back(temp);
+		}
+	}
+	catch(const std::runtime_error& e){
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
+	return true;
 }
 
 void PokedexActivitySetting::onActivate() {
@@ -83,6 +174,12 @@ void PokedexActivitySetting::onActivate() {
     }
 
 /// set selected setting/settingOption END
+	needRedraw = true;
+
+	if(!initSDL()){
+		std::cout << "PokedexActivitySetting::onActivate - Error in initSDL(), SDL Error: " << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
     std::cout << "PokedexActivitySetting::onActivate END \n";
 }
@@ -145,14 +242,60 @@ void PokedexActivitySetting::setUserConfig(const std::string& file_name) {
 }
 
 void PokedexActivitySetting::onDeactivate() {
+	if(backgroundSurface)
+		SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
+
+	if(listEntrySurface_default)
+    	SDL_FreeSurface(listEntrySurface_default);
+	listEntrySurface_default = nullptr;
+
+	if(listEntrySurface_selected)
+    	SDL_FreeSurface(listEntrySurface_selected);
+	listEntrySurface_selected = nullptr;
+
+	for(std::pair<SDL_Surface*,SDL_Surface*> surfaces : optionNameSurface_cache){
+		if(surfaces.first)
+			SDL_FreeSurface(surfaces.first);
+
+		if(surfaces.second)
+			SDL_FreeSurface(surfaces.second);
+
+		surfaces.first = nullptr;
+		surfaces.second = nullptr;
+	}
+
+	for(std::vector<std::pair<SDL_Surface*, SDL_Surface*>> surfaces : settingOptionsSurface_cache)
+		for(std::pair<SDL_Surface*, SDL_Surface*> surface_pair : surfaces){
+			if(surface_pair.first)
+				SDL_FreeSurface(surface_pair.first);
+
+			if(surface_pair.second)
+				SDL_FreeSurface(surface_pair.second);
+
+			surface_pair.first = nullptr;
+			surface_pair.second = nullptr;
+		}
+
+	optionNameSurface_cache.clear();
+	settingOptionsSurface_cache.clear();
+
+	if(fontSurface)
+		TTF_CloseFont(fontSurface);
+
     delete settings;
+	settings = nullptr;
+
     delete optionItems;
+	optionItems = nullptr;
+
     audioOptions.clear();
     //fontPath.clear();
 
     //selectedSettingIndex = 0,
     //    offset = 0;
 }
+
 void PokedexActivitySetting::onLoop() {
 /// set selected setting/settingOption START 
     setting = (*settings)[selectedSettingIndex];
@@ -174,90 +317,57 @@ void PokedexActivitySetting::onLoop() {
 /// set selected setting/settingOption END
 }
 void PokedexActivitySetting::onFreeze() {}
+
 void PokedexActivitySetting::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
-    SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
+	if(needRedraw){
+		SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-    // Render _PokemonView_Location Items
-    //Render background
-    std::string backgroundImageFile = "res/assets/misc/settings_background.png";
-    backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (backgroundSurface == NULL) {
-        std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+		// Render _PokemonView_Location Items
+		//Render background
+		PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
 
-    SDL_Rect backgroundRect;
-    backgroundRect.x = 0;
-    backgroundRect.y = 0;
-    backgroundRect.w = surf_display->w;
-    backgroundRect.h = surf_display->h;
-
-    PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
-    SDL_FreeSurface(backgroundSurface);
-
-    //// Render List Items
-    // MAX_ITEMS = 7
-    for (int i = 0; i < 7 && static_cast<std::size_t>(offset + i) < settings->size(); i++) {
-        if (!renderListItems(surf_display, font, i)) {
-            exit(EXIT_FAILURE);
-        }
-    }
-
+		//// Render List Items
+		// MAX_ITEMS = 7
+		for (int i = 0; i < 7 && static_cast<std::size_t>(offset + i) < settings->size(); i++) {
+			if (!renderListItems(surf_display, font, i)) {
+				exit(EXIT_FAILURE);
+			}
+		}
+		needRedraw = false;
+	}
 }
 
 bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
-    if (offset + i == selectedSettingIndex) {
-        std::string ListackgroundImageFile = "res/assets/misc/setting_item_background.png";
-        listEntrySurface = PokeSurface::onLoadImg(ListackgroundImageFile);
-        if (listEntrySurface == NULL) {
-            std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        };
-    }
-    else {
-        //List item background
-        listEntrySurface = SDL_CreateRGBSurfaceWithFormat(
-            0,
-            surf_display->w,
-            itemHeight,
-            DEPTH,
-            SDL_PIXELFORMAT_RGBA32
-        );
-        if (!listEntrySurface) {
-            std::cout << "Unable to render surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-    }
-
+	// Render ListEntry Background
     int topBorderW = 168;
-    SDL_Rect listEntryRect;
     listEntryRect.x = 42;
     listEntryRect.y = (i * itemHeight) + topBorderW;
-    listEntryRect.w = static_cast<int>(surf_display->w * .87);
+    listEntryRect.w = static_cast<int>(WINDOW_WIDTH * .87);
     listEntryRect.h = itemHeight;
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
-    SDL_FreeSurface(listEntrySurface);
 
-    /////////////////////////////////////////////////////////////////////////////
 
-    // Render Setting Name
-    optionNameSurface = TTF_RenderUTF8_Blended(
-        font,
-        (*settings)[offset + i].c_str(),
-        offset + i == selectedSettingIndex ? highlightColor : color
-    );
-    if (optionNameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: optionNameSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+    if (offset + i == selectedSettingIndex) {
+		// Render ListEntry Background
+    	PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
 
-    SDL_Rect settingNameRect;
-    settingNameRect.x = listEntryRect.x + 40;
-    settingNameRect.y = listEntryRect.y + (listEntryRect.h/2) - (optionNameSurface->h/2);
-    settingNameRect.w = optionNameSurface->w;
-    settingNameRect.h = optionNameSurface->h;
-    PokeSurface::onDraw(surf_display, optionNameSurface, &settingNameRect);
-    SDL_FreeSurface(optionNameSurface);
+    	// Render Setting Name
+		settingNameRect.x = listEntryRect.x + 40;
+		settingNameRect.y = listEntryRect.y + (listEntryRect.h/2) - (optionNameSurface_cache[offset + i].second->h/2);
+		settingNameRect.w = optionNameSurface_cache[offset + i].second->w;
+		settingNameRect.h = optionNameSurface_cache[offset + i].second->h;
+    	PokeSurface::onDraw(surf_display, optionNameSurface_cache[i + offset].second, &settingNameRect);
+    }
+    else {
+		// Render ListEntry Background
+    	PokeSurface::onDrawScaled(surf_display, listEntrySurface_default, &listEntryRect);
+		
+    	// Render Setting Name
+		settingNameRect.x = listEntryRect.x + 40;
+		settingNameRect.y = listEntryRect.y + (listEntryRect.h/2) - (optionNameSurface_cache[offset + i].first->h/2);
+		settingNameRect.w = optionNameSurface_cache[offset + i].first->w;
+		settingNameRect.h = optionNameSurface_cache[offset + i].first->h;
+    	PokeSurface::onDraw(surf_display, optionNameSurface_cache[i + offset].first, &settingNameRect);
+    }
 
     /////////////////////////////////////////////////////////////////////////////
     // //// Render List Items list 
@@ -267,7 +377,6 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface* surf_display, TTF_Font
             exit(EXIT_FAILURE);
         }
     }
-
     return true;
 }
 bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL_Rect* setting_rect, TTF_Font* font, int i) {
@@ -283,27 +392,21 @@ bool PokedexActivitySetting::renderSettingOptions(SDL_Surface* surf_display, SDL
         }
     );
     if (it != currentOptions.end()) {
-        size_t index = std::distance(currentOptions.begin(), it);
+  		size_t index = std::distance(currentOptions.begin(), it);
         std::string selectedSetting = currentOptions[index][1];
 
-        settingOptionsSurface = TTF_RenderUTF8_Blended(
-            font,
-            selectedSetting.c_str(),
-            offset + i == selectedSettingIndex ? highlightColor : color
-        );
-        if (settingOptionsSurface == NULL) {
-            std::cout << "Unable to render text! SDL Error: settingOptionsSurface " << TTF_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        };
+		settingOptionRect.x = (WINDOW_WIDTH / 2) + 100;
+		settingOptionRect.y = setting_rect->y;
+		settingOptionRect.w = settingOptionsSurface_cache[offset + i][index].second->w;
+		settingOptionRect.h = settingOptionsSurface_cache[offset + i][index].second->h;
 
-        SDL_Rect settingOptionRect;
-        settingOptionRect.x = (WINDOW_WIDTH/2) + 100;
-        settingOptionRect.y = setting_rect->y;
-        settingOptionRect.w = settingOptionsSurface->w;
-        settingOptionRect.h = settingOptionsSurface->h;
-        PokeSurface::onDraw(surf_display, settingOptionsSurface, &settingOptionRect);
-        SDL_FreeSurface(settingOptionsSurface);
-    }
+		if (offset + i == selectedSettingIndex) {
+			PokeSurface::onDraw(surf_display, settingOptionsSurface_cache[offset + i][index].second, &settingOptionRect);
+		}
+		else {
+			PokeSurface::onDraw(surf_display, settingOptionsSurface_cache[offset + i][index].first, &settingOptionRect);
+		}
+	}
     return true;
 }
 
@@ -312,6 +415,8 @@ PokedexActivitySetting* PokedexActivitySetting::getInstance() {
 }
 
 void PokedexActivitySetting::onButtonUp(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedSettingIndex > 0) {
         selectedSettingIndex--;
         if (selectedSettingIndex < offset) {
@@ -320,6 +425,8 @@ void PokedexActivitySetting::onButtonUp(SDL_Keycode sym, Uint16 mod) {
     }
 }
 void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedSettingIndex < settings->size() - 1) {
         selectedSettingIndex++;
         if (selectedSettingIndex - offset >= 7) {
@@ -328,11 +435,15 @@ void PokedexActivitySetting::onButtonDown(SDL_Keycode sym, Uint16 mod) {
     }
 }
 void PokedexActivitySetting::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedOptionIndex > 0) {
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex - 1][0]);
     }
 }
 void PokedexActivitySetting::onButtonRight(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedOptionIndex < settingOptions.size() - 1) {
         userSettingMap[setting] = std::stoi(settingOptions[selectedOptionIndex + 1][0]);
     }

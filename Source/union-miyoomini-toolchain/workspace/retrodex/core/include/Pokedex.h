@@ -15,15 +15,20 @@ private:
     Uint32 frameCount;
     Uint32 lastTime;
     float fps;
+	
+    // Variables for frame delay calculation
+	const float FPS = 60.0f;
+	const Uint32 frameDelay = 1000 / FPS;
 
-	bool running;
+	bool running, needRedraw;
 
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* texture;
-    SDL_Surface* screen;
+    SDL_Surface* screen, *fpsSurface;
     TTF_Font* font;
     Mix_Chunk* sEffect;
+	SDL_Rect fpsRect;
 
 public:
     Pokedex();

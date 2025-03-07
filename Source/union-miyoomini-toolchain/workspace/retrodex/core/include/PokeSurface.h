@@ -12,7 +12,11 @@ public:
 public:
     static SDL_Surface* onLoadImg(std::string& file);
 
+    static SDL_Surface* onLoadImg(const std::string& file);
+
     static SDL_Surface* onLoadBMP(std::string& file);
+
+    static SDL_Surface* onLoadBMP(const std::string& file);
 
     static bool onDraw(SDL_Surface* destinationSurface, SDL_Surface* sourceSurface, SDL_Rect* rect);
     

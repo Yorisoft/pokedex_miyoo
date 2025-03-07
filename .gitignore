@@ -27,6 +27,8 @@ Source/window_dev/res
 !**/App/Retrodex/lib/libSDL2**
 **/logs
 
+# Vim
+**/.clang-format
 #ignore gifs/webm untill ready
 **.gif
 
@@ -47,4 +49,5 @@ sqlite/
 Source/union-miyoomini-toolchain/workspace/retrodex/CMakeLists.txt
 Source/union-miyoomini-toolchain/workspace/retrodex/Makefile
 Source/union-miyoomini-toolchain/workspace/retrodex/ToolChain.cmake
+
 

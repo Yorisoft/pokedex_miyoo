@@ -4,45 +4,135 @@
 PokedexActivityMenu PokedexActivityMenu::instance;
 
 PokedexActivityMenu::PokedexActivityMenu() :
-    dbResults(nullptr),
-    fontSurface(nullptr),
-    sEffect(nullptr),
-    selectedIndex(0),
-    offset(0),
-    itemHeight(0)
+selectedIndex(0),
+offset(0),
+needRedraw(true),
+dbResults(nullptr),
+backgroundSurface(nullptr),
+listEntrySurface_default(nullptr),
+listEntrySurface_selected(nullptr),
+fontSurface(nullptr),
+se_up_down(nullptr)
 {
 }
 
 PokedexActivityMenu::~PokedexActivityMenu() {
+    if(se_up_down)
+        Mix_FreeChunk(se_up_down);
+    se_up_down = nullptr;
+}
+
+bool PokedexActivityMenu::initSDL(){
+	try{
+		// AUDIO
+		se_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
+		if (!se_up_down) {
+			std::cerr << "Failed to load sound sound_up_down: " << Mix_GetError() << std::endl;
+		}
+
+		// FONT
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 46);
+		if (!fontSurface) {
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
+		}
+		
+		// Background
+		backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
+		if (backgroundSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load backgroundSurface! SDL Error:  ") + SDL_GetError());
+		};
+		backgroundRect.x = 0;
+		backgroundRect.y = 0;
+		backgroundRect.w = WINDOW_WIDTH;
+		backgroundRect.h = WINDOW_HEIGHT;
+
+		//List Item Background
+		listEntrySurface_default = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_DEFAULT);
+		listEntrySurface_selected = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_SELECTED);
+		if (listEntrySurface_default == NULL) {
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load listEntrySurface_default! SDL Error:  ") + SDL_GetError());
+		};
+		if (listEntrySurface_selected == NULL) {
+			throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load listEntrySurface_selected! SDL Error:  ") + SDL_GetError());
+		};
+		listEntryRect.x = 0;
+		listEntryRect.y = 0;
+		listEntryRect.w = WINDOW_WIDTH;
+		listEntryRect.h = ITEM_HEIGHT;
+
+		// GAME NAME
+		for (const auto& game_name : *dbResults) {
+			SDL_Surface* normal = TTF_RenderUTF8_Solid(
+				fontSurface, 
+				game_name[2].c_str(), 
+				COLOR
+			);
+			SDL_Surface* highlight = TTF_RenderUTF8_Solid(
+				fontSurface, 
+				game_name[2].c_str(), 
+				HIGHLIGHT_COLOR
+			);
+			if (normal == NULL) {
+				throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load game_name normal Surface! SDL Error:  ") + SDL_GetError());
+			};
+			if (highlight == NULL) {
+				throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load game_name highlight Surface! SDL Error:  ") + SDL_GetError());
+			};
+			cachedTextSurfaces.push_back(normal);
+			cachedHighlightTextSurfaces.push_back(highlight);
+		}
+	}
+	catch(const std::runtime_error& e){
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+void PokedexActivityMenu::print_dbResults(){
+    for (std::vector<std::string>& row : *dbResults) {
+        for (auto& col : row) {
+            std::cout << col << " | ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+void PokedexActivityMenu::clearCacheSurfaces(){
+	if(!cachedTextSurfaces.empty())
+		for(SDL_Surface* surface : cachedTextSurfaces){
+			if(surface)
+				SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	if(!cachedHighlightTextSurfaces.empty())
+		for(SDL_Surface* surface : cachedHighlightTextSurfaces){
+			if(surface)
+				SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	cachedTextSurfaces.clear();
+	cachedHighlightTextSurfaces.clear();
 }
 
 void PokedexActivityMenu::onActivate() {
     std::cout << "PokedexActivityMenu::onActivate START \n";
 
-    color = { 248, 248, 248 }, highlightColor = { 255, 0, 0 };
-    
-    itemHeight = static_cast<int>(WINDOW_HEIGHT / 5);
-
-    fontPath = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf";
+	needRedraw = true;
 
     dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
-    for (std::vector<std::string>& game : *dbResults) {
-        for (auto& col : game) {
-            std::cout << col << " | ";
-        }
-        std::cout << std::endl;
-    }
     game = (*dbResults)[selectedIndex];
+	print_dbResults();
 
-    fontSurface = TTF_OpenFont(fontPath.c_str(), 46);
-    if (!fontSurface) {
-        std::cerr << "PokedexActivityMenu::onActivate: Failed to load font: " << TTF_GetError() << std::endl;
-    }
+	clearCacheSurfaces();
 
-    sEffect = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
-    if (!sEffect) {
-        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
-    }
+	if(!initSDL()){
+		std::cout << "PokedexActivityMenu::onActivate - Error in initSDL(), SDL Error: " << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }
@@ -52,19 +142,30 @@ void PokedexActivityMenu::onDeactivate() {
         TTF_CloseFont(fontSurface);
     fontSurface = nullptr;
 
-    if(sEffect)
-        Mix_FreeChunk(sEffect);
-    sEffect = nullptr;
+    if(backgroundSurface)
+    	SDL_FreeSurface(backgroundSurface);
+	backgroundSurface = nullptr;
 
-    delete dbResults;
-    dbResults = nullptr;
+    if(listEntrySurface_default)
+    	SDL_FreeSurface(listEntrySurface_default);
+	listEntrySurface_default = nullptr;
 
-    color = { }, highlightColor = { };
+    if(listEntrySurface_selected)
+    	SDL_FreeSurface(listEntrySurface_selected);
+	listEntrySurface_selected = nullptr;
+
+	for(auto& surface : cachedHighlightTextSurfaces){
+		if(surface)
+			SDL_FreeSurface(surface);
+		surface = nullptr;
+	}
+	for(auto& surface : cachedTextSurfaces){
+		if(surface)
+			SDL_FreeSurface(surface);
+		surface = nullptr;
+	}
 
     game.clear();
-    fontPath.clear();
-
-    selectedIndex = 0, offset = 0, itemHeight = 0;
 }
 
 void PokedexActivityMenu::onLoop() {
@@ -73,73 +174,39 @@ void PokedexActivityMenu::onLoop() {
 }
 
 void PokedexActivityMenu::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
-    //std::cout << "PokedexActivityMenu::onRender START \n";
-    // Clear the display surface
-    SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
+	if(needRedraw){
+		SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-    // Background
-    std::string backgroundImageFile = "res/assets/misc/menu_background.png";
-    SDL_Surface* listBackgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (listBackgroundSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: listBackgroundSurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+		PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
 
-    SDL_Rect backgroundRect;
-    backgroundRect.x = 0;
-    backgroundRect.y = 0;
-    backgroundRect.w = surf_display->w;
-    backgroundRect.h = surf_display->h;
-
-    PokeSurface::onDrawScaled(surf_display, listBackgroundSurface, &backgroundRect);
-    SDL_FreeSurface(listBackgroundSurface);
-
-    // List Items
-    for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
-        if (!renderListItems(surf_display, i)) {
-            exit(EXIT_FAILURE);
-        }
-    }
+		// List Items
+		for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++) {
+			if (!renderListItems(surf_display, i)) {
+				exit(EXIT_FAILURE);
+			}
+		}
+		needRedraw = false;
+	}
 }
 
 bool PokedexActivityMenu::renderListItems(SDL_Surface* surf_display, int i) {
     //List item background
-    std::string backgroundImageFile = "res/assets/misc/menu_item_background_";
-    offset + i == selectedIndex ? backgroundImageFile.append("selected.png") : backgroundImageFile.append("default.png");
-    SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (listEntrySurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect listEntryRect;
-    listEntryRect.x = 0;
-    listEntryRect.y = (i * itemHeight);
-    listEntryRect.w = surf_display->w;
-    listEntryRect.h = itemHeight;
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
-    SDL_FreeSurface(listEntrySurface);
-
-    //List item title ( Game Title )
-    SDL_Surface* versionTitleSurface = TTF_RenderUTF8_Blended(
-        fontSurface,
-        (*dbResults)[offset + i][2].c_str(),
-        offset + i == selectedIndex ? highlightColor : color
-    );
-    if (versionTitleSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: versionTitleSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+    listEntryRect.y = (i * ITEM_HEIGHT);
 
     int leftBorder = 15;
-    SDL_Rect gameVersionRect;
-    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (versionTitleSurface->w / 2);
-    gameVersionRect.y = (i * itemHeight) + (listEntryRect.h / 2) - (versionTitleSurface->h / 2) - 10;
-    gameVersionRect.w = versionTitleSurface->w;
-    gameVersionRect.h = versionTitleSurface->h;
-    PokeSurface::onDraw(surf_display, versionTitleSurface, &gameVersionRect);
-    SDL_FreeSurface(versionTitleSurface);
+    gameVersionRect.x = leftBorder + (WINDOW_WIDTH/2) - (cachedTextSurfaces[offset + i]->w / 2);
+    gameVersionRect.y = (i * ITEM_HEIGHT) + (listEntryRect.h / 2) - (cachedTextSurfaces[offset + i]->h / 2) - 10;
+    gameVersionRect.w = cachedTextSurfaces[offset + i]->w;
+    gameVersionRect.h = cachedTextSurfaces[offset + i]->h;
 
+	if(offset + i == selectedIndex){
+		PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
+		PokeSurface::onDrawScaled(surf_display, cachedHighlightTextSurfaces[offset + i], &gameVersionRect);
+	}
+	else {
+		PokeSurface::onDrawScaled(surf_display, listEntrySurface_default, &listEntryRect);
+		PokeSurface::onDrawScaled(surf_display, cachedTextSurfaces[offset + i], &gameVersionRect);
+	}
     return true;
 }
 
@@ -151,24 +218,28 @@ PokedexActivityMenu* PokedexActivityMenu::getInstance() {
 }
 
 void PokedexActivityMenu::onButtonUp(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex > 0) {
         selectedIndex--;
         if (selectedIndex < offset) {
             offset--;
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sEffect, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
 }
 
 void PokedexActivityMenu::onButtonDown(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex < dbResults->size() - 1) {
         selectedIndex++;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
             offset++;
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sEffect, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
 }
 
@@ -188,6 +259,8 @@ void PokedexActivityMenu::onButtonB(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex < dbResults->size() - 3) {
         selectedIndex += 3;
         if (selectedIndex - offset >= MAX_VISIBLE_ITEMS) {
@@ -198,7 +271,7 @@ void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
             }
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sEffect, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
     else {
         // If we exceed the last item, set selectedIndex to the last item visible
@@ -208,6 +281,8 @@ void PokedexActivityMenu::onButtonR(SDL_Keycode sym, Uint16 mod) {
 }
 
 void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+
     if (selectedIndex >= 3) {
         selectedIndex -= 3;
         if (selectedIndex < offset) {
@@ -218,7 +293,7 @@ void PokedexActivityMenu::onButtonL(SDL_Keycode sym, Uint16 mod) {
             }
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sEffect, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
     else {
         selectedIndex = 0; // Ensure selectedIndex doesn't go below zero

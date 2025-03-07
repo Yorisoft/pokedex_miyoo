@@ -17,9 +17,11 @@ public:
 
     virtual void onDeactivate() = 0;
 
-    virtual void onLoop() = 0;
-
     virtual void onFreeze() = 0;
+
+    //virtual void onResume() = 0;
+
+    virtual void onLoop() = 0;
 
     virtual void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) = 0;
 };

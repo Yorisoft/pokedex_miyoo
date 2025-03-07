@@ -8,20 +8,39 @@ class PokedexActivity_PokemonView_Stats : public PokedexActivity {
 private:
     static PokedexActivity_PokemonView_Stats instance;
 
-    std::string fontPath;
+	const std::string
+		FONT_PATH = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
+		SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
+		BACKGROUND_IMG_PATH = "res/assets/misc/pokemon_fr_view_2.png",
+		SPRITE_IMG_BASE_PATH = "res/assets/pokemons/sprites/";
+
+	bool needRedraw;
 
     std::vector<std::vector<std::string>>* dbResults;
 
     Pokemon* pokemon;
 
-    Mix_Chunk* sEffect;
+	std::vector<std::vector<std::string>>* statNames;
+	std::vector<SDL_Surface*> statsNameSurface_cache;
+	std::vector<SDL_Surface*> statsSurface_cache;
+
+	SDL_Surface* backgroundSurface, *iconSurface,
+		*idSurface, *nameSurface,
+		*abilitySurface, *h_abilitySurface;
+	SDL_Rect backgroundRect, iconRect,
+			 idRect, nameRect,
+			 statsNameRect, statsRect,
+			 abilityRect, h_abilityRect;
+    Mix_Chunk* se_left_right;
+	TTF_Font* fontSurface;
 
 private:
     PokedexActivity_PokemonView_Stats();
-    bool renderSprites(SDL_Surface* surf_display);
-    bool renderNameID(SDL_Surface* surf_display, TTF_Font* font);
-    bool renderStats(SDL_Surface* surf_display, TTF_Font* font);
-    bool renderFlavorText(SDL_Surface* surf_display);
+    ~PokedexActivity_PokemonView_Stats();
+
+	void printPokeInfo();
+	bool initSDL();
+	void clearCachedSurfaces();
 
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);

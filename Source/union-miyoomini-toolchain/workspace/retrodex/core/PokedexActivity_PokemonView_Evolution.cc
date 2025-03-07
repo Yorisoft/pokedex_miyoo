@@ -5,38 +5,22 @@ PokedexActivity_PokemonView_Evolution PokedexActivity_PokemonView_Evolution::ins
 
 PokedexActivity_PokemonView_Evolution::PokedexActivity_PokemonView_Evolution() :
 pokemon(nullptr),
-sEffect(nullptr),
-color({ 64, 64, 64 }),
-highlightColor({ 255, 0, 0 }),
+se_up_down(nullptr),
+se_left_right(nullptr),
+backgroundSurface(nullptr),
+needRedraw(true),
 selectedIndex(0),
-offset(0),
-itemHeight(static_cast<int>((WINDOW_HEIGHT / 3) * 0.7))
+offset(0)
 {
 }
 
 PokedexActivity_PokemonView_Evolution::~PokedexActivity_PokemonView_Evolution() {
-}
+	if(se_up_down)
+		Mix_FreeChunk(se_up_down);
 
-void PokedexActivity_PokemonView_Evolution::onActivate() {
-    std::cout << "PokedexActivity_PokemonView_Evolution::onActivate START \n";
+	if(se_left_right)
+		Mix_FreeChunk(se_left_right);
 
-    pokemon = new Pokemon();
-	evoChain = pokemon->getEvolutionChain();
-    printPokeInfo();
-    evo = (*evoChain)[selectedIndex];
-
-    std::string sEffectPath = "res/assets/sound_effects/left_right.wav"; // <- empty char is standin for form variant
-    sEffect = Mix_LoadWAV(sEffectPath.c_str());
-    if (!sEffect) {
-        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
-    }
-
-    sEffect_UpDown = Mix_LoadWAV("res/assets/sound_effects/up_down.wav");
-    if (!sEffect) {
-        std::cerr << "Failed to load sound sEffect: " << Mix_GetError() << std::endl;
-    }
-
-    std::cout << "PokedexActivity_PokemonView_Evolution::onActivate END \n";
 }
 
 void PokedexActivity_PokemonView_Evolution::printPokeInfo() {
@@ -57,8 +41,8 @@ void PokedexActivity_PokemonView_Evolution::printPokeInfo() {
     std::cout << "Special Deffense: " << stats[4] << '\n';
     std::cout << "Speed: " << stats[5] << '\n';
 
-    for (std::vector<std::string> evol : *evoChain) {
-        for (auto& c : evol) {
+    for (std::vector<std::string> r : *pokemon->getEvolutionChain()) {
+        for (auto& c : r) {
             std::cout << c << '|';
         }
         std::cout << std::endl;
@@ -66,7 +50,266 @@ void PokedexActivity_PokemonView_Evolution::printPokeInfo() {
 
 }
 
+bool PokedexActivity_PokemonView_Evolution::initSDL(){
+	try{
+		se_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
+		if (!se_left_right) {
+			std::cerr << "Failed to load sound se_up_down: " << Mix_GetError() << std::endl;
+		}
+
+		se_left_right = Mix_LoadWAV(SOUND_LEFT_RIGHT_PATH.c_str());
+		if (!se_left_right) {
+			std::cerr << "Failed to load sound se_left_right: " << Mix_GetError() << std::endl;
+		}
+
+		fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
+		if (fontSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load fontSurface! SDL Error:  ") + SDL_GetError());
+		}
+
+		//Render background
+		backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH.c_str());
+		if (backgroundSurface == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load backgroundSurface! SDL Error:  ") + SDL_GetError());
+		};
+
+		backgroundRect = {
+			0,
+			0,
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT
+		};
+
+		// ListEntry
+		listEntrySurface_default = PokeSurface::onLoadImg(ENTRY_BACKGROUND_IMAGE_PATH_DEFAULT);
+		if (listEntrySurface_default == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load listEntrySurface_default! SDL Error:  ") + SDL_GetError());
+		};
+
+		listEntrySurface_selected = PokeSurface::onLoadImg(ENTRY_BACKGROUND_IMAGE_PATH_SELECTED);
+		if (listEntrySurface_selected == NULL) {
+			throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load listEntrySurface_selected! SDL Error:  ") + SDL_GetError());
+		};
+
+		for (int i = 0; i < evoChain->size(); i++) {
+			if (i > 0 && (*evoChain)[i][1] == (*evoChain)[i - 1][1]){ // < -- skip forms. for now..
+				continue;
+			}
+
+			// Pokemon Sprite
+			std::string poke = (*evoChain)[i][2];
+			std::string path = SPRITE_IMG_BASE_PATH + poke + ".png";
+
+			SDL_Surface* pokeSurface = PokeSurface::onLoadImg(path);
+			if (pokeSurface == NULL) {
+				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load pokeSurface! SDL Error:  ") + SDL_GetError());
+			};
+
+			//
+			// make it a 3 digit
+			std::stringstream formattedID;
+			formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[i][1];
+			std::string id = formattedID.str();
+
+			SDL_Surface* idSurface = TTF_RenderUTF8_Blended(
+				fontSurface,
+				id.c_str(),
+				{ 96, 96, 96 }
+			);
+			if (idSurface == NULL) {
+				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load idSurface! SDL Error:  ") + SDL_GetError());
+			};
+
+			std::string name = (*evoChain)[i][3];
+			SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
+				fontSurface,
+				name.c_str(),
+				{ 96, 96, 96 }
+			);
+			if (nameSurface == NULL ) {
+				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load idSurface! SDL Error:  ") + SDL_GetError());
+			};
+
+			// METHOD
+			std::string method = (*evoChain)[i][4];
+			if (method == "NULL") {
+				method = "__";
+			}
+			else if (method == "level-up" && (*evoChain)[i][5] != "NULL") { // BY LEVEL
+				method = "res/assets/pokemons/encounters/" + method + ".png";
+			}
+			else if (method == "use-item") { // BY ITEM
+				method = "res/assets/items/" + (*evoChain)[i][6] + ".png";
+			}
+			else if (method == "trade") { // BY ITEM
+				method = "res/assets/pokemons/encounters/" + method + ".png";
+			}
+			else if ((*evoChain)[i][8] != "NULL") { // BY HAPPYNESS
+				method = "happiness";
+				method = "res/assets/pokemons/encounters/" + method + ".png";
+			}
+			//else if (method == "level-up" && (*evoChain)[i][7] != "NULL") { // BY TIME OF DAY
+			//    method = "res/assets/pokemons/encounters/" + method + ".png";
+			//}
+			//if (method == "Level up" && (*evoChain)[i][7] != "NULL") {
+			//    method = "Time: " + (*evoChain)[i][7];
+			//    if ((*evoChain)[i][8] != "NULL") {
+			//        method += " Happiness: " + (*evoChain)[i][8];
+			//    }
+			//}
+			//else if (method == "Level up" && (*evoChain)[i][8] != "NULL") {
+			//    method = "Happiness: " + (*evoChain)[i][8];
+			//}
+
+			SDL_Surface* methodSurface;
+			SDL_Surface* methodInfoSurface;
+			SDL_Rect methodRect;
+			if (method == "__") {
+				methodSurface = TTF_RenderUTF8_Blended(
+					fontSurface,
+					method.c_str(),
+					{ 96, 96, 96 }
+				);
+			}
+			else {
+				methodSurface = PokeSurface::onLoadImg(method);
+			}
+			if (methodSurface == NULL ) {
+				throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load methodSurface! SDL Error:  ") + SDL_GetError());
+			};
+
+			std::string methodInfo = (*evoChain)[i][5] != "NULL" ? (*evoChain)[i][5] : (*evoChain)[i][8];
+			methodInfoSurface = TTF_RenderUTF8_Blended(
+				fontSurface,
+				methodInfo.c_str(),
+				{ 96, 96, 96 }
+			);
+			if (methodInfoSurface == NULL ) {
+				std::cout << "Unable to render text! SDL Error: methodSurfaceInfo" << TTF_GetError() << std::endl;
+				exit(EXIT_FAILURE);
+			};
+
+			pokeSprite_cache.push_back(pokeSurface);
+			idSurface_cache.push_back(idSurface);
+			nameSurface_cache.push_back(nameSurface);
+			methodSurface_cache.push_back(methodSurface);
+			methodInfoSurface_cache.push_back(methodInfoSurface);
+		}
+	}
+	catch(const std::runtime_error& e){
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+void PokedexActivity_PokemonView_Evolution::clearCachedSurfaces(){
+	for(SDL_Surface* surface : pokeSprite_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : idSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : nameSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : methodSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : methodInfoSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	pokeSprite_cache.clear();
+	idSurface_cache.clear();
+	nameSurface_cache.clear();
+	methodSurface_cache.clear();
+	methodInfoSurface_cache.clear();
+}
+
+void PokedexActivity_PokemonView_Evolution::onActivate() {
+    std::cout << "PokedexActivity_PokemonView_Evolution::onActivate START \n";
+
+    pokemon = new Pokemon();
+	evoChain = pokemon->getEvolutionChain();
+    printPokeInfo();
+
+    evo = (*evoChain)[selectedIndex];
+
+	needRedraw = true;
+
+	clearCachedSurfaces();
+	if(!initSDL()){
+		std::cerr << "PokedexActivity_PokemonView_Moves::onActivate - Error in initSDL(), SDL Error: " << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	
+    std::cout << "PokedexActivity_PokemonView_Evolution::onActivate END \n";
+}
+
 void PokedexActivity_PokemonView_Evolution::onDeactivate() {
+	if(backgroundSurface)
+		SDL_FreeSurface(backgroundSurface);
+
+	if(listEntrySurface_default)
+    	SDL_FreeSurface(listEntrySurface_default);
+	listEntrySurface_default = nullptr;
+
+	if(listEntrySurface_selected)
+    	SDL_FreeSurface(listEntrySurface_selected);
+	listEntrySurface_selected = nullptr;
+
+	for(SDL_Surface* surface : pokeSprite_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : idSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : nameSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : methodSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	for(SDL_Surface* surface : methodInfoSurface_cache)
+		if(surface){
+			SDL_FreeSurface(surface);
+			surface = nullptr;
+		}
+
+	pokeSprite_cache.clear();
+	idSurface_cache.clear();
+	nameSurface_cache.clear();
+	methodSurface_cache.clear();
+	methodInfoSurface_cache.clear();
+
     delete pokemon;
     pokemon = nullptr;
 
@@ -78,127 +321,73 @@ void PokedexActivity_PokemonView_Evolution::onLoop() {}
 void PokedexActivity_PokemonView_Evolution::onFreeze() {}
 
 void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
-    SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
+	if(needRedraw){
+		SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-    //Render background
-    std::string backgroundImageFile = "res/assets/misc/pokemon_fr_view_5.png";
-    SDL_Surface* backgroundSurface = PokeSurface::onLoadImg(backgroundImageFile);
-    if (backgroundSurface == NULL) {
-        std::cout << "Unable to load surface! SDL Error: backgroundSurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
+		PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
 
-    SDL_Rect backgroundRect = {
-        0,
-        0,
-        surf_display->w,
-        surf_display->h
-    };
-    PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
-    SDL_FreeSurface(backgroundSurface);
+		for (int i = 0; i < 3 && static_cast<std::size_t>(offset + i) < evoChain->size(); i++) {
+			if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1]){ // < -- skip forms. for now..
+				if (selectedIndex == evoChain->size() - 1) {
+					selectedIndex--;
+					if (selectedIndex - offset >= 3) {
+						offset--;
+					}
+				}
+				continue;
+			}
 
-    for (int i = 0; i < 3 && static_cast<std::size_t>(offset + i) < evoChain->size(); i++) {
-        if (i > 0 && (*evoChain)[offset + i][1] == (*evoChain)[offset + i - 1][1]){ // < -- skip forms. for now..
-            if (selectedIndex == evoChain->size() - 1) {
-                selectedIndex--;
-                if (selectedIndex - offset >= 3) {
-                    offset--;
-                }
-            }
-            continue;
-        }
-
-        // Render list items
-        if (!renderListItems(surf_display, font, i)) {
-            exit(EXIT_FAILURE);
-        }
-    }
+			// Render list items
+			if (!renderListItems(surf_display, font, i)) {
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
 }
 
 bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
-    std::string listEntryImageFile = "res/assets/misc/evolution_item_background_";
-    offset + i == selectedIndex ? listEntryImageFile.append("selected.png") : listEntryImageFile.append("default.png");
-
-    SDL_Surface* listEntrySurface = PokeSurface::onLoadImg(listEntryImageFile);
-    if (listEntrySurface == NULL) {
-        std::cout << "Unable to load surface! SDL Error: listEntrySurface " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    int spacing = 15; 
-    SDL_Rect listEntryRect = {
-        static_cast<int>(surf_display->w - (surf_display->w * 0.5)),
-        65 + (i * (itemHeight + spacing)),
-        static_cast<int>(surf_display->w * 0.50),
-        itemHeight
-    };
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
-    SDL_FreeSurface(listEntrySurface);
+	// ListEntry
+	int spacing = 15; 
+	listEntryRect = {
+		static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * 0.5)),
+		65 + (i * (ITEM_HEIGHT + spacing)),
+		static_cast<int>(WINDOW_WIDTH * 0.50),
+		ITEM_HEIGHT
+	};
+	
+	if(offset + i == selectedIndex){
+		PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
+	}
+	else {
+		PokeSurface::onDrawScaled(surf_display, listEntrySurface_default, &listEntryRect);
+	}
 
     // render poke sprite
-    std::string poke = (*evoChain)[offset + i][2];
-    poke = "res/assets/pokemons/sprites/" + poke + ".png";
-
-    SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
-    if (pokeSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect pokeRect = {
-        static_cast<int>((listEntryRect.x + listEntryRect.w ) - pokeSurface->w * 1.3),
-        listEntryRect.y + 10,
-        pokeSurface->w,
-        pokeSurface->h
-    };
-    PokeSurface::onDrawScaled(surf_display, pokeSurface, &pokeRect);
-    SDL_FreeSurface(pokeSurface);
+	pokeRect = {
+		static_cast<int>((listEntryRect.x + listEntryRect.w ) - pokeSprite_cache[offset + i]->w * 1.3),
+		listEntryRect.y + 10,
+		pokeSprite_cache[offset + i]->w,
+		pokeSprite_cache[offset + i]->h
+	};
+    PokeSurface::onDrawScaled(surf_display, pokeSprite_cache[offset + i], &pokeRect);
 
     // Render Item ID
-    // make it a 3 digit
-    std::stringstream formattedID;
-    formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[offset + i][1];
-    std::string id = formattedID.str();
-
-    SDL_Surface* idSurface = TTF_RenderUTF8_Blended(
-        font,
-        id.c_str(),
-        { 96, 96, 96 }
-    );
-    if (idSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: idSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect idRect = {
+    idRect = {
         listEntryRect.x + 60,
         listEntryRect.y + 20,
-        static_cast<int>(idSurface->w * .8),
-        static_cast<int>(idSurface->h * .8)
+        static_cast<int>(idSurface_cache[i + offset]->w * .8),
+        static_cast<int>(idSurface_cache[i + offset]->h * .8)
     };
-    PokeSurface::onDrawScaled(surf_display, idSurface, &idRect);
-    SDL_FreeSurface(idSurface);
+    PokeSurface::onDrawScaled(surf_display, idSurface_cache[i + offset], &idRect);
 
     //// Render poke name( level or item)
-    std::string name = (*evoChain)[offset + i][3];
-    SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
-        font,
-        name.c_str(),
-        { 96, 96, 96 }
-    );
-    if (nameSurface == NULL ) {
-        std::cout << "Unable to render text! SDL Error: nameSurface" << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect nameRect = {
+    nameRect = {
         listEntryRect.x + 10,
         idRect.y + idRect.h + 20,
-        static_cast<int>(nameSurface->w * 0.8),
-        static_cast<int>(nameSurface->h * 0.8)
+        static_cast<int>(nameSurface_cache[i + offset]->w * 0.8),
+        static_cast<int>(nameSurface_cache[i + offset]->h * 0.8)
     };
-    PokeSurface::onDrawScaled(surf_display, nameSurface, &nameRect);
-    SDL_FreeSurface(nameSurface);
+    PokeSurface::onDrawScaled(surf_display, nameSurface_cache[i + offset], &nameRect);
 
     if (offset + i == selectedIndex) {
         if (!renderPokeInfo(surf_display, font, i)) {
@@ -212,154 +401,91 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 
 bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_display, TTF_Font* font, int i) {
     // render poke sprite
-    std::string poke = (*evoChain)[offset + i][2];
-    poke = "res/assets/pokemons/sprites/" + poke + ".png";
-
-    SDL_Surface* pokeSurface = PokeSurface::onLoadImg(poke);
-    if (pokeSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: pokeSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect pokeRect= {
+    pokeRect= {
         50,
         90,
-        pokeSurface->w * 2,
-        pokeSurface->h * 2
+        pokeSprite_cache[offset + i]->w * 2,
+        pokeSprite_cache[offset + i]->h * 2
     };
-    PokeSurface::onDrawScaled(surf_display, pokeSurface, &pokeRect);
-    SDL_FreeSurface(pokeSurface);
+    PokeSurface::onDrawScaled(surf_display, pokeSprite_cache[offset + i], &pokeRect);
     
     // Render Item ID
     // make it a 3 digit
-    std::stringstream formattedID;
-    formattedID << std::setw(3) << std::setfill('0') << (*evoChain)[offset + i][1];
-    std::string id = formattedID.str();
-
-    SDL_Surface* idSurface = TTF_RenderUTF8_Blended(
-        font,
-        id.c_str(),
-        { 96, 96, 96 }
-    );
-    if (idSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: idSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect idRect = {
+    idRect = {
         20,
         WINDOW_HEIGHT/2 + 45,
-        idSurface->w,
-        idSurface->h
+        idSurface_cache[offset + i]->w,
+        idSurface_cache[offset + i]->h
     };
-    PokeSurface::onDraw(surf_display, idSurface, &idRect);
-    SDL_FreeSurface(idSurface);
+    PokeSurface::onDraw(surf_display, idSurface_cache[offset + i], &idRect);
 
     //// Render poke name
-    std::string name = (*evoChain)[offset + i][3];
-    SDL_Surface* nameSurface = TTF_RenderUTF8_Blended(
-        font,
-        name.c_str(),
-        { 96, 96, 96 }
-    );
-    if (nameSurface == NULL) {
-        std::cout << "Unable to render text! SDL Error: nameSurface " << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    SDL_Rect nameRect = {
+    nameRect = {
         idRect.x,
         idRect.y + idRect.h + 10,
-        static_cast<int>(nameSurface->w),
-        static_cast<int>(nameSurface->h)
+        static_cast<int>(nameSurface_cache[offset + i]->w),
+        static_cast<int>(nameSurface_cache[offset + i]->h)
     };
-    PokeSurface::onDraw(surf_display, nameSurface, &nameRect);
-    SDL_FreeSurface(nameSurface);
+    PokeSurface::onDraw(surf_display, nameSurface_cache[offset + i], &nameRect);
     
     //// Render poke method( level or item)
-    std::string method = (*evoChain)[offset + i][4];
-    if (method == "NULL") {
-        method = "__";
-    }
-    else if (method == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL
-        method = "res/assets/pokemons/encounters/" + method + ".png";
-    }
-    else if (method == "use-item") { // BY ITEM
-        method = "res/assets/items/" + (*evoChain)[offset + i][6] + ".png";
-    }
-    else if (method == "trade") { // BY ITEM
-        method = "res/assets/pokemons/encounters/" + method + ".png";
-    }
-    else if ((*evoChain)[offset + i][8] != "NULL") { // BY HAPPYNESS
-        method = "happiness";
-        method = "res/assets/pokemons/encounters/" + method + ".png";
-    }
-    //else if (method == "level-up" && (*evoChain)[offset + i][7] != "NULL") { // BY TIME OF DAY
-    //    method = "res/assets/pokemons/encounters/" + method + ".png";
-    //}
-    //if (method == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
-    //    method = "Time: " + (*evoChain)[offset + i][7];
-    //    if ((*evoChain)[offset + i][8] != "NULL") {
-    //        method += " Happiness: " + (*evoChain)[offset + i][8];
-    //    }
-    //}
-    //else if (method == "Level up" && (*evoChain)[offset + i][8] != "NULL") {
-    //    method = "Happiness: " + (*evoChain)[offset + i][8];
-    //}
-    SDL_Surface* methodSurface;
-    SDL_Surface* methodSurfaceInfo;
-    SDL_Rect methodRect;
-    if (method == "__") {
-        methodSurface = TTF_RenderUTF8_Blended(
-            font,
-            method.c_str(),
-            { 96, 96, 96 }
-        );
-        methodRect = {
-            nameRect.x,
-            nameRect.y + nameRect.h + 5,
-            static_cast<int>(methodSurface->w ),
-            static_cast<int>(methodSurface->h )
-        };
-    }
-    else {
-        methodSurface = PokeSurface::onLoadImg(method);
-        methodRect = {
-            nameRect.x,
-            nameRect.y + nameRect.h + 5,
-            static_cast<int>(methodSurface->w * 1.5),
-            static_cast<int>(methodSurface->h * 1.5)
-        };
-    }
-    if (methodSurface == NULL ) {
-        std::cout << "Unable to render text! SDL Error: methodSurface" << TTF_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    };
-
-    PokeSurface::onDrawScaled(surf_display, methodSurface, &methodRect);
-    SDL_FreeSurface(methodSurface);
+	std::string method = (*evoChain)[offset + i][4];
+	if (method == "NULL") {
+		method = "__";
+	}
+	else if (method == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL
+		method = "res/assets/pokemons/encounters/" + method + ".png";
+	}
+	else if (method == "use-item") { // BY ITEM
+		method = "res/assets/items/" + (*evoChain)[offset + i][6] + ".png";
+	}
+	else if (method == "trade") { // BY ITEM
+		method = "res/assets/pokemons/encounters/" + method + ".png";
+	}
+	else if ((*evoChain)[offset + i][8] != "NULL") { // BY HAPPYNESS
+		method = "happiness";
+		method = "res/assets/pokemons/encounters/" + method + ".png";
+	}
+	//else if (method == "level-up" && (*evoChain)[offset + i][7] != "NULL") { // BY TIME OF DAY
+	//    method = "res/assets/pokemons/encounters/" + method + ".png";
+	//}
+	//if (method == "Level up" && (*evoChain)[offset + i][7] != "NULL") {
+	//    method = "Time: " + (*evoChain)[offset + i][7];
+	//    if ((*evoChain)[offset + i][8] != "NULL") {
+	//        method += " Happiness: " + (*evoChain)[offset + i][8];
+	//    }
+	//}
+	//else if (method == "Level up" && (*evoChain)[offset + i][8] != "NULL") {
+	//    method = "Happiness: " + (*evoChain)[offset + i][8];
+	//}
+	if (method == "__") {
+		methodRect = {
+			nameRect.x,
+			nameRect.y + nameRect.h + 5,
+			static_cast<int>(methodSurface_cache[offset + i]->w ),
+			static_cast<int>(methodSurface_cache[offset + i]->h )
+		};
+	}
+	else {
+		methodRect = {
+			nameRect.x,
+			nameRect.y + nameRect.h + 5,
+			static_cast<int>(methodSurface_cache[offset + i]->w * 1.5),
+			static_cast<int>(methodSurface_cache[offset + i]->h * 1.5)
+		};
+	}
+    PokeSurface::onDrawScaled(surf_display, methodSurface_cache[offset + i], &methodRect);
 
     //
     if ((*evoChain)[offset + i][5] != "NULL" || (*evoChain)[offset + i][8] != "NULL") {
-        std::string methodInfo = (*evoChain)[offset + i][5] != "NULL" ? (*evoChain)[offset + i][5] : (*evoChain)[offset + i][8];
-        methodSurfaceInfo = TTF_RenderUTF8_Blended(
-            font,
-            methodInfo.c_str(),
-            { 96, 96, 96 }
-        );
-        if (methodSurfaceInfo == NULL ) {
-            std::cout << "Unable to render text! SDL Error: methodSurfaceInfo" << TTF_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        };
+		methodInfoRect = {
+			methodRect.x + methodRect.w,
+			nameRect.y + nameRect.h + 10,
+			static_cast<int>(methodInfoSurface_cache[offset + i]->w * .9),
+			static_cast<int>(methodInfoSurface_cache[offset + i]->h * .9)
+		};
 
-        SDL_Rect pokeMethodInfoRect = {
-            methodRect.x + methodRect.w,
-            nameRect.y + nameRect.h + 10,
-            static_cast<int>(methodSurfaceInfo->w * .9),
-            static_cast<int>(methodSurfaceInfo->h * .9)
-        };
-        PokeSurface::onDrawScaled(surf_display, methodSurfaceInfo, &pokeMethodInfoRect);
-        SDL_FreeSurface(methodSurfaceInfo);
+        PokeSurface::onDrawScaled(surf_display, methodInfoSurface_cache[offset + i], &methodInfoRect);
     }
 
     return true;
@@ -377,7 +503,7 @@ void PokedexActivity_PokemonView_Evolution::onButtonUp(SDL_Keycode sym, Uint16 m
             offset--;
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sEffect_UpDown, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
 }
 
@@ -389,13 +515,13 @@ void PokedexActivity_PokemonView_Evolution::onButtonDown(SDL_Keycode sym, Uint16
             offset++;
         }
         // Play the sound effect
-        Mix_PlayChannel(1, sEffect_UpDown, 0);
+        Mix_PlayChannel(1, se_up_down, 0);
     }
 }
 
 void PokedexActivity_PokemonView_Evolution::onButtonLeft(SDL_Keycode sym, Uint16 mod) {
     // Play the sound effect
-    Mix_PlayChannel(1, sEffect, 0);
+    Mix_PlayChannel(1, se_left_right, 0);
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_LOCATION);
 }
 

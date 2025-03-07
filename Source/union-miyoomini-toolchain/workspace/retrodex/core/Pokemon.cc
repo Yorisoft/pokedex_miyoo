@@ -46,6 +46,7 @@ Pokemon::Pokemon() {
 		stats->push_back(std::stoi(stat[0]));
 	}
 	setBasicStats(stats);
+	delete stats;
 
 	// //set abilities;
 	results = PokedexDB::executeSQL(&SQL_getPokeAbilities);
