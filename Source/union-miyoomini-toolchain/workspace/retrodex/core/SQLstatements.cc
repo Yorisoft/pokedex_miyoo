@@ -294,11 +294,11 @@ const std::string SQL_getPokeEvoChain = R"(
 		i.identifier AS item_identifier,
 		pe.minimum_level,
 		pe.gender_id,
-		pe.location_id,
+		ln.name AS location_name,  -- Replaced location_id with location_name
 		held_item.identifier AS held_item_identifier,
 		pe.time_of_day,
-		pe.known_move_id,
-		pe.known_move_type_id,
+		mn.name AS known_move_name,
+		t.identifier AS move_type_identifier,
 		pe.minimum_happiness,
 		pe.minimum_beauty,
 		pe.minimum_affection,
@@ -320,6 +320,14 @@ const std::string SQL_getPokeEvoChain = R"(
 		items i ON pe.trigger_item_id = i.id
 	LEFT JOIN
 		items held_item ON pe.held_item_id = held_item.id
+	LEFT JOIN
+		types t ON pe.known_move_type_id = t.id
+	LEFT JOIN
+		moves m ON pe.known_move_id = m.id
+	LEFT JOIN
+		move_names mn ON m.id = mn.move_id AND mn.local_language_id = :language_id
+	LEFT JOIN
+		location_names ln ON pe.location_id = ln.location_id AND ln.local_language_id = 9
 	WHERE
 		ps.evolution_chain_id = :evo_chain_id
 		AND ps.id <= 649
