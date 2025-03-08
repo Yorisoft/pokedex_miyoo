@@ -797,6 +797,68 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface* surf_dis
 		SDL_FreeSurface(locationSurface);
 	}
 
+	// RELATIVE STATS
+	std::string relativeStats = (*evoChain)[offset + i][16];
+	if (relativeStats != "NULL") {
+		std::string atkIconPath = "res/assets/pokemons/encounters/stats_atk.png";
+		SDL_Surface* atkIconSurface = PokeSurface::onLoadImg(atkIconPath);
+		if (atkIconSurface == NULL ) {
+			std::cerr << "Failed to load surface: SDL_GetError:" << SDL_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		};
+		std::string defIconPath = "res/assets/pokemons/encounters/stats_def.png";
+		SDL_Surface* defIconSurface = PokeSurface::onLoadImg(defIconPath);
+		if (defIconSurface == NULL ) {
+			std::cerr << "Failed to load surface: SDL_GetError:" << SDL_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		};
+
+		if(relativeStats == "1")
+			relativeStats = "Attack > Deffense";
+		if(relativeStats == "-1")
+			relativeStats = "Attack < Deffense";
+		if(relativeStats == "0")
+			relativeStats = "Attack = Deffense";
+
+		SDL_Surface* relativeStatSurface = TTF_RenderUTF8_Blended(
+			font,
+			relativeStats.c_str(),
+			{ 96, 96, 96 }
+		);
+		if (relativeStatSurface == NULL ) {
+			std::cerr << "Failed to load surface: SDL_GetError:" << SDL_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		};
+
+		SDL_Rect atkIconRect;
+		atkIconRect.x = triggerIconRect.x;
+		atkIconRect.y = evo_item_y;
+		atkIconRect.w = static_cast<int>(atkIconSurface->w * 0.7);
+		atkIconRect.h = static_cast<int>(atkIconSurface->h * 0.7);
+
+		SDL_Rect defIconRect;
+		defIconRect.x = atkIconRect.x + atkIconRect.w + 60;
+		defIconRect.y = evo_item_y;
+		defIconRect.w = static_cast<int>(defIconSurface->w * 0.7);
+		defIconRect.h = static_cast<int>(defIconSurface->h * 0.7);
+
+		SDL_Rect relativeStatRect;
+		relativeStatRect.x = triggerIconRect.x;
+		relativeStatRect.y = atkIconRect.y + atkIconRect.h;
+		relativeStatRect.w = static_cast<int>(relativeStatSurface->w);
+		relativeStatRect.h = static_cast<int>(relativeStatSurface->h);
+		
+    	PokeSurface::onDrawScaled(surf_display, atkIconSurface, &atkIconRect);
+    	PokeSurface::onDrawScaled(surf_display, defIconSurface, &defIconRect);
+    	PokeSurface::onDrawScaled(surf_display, relativeStatSurface, &relativeStatRect);
+
+		SDL_FreeSurface(atkIconSurface);
+		SDL_FreeSurface(defIconSurface);
+		SDL_FreeSurface(relativeStatSurface);
+		evo_item_y = relativeStatRect.y + relativeStatRect.h;
+	}
+
+
 
 	/* else if (trigger == "level-up" && (*evoChain)[offset + i][5] != "NULL") { // BY LEVEL */
 	/* 	trigger = "res/assets/pokemons/encounters/" + trigger + ".png"; */
