@@ -130,6 +130,7 @@ bool PokedexActivity_PokemonView_Evolution::initSDL(){
 
 			//// Render poke method( level or item)
 			std::vector<SDL_Surface*> temp;
+
 			// TRIGGER
 			std::string trigger = (*evoChain)[offset + i][4];
 			SDL_Surface* triggerSurface = nullptr;
@@ -539,10 +540,18 @@ void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface* surf_display, 
 				exit(EXIT_FAILURE);
 			}
 		}
+		needRedraw = false;
 	}
 }
 
 bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_display, TTF_Font* font, int i) {
+    if (offset + i == selectedIndex) {
+        if (!renderPokeInfo(surf_display, font, i)) {
+            std::cout << "Unable to load surface! SDL Error: renderPokeInfo " << SDL_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
 	// ListEntry
 	int spacing = 15; 
 	listEntryRect = {
@@ -552,12 +561,6 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
 		ITEM_HEIGHT + 10
 	};
 	
-	/* int spacing = 5; */ 
-	/* listEntryRect.h = ITEM_HEIGHT; */
-	/* double heightRatio = static_cast<double>(listEntryRect.h) / static_cast<double>(listEntrySurface_default->h); */
-	/* listEntryRect.x = static_cast<int>(WINDOW_WIDTH * 0.5); */
-	/* listEntryRect.y = 65 + (i * (ITEM_HEIGHT + spacing)); */
-	/* listEntryRect.w = static_cast<int>(heightRatio * listEntrySurface_default->w); */
 	if(offset + i == selectedIndex){
 		PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
 	}
@@ -591,13 +594,6 @@ bool PokedexActivity_PokemonView_Evolution::renderListItems(SDL_Surface* surf_di
         static_cast<int>(nameSurface_cache[i + offset]->h * .9)
     };
     PokeSurface::onDrawScaled(surf_display, nameSurface_cache[i + offset], &nameRect);
-
-    if (offset + i == selectedIndex) {
-        if (!renderPokeInfo(surf_display, font, i)) {
-            std::cout << "Unable to load surface! SDL Error: renderPokeInfo " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-    }
 
     return true;
 }
@@ -840,6 +836,8 @@ PokedexActivity_PokemonView_Evolution* PokedexActivity_PokemonView_Evolution::ge
 }
 
 void PokedexActivity_PokemonView_Evolution::onButtonUp(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+	
     if (selectedIndex > 0) {
         selectedIndex--;
         evo = (*evoChain)[selectedIndex];
@@ -852,6 +850,8 @@ void PokedexActivity_PokemonView_Evolution::onButtonUp(SDL_Keycode sym, Uint16 m
 }
 
 void PokedexActivity_PokemonView_Evolution::onButtonDown(SDL_Keycode sym, Uint16 mod) {
+	needRedraw = true;
+	
     if (selectedIndex < evoChain->size() - 1) {
         selectedIndex++;
         evo = (*evoChain)[selectedIndex];
@@ -875,9 +875,9 @@ void PokedexActivity_PokemonView_Evolution::onButtonA(SDL_Keycode sym, Uint16 mo
     std::cout << evo[2] << '\n';
     PokedexDB::setPokemonID(std::stoi(evo[1]));
     PokedexDB::setPokemonIdentifier(evo[2]);
-    PokedexDB::setVersionID(std::stoi(evo[11]));
-    PokedexDB::setVersionGroupID(std::stoi(evo[12]));
-    PokedexDB::setGenerationID(std::stoi(evo[13]));
+    PokedexDB::setVersionID(std::stoi(evo[22]));
+    PokedexDB::setVersionGroupID(std::stoi(evo[23]));
+    PokedexDB::setGenerationID(std::stoi(evo[24]));
 
     ////Call next activity
     PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_INFO);
