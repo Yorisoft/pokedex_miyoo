@@ -40,9 +40,7 @@ private:
 	std::vector<SDL_Surface*> pokeSprite_cache;
 	std::vector<SDL_Surface*> idSurface_cache;
 	std::vector<SDL_Surface*> nameSurface_cache;
-	std::vector<SDL_Surface*> methodSurface_cache;
-	std::vector<SDL_Surface*> methodInfoSurface_cache;
-
+    std::vector<std::vector<SDL_Surface*>> evoConditionSurface_cache;
 
 	SDL_Surface* backgroundSurface, 
 		*listEntrySurface_default, *listEntrySurface_selected;

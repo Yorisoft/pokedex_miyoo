@@ -420,7 +420,7 @@ void PokedexActivity_PokemonView_Location::onRender(SDL_Surface* surf_display, S
 				}
 			}
 
-			needRedraw = true;
+			needRedraw = false;
 		}
 		catch(const std::runtime_error& e){
 			std::cerr << e.what() << std::endl;
