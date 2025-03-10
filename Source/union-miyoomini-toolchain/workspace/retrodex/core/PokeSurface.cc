@@ -9,7 +9,7 @@ SDL_Surface* PokeSurface::onLoadImg(std::string& file) {
 
     tempSurface = IMG_Load(file.c_str());
     if (tempSurface == NULL) {
-        std::cout << "Unable to load image! SDL Error: " << IMG_GetError() << std::endl;
+        std::cout << "Unable to load image! File: " << file << ".  SDL Error: " << IMG_GetError() << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -29,7 +29,7 @@ SDL_Surface* PokeSurface::onLoadImg(const std::string& file){
 
     tempSurface = IMG_Load(file.c_str());
     if (tempSurface == NULL) {
-        std::cout << "Unable to load image! SDL Error: " << IMG_GetError() << std::endl;
+        std::cout << "Unable to load image! File: " << file << ".  SDL Error: " << IMG_GetError() << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -49,7 +49,7 @@ SDL_Surface* PokeSurface::onLoadBMP(std::string& file) {
 
     tempSurface = SDL_LoadBMP(file.c_str());
     if (tempSurface == NULL) {
-        std::cout << "Unable to load image! SDL Error: " << IMG_GetError() << std::endl;
+        std::cout << "Unable to load image! File: " << file << ".  SDL Error: " << IMG_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -70,7 +70,7 @@ SDL_Surface* PokeSurface::onLoadBMP(const std::string& file){
 
     tempSurface = SDL_LoadBMP(file.c_str());
     if (tempSurface == NULL) {
-        std::cout << "Unable to load image! SDL Error: " << IMG_GetError() << std::endl;
+        std::cout << "Unable to load image! File: " << file << ".  SDL Error: " << IMG_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 

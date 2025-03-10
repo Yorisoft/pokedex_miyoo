@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
 Pokedex::Pokedex() {
     running = true;
 	needRedraw = false;
+	assetsLoaded = false;
 
     window = NULL;
     renderer = NULL;
@@ -56,7 +57,7 @@ int Pokedex::onExecute() {
 	static SDL_Event event;
     while (running) {
 		Uint32 frameStart = SDL_GetTicks();
-
+		
 		calculateFPS();
 
 		Uint32 prev_ButtonPressTick;
@@ -80,7 +81,7 @@ int Pokedex::onExecute() {
         onRender();
 
 		Uint32 frameTime = SDL_GetTicks() - frameStart;
-		if(frameTime < frameDelay){
+		if(assetsLoaded && frameTime < frameDelay){
 			SDL_Delay(frameDelay - frameTime);
 		}
     }
@@ -122,7 +123,7 @@ bool Pokedex::onSDLInit() {
     this->renderer = SDL_CreateRenderer(
         this->window,
         -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+        SDL_RENDERER_ACCELERATED //| SDL_RENDERER_PRESENTVSYNC
     );
     if (!this->renderer) {
         std::cout << "Failed to create renderer: " << SDL_GetError();
@@ -203,6 +204,9 @@ void Pokedex::onEvent(SDL_Event* event) {
 }
 
 void Pokedex::onLoop() {
+	if(!assetsLoaded)
+		assetsLoaded = AssetManager::getInstance()->isDoneLoading();
+
     PokedexActivityManager::onLoop();
 }
 
