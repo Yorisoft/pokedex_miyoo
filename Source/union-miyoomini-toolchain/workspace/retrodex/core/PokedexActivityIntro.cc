@@ -20,7 +20,7 @@ bool PokedexActivityIntro::initSDL()
     try
     {
         //==================================FONT==================================
-        fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 14);
+        fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 18);
         if (fontSurface == NULL)
         {
             throw std::runtime_error(
@@ -124,10 +124,15 @@ void PokedexActivityIntro::onLoop()
         if (!assetManager->isDoneLoading())
         {
             assetManager->loadAssets();
-            std::cout << "Current File: " << assetManager->getFile().c_str() << std::endl;
 
-            fileSurface = TTF_RenderUTF8_Blended_Wrapped(
-                fontSurface, assetManager->getFile().c_str(), COLOR, WINDOW_WIDTH);
+            std::string loadedAssetName = assetManager->getFile().c_str();
+            size_t pos                  = loadedAssetName.find(".png");
+            if (pos != std::string::npos)
+                loadedAssetName.erase(pos, 4);
+            /* std::cout << "Current File: " << assetManager->getFile().c_str() << std::endl; */
+
+            fileSurface = TTF_RenderUTF8_Blended_Wrapped(fontSurface, loadedAssetName.c_str(),
+                                                         COLOR, WINDOW_WIDTH);
             if (!fileSurface)
             {
                 std::cout << "Unable to load image! fileSurface.  SDL Error: " << IMG_GetError()
@@ -227,20 +232,24 @@ void PokedexActivityIntro::onRender(SDL_Surface *surf_display, SDL_Renderer *ren
         Uint32 greenColor = SDL_MapRGB(surf_display->format, green.r, green.g, green.b);
 
         SDL_Rect barRect = {
-            0, WINDOW_HEIGHT - WINDOW_HEIGHT / 4,
+            0, WINDOW_HEIGHT - WINDOW_HEIGHT / 10,
             static_cast<int>(WINDOW_WIDTH * assetManager->getCurrentProgress() / 100), 5};
         SDL_FillRect(surf_display, &barRect, greenColor);
 
-        SDL_Rect fileRect = {
-            WINDOW_WIDTH / 2 - fileSurface->w / 2,
-            barRect.y + 10,
-            fileSurface->w,
-            fileSurface->h,
-        };
-        SDL_BlitSurface(fileSurface, NULL, surf_display, NULL);
+        if (fileSurface != nullptr)
+        {
+            SDL_Rect fileRect = {
+                0,
+                barRect.y + 10,
+                fileSurface->w,
+                fileSurface->h,
+            };
 
-        SDL_FreeSurface(fileSurface);
-        fileSurface = nullptr;
+            // Use SDL_BlitSurface instead of BlitScaled if no scaling is needed
+            SDL_BlitSurface(fileSurface, NULL, surf_display, &fileRect);
+            SDL_FreeSurface(fileSurface);
+            fileSurface = nullptr;
+        }
     }
 }
 

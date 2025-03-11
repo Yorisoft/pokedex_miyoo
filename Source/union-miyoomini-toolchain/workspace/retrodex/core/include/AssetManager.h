@@ -4,34 +4,37 @@
 #include "PokedexAssets.h"
 #include <unordered_map>
 
-class AssetManager : public PokedexAssets {
-public: 
-	typedef std::unordered_map<std::string, asset> assetMap_t;
+class AssetManager : public PokedexAssets
+{
+  public:
+    typedef std::unordered_map<std::string, asset> assetMap_t;
 
-private: 
+  private:
     static AssetManager instance;
-  
-    assetMap_t* assetMap;
-    
-    double loadedAssetsIndex, totalAssets;
-	bool allAssetsLoaded;
 
-	std::string file;
+    assetMap_t *assetMap;
+
+    double loadedAssetsIndex, totalAssets;
+    bool allAssetsLoaded;
+
+    std::string file;
 
     AssetManager();
     ~AssetManager();
-    
-public: 
+
+  public:
     void loadAssets();
-	asset* getAsset(const std::string&);
+    void loadSurface(asset &);
+    void loadFont(asset &);
+    void loadAudio(asset &);
+    asset *getAsset(const std::string &);
 
-	double getCurrentProgress();
-	bool isDoneLoading();
+    double getCurrentProgress();
+    bool isDoneLoading();
 
-	std::string getFile();
+    std::string getFile();
 
-    static AssetManager* getInstance();
+    static AssetManager *getInstance();
 };
-
 
 #endif

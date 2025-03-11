@@ -30,7 +30,8 @@ AssetManager::AssetManager()
                 std::string path         = icon.path().string();
                 std::pair<int, int> size = {2, 2};
 
-                asset icon_asset(path, size);
+                char type[] = "surface";
+                asset icon_asset(path, type, size);
                 assetMap->insert({icon.path().stem().string() + "_s", icon_asset});
             }
         }
@@ -46,7 +47,7 @@ AssetManager::AssetManager()
                 std::string path         = sprite.path().string();
                 std::pair<int, int> size = {2, 2};
 
-                asset sprite_asset(path, size);
+                asset sprite_asset(path, "surface", size);
                 assetMap->insert({sprite.path().stem().string() + "_l", sprite_asset});
             }
         }
@@ -69,30 +70,38 @@ AssetManager::~AssetManager()
 
 void AssetManager::loadAssets()
 {
+    enum
+    {
+        SURFACE,
+        FONT,
+        MIXCHUNK,
+    };
+    int assetType;
+
     if (loadedAssetsIndex < totalAssets)
     {
+
         auto it = std::next(assetMap->begin(), loadedAssetsIndex);
 
-        SDL_Surface *tempSurface = IMG_Load(it->second.path.c_str());
-        if (!tempSurface)
-        {
-            std::cout << "AssetManager::loadAssets() Unable to load temp surface! File: "
-                      << it->second.path.c_str() << ".  SDL Error: " << IMG_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
+        if (strcmp(it->second.type, "surface") == 0)
+            assetType = SURFACE;
+        else if (strcmp(it->second.type, "font") == 0)
+            assetType = FONT;
+        else if (strcmp(it->second.type, "audio") == 0)
+            assetType = MIXCHUNK;
 
-        it->second.surface = SDL_CreateRGBSurfaceWithFormat(
-            0, it->second.size.w * tempSurface->w, it->second.size.h * tempSurface->h,
-            tempSurface->format->BitsPerPixel, tempSurface->format->format);
-        if (!it->second.surface)
+        switch (assetType)
         {
-            std::cout << "AssetManager::loadAssets() Unable to create surface for "
-                         "it->second.surface! SDL Error: "
-                      << IMG_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        SDL_BlitSurface(tempSurface, NULL, it->second.surface, NULL);
-        SDL_FreeSurface(tempSurface);
+        case SURFACE:
+            loadSurface(it->second);
+            break;
+        case FONT:
+            loadFont(it->second);
+            break;
+        case MIXCHUNK:
+            loadAudio(it->second);
+            break;
+        };
 
         file = it->second.path;
 
@@ -103,6 +112,34 @@ void AssetManager::loadAssets()
 
     allAssetsLoaded = loadedAssetsIndex == totalAssets ? true : false;
 }
+
+void AssetManager::loadSurface(asset &asset)
+{
+    SDL_Surface *tempSurface = IMG_Load(asset.path.c_str());
+    if (!tempSurface)
+    {
+        std::cout << "AssetManager::loadAssets() Unable to load temp surface! File: "
+                  << asset.path.c_str() << ".  SDL Error: " << IMG_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    asset.surface = SDL_CreateRGBSurfaceWithFormat(
+        0, asset.size.w * tempSurface->w, asset.size.h * tempSurface->h,
+        tempSurface->format->BitsPerPixel, tempSurface->format->format);
+    if (!asset.surface)
+    {
+        std::cout << "AssetManager::loadAssets() Unable to create surface for "
+                     "asset.surface! SDL Error: "
+                  << IMG_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    SDL_BlitSurface(tempSurface, NULL, asset.surface, NULL);
+    SDL_FreeSurface(tempSurface);
+}
+
+void AssetManager::loadFont(asset &asset) {}
+
+void AssetManager::loadAudio(asset &asset) {}
 
 AssetManager::asset *AssetManager::getAsset(const std::string &assetName)
 {
