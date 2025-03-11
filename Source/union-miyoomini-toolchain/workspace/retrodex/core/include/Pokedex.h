@@ -19,7 +19,7 @@ class Pokedex : public PokedexActivityEvent
     float fps;
 
     // Variables for frame delay calculation
-    const float FPS = 60.0f;
+    const float FPS         = 60.0f;
     const Uint32 frameDelay = 1000 / FPS;
 
     bool running, needRedraw, assetsLoaded;

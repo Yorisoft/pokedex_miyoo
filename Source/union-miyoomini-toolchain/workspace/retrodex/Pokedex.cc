@@ -1,281 +1,282 @@
 // Window Settings
-#define WINDOW_HEIGHT 480                   // window height in pixels
-#define WINDOW_WIDTH 640                    // window width in pixels
-#define DEPTH 16                            // window depth in pixels
-#define MAX_VISIBLE_ITEMS 5                 // Set the maximum number of visible
+#define WINDOW_HEIGHT 480   // window height in pixels
+#define WINDOW_WIDTH 640    // window width in pixels
+#define DEPTH 16            // window depth in pixels
+#define MAX_VISIBLE_ITEMS 5 // Set the maximum number of visible
 
-#include<iostream>
-#include<iomanip>
-#include<sqlite/sqlite3.h>
-#include"Pokedex.h"
+#include "Pokedex.h"
+#include <iomanip>
+#include <iostream>
+#include <sqlite/sqlite3.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
     std::cout << "main: START" << std::endl;
- 
- /* BASIC GAME LOOP
-	Initialize();
 
-	while (true) {
-		Events();
-		Loop();
-		Render();
-	}
- 	Cleanup(); */
+    /* BASIC GAME LOOP
+       Initialize();
 
-	Pokedex pokedexApp;
+       while (true) {
+           Events();
+           Loop();
+           Render();
+       }
+       Cleanup(); */
 
-	return pokedexApp.onExecute();
+    Pokedex pokedexApp;
+
+    return pokedexApp.onExecute();
 }
 
-Pokedex::Pokedex() {
-    running = true;
-	needRedraw = false;
-	assetsLoaded = false;
+Pokedex::Pokedex()
+{
+    running      = true;
+    needRedraw   = false;
+    assetsLoaded = false;
 
-    window = NULL;
-    renderer = NULL;
-    texture = NULL;
-    screen = NULL;
-    font = NULL;
-    sEffect = NULL;
-	
+    window   = nullptr;
+    renderer = nullptr;
+    texture  = nullptr;
+    screen   = nullptr;
+    font     = nullptr;
+    sEffect  = nullptr;
+
     // Variables for FPS calculation
     frameCount = 0;
-    lastTime = SDL_GetTicks();
-    fps = 0.0f;
-	fpsSurface = nullptr;
-	fpsRect = {};
+    lastTime   = SDL_GetTicks();
+    fps        = 0.0f;
+    fpsSurface = nullptr;
+    fpsRect    = {};
 }
 
-int Pokedex::onExecute() {
+int Pokedex::onExecute()
+{
     std::cout << "Pokedex::onExecute: START" << std::endl;
 
-    if (onSDLInit() == false || onInit() == false) {
+    if (onSDLInit() == false || onInit() == false)
+    {
         return -1;
     }
 
-	static SDL_Event event;
-    while (running) {
-		Uint32 frameStart = SDL_GetTicks();
-		
-		calculateFPS();
+    static SDL_Event event;
+    while (running)
+    {
+        Uint32 frameStart = SDL_GetTicks();
 
-		Uint32 prev_ButtonPressTick;
-		while(SDL_PollEvent(&event)){
-			prev_ButtonPressTick = SDL_GetTicks();
+        calculateFPS();
 
-			onEvent(&event);
-		}
+        Uint32 prev_ButtonPressTick;
+        while (SDL_PollEvent(&event))
+        {
+            prev_ButtonPressTick = SDL_GetTicks();
 
-		Uint32 cur_ButtonPressTick = SDL_GetTicks();
-		Uint32 elapsedTime = cur_ButtonPressTick - prev_ButtonPressTick;
-		if(elapsedTime >= 150){
-			SDL_PumpEvents();
-			static const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-			PokedexActivityManager::onKeyHold(currentKeyStates, &event);
+            onEvent(&event);
+        }
 
-			prev_ButtonPressTick = cur_ButtonPressTick;
-		}
+        Uint32 cur_ButtonPressTick = SDL_GetTicks();
+        Uint32 elapsedTime         = cur_ButtonPressTick - prev_ButtonPressTick;
+        if (elapsedTime >= 150)
+        {
+            SDL_PumpEvents();
+            static const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
+            PokedexActivityManager::onKeyHold(currentKeyStates, &event);
+
+            prev_ButtonPressTick = cur_ButtonPressTick;
+        }
 
         onLoop();
         onRender();
 
-		Uint32 frameTime = SDL_GetTicks() - frameStart;
-		if(assetsLoaded && frameTime < frameDelay){
-			SDL_Delay(frameDelay - frameTime);
-		}
+        Uint32 frameTime = SDL_GetTicks() - frameStart;
+        if (assetsLoaded && frameTime < frameDelay)
+        {
+            SDL_Delay(frameDelay - frameTime);
+        }
     }
-    onCleanup(); 
+    onCleanup();
 
     std::cout << "Pokedex::onExecute: END" << std::endl;
 
     return 0;
 }
 
-bool Pokedex::onSDLInit() {
+bool Pokedex::onSDLInit()
+{
     std::cout << "Pokedex::onSDLInit: START" << std::endl;
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) < 0)
+    {
         std::cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
     int imgFlags = IMG_INIT_PNG;
-    if (!(IMG_Init(imgFlags) & imgFlags)) {
+    if (!(IMG_Init(imgFlags) & imgFlags))
+    {
         std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError();
         exit(EXIT_FAILURE);
     }
 
-    this->window = SDL_CreateWindow(
-        "Pokedex",
-        SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED,
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-        SDL_WINDOW_SHOWN
-    );
-    if (!this->window) {
+    this->window = SDL_CreateWindow("Pokedex", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                    WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    if (!this->window)
+    {
         std::cout << "Failed to create window: " << SDL_GetError();
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
 
-    this->renderer = SDL_CreateRenderer(
-        this->window,
-        -1,
-        SDL_RENDERER_ACCELERATED //| SDL_RENDERER_PRESENTVSYNC
+    this->renderer = SDL_CreateRenderer(this->window, -1,
+                                        SDL_RENDERER_ACCELERATED //| SDL_RENDERER_PRESENTVSYNC
     );
-    if (!this->renderer) {
+    if (!this->renderer)
+    {
         std::cout << "Failed to create renderer: " << SDL_GetError();
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
 
-    this->texture = SDL_CreateTexture(
-        this->renderer,
-        SDL_PIXELFORMAT_RGB565,
-        SDL_TEXTUREACCESS_STREAMING,
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT
-    );
-    if (!this->texture) {
+    this->texture = SDL_CreateTexture(this->renderer, SDL_PIXELFORMAT_RGB565,
+                                      SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (!this->texture)
+    {
         std::cout << "Failed to create texture: " << SDL_GetError();
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    
-    this->screen = SDL_CreateRGBSurface(
-        0,
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-        DEPTH,
-        0, 0, 0, 0
-    );
-    if (!this->screen) {
-        std::cout << "Failed to create optimized surface, screen, from tempSurface: " << SDL_GetError();
+
+    this->screen = SDL_CreateRGBSurface(0, WINDOW_WIDTH, WINDOW_HEIGHT, DEPTH, 0, 0, 0, 0);
+    if (!this->screen)
+    {
+        std::cout << "Failed to create optimized surface, screen, from tempSurface: "
+                  << SDL_GetError();
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
 
-    if (TTF_Init() == -1) {
+    if (TTF_Init() == -1)
+    {
         std::cout << "SDL could not initialize TTF_Init: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
     this->font = TTF_OpenFont("res/assets/font/pokemon-dppt/pokemon-dppt.ttf", 34);
-    if (this->font == NULL) {
+    if (this->font == nullptr)
+    {
         std::cout << "TTF_OpenFont: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 
-	fpsSurface = TTF_RenderUTF8_Blended(
-		font,
-		"0",
-		{ 0, 128, 0 }
-	);
-	if (fpsSurface == NULL) {
-		std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
-		exit(EXIT_FAILURE);
-	};
+    fpsSurface = TTF_RenderUTF8_Blended(font, "0", {0, 128, 0});
+    if (fpsSurface == nullptr)
+    {
+        std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
+        exit(EXIT_FAILURE);
+    };
 
-    SDL_FillRect(
-        this->screen,
-        &(this->screen)->clip_rect,
-        SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00)
-    );
+    SDL_FillRect(this->screen, &(this->screen)->clip_rect,
+                 SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00));
 
     std::cout << "Pokedex::onSDLInit: END" << std::endl;
 
     return true;
 }
 
-bool Pokedex::onInit() {
+bool Pokedex::onInit()
+{
     std::cout << "Pokedex::onInit: START" << std::endl;
     PokedexActivityManager::setActiveState(APPSTATE_INTRO);
 
     std::cout << "Pokedex::onInit: END" << std::endl;
-	return true;
+    return true;
 }
 
-void Pokedex::onEvent(SDL_Event* event) {
+void Pokedex::onEvent(SDL_Event *event)
+{
     PokedexActivityEvent::onEvent(event);
     PokedexActivityManager::onEvent(event);
 }
 
-void Pokedex::onLoop() {
-	if(!assetsLoaded)
-		assetsLoaded = AssetManager::getInstance()->isDoneLoading();
+void Pokedex::onLoop()
+{
+    if (!assetsLoaded)
+        assetsLoaded = AssetManager::getInstance()->isDoneLoading();
 
     PokedexActivityManager::onLoop();
 }
 
-void Pokedex::onRender() {
-    //std::cout << "Pokedex::onRender: START" << std::endl;
+void Pokedex::onRender()
+{
+    // std::cout << "Pokedex::onRender: START" << std::endl;
     SDL_RenderClear(renderer);
 
     PokedexActivityManager::onRender(screen, renderer, texture, font, sEffect);
 
     // Calculate and print FPS
-	// Uncomment this line during debug. Not ready to roll out.
-	renderFPS();
+    // Uncomment this line during debug. Not ready to roll out.
+    renderFPS();
 
     SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
-    //std::cout << "Pokedex::onRender: START" << std::endl;
+    // std::cout << "Pokedex::onRender: START" << std::endl;
 }
 
-void Pokedex::calculateFPS() {
+void Pokedex::calculateFPS()
+{
     frameCount++;
     Uint32 currentTime = SDL_GetTicks();
     Uint32 elapsedTime = currentTime - lastTime;
 
-    if (elapsedTime >= 1000) {
-        fps = frameCount / (elapsedTime / 1000.0f);
+    if (elapsedTime >= 1000)
+    {
+        fps        = frameCount / (elapsedTime / 1000.0f);
         frameCount = 0;
-        lastTime = currentTime;
+        lastTime   = currentTime;
     }
 }
 
-void Pokedex::renderFPS(){
-	std::stringstream iss;
-	iss << std::fixed << std::setprecision(2);
+void Pokedex::renderFPS()
+{
+    std::stringstream iss;
+    iss << std::fixed << std::setprecision(2);
     iss << fps;
 
-	static std::string lastFPS = "";
-	std::string currentFPS = iss.str();
-	
-	if (currentFPS != lastFPS) {
+    static std::string lastFPS = "";
+    std::string currentFPS     = iss.str();
+
+    if (currentFPS != lastFPS)
+    {
         // Free the old surface if it exists
-        if (fpsSurface) {
+        if (fpsSurface)
+        {
             SDL_FreeSurface(fpsSurface);
             fpsSurface = nullptr;
         }
-	
-		fpsSurface = TTF_RenderUTF8_Blended(
-			font,
-			iss.str().c_str(),
-			{ 0, 128, 0 }
-		);
-		if (fpsSurface == NULL) {
-			std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
-			exit(EXIT_FAILURE);
-		};
-		
-		fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
-		fpsRect.y = 0;
-		fpsRect.w = fpsSurface->w;
-		fpsRect.h = fpsSurface->h;
-		lastFPS = currentFPS;
-	}
 
-	SDL_FillRect(screen, &fpsRect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
+        fpsSurface = TTF_RenderUTF8_Blended(font, iss.str().c_str(), {0, 128, 0});
+        if (fpsSurface == nullptr)
+        {
+            std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError()
+                      << std::endl;
+            exit(EXIT_FAILURE);
+        };
+
+        fpsRect.x = WINDOW_WIDTH - fpsSurface->w;
+        fpsRect.y = 0;
+        fpsRect.w = fpsSurface->w;
+        fpsRect.h = fpsSurface->h;
+        lastFPS   = currentFPS;
+    }
+
+    SDL_FillRect(screen, &fpsRect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
 
     PokeSurface::onDraw(screen, fpsSurface, &fpsRect);
 }
 
-void Pokedex::onExit() {
+void Pokedex::onExit()
+{
     std::cout << "Pokedex::onExit: START" << std::endl;
 
     running = false;
@@ -283,10 +284,11 @@ void Pokedex::onExit() {
     std::cout << "Pokedex::onExit: END" << std::endl;
 }
 
-void Pokedex::onCleanup() {
+void Pokedex::onCleanup()
+{
     std::cout << "Pokedex::onCleanUp: START" << std::endl;
 
-	TTF_CloseFont(font);
+    TTF_CloseFont(font);
     SDL_FreeSurface(screen);
     SDL_FreeSurface(fpsSurface);
     SDL_DestroyTexture(texture);
@@ -296,10 +298,10 @@ void Pokedex::onCleanup() {
     Mix_CloseAudio();
     TTF_Quit();
     IMG_Quit();
-	Mix_Quit();
-	SDL_VideoQuit();
+    Mix_Quit();
+    SDL_VideoQuit();
 
     SDL_Quit();
-	
+
     std::cout << "Pokedex::onCleanUp: END" << std::endl;
 }
