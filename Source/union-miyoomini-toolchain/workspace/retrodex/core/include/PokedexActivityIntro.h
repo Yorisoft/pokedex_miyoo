@@ -24,6 +24,7 @@ private:
     std::map<std::string, int> userSettingMap;
 
     SDL_Surface* splashSurface, *fileSurface;
+	TTF_Font* fontSurface;
 	AssetManager* assetManager;
 	
 private:

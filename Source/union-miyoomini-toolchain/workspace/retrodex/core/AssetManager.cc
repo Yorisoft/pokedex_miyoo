@@ -15,7 +15,7 @@ AssetManager::AssetManager()
     file = "";
 
     // Add the surfaces I want to this map
-    // s = snall
+    // s = small
     // m = medium
     // l = large
     // f = fullscreen
@@ -28,7 +28,7 @@ AssetManager::AssetManager()
             if (icon.path().extension() == ".png")
             {
                 std::string path = icon.path().string();
-                std::pair<int, int> size = {100, 100};
+                std::pair<int, int> size = {2, 2};
 
                 asset icon_asset(path, size);
                 assetMap->insert({icon.path().stem().string() + "_s", icon_asset});
@@ -44,7 +44,7 @@ AssetManager::AssetManager()
             if (sprite.path().extension() == ".png")
             {
                 std::string path = sprite.path().string();
-                std::pair<int, int> size = {100, 100};
+                std::pair<int, int> size = {2, 2};
 
                 asset sprite_asset(path, size);
                 assetMap->insert({sprite.path().stem().string() + "_l", sprite_asset});
@@ -73,29 +73,46 @@ void AssetManager::loadAssets()
     {
         auto it = std::next(assetMap->begin(), loadedAssetsIndex);
 
-        it->second.surface = PokeSurface::onLoadImg(it->second.path);
-        if (it->second.surface == NULL)
-        {
-            std::cout << "Unable to load asset! Asset path" << it->second.path
-                      << "\nSDL Error: " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        SDL_Surface *scaledSurface = SDL_CreateRGBSurface(
-            0, it->second.size.w, it->second.size.h, it->second.surface->format->BitsPerPixel,
-            it->second.surface->format->Rmask, it->second.surface->format->Gmask,
-            it->second.surface->format->Bmask, it->second.surface->format->Amask);
+		SDL_Surface* tempSurface = IMG_Load(it->second.path.c_str());
+		if (!tempSurface)
+		{
+			std::cout << "AssetManager::loadAssets() Unable to load temp surface! File: " << it->second.path.c_str() << ".  SDL Error: " << IMG_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		it->second.surface = SDL_CreateRGBSurfaceWithFormat(
+			0, 
+			it->second.size.w * tempSurface->w,
+			it->second.size.h * tempSurface->h,
+			tempSurface->format->BitsPerPixel,
+			tempSurface->format->format
+		);
+		if (!it->second.surface)
+		{
+			std::cout << "AssetManager::loadAssets() Unable to create surface for it->second.surface! SDL Error: " << IMG_GetError() << std::endl;
+			exit(EXIT_FAILURE);
+		}
+        SDL_BlitSurface(tempSurface, NULL, it->second.surface, NULL);
+		SDL_FreeSurface(tempSurface);
 
         file = it->second.path;
 
         it->second.isLoaded = true;
 
         loadedAssetsIndex++;
+
+		/* std::cout << "loadedAssetsIndex: " << loadedAssetsIndex << std::endl; */
+		if(it->first.find("drowzee") != std::string::npos){
+			std::cout << "it->first : " << it->first << std::endl;
+			std::cout << "it->second.path " << it->second.path << std::endl;
+		}
+
     }
 
     allAssetsLoaded = loadedAssetsIndex == totalAssets ? true : false;
 }
 
-AssetManager::asset *AssetManager::getAsset(const std::string &assetName)
+AssetManager::asset* AssetManager::getAsset(const std::string &assetName)
 {
     auto it = assetMap->find(assetName);
     if (it != assetMap->end())

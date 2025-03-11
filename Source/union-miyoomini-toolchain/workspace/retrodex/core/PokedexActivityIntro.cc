@@ -7,8 +7,9 @@ PokedexActivityIntro PokedexActivityIntro::instance;
 const std::string PokedexActivityIntro::userConfigFile = "user_config";
 
 PokedexActivityIntro::PokedexActivityIntro() {
-    splashSurface = NULL;
-    fileSurface = NULL;
+    splashSurface = nullptr;
+    fileSurface = nullptr;
+    fontSurface = nullptr;
     StartTime = SDL_GetTicks();
     logoAlpha = 0;
 }
@@ -16,6 +17,15 @@ PokedexActivityIntro::PokedexActivityIntro() {
 void PokedexActivityIntro::onActivate() {
 	// Asset Manager
 	assetManager = AssetManager::getInstance();
+
+    // Load Font
+	//==================================FONT==================================
+	// Font
+	fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 14);
+	if (fontSurface == NULL) {
+		std::cout << "Unable to load image! fontSurface.  SDL Error: " << IMG_GetError() << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
     // Load Simple Logo
 	//==================================SPLASH ART==================================
@@ -55,10 +65,18 @@ void PokedexActivityIntro::onActivate() {
 }
 
 void PokedexActivityIntro::onDeactivate() {
-    if (splashSurface) {
+    if (splashSurface) 
         SDL_FreeSurface(splashSurface);
-        splashSurface = NULL;
-    }
+	splashSurface = nullptr;
+    
+    if (fileSurface) 
+        SDL_FreeSurface(fileSurface);
+	fileSurface = nullptr;
+
+	if(fontSurface)
+		TTF_CloseFont(fontSurface);
+	fontSurface = nullptr;
+
 }
 
 void PokedexActivityIntro::onLoop() {
@@ -81,12 +99,7 @@ void PokedexActivityIntro::onLoop() {
 		if(!assetManager->isDoneLoading()){
 			assetManager->loadAssets(); 
 
-			// Font
-			TTF_Font* fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 14);
-			if (fontSurface == NULL) {
-				std::cout << "Unable to load image! fontSurface.  SDL Error: " << IMG_GetError() << std::endl;
-				exit(EXIT_FAILURE);
-			}
+			/* std::cout << "Current File: " << assetManager->getFile().c_str() << std::endl; */ 
 
             fileSurface = TTF_RenderUTF8_Blended_Wrapped(
                 fontSurface, 
@@ -186,15 +199,15 @@ void PokedexActivityIntro::onRender(SDL_Surface* surf_display, SDL_Renderer* ren
 		};
 		SDL_FillRect(surf_display, &barRect, greenColor);
 
-		/* SDL_Rect fileRect = { */
-		/* 	WINDOW_WIDTH/2 - fileSurface->w/2, */
-		/* 	barRect.y + barRect.h, */
-		/* 	fileSurface->w, */
-		/* 	fileSurface->h, */
-		/* }; */
-		/* SDL_BlitSurface(fileSurface, NULL, surf_display, &fileRect); */
-		/* SDL_FreeSurface(fileSurface); */
-		/* fileSurface = nullptr; */
+		SDL_Rect fileRect = {
+			WINDOW_WIDTH/2 - fileSurface->w/2,
+			barRect.y + barRect.h + 5,
+			fileSurface->w,
+			fileSurface->h,
+		};
+		SDL_BlitSurface(fileSurface, NULL, surf_display, &fileRect);
+		SDL_FreeSurface(fileSurface);
+		fileSurface = nullptr;
 	}
 }
 
