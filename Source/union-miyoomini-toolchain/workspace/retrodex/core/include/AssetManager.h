@@ -7,13 +7,14 @@
 class AssetManager : public PokedexAssets
 {
   public:
-    typedef std::unordered_map<std::string, asset> assetMap_t;
+    typedef std::unordered_map<int, asset> assetMap_t;
 
   private:
     static AssetManager instance;
 
     assetMap_t *assetMap;
 
+    int currentAssetID = 0;
     double loadedAssetsIndex, totalAssets;
     bool allAssetsLoaded;
 
@@ -27,7 +28,7 @@ class AssetManager : public PokedexAssets
     void loadSurface(asset &);
     void loadFont(asset &);
     void loadAudio(asset &);
-    asset *getAsset(const std::string &);
+    asset *getAsset(const int) const;
 
     double getCurrentProgress();
     bool isDoneLoading();

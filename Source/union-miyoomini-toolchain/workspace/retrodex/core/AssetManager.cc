@@ -20,23 +20,6 @@ AssetManager::AssetManager()
     // l = large
     // f = fullscreen
 
-    // Pokemon Icons
-    for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH))
-    {
-        if (std::filesystem::is_regular_file(icon))
-        { // Ensure it's a file
-            if (icon.path().extension() == ".png")
-            {
-                std::string path         = icon.path().string();
-                std::pair<int, int> size = {2, 2};
-
-                char type[] = "surface";
-                asset icon_asset(path, type, size);
-                assetMap->insert({icon.path().stem().string() + "_s", icon_asset});
-            }
-        }
-    }
-
     // Pokemon Sprites
     for (const auto &sprite : std::filesystem::directory_iterator(POKEMON_SPRITES_PATH))
     {
@@ -48,9 +31,28 @@ AssetManager::AssetManager()
                 std::pair<int, int> size = {2, 2};
 
                 asset sprite_asset(path, "surface", size);
-                assetMap->insert({sprite.path().stem().string() + "_l", sprite_asset});
+                assetMap->insert({currentAssetID, sprite_asset});
             }
         }
+        currentAssetID++;
+    }
+
+    // Pokemon Icons
+    for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH))
+    {
+        if (std::filesystem::is_regular_file(icon))
+        { // Ensure it's a file
+            if (icon.path().extension() == ".png")
+            {
+                std::string path         = icon.path().string();
+                std::pair<int, int> size = {2, 2};
+
+                char *type = "surface";
+                asset icon_asset(path, type, size);
+                assetMap->insert({currentAssetID, icon_asset});
+            }
+        }
+        currentAssetID++;
     }
 
     loadedAssetsIndex = 0;
@@ -59,7 +61,7 @@ AssetManager::AssetManager()
 
 AssetManager::~AssetManager()
 {
-    for (std::pair<const std::string, asset_t> &asset : *assetMap)
+    for (std::pair<const int, asset_t> &asset : *assetMap)
     {
         if (asset.second.surface)
             SDL_FreeSurface(asset.second.surface);
@@ -80,32 +82,32 @@ void AssetManager::loadAssets()
 
     if (loadedAssetsIndex < totalAssets)
     {
+        asset current_asset = assetMap->at(loadedAssetsIndex);
+        int type;
 
-        auto it = std::next(assetMap->begin(), loadedAssetsIndex);
+        if (strcmp(current_asset.type, "surface") == 0)
+            type = SURFACE;
+        else if (strcmp(current_asset.type, "font") == 0)
+            type = FONT;
+        else if (strcmp(current_asset.type, "audio") == 0)
+            type = MIXCHUNK;
 
-        if (strcmp(it->second.type, "surface") == 0)
-            assetType = SURFACE;
-        else if (strcmp(it->second.type, "font") == 0)
-            assetType = FONT;
-        else if (strcmp(it->second.type, "audio") == 0)
-            assetType = MIXCHUNK;
-
-        switch (assetType)
+        switch (type)
         {
         case SURFACE:
-            loadSurface(it->second);
+            loadSurface(current_asset);
             break;
         case FONT:
-            loadFont(it->second);
+            loadFont(current_asset);
             break;
         case MIXCHUNK:
-            loadAudio(it->second);
+            loadAudio(current_asset);
             break;
         };
 
-        file = it->second.path;
+        file = current_asset.path;
 
-        it->second.isLoaded = true;
+        current_asset.isLoaded = true;
 
         loadedAssetsIndex++;
     }
@@ -141,9 +143,9 @@ void AssetManager::loadFont(asset &asset) {}
 
 void AssetManager::loadAudio(asset &asset) {}
 
-AssetManager::asset *AssetManager::getAsset(const std::string &assetName)
+AssetManager::asset *AssetManager::getAsset(const int asset_id) const
 {
-    auto it = assetMap->find(assetName);
+    auto it = assetMap->find(asset_id);
     if (it != assetMap->end())
     {
         return &it->second;
