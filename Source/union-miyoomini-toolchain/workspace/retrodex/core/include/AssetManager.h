@@ -7,18 +7,19 @@
 class AssetManager : public PokedexAssets
 {
   public:
-    typedef std::unordered_map<int, asset> assetMap_t;
+    typedef std::unordered_map<Asset_ID, asset> assetMap_t;
 
   private:
     static AssetManager instance;
 
-    assetMap_t *assetMap;
-
-    int currentAssetID = 0;
-    double loadedAssetsIndex, totalAssets;
+    int loadedAssetsIndex, totalAssets;
     bool allAssetsLoaded;
 
     std::string file;
+
+    assetMap_t *assetMap;
+
+    Asset_ID currentAssetID;
 
     AssetManager();
     ~AssetManager();

@@ -251,6 +251,29 @@ void PokedexActivityIntro::onRender(SDL_Surface *surf_display, SDL_Renderer *ren
             fileSurface = nullptr;
         }
     }
+
+    if (static_cast<Uint32>(StartTime + 5000) < SDL_GetTicks())
+    {
+        AssetManager::asset *asset = assetManager->getAsset(AssetManager::SURFACE_ABOMASNOW_SPRITE);
+
+        if (!asset->surface)
+        {
+            std::cerr << "assetManager->getAsset(AssetManager::SURFACE_ABOMASNOW_SPRITE) reutrn "
+                         "nullptr \n";
+        }
+        else
+        {
+            SDL_Rect assetRect = {
+                0,
+                0,
+                asset->surface->w,
+                asset->surface->h,
+            };
+
+            // Use SDL_BlitSurface instead of BlitScaled if no scaling is needed
+            SDL_BlitSurface(asset->surface, NULL, surf_display, &assetRect);
+        }
+    }
 }
 
 void PokedexActivityIntro::onFreeze()

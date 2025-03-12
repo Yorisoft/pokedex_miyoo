@@ -29,7 +29,7 @@ class PokedexAssets
         }
     } asset;
 
-    typedef enum Asset_ID
+    enum Asset_ID
     {
         // POKEMON SPRITES
         SURFACE_ABOMASNOW_SPRITE,
@@ -1581,6 +1581,8 @@ class PokedexAssets
         SURFACE_ZWEILOUS_ICON,
         SURFACE_ZYGARDE_ICON,
 
+        ASSET_COUNT,
+
         // MISC
         SURFACE_APP_ICON,
         SURFACE_LIST_ITEM_BACKGROUND_DEFAULT,
@@ -3013,8 +3015,8 @@ class PokedexAssets
         SURFACE_ZINC_ICON,
         SURFACE_ZOOM_LENS_ICON,
 
-        ASSET_COUNT
-    } assetID;
+        // ASSET_COUNT
+    };
 
   protected:
     const std::string POKEMON_ICONS_PATH   = "res/assets/pokemons/icons/",
