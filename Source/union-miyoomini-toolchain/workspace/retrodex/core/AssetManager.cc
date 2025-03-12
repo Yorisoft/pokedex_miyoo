@@ -14,7 +14,7 @@ AssetManager::AssetManager()
     assetMap        = new assetMap_t();
     allAssetsLoaded = false;
     file            = "";
-    currentAssetID  = PokedexAssets::Asset_ID(0);
+    currentAssetID  = Asset_ID(0);
 
     // Add the surfaces I want to this map
     // s = small
@@ -29,15 +29,15 @@ AssetManager::AssetManager()
         { // Ensure it's a file
             if (sprite.path().extension() == ".png")
             {
-                char type[]              = "surface";
+                std::string type         = "surface";
                 std::string path         = sprite.path().string();
                 std::pair<int, int> size = {2, 2};
 
                 asset sprite_asset(path, type, size);
                 assetMap->insert({currentAssetID, sprite_asset});
-                currentAssetID = PokedexAssets::Asset_ID(currentAssetID + 1);
                 std::cout << "Inserted asset: " << currentAssetID << " at path: " << path
                           << std::endl;
+                currentAssetID = Asset_ID(currentAssetID + 1);
             }
         }
     }
@@ -49,21 +49,21 @@ AssetManager::AssetManager()
         { // Ensure it's a file
             if (icon.path().extension() == ".png")
             {
-                char type[]              = "surface";
+                std::string type         = "surface";
                 std::string path         = icon.path().string();
                 std::pair<int, int> size = {2, 2};
 
                 asset icon_asset(path, type, size);
                 assetMap->insert({currentAssetID, icon_asset});
-                currentAssetID = PokedexAssets::Asset_ID(currentAssetID + 1);
                 std::cout << "Inserted asset: " << currentAssetID << " at path: " << path
                           << std::endl;
+                currentAssetID = Asset_ID(currentAssetID + 1);
             }
         }
     }
 
     loadedAssetsIndex = 0;
-    currentAssetID    = PokedexAssets::Asset_ID(0);
+    currentAssetID    = Asset_ID(0);
     totalAssets       = assetMap->size();
 }
 
@@ -88,16 +88,16 @@ void AssetManager::loadAssets()
     };
     int assetType;
 
-    if (loadedAssetsIndex < totalAssets && currentAssetID < PokedexAssets::ASSET_COUNT)
+    if (loadedAssetsIndex < totalAssets && currentAssetID < ASSET_COUNT)
     {
-        asset *current_asset = &assetMap->at(PokedexAssets::Asset_ID(currentAssetID));
+        asset *current_asset = &assetMap->at(Asset_ID(currentAssetID));
         int type;
 
-        if (strcmp(current_asset->type, "surface") == 0)
+        if (current_asset->type == "surface")
             loadSurface(*current_asset);
-        else if (strcmp(current_asset->type, "font") == 0)
+        else if (current_asset->type == "font")
             loadFont(*current_asset);
-        else if (strcmp(current_asset->type, "audio") == 0)
+        else if (current_asset->type == "audio")
             loadAudio(*current_asset);
 
         file = current_asset->path;
@@ -106,14 +106,14 @@ void AssetManager::loadAssets()
 
         loadedAssetsIndex++;
 
-        currentAssetID = PokedexAssets::Asset_ID(currentAssetID + 1);
+        currentAssetID = Asset_ID(currentAssetID + 1);
     }
 
     if (loadedAssetsIndex == totalAssets)
     {
         allAssetsLoaded = true;
 
-        currentAssetID = PokedexAssets::Asset_ID(0);
+        currentAssetID = Asset_ID(0);
     }
 }
 
@@ -147,7 +147,7 @@ void AssetManager::loadAudio(asset &asset) {}
 
 AssetManager::asset *AssetManager::getAsset(const int asset_id) const
 {
-    auto it = assetMap->find(PokedexAssets::Asset_ID(asset_id));
+    auto it = assetMap->find(Asset_ID(asset_id));
     if (it != assetMap->end())
     {
         return &it->second;

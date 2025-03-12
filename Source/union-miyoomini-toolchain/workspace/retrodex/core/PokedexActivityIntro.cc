@@ -254,12 +254,14 @@ void PokedexActivityIntro::onRender(SDL_Surface *surf_display, SDL_Renderer *ren
 
     if (static_cast<Uint32>(StartTime + 5000) < SDL_GetTicks())
     {
-        AssetManager::asset *asset = assetManager->getAsset(AssetManager::SURFACE_ABOMASNOW_SPRITE);
+        AssetManager::asset *asset = assetManager->getAsset(AssetManager::Asset_ID(0));
 
         if (!asset->surface)
         {
             std::cerr << "assetManager->getAsset(AssetManager::SURFACE_ABOMASNOW_SPRITE) reutrn "
                          "nullptr \n";
+            std::cout << "SURFACE_ABOMASNOW_SPRITE value: "
+                      << AssetManager::SURFACE_ABOMASNOW_SPRITE << std::endl;
         }
         else
         {

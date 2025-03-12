@@ -10,7 +10,7 @@ class PokedexAssets
     typedef struct asset_t
     {
         std::string path;
-        char *type;
+        std::string type;
         SDL_Surface *surface = nullptr;
         SDL_Rect size;
         bool isLoaded = false;
@@ -19,7 +19,7 @@ class PokedexAssets
         asset_t();
         asset_t(std::string p) : path(p) {}
         asset_t(std::string p, std::pair<int, int> s) : path(p), size({0, 0, s.first, s.second}) {}
-        asset_t(std::string p, char *t, std::pair<int, int> s)
+        asset_t(std::string p, std::string t, std::pair<int, int> s)
             : path(p), type(t), size({0, 0, s.first, s.second})
         {
         }
