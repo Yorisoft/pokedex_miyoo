@@ -139,7 +139,7 @@ void AssetManager::loadAssets()
             file = current_asset->name;
         }
 
-        if (index > currentAssetCategory.size()) // end of inner map
+        if (index == currentAssetCategory.size()) // end of inner map
         {
             currentAssetType = t_assetType(currentAssetType + 1);
             index            = 0;
