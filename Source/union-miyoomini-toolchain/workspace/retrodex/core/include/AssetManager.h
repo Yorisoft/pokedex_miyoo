@@ -2,34 +2,38 @@
 #define __ASSET_MANAGER__
 
 #include "PokedexAssets.h"
-#include <unordered_map>
 
 class AssetManager : public PokedexAssets
 {
   public:
-    typedef std::unordered_map<Asset_ID, asset> assetMap_t;
+    typedef std::unordered_map<t_assetType, std::unordered_map<t_assetID, t_asset>> t_assetMap;
 
   private:
     static AssetManager instance;
 
-    int loadedAssetsIndex, totalAssets;
+    const std::string POKEMON_ICONS_PATH   = "res/assets/pokemons/icons/",
+                      POKEMON_SPRITES_PATH = "res/assets/pokemons/sprites/";
+
+    int loadedAssets, totalAssets, index;
     bool allAssetsLoaded;
 
     std::string file;
 
-    assetMap_t *assetMap;
+    t_assetMap *assetMap;
 
-    Asset_ID currentAssetID;
+    t_assetType currentAssetType;
+
+    t_assetID currentAssetID;
 
     AssetManager();
     ~AssetManager();
 
   public:
     void loadAssets();
-    void loadSurface(asset &);
-    void loadFont(asset &);
-    void loadAudio(asset &);
-    asset *getAsset(const int) const;
+    void loadSurface(t_asset &);
+    void loadFont(t_asset &);
+    void loadAudio(t_asset &);
+    t_asset *getAsset(const t_assetType, const t_assetID) const;
 
     double getCurrentProgress();
     bool isDoneLoading();

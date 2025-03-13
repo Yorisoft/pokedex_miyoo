@@ -126,9 +126,6 @@ void PokedexActivityIntro::onLoop()
             assetManager->loadAssets();
 
             std::string loadedAssetName = assetManager->getFile().c_str();
-            size_t pos                  = loadedAssetName.find(".png");
-            if (pos != std::string::npos)
-                loadedAssetName.erase(pos, 4);
             /* std::cout << "Current File: " << assetManager->getFile().c_str() << std::endl; */
 
             fileSurface = TTF_RenderUTF8_Blended_Wrapped(fontSurface, loadedAssetName.c_str(),
@@ -254,14 +251,14 @@ void PokedexActivityIntro::onRender(SDL_Surface *surf_display, SDL_Renderer *ren
 
     if (static_cast<Uint32>(StartTime + 5000) < SDL_GetTicks())
     {
-        AssetManager::asset *asset = assetManager->getAsset(AssetManager::Asset_ID(0));
+        AssetManager::t_asset *asset = assetManager->getAsset(
+            AssetManager::POKEMON_SPRITES, AssetManager::SURFACE_BULBASAUR_SPRITE);
 
         if (!asset->surface)
         {
-            std::cerr << "assetManager->getAsset(AssetManager::SURFACE_ABOMASNOW_SPRITE) reutrn "
-                         "nullptr \n";
-            std::cout << "SURFACE_ABOMASNOW_SPRITE value: "
-                      << AssetManager::SURFACE_ABOMASNOW_SPRITE << std::endl;
+            std::cerr << "assetManager->getAsset() reutrn nullptr \n";
+            std::cout << "SURFACE_BULBASAUR_SPRITE value: "
+                      << AssetManager::SURFACE_BULBASAUR_SPRITE << std::endl;
         }
         else
         {

@@ -390,8 +390,8 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface *surf_display, int i)
 {
     int index = offset + i;
 
-    AssetManager::asset *pokemonSpriteAsset =
-        assetManager->getAsset(PokedexAssets::Asset_ID(index));
+    AssetManager::t_asset *pokemonSpriteAsset = assetManager->getAsset(
+        AssetManager::POKEMON_SPRITES, AssetManager::t_assetID(std::stoi(pokemon[0])));
 
     // pokemon Sprite
     pokeEntryRect.x = 50;
@@ -399,7 +399,8 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface *surf_display, int i)
     pokeEntryRect.w = pokemonSpriteAsset->surface->w;
     pokeEntryRect.h = pokemonSpriteAsset->surface->h;
 
-    PokeSurface::onDraw(surf_display, pokemonSpriteAsset->surface, &pokeEntryRect);
+    SDL_BlitSurface(pokemonSpriteAsset->surface, NULL, surf_display, &pokeEntryRect);
+    // PokeSurface::onDraw(surf_display, pokemonSpriteAsset->surface, &pokeEntryRect);
 
     // List item types_1
     pokeEntryType1Rect.x = 20;

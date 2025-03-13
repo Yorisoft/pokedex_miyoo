@@ -6,158 +6,218 @@
 #include "SDL_image.h"
 #include <filesystem>
 #include <iostream>
+#include <vector>
 
 AssetManager AssetManager::instance;
 
 AssetManager::AssetManager()
+    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""), currentAssetID(t_assetID(0))
 {
-    assetMap        = new assetMap_t();
-    allAssetsLoaded = false;
-    file            = "";
-    currentAssetID  = Asset_ID(0);
-
-    // Add the surfaces I want to this map
-    // s = small
-    // m = medium
-    // l = large
-    // f = fullscreen
+    assetMap = new t_assetMap();
 
     // Pokemon Sprites
     for (const auto &sprite : std::filesystem::directory_iterator(POKEMON_SPRITES_PATH))
     {
-        if (std::filesystem::is_regular_file(sprite))
-        { // Ensure it's a file
-            if (sprite.path().extension() == ".png")
-            {
-                std::string type         = "surface";
-                std::string path         = sprite.path().string();
-                std::pair<int, int> size = {2, 2};
+        if (std::filesystem::is_regular_file(sprite) && sprite.path().extension() == ".png")
+        { // Ensure it's a file and a png
+            t_assetType type         = POKEMON_SPRITES;
+            std::string path         = sprite.path().string();
+            std::string name         = sprite.path().stem().string();
+            std::pair<int, int> size = {2, 2};
 
-                asset sprite_asset(path, type, size);
-                assetMap->insert({currentAssetID, sprite_asset});
-                std::cout << "Inserted asset: " << currentAssetID << " at path: " << path
+            if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
+            {
+                t_asset sprite_asset(name, path, type, size);
+
+                (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), sprite_asset);
+
+                std::cout << "Created pokemon sprite asset: ID: " << POKEMON_NAMETOID_MAP.at(name)
+                          << ". name: " << name << std::endl;
+
+                totalAssets++;
+            }
+            else
+            {
+                std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name
                           << std::endl;
-                currentAssetID = Asset_ID(currentAssetID + 1);
             }
         }
     }
 
     // Pokemon Icons
-    for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH))
-    {
-        if (std::filesystem::is_regular_file(icon))
-        { // Ensure it's a file
-            if (icon.path().extension() == ".png")
-            {
-                std::string type         = "surface";
-                std::string path         = icon.path().string();
-                std::pair<int, int> size = {2, 2};
+    /* for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH)) */
+    /* { */
+    /*     if (std::filesystem::is_regular_file(icon) && icon.path().extension() == ".png") */
+    /*     { // Ensure it's a file */
+    /*         t_assetType type         = POKEMON_ICON; */
+    /*         std::string path         = icon.path().string(); */
+    /*         std::string name         = icon.path().stem().string(); */
+    /*         std::pair<int, int> size = {2, 2}; */
 
-                asset icon_asset(path, type, size);
-                assetMap->insert({currentAssetID, icon_asset});
-                std::cout << "Inserted asset: " << currentAssetID << " at path: " << path
-                          << std::endl;
-                currentAssetID = Asset_ID(currentAssetID + 1);
-            }
-        }
-    }
+    /*         if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end()) */
+    /*         { */
+    /*             t_asset icon_asset(name, path, type, size); */
 
-    loadedAssetsIndex = 0;
-    currentAssetID    = Asset_ID(0);
-    totalAssets       = assetMap->size();
+    /*             (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), icon_asset); */
+
+    /*             std::cout << "Created pokemon icon asset: ID: " << POKEMON_NAMETOID_MAP.at(name)
+     */
+    /*                       << ". name: " << name << std::endl; */
+
+    /*             totalAssets++; */
+    /*         } */
+    /*         else */
+    /*         { */
+    /*             std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name */
+    /*                       << std::endl; */
+    /*         } */
+    /*     } */
+    /* } */
+
+    /* currentAssetID   = t_assetID(1); */
+    /* totalAssets      = assetMap->size(); */
+    currentAssetType = POKEMON_SPRITES; // POKEMON_SPRITES == 0
 }
 
 AssetManager::~AssetManager()
 {
-    for (std::pair<const Asset_ID, asset_t> &asset : *assetMap)
+    for (std::pair<const t_assetType, std::unordered_map<t_assetID, t_asset>> &assets : *assetMap)
     {
-        if (asset.second.surface)
-            SDL_FreeSurface(asset.second.surface);
+        for (std::pair<const t_assetID, t_asset> &asset : assets.second)
+        {
+            if (asset.second.surface)
+                SDL_FreeSurface(asset.second.surface);
 
-        asset.second.surface = nullptr;
+            asset.second.surface = nullptr;
+        }
     }
 }
 
 void AssetManager::loadAssets()
 {
-    enum
+    /* typedef enum _assetType */
+    /* { */
+    /*     SOUND_EFFECT, */
+    /*     FONT, */
+    /*     POKEMON_SPRITES, */
+    /*     POKEMON_ICON, */
+    /*     POKEMON_CRY, */
+    /*     ITEMS */
+    /* } t_assetType; */
+
+    if (!allAssetsLoaded)
     {
-        SURFACE,
-        FONT,
-        MIXCHUNK,
-    };
-    int assetType;
+        auto &currentAssetCategory = (*assetMap)[currentAssetType];
+        if (index <= currentAssetCategory.size())
+        {
+            auto it = currentAssetCategory.begin();
+            std::advance(it, index);
+            t_asset *current_asset = &it->second;
+            /* t_asset *current_asset = &currentAssetCategory[currentAssetID]; */
 
-    if (loadedAssetsIndex < totalAssets && currentAssetID < ASSET_COUNT)
-    {
-        asset *current_asset = &assetMap->at(Asset_ID(currentAssetID));
-        int type;
+            switch (current_asset->type)
+            {
+            case POKEMON_SPRITES:
+            case POKEMON_ICON:
+            case ITEMS:
+                loadSurface(*current_asset);
+                break;
+            case SOUND_EFFECT:
+            case POKEMON_CRY:
+                loadAudio(*current_asset);
+                break;
+            case FONT:
+                loadFont(*current_asset);
+                break;
+            }
 
-        if (current_asset->type == "surface")
-            loadSurface(*current_asset);
-        else if (current_asset->type == "font")
-            loadFont(*current_asset);
-        else if (current_asset->type == "audio")
-            loadAudio(*current_asset);
+            current_asset->isLoaded = true;
 
-        file = current_asset->path;
+            loadedAssets++;
+            index++;
 
-        current_asset->isLoaded = true;
+            file = current_asset->name;
+        }
 
-        loadedAssetsIndex++;
+        if (index > currentAssetCategory.size()) // end of inner map
+        {
+            currentAssetType = t_assetType(currentAssetType + 1);
+            index            = 0;
 
-        currentAssetID = Asset_ID(currentAssetID + 1);
-    }
-
-    if (loadedAssetsIndex == totalAssets)
-    {
-        allAssetsLoaded = true;
-
-        currentAssetID = Asset_ID(0);
+            if (currentAssetType >= (*assetMap).size()) // end of out map
+            {
+                allAssetsLoaded = true;
+            }
+        }
     }
 }
 
-void AssetManager::loadSurface(asset &asset)
+void AssetManager::loadSurface(t_asset &asset)
 {
     SDL_Surface *tempSurface = IMG_Load(asset.path.c_str());
     if (!tempSurface)
     {
-        std::cout << "AssetManager::loadAssets() Unable to load temp surface! File: "
+        std::cout << "AssetManager::loadAssets() Unable to load tempSurface! File: "
                   << asset.path.c_str() << ".  SDL Error: " << IMG_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
+    std::cout << "Created tempSurface asset: " << asset.path << std::endl;
 
-    asset.surface = SDL_CreateRGBSurfaceWithFormat(
-        0, asset.size.w * tempSurface->w, asset.size.h * tempSurface->h,
-        tempSurface->format->BitsPerPixel, tempSurface->format->format);
-    if (!asset.surface)
+    SDL_Surface *optimizedSurface =
+        SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
+    if (!optimizedSurface)
     {
         std::cout << "AssetManager::loadAssets() Unable to create surface for "
-                     "asset.surface! SDL Error: "
+                     "optimizedSurface! SDL Error: "
                   << IMG_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
-    SDL_BlitSurface(tempSurface, NULL, asset.surface, NULL);
     SDL_FreeSurface(tempSurface);
+    tempSurface = nullptr;
+
+    asset.surface = SDL_CreateRGBSurfaceWithFormat(
+        0, asset.size.w * optimizedSurface->w, asset.size.h * optimizedSurface->h,
+        optimizedSurface->format->BitsPerPixel, optimizedSurface->format->format);
+
+    SDL_Rect assetSurfaceRect = {
+        0,
+        0,
+        asset.surface->w,
+        asset.surface->h,
+    };
+    SDL_BlitScaled(optimizedSurface, NULL, asset.surface, &assetSurfaceRect);
+    SDL_FreeSurface(optimizedSurface);
+    optimizedSurface = nullptr;
 }
 
-void AssetManager::loadFont(asset &asset) {}
+void AssetManager::loadFont(t_asset &asset) {}
 
-void AssetManager::loadAudio(asset &asset) {}
+void AssetManager::loadAudio(t_asset &asset) {}
 
-AssetManager::asset *AssetManager::getAsset(const int asset_id) const
+AssetManager::t_asset *AssetManager::getAsset(const t_assetType type, const t_assetID id) const
 {
-    auto it = assetMap->find(Asset_ID(asset_id));
-    if (it != assetMap->end())
+    if (assetMap->find(type) != assetMap->end())
     {
-        return &it->second;
+        if ((*assetMap)[type].find(id) != (*assetMap)[type].end())
+        {
+            return &(*assetMap)[type][id];
+        }
+        else
+        {
+            std::cout << "Error: id - " << id << " is not a valid asset id \n";
+        }
     }
+    else
+    {
+        std::cout << "Error: type - " << type << " is not a valid asset map type \n";
+    }
+
     return nullptr;
 }
 
 double AssetManager::getCurrentProgress()
 {
-    return (static_cast<double>(loadedAssetsIndex) / totalAssets * 100);
+    return (static_cast<double>(loadedAssets) / totalAssets * 100);
 }
 
 bool AssetManager::isDoneLoading() { return allAssetsLoaded; }
