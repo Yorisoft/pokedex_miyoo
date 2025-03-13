@@ -48,7 +48,121 @@ class PokedexAssets
 
     typedef enum _assetID
     {
-        //==================================================================================================================
+        //=================================================AUDIO================================================================
+
+        /* // AUDIO */
+        /* AUDIO_BACK_SOUNDEFFECT, */
+        /* AUDIO_LEFT_RIGHT_SOUNDEFFECT, */
+        /* AUDIO_LIST_BACK_SOUNDEFFECT, */
+        /* AUDIO_LIST_START_SOUNDEFFECT, */
+        /* AUDIO_UP_DOWN_SOUNDEFFECT, */
+        /* AUDIO_UP_DOWN_BACK_SOUNDEFFECT, */
+        /* AUDIO_SELECT_1_SOUNDEFFECT, */
+
+        //=================================================MISC================================================================
+
+        /* // MISC */
+        /* SURFACE_APP_ICON, */
+        /* SURFACE_LIST_ITEM_BACKGROUND_DEFAULT, */
+        /* SURFACE_LIST_ITEM_BACKGROUND_SELECTED, */
+        /* SURFACE_POKEMON_GENDER_MALE_ICON, */
+        /* SURFACE_POKEMON_GENDER_FEMALE_ICON, */
+
+        //=================================================FONTS================================================================
+
+        /* // FONT */
+        /* FONT_POKEMON_DPPT, */
+        /* FONT_POKEMON_ADVANCED_BATTLE, */
+
+        //=================================================SCREEN_ASSETS================================================================
+
+        /* // SPLASH SCREEN */
+        /* SURFACE_SPLASH_SCREEN_BACKGROUND, */
+
+        /* // MENU SCREEN */
+        /* SURFACE_MAIN_MENU_BACKGROUND, */
+
+        /* // LIST SCREEN */
+        /* SURFACE_POKEDEX_BACKGROUND, */
+
+        /* // POKEMON INFO SCREEEN */
+        /* SURFACE_EVOLUTION_SCREEN_BACKGROUND, */
+
+        /* // POKEMON STATS SCREEEN */
+        /* SURFACE_STATS_SCREEN_BACKGROUND, */
+
+        /* // POKEMON MOVES SCREEEN */
+        /* SURFACE_MOVES_SCREEN_BACKGROUND, */
+
+        /* // POKEMON LOCATION SCREEEN */
+        /* SURFACE_LOCATION_SCREEN_BACKGROUND, */
+
+        /* // POKEMON EVOLUTION SCREEEN */
+        /* SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_DEFAULT, */
+        /* SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED, */
+
+        /* // POKEMON SETTINGS SCREEEN */
+        /* SURFACE_SETTING_BACKGROUND, */
+        /* SURFACE_SETTING_LIST_ITEM_BACKGROUND, */
+
+        //=================================================ENCOUNTER_ICONS================================================================
+
+        /* // ENCOUNTER ICONS */
+        /* SURFACE_AFFECTION_ICON, */
+        /* SURFACE_BEAUTY_ICON, */
+        /* SURFACE_BRIDGE_SPOTS_ICON, */
+        /* SURFACE_CAVE_SPOTS_ICON, */
+        /* SURFACE_DARK_GRASS_ICON, */
+        /* SURFACE_DAY_ICON, */
+        /* SURFACE_EGG_ICON, */
+        /* SURFACE_GIFT_BIG_ICON, */
+        /* SURFACE_GIFT_EGG_ICON, */
+        /* SURFACE_GIFT_ICON, */
+        /* SURFACE_GRASS_ICON, */
+        /* SURFACE_HAPPINESS_ICON, */
+        /* SURFACE_HEADBUTT_ICON, */
+        /* SURFACE_HELD_ICON_IV_ICON, */
+        /* SURFACE_LEVEL_UP_ICON, */
+        /* SURFACE_LOCATION_ICON, */
+        /* SURFACE_MACHINE_ICON, */
+        /* SURFACE_MORNING_ICON, */
+        /* SURFACE_NIGHT_ICON, */
+        /* SURFACE_RADAR_OFF_ICON, */
+        /* SURFACE_RADAR_ON_ICON, */
+        /* SURFACE_RADIO_HOENN_ICON, */
+        /* SURFACE_RADIO_OFF_ICON, */
+        /* SURFACE_RADIO_SINNOH_ICON, */
+        /* SURFACE_ROCK_SMASH_ICON, */
+        /* SURFACE_SEASON_AUTUMN_ICON, */
+        /* SURFACE_SEASON_SPRING_ICON, */
+        /* SURFACE_SEASON_SUMMER_ICON, */
+        /* SURFACE_SEASON_WINTER_ICON, */
+        /* SURFACE_SHED_ICON, */
+        /* SURFACE_SLOT2_EMERALD_ICON, */
+        /* SURFACE_SLOT2_FIRERED_ICON, */
+        /* SURFACE_SLOT2_LEAFGREEN_ICON, */
+        /* SURFACE_SLOT2_NONE_ICON, */
+        /* SURFACE_SLOT2_RUBY_ICON, */
+        /* SURFACE_SLOT2_SAPPHIRE_ICON, */
+        /* SURFACE_SPIN_ICON, */
+        /* SURFACE_STADIUM_SURFING_PIKACHU_ICON, */
+        /* SURFACE_STATS_ATK_ICON, */
+        /* SURFACE_STATS_DEF_ICON, */
+        /* SURFACE_SWARM_NO_ICON, */
+        /* SURFACE_SWARM_YES_ICON, */
+        /* SURFACE_TIME_DAY_ICON, */
+        /* SURFACE_TIME_MORNING_ICON, */
+        /* SURFACE_TIME_NIGHT_ICON, */
+        /* SURFACE_TRADE_ICON, */
+        /* SURFACE_TRADE_NA_ICON, */
+        /* SURFACE_TUTOR_ICON, */
+        /* SURFACE_UNKNOWN_ICON, */
+        /* SURFACE_USE_ITEM_ICON, */
+        /* SURFACE_VOLT_TACKLE_PIKACHU_ICON, */
+        /* SURFACE_WATER_SPOTS_ICON, */
+        /* SURFACE_WATER_ICON, */
+
+        //====================================================POKEMON_SPRITES==============================================================
 
         // Kanto Pokémon (Generation 1) - National Dex IDs 1–151
         // =========================================================
@@ -714,9 +828,8 @@ class PokedexAssets
         SURFACE_MELOETTA_ARIA_SPRITE        = 648, // Meloetta
         SURFACE_GENESECT_SPRITE             = 649, // Genesect
 
-        //==================================================================================================================
+        //====================================================POKEMON_ICONS==============================================================
 
-        // POKEMON SURFACE ICON
         // Kanto Pokémon (Generation 1) - National Dex IDs 1–151
         // =========================================================
         SURFACE_BULBASAUR_ICON  = 1,   // Bulbasaur (#001)
@@ -1381,63 +1494,6 @@ class PokedexAssets
         SURFACE_MELOETTAARIA_ICON         = 648, // Meloetta
         SURFACE_GENESECT_ICON             = 649, // Genesect
 
-        //=================================================AUDIO================================================================
-
-        /* // AUDIO */
-        /* AUDIO_BACK_SOUNDEFFECT, */
-        /* AUDIO_LEFT_RIGHT_SOUNDEFFECT, */
-        /* AUDIO_LIST_BACK_SOUNDEFFECT, */
-        /* AUDIO_LIST_START_SOUNDEFFECT, */
-        /* AUDIO_UP_DOWN_SOUNDEFFECT, */
-        /* AUDIO_UP_DOWN_BACK_SOUNDEFFECT, */
-        /* AUDIO_SELECT_1_SOUNDEFFECT, */
-
-        //=================================================MISC================================================================
-
-        /* // MISC */
-        /* SURFACE_APP_ICON, */
-        /* SURFACE_LIST_ITEM_BACKGROUND_DEFAULT, */
-        /* SURFACE_LIST_ITEM_BACKGROUND_SELECTED, */
-        /* SURFACE_POKEMON_GENDER_MALE_ICON, */
-        /* SURFACE_POKEMON_GENDER_FEMALE_ICON, */
-
-        //=================================================FONTS================================================================
-
-        /* // FONT */
-        /* FONT_POKEMON_DPPT, */
-        /* FONT_POKEMON_ADVANCED_BATTLE, */
-
-        //=================================================SCREEN_ASSETS================================================================
-
-        /* // SPLASH SCREEN */
-        /* SURFACE_SPLASH_SCREEN_BACKGROUND, */
-
-        /* // MENU SCREEN */
-        /* SURFACE_MAIN_MENU_BACKGROUND, */
-
-        /* // LIST SCREEN */
-        /* SURFACE_POKEDEX_BACKGROUND, */
-
-        /* // POKEMON INFO SCREEEN */
-        /* SURFACE_EVOLUTION_SCREEN_BACKGROUND, */
-
-        /* // POKEMON STATS SCREEEN */
-        /* SURFACE_STATS_SCREEN_BACKGROUND, */
-
-        /* // POKEMON MOVES SCREEEN */
-        /* SURFACE_MOVES_SCREEN_BACKGROUND, */
-
-        /* // POKEMON LOCATION SCREEEN */
-        /* SURFACE_LOCATION_SCREEN_BACKGROUND, */
-
-        /* // POKEMON EVOLUTION SCREEEN */
-        /* SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_DEFAULT, */
-        /* SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED, */
-
-        /* // POKEMON SETTINGS SCREEEN */
-        /* SURFACE_SETTING_BACKGROUND, */
-        /* SURFACE_SETTING_LIST_ITEM_BACKGROUND, */
-
         //=================================================POKEMON_TYPES================================================================
 
         /* // TYPES SPRITES */
@@ -1462,63 +1518,6 @@ class PokedexAssets
         /* SURFACE_STATUS_SPRITE, */
         /* SURFACE_STEEL_SPRITE, */
         /* SURFACE_WATER_SPRITE, */
-
-        //=================================================ENCOUNTER_ICONS================================================================
-
-        /* // ENCOUNTER ICONS */
-        /* SURFACE_AFFECTION_ICON, */
-        /* SURFACE_BEAUTY_ICON, */
-        /* SURFACE_BRIDGE_SPOTS_ICON, */
-        /* SURFACE_CAVE_SPOTS_ICON, */
-        /* SURFACE_DARK_GRASS_ICON, */
-        /* SURFACE_DAY_ICON, */
-        /* SURFACE_EGG_ICON, */
-        /* SURFACE_GIFT_BIG_ICON, */
-        /* SURFACE_GIFT_EGG_ICON, */
-        /* SURFACE_GIFT_ICON, */
-        /* SURFACE_GRASS_ICON, */
-        /* SURFACE_HAPPINESS_ICON, */
-        /* SURFACE_HEADBUTT_ICON, */
-        /* SURFACE_HELD_ICON_IV_ICON, */
-        /* SURFACE_LEVEL_UP_ICON, */
-        /* SURFACE_LOCATION_ICON, */
-        /* SURFACE_MACHINE_ICON, */
-        /* SURFACE_MORNING_ICON, */
-        /* SURFACE_NIGHT_ICON, */
-        /* SURFACE_RADAR_OFF_ICON, */
-        /* SURFACE_RADAR_ON_ICON, */
-        /* SURFACE_RADIO_HOENN_ICON, */
-        /* SURFACE_RADIO_OFF_ICON, */
-        /* SURFACE_RADIO_SINNOH_ICON, */
-        /* SURFACE_ROCK_SMASH_ICON, */
-        /* SURFACE_SEASON_AUTUMN_ICON, */
-        /* SURFACE_SEASON_SPRING_ICON, */
-        /* SURFACE_SEASON_SUMMER_ICON, */
-        /* SURFACE_SEASON_WINTER_ICON, */
-        /* SURFACE_SHED_ICON, */
-        /* SURFACE_SLOT2_EMERALD_ICON, */
-        /* SURFACE_SLOT2_FIRERED_ICON, */
-        /* SURFACE_SLOT2_LEAFGREEN_ICON, */
-        /* SURFACE_SLOT2_NONE_ICON, */
-        /* SURFACE_SLOT2_RUBY_ICON, */
-        /* SURFACE_SLOT2_SAPPHIRE_ICON, */
-        /* SURFACE_SPIN_ICON, */
-        /* SURFACE_STADIUM_SURFING_PIKACHU_ICON, */
-        /* SURFACE_STATS_ATK_ICON, */
-        /* SURFACE_STATS_DEF_ICON, */
-        /* SURFACE_SWARM_NO_ICON, */
-        /* SURFACE_SWARM_YES_ICON, */
-        /* SURFACE_TIME_DAY_ICON, */
-        /* SURFACE_TIME_MORNING_ICON, */
-        /* SURFACE_TIME_NIGHT_ICON, */
-        /* SURFACE_TRADE_ICON, */
-        /* SURFACE_TRADE_NA_ICON, */
-        /* SURFACE_TUTOR_ICON, */
-        /* SURFACE_UNKNOWN_ICON, */
-        /* SURFACE_USE_ITEM_ICON, */
-        /* SURFACE_VOLT_TACKLE_PIKACHU_ICON, */
-        /* SURFACE_WATER_SPOTS_ICON, */
-        /* SURFACE_WATER_ICON, */
 
         //=================================================POKEMON_CRY================================================================
 
@@ -2831,672 +2830,6 @@ class PokedexAssets
 
         ASSET_COUNT,
     } t_assetID;
-
-    const std::unordered_map<std::string, t_assetID> POKEMON_NAMETOID_MAP = {
-        /* Kanto pokémon (generation 1 */
-        /* ======================== */
-        {"bulbasaur", SURFACE_BULBASAUR_SPRITE},
-        {"ivysaur", SURFACE_IVYSAUR_SPRITE},
-        {"venusaur", SURFACE_VENUSAUR_SPRITE},
-        {"charmander", SURFACE_CHARMANDER_SPRITE},
-        {"charmeleon", SURFACE_CHARMELEON_SPRITE},
-        {"charizard", SURFACE_CHARIZARD_SPRITE},
-        {"squirtle", SURFACE_SQUIRTLE_SPRITE},
-        {"wartortle", SURFACE_WARTORTLE_SPRITE},
-        {"blastoise", SURFACE_BLASTOISE_SPRITE},
-        {"caterpie", SURFACE_CATERPIE_SPRITE},
-        {"metapod", SURFACE_METAPOD_SPRITE},
-        {"butterfree", SURFACE_BUTTERFREE_SPRITE},
-        {"weedle", SURFACE_WEEDLE_SPRITE},
-        {"kakuna", SURFACE_KAKUNA_SPRITE},
-        {"beedrill", SURFACE_BEEDRILL_SPRITE},
-        {"pidgey", SURFACE_PIDGEY_SPRITE},
-        {"pidgeotto", SURFACE_PIDGEOTTO_SPRITE},
-        {"pidgeot", SURFACE_PIDGEOT_SPRITE},
-        {"rattata", SURFACE_RATTATA_SPRITE},
-        {"raticate", SURFACE_RATICATE_SPRITE},
-        {"spearow", SURFACE_SPEAROW_SPRITE},
-        {"fearow", SURFACE_FEAROW_SPRITE},
-        {"ekans", SURFACE_EKANS_SPRITE},
-        {"arbok", SURFACE_ARBOK_SPRITE},
-        {"pikachu", SURFACE_PIKACHU_SPRITE},
-        {"raichu", SURFACE_RAICHU_SPRITE},
-        {"sandshrew", SURFACE_SANDSHREW_SPRITE},
-        {"sandslash", SURFACE_SANDSLASH_SPRITE},
-        {"nidoran-f", SURFACE_NIDORAN_F_SPRITE},
-        {"nidorina", SURFACE_NIDORINA_SPRITE},
-        {"nidoqueen", SURFACE_NIDOQUEEN_SPRITE},
-        {"nidoran-m", SURFACE_NIDORAN_M_SPRITE},
-        {"nidorino", SURFACE_NIDORINO_SPRITE},
-        {"nidoking", SURFACE_NIDOKING_SPRITE},
-        {"clefairy", SURFACE_CLEFAIRY_SPRITE},
-        {"clefable", SURFACE_CLEFABLE_SPRITE},
-        {"vulpix", SURFACE_VULPIX_SPRITE},
-        {"ninetales", SURFACE_NINETALES_SPRITE},
-        {"jigglypuff", SURFACE_JIGGLYPUFF_SPRITE},
-        {"wigglytuff", SURFACE_WIGGLYTUFF_SPRITE},
-        {"zubat", SURFACE_ZUBAT_SPRITE},
-        {"golbat", SURFACE_GOLBAT_SPRITE},
-        {"oddish", SURFACE_ODDISH_SPRITE},
-        {"gloom", SURFACE_GLOOM_SPRITE},
-        {"vileplume", SURFACE_VILEPLUME_SPRITE},
-        {"paras", SURFACE_PARAS_SPRITE},
-        {"parasect", SURFACE_PARASECT_SPRITE},
-        {"venonat", SURFACE_VENONAT_SPRITE},
-        {"venomoth", SURFACE_VENOMOTH_SPRITE},
-        {"diglett", SURFACE_DIGLETT_SPRITE},
-        {"dugtrio", SURFACE_DUGTRIO_SPRITE},
-        {"meowth", SURFACE_MEOWTH_SPRITE},
-        {"persian", SURFACE_PERSIAN_SPRITE},
-        {"psyduck", SURFACE_PSYDUCK_SPRITE},
-        {"golduck", SURFACE_GOLDUCK_SPRITE},
-        {"mankey", SURFACE_MANKEY_SPRITE},
-        {"primeape", SURFACE_PRIMEAPE_SPRITE},
-        {"growlithe", SURFACE_GROWLITHE_SPRITE},
-        {"arcanine", SURFACE_ARCANINE_SPRITE},
-        {"poliwag", SURFACE_POLIWAG_SPRITE},
-        {"poliwhirl", SURFACE_POLIWHIRL_SPRITE},
-        {"poliwrath", SURFACE_POLIWRATH_SPRITE},
-        {"abra", SURFACE_ABRA_SPRITE},
-        {"kadabra", SURFACE_KADABRA_SPRITE},
-        {"alakazam", SURFACE_ALAKAZAM_SPRITE},
-        {"machop", SURFACE_MACHOP_SPRITE},
-        {"machoke", SURFACE_MACHOKE_SPRITE},
-        {"machamp", SURFACE_MACHAMP_SPRITE},
-        {"bellsprout", SURFACE_BELLSPROUT_SPRITE},
-        {"weepinbell", SURFACE_WEEPINBELL_SPRITE},
-        {"victreebel", SURFACE_VICTREEBEL_SPRITE},
-        {"tentacool", SURFACE_TENTACOOL_SPRITE},
-        {"tentacruel", SURFACE_TENTACRUEL_SPRITE},
-        {"geodude", SURFACE_GEODUDE_SPRITE},
-        {"graveler", SURFACE_GRAVELER_SPRITE},
-        {"golem", SURFACE_GOLEM_SPRITE},
-        {"ponyta", SURFACE_PONYTA_SPRITE},
-        {"rapidash", SURFACE_RAPIDASH_SPRITE},
-        {"slowpoke", SURFACE_SLOWPOKE_SPRITE},
-        {"slowbro", SURFACE_SLOWBRO_SPRITE},
-        {"magnemite", SURFACE_MAGNEMITE_SPRITE},
-        {"magneton", SURFACE_MAGNETON_SPRITE},
-        {"farfetchd", SURFACE_FARFETCHD_SPRITE},
-        {"doduo", SURFACE_DODUO_SPRITE},
-        {"dodrio", SURFACE_DODRIO_SPRITE},
-        {"seel", SURFACE_SEEL_SPRITE},
-        {"dewgong", SURFACE_DEWGONG_SPRITE},
-        {"grimer", SURFACE_GRIMER_SPRITE},
-        {"muk", SURFACE_MUK_SPRITE},
-        {"shellder", SURFACE_SHELLDER_SPRITE},
-        {"cloyster", SURFACE_CLOYSTER_SPRITE},
-        {"gastly", SURFACE_GASTLY_SPRITE},
-        {"haunter", SURFACE_HAUNTER_SPRITE},
-        {"gengar", SURFACE_GENGAR_SPRITE},
-        {"onix", SURFACE_ONIX_SPRITE},
-        {"drowzee", SURFACE_DROWZEE_SPRITE},
-        {"hypno", SURFACE_HYPNO_SPRITE},
-        {"krabby", SURFACE_KRABBY_SPRITE},
-        {"kingler", SURFACE_KINGLER_SPRITE},
-        {"voltorb", SURFACE_VOLTORB_SPRITE},
-        {"electrode", SURFACE_ELECTRODE_SPRITE},
-        {"exeggcute", SURFACE_EXEGGCUTE_SPRITE},
-        {"exeggutor", SURFACE_EXEGGUTOR_SPRITE},
-        {"cubone", SURFACE_CUBONE_SPRITE},
-        {"marowak", SURFACE_MAROWAK_SPRITE},
-        {"hitmonlee", SURFACE_HITMONLEE_SPRITE},
-        {"hitmonchan", SURFACE_HITMONCHAN_SPRITE},
-        {"lickitung", SURFACE_LICKITUNG_SPRITE},
-        {"koffing", SURFACE_KOFFING_SPRITE},
-        {"weezing", SURFACE_WEEZING_SPRITE},
-        {"rhyhorn", SURFACE_RHYHORN_SPRITE},
-        {"rhydon", SURFACE_RHYDON_SPRITE},
-        {"chansey", SURFACE_CHANSEY_SPRITE},
-        {"tangela", SURFACE_TANGELA_SPRITE},
-        {"kangaskhan", SURFACE_KANGASKHAN_SPRITE},
-        {"horsea", SURFACE_HORSEA_SPRITE},
-        {"seadra", SURFACE_SEADRA_SPRITE},
-        {"goldeen", SURFACE_GOLDEEN_SPRITE},
-        {"seaking", SURFACE_SEAKING_SPRITE},
-        {"staryu", SURFACE_STARYU_SPRITE},
-        {"starmie", SURFACE_STARMIE_SPRITE},
-        {"mr-mime", SURFACE_MRMIME_SPRITE},
-        {"scyther", SURFACE_SCYTHER_SPRITE},
-        {"jynx", SURFACE_JYNX_SPRITE},
-        {"electabuzz", SURFACE_ELECTABUZZ_SPRITE},
-        {"magmar", SURFACE_MAGMAR_SPRITE},
-        {"pinsir", SURFACE_PINSIR_SPRITE},
-        {"tauros", SURFACE_TAUROS_SPRITE},
-        {"magikarp", SURFACE_MAGIKARP_SPRITE},
-        {"gyarados", SURFACE_GYARADOS_SPRITE},
-        {"lapras", SURFACE_LAPRAS_SPRITE},
-        {"ditto", SURFACE_DITTO_SPRITE},
-        {"eevee", SURFACE_EEVEE_SPRITE},
-        {"vaporeon", SURFACE_VAPOREON_SPRITE},
-        {"jolteon", SURFACE_JOLTEON_SPRITE},
-        {"flareon", SURFACE_FLAREON_SPRITE},
-        {"porygon", SURFACE_PORYGON_SPRITE},
-        {"omanyte", SURFACE_OMANYTE_SPRITE},
-        {"omastar", SURFACE_OMASTAR_SPRITE},
-        {"kabuto", SURFACE_KABUTO_SPRITE},
-        {"kabutops", SURFACE_KABUTOPS_SPRITE},
-        {"aerodactyl", SURFACE_AERODACTYL_SPRITE},
-        {"snorlax", SURFACE_SNORLAX_SPRITE},
-        {"articuno", SURFACE_ARTICUNO_SPRITE},
-        {"zapdos", SURFACE_ZAPDOS_SPRITE},
-        {"moltres", SURFACE_MOLTRES_SPRITE},
-        {"dratini", SURFACE_DRATINI_SPRITE},
-        {"dragonair", SURFACE_DRAGONAIR_SPRITE},
-        {"dragonite", SURFACE_DRAGONITE_SPRITE},
-        {"mewtwo", SURFACE_MEWTWO_SPRITE},
-        {"mew", SURFACE_MEW_SPRITE},
-
-        /* Johto pokémon (generation 2 */
-        /* ======================== */
-        {"chikorita", SURFACE_CHIKORITA_SPRITE},
-        {"bayleef", SURFACE_BAYLEEF_SPRITE},
-        {"meganium", SURFACE_MEGANIUM_SPRITE},
-        {"cyndaquil", SURFACE_CYNDAQUIL_SPRITE},
-        {"quilava", SURFACE_QUILAVA_SPRITE},
-        {"typhlosion", SURFACE_TYPHLOSION_SPRITE},
-        {"totodile", SURFACE_TOTODILE_SPRITE},
-        {"croconaw", SURFACE_CROCONAW_SPRITE},
-        {"feraligatr", SURFACE_FERALIGATR_SPRITE},
-        {"sentret", SURFACE_SENTRET_SPRITE},
-        {"furret", SURFACE_FURRET_SPRITE},
-        {"hoothoot", SURFACE_HOOTHOOT_SPRITE},
-        {"noctowl", SURFACE_NOCTOWL_SPRITE},
-        {"ledyba", SURFACE_LEDYBA_SPRITE},
-        {"ledian", SURFACE_LEDIAN_SPRITE},
-        {"spinarak", SURFACE_SPINARAK_SPRITE},
-        {"ariados", SURFACE_ARIADOS_SPRITE},
-        {"crobat", SURFACE_CROBAT_SPRITE},
-        {"chinchou", SURFACE_CHINCHOU_SPRITE},
-        {"lanturn", SURFACE_LANTURN_SPRITE},
-        {"pichu", SURFACE_PICHU_SPRITE},
-        {"cleffa", SURFACE_CLEFFA_SPRITE},
-        {"igglybuff", SURFACE_IGGLYBUFF_SPRITE},
-        {"togepi", SURFACE_TOGEPI_SPRITE},
-        {"togetic", SURFACE_TOGETIC_SPRITE},
-        {"natu", SURFACE_NATU_SPRITE},
-        {"xatu", SURFACE_XATU_SPRITE},
-        {"mareep", SURFACE_MAREEP_SPRITE},
-        {"flaaffy", SURFACE_FLAAFFY_SPRITE},
-        {"ampharos", SURFACE_AMPHAROS_SPRITE},
-        {"bellossom", SURFACE_BELLOSSOM_SPRITE},
-        {"marill", SURFACE_MARILL_SPRITE},
-        {"azumarill", SURFACE_AZUMARILL_SPRITE},
-        {"sudowoodo", SURFACE_SUDOWOODO_SPRITE},
-        {"politoed", SURFACE_POLITOED_SPRITE},
-        {"hoppip", SURFACE_HOPPIP_SPRITE},
-        {"skiploom", SURFACE_SKIPLOOM_SPRITE},
-        {"jumpluff", SURFACE_JUMPLUFF_SPRITE},
-        {"aipom", SURFACE_AIPOM_SPRITE},
-        {"sunkern", SURFACE_SUNKERN_SPRITE},
-        {"sunflora", SURFACE_SUNFLORA_SPRITE},
-        {"yanma", SURFACE_YANMA_SPRITE},
-        {"wooper", SURFACE_WOOPER_SPRITE},
-        {"quagsire", SURFACE_QUAGSIRE_SPRITE},
-        {"espeon", SURFACE_ESPEON_SPRITE},
-        {"umbreon", SURFACE_UMBREON_SPRITE},
-        {"murkrow", SURFACE_MURKROW_SPRITE},
-        {"slowking", SURFACE_SLOWKING_SPRITE},
-        {"misdreavus", SURFACE_MISDREAVUS_SPRITE},
-        {"unown", SURFACE_UNOWN_SPRITE},
-        {"wobbuffet", SURFACE_WOBBUFFET_SPRITE},
-        {"girafarig", SURFACE_GIRAFARIG_SPRITE},
-        {"pineco", SURFACE_PINECO_SPRITE},
-        {"forretress", SURFACE_FORRETRESS_SPRITE},
-        {"dunsparce", SURFACE_DUNSPARCE_SPRITE},
-        {"gligar", SURFACE_GLIGAR_SPRITE},
-        {"steelix", SURFACE_STEELIX_SPRITE},
-        {"snubbull", SURFACE_SNUBBULL_SPRITE},
-        {"granbull", SURFACE_GRANBULL_SPRITE},
-        {"qwilfish", SURFACE_QWILFISH_SPRITE},
-        {"scizor", SURFACE_SCIZOR_SPRITE},
-        {"shuckle", SURFACE_SHUCKLE_SPRITE},
-        {"heracross", SURFACE_HERACROSS_SPRITE},
-        {"sneasel", SURFACE_SNEASEL_SPRITE},
-        {"teddiursa", SURFACE_TEDDIURSA_SPRITE},
-        {"ursaring", SURFACE_URSARING_SPRITE},
-        {"slugma", SURFACE_SLUGMA_SPRITE},
-        {"magcargo", SURFACE_MAGCARGO_SPRITE},
-        {"swinub", SURFACE_SWINUB_SPRITE},
-        {"piloswine", SURFACE_PILOSWINE_SPRITE},
-        {"corsola", SURFACE_CORSOLA_SPRITE},
-        {"remoraid", SURFACE_REMORAID_SPRITE},
-        {"octillery", SURFACE_OCTILLERY_SPRITE},
-        {"delibird", SURFACE_DELIBIRD_SPRITE},
-        {"mantine", SURFACE_MANTINE_SPRITE},
-        {"skarmory", SURFACE_SKARMORY_SPRITE},
-        {"houndour", SURFACE_HOUNDOUR_SPRITE},
-        {"houndoom", SURFACE_HOUNDOOM_SPRITE},
-        {"kingdra", SURFACE_KINGDRA_SPRITE},
-        {"phanpy", SURFACE_PHANPY_SPRITE},
-        {"donphan", SURFACE_DONPHAN_SPRITE},
-        {"porygon2", SURFACE_PORYGON2_SPRITE},
-        {"stantler", SURFACE_STANTLER_SPRITE},
-        {"smeargle", SURFACE_SMEARGLE_SPRITE},
-        {"tyrogue", SURFACE_TYROGUE_SPRITE},
-        {"hitmontop", SURFACE_HITMONTOP_SPRITE},
-        {"smoochum", SURFACE_SMOOCHUM_SPRITE},
-        {"elekid", SURFACE_ELEKID_SPRITE},
-        {"magby", SURFACE_MAGBY_SPRITE},
-        {"miltank", SURFACE_MILTANK_SPRITE},
-        {"blissey", SURFACE_BLISSEY_SPRITE},
-        {"raikou", SURFACE_RAIKOU_SPRITE},
-        {"entei", SURFACE_ENTEI_SPRITE},
-        {"suicune", SURFACE_SUICUNE_SPRITE},
-        {"larvitar", SURFACE_LARVITAR_SPRITE},
-        {"pupitar", SURFACE_PUPITAR_SPRITE},
-        {"tyranitar", SURFACE_TYRANITAR_SPRITE},
-        {"lugia", SURFACE_LUGIA_SPRITE},
-        {"ho-oh", SURFACE_HOOH_SPRITE},
-        {"celebi", SURFACE_CELEBI_SPRITE},
-
-        /* Hoenn pokémon (generation 3 */
-        /* ======================== */
-        {"treecko", SURFACE_TREECKO_SPRITE},
-        {"grovyle", SURFACE_GROVYLE_SPRITE},
-        {"sceptile", SURFACE_SCEPTILE_SPRITE},
-        {"torchic", SURFACE_TORCHIC_SPRITE},
-        {"combusken", SURFACE_COMBUSKEN_SPRITE},
-        {"blaziken", SURFACE_BLAZIKEN_SPRITE},
-        {"mudkip", SURFACE_MUDKIP_SPRITE},
-        {"marshtomp", SURFACE_MARSHTOMP_SPRITE},
-        {"swampert", SURFACE_SWAMPERT_SPRITE},
-        {"poochyena", SURFACE_POOCHYENA_SPRITE},
-        {"mightyena", SURFACE_MIGHTYENA_SPRITE},
-        {"zigzagoon", SURFACE_ZIGZAGOON_SPRITE},
-        {"linoone", SURFACE_LINOONE_SPRITE},
-        {"wurmple", SURFACE_WURMPLE_SPRITE},
-        {"silcoon", SURFACE_SILCOON_SPRITE},
-        {"beautifly", SURFACE_BEAUTIFLY_SPRITE},
-        {"cascoon", SURFACE_CASCOON_SPRITE},
-        {"dustox", SURFACE_DUSTOX_SPRITE},
-        {"lotad", SURFACE_LOTAD_SPRITE},
-        {"lombre", SURFACE_LOMBRE_SPRITE},
-        {"ludicolo", SURFACE_LUDICOLO_SPRITE},
-        {"seedot", SURFACE_SEEDOT_SPRITE},
-        {"nuzleaf", SURFACE_NUZLEAF_SPRITE},
-        {"shiftry", SURFACE_SHIFTRY_SPRITE},
-        {"taillow", SURFACE_TAILLOW_SPRITE},
-        {"swellow", SURFACE_SWELLOW_SPRITE},
-        {"wingull", SURFACE_WINGULL_SPRITE},
-        {"pelipper", SURFACE_PELIPPER_SPRITE},
-        {"ralts", SURFACE_RALTS_SPRITE},
-        {"kirlia", SURFACE_KIRLIA_SPRITE},
-        {"gardevoir", SURFACE_GARDEVOIR_SPRITE},
-        {"surskit", SURFACE_SURSKIT_SPRITE},
-        {"masquerain", SURFACE_MASQUERAIN_SPRITE},
-        {"shroomish", SURFACE_SHROOMISH_SPRITE},
-        {"breloom", SURFACE_BRELOOM_SPRITE},
-        {"slakoth", SURFACE_SLAKOTH_SPRITE},
-        {"vigoroth", SURFACE_VIGOROTH_SPRITE},
-        {"slaking", SURFACE_SLAKING_SPRITE},
-        {"nincada", SURFACE_NINCADA_SPRITE},
-        {"ninjask", SURFACE_NINJASK_SPRITE},
-        {"shedinja", SURFACE_SHEDINJA_SPRITE},
-        {"whismur", SURFACE_WHISMUR_SPRITE},
-        {"loudred", SURFACE_LOUDRED_SPRITE},
-        {"exploud", SURFACE_EXPLOUD_SPRITE},
-        {"makuhita", SURFACE_MAKUHITA_SPRITE},
-        {"hariyama", SURFACE_HARIYAMA_SPRITE},
-        {"azurill", SURFACE_AZURILL_SPRITE},
-        {"nosepass", SURFACE_NOSEPASS_SPRITE},
-        {"skitty", SURFACE_SKITTY_SPRITE},
-        {"delcatty", SURFACE_DELCATTY_SPRITE},
-        {"sableye", SURFACE_SABLEYE_SPRITE},
-        {"mawile", SURFACE_MAWILE_SPRITE},
-        {"aron", SURFACE_ARON_SPRITE},
-        {"lairon", SURFACE_LAIRON_SPRITE},
-        {"aggron", SURFACE_AGGRON_SPRITE},
-        {"meditite", SURFACE_MEDITITE_SPRITE},
-        {"medicham", SURFACE_MEDICHAM_SPRITE},
-        {"electrike", SURFACE_ELECTRIKE_SPRITE},
-        {"manectric", SURFACE_MANECTRIC_SPRITE},
-        {"plusle", SURFACE_PLUSLE_SPRITE},
-        {"minun", SURFACE_MINUN_SPRITE},
-        {"volbeat", SURFACE_VOLBEAT_SPRITE},
-        {"illumise", SURFACE_ILLUMISE_SPRITE},
-        {"roselia", SURFACE_ROSELIA_SPRITE},
-        {"gulpin", SURFACE_GULPIN_SPRITE},
-        {"swalot", SURFACE_SWALOT_SPRITE},
-        {"carvanha", SURFACE_CARVANHA_SPRITE},
-        {"sharpedo", SURFACE_SHARPEDO_SPRITE},
-        {"wailmer", SURFACE_WAILMER_SPRITE},
-        {"wailord", SURFACE_WAILORD_SPRITE},
-        {"numel", SURFACE_NUMEL_SPRITE},
-        {"camerupt", SURFACE_CAMERUPT_SPRITE},
-        {"torkoal", SURFACE_TORKOAL_SPRITE},
-        {"spoink", SURFACE_SPOINK_SPRITE},
-        {"grumpig", SURFACE_GRUMPIG_SPRITE},
-        {"spinda", SURFACE_SPINDA_SPRITE},
-        {"trapinch", SURFACE_TRAPINCH_SPRITE},
-        {"vibrava", SURFACE_VIBRAVA_SPRITE},
-        {"flygon", SURFACE_FLYGON_SPRITE},
-        {"cacnea", SURFACE_CACNEA_SPRITE},
-        {"cacturne", SURFACE_CACTURNE_SPRITE},
-        {"swablu", SURFACE_SWABLU_SPRITE},
-        {"altaria", SURFACE_ALTARIA_SPRITE},
-        {"zangoose", SURFACE_ZANGOOSE_SPRITE},
-        {"seviper", SURFACE_SEVIPER_SPRITE},
-        {"lunatone", SURFACE_LUNATONE_SPRITE},
-        {"solrock", SURFACE_SOLROCK_SPRITE},
-        {"barboach", SURFACE_BARBOACH_SPRITE},
-        {"whiscash", SURFACE_WHISCASH_SPRITE},
-        {"corphish", SURFACE_CORPHISH_SPRITE},
-        {"crawdaunt", SURFACE_CRAWDAUNT_SPRITE},
-        {"baltoy", SURFACE_BALTOY_SPRITE},
-        {"claydol", SURFACE_CLAYDOL_SPRITE},
-        {"lileep", SURFACE_LILEEP_SPRITE},
-        {"cradily", SURFACE_CRADILY_SPRITE},
-        {"anorith", SURFACE_ANORITH_SPRITE},
-        {"armaldo", SURFACE_ARMALDO_SPRITE},
-        {"feebas", SURFACE_FEEBAS_SPRITE},
-        {"milotic", SURFACE_MILOTIC_SPRITE},
-        {"castform", SURFACE_CASTFORM_SPRITE},
-        {"kecleon", SURFACE_KECLEON_SPRITE},
-        {"shuppet", SURFACE_SHUPPET_SPRITE},
-        {"banette", SURFACE_BANETTE_SPRITE},
-        {"duskull", SURFACE_DUSKULL_SPRITE},
-        {"dusclops", SURFACE_DUSCLOPS_SPRITE},
-        {"tropius", SURFACE_TROPIUS_SPRITE},
-        {"chimecho", SURFACE_CHIMECHO_SPRITE},
-        {"absol", SURFACE_ABSOL_SPRITE},
-        {"wynaut", SURFACE_WYNAUT_SPRITE},
-        {"snorunt", SURFACE_SNORUNT_SPRITE},
-        {"glalie", SURFACE_GLALIE_SPRITE},
-        {"spheal", SURFACE_SPHEAL_SPRITE},
-        {"sealeo", SURFACE_SEALEO_SPRITE},
-        {"walrein", SURFACE_WALREIN_SPRITE},
-        {"clamperl", SURFACE_CLAMPERL_SPRITE},
-        {"huntail", SURFACE_HUNTAIL_SPRITE},
-        {"gorebyss", SURFACE_GOREBYSS_SPRITE},
-        {"relicanth", SURFACE_RELICANTH_SPRITE},
-        {"luvdisc", SURFACE_LUVDISC_SPRITE},
-        {"bagon", SURFACE_BAGON_SPRITE},
-        {"shelgon", SURFACE_SHELGON_SPRITE},
-        {"salamence", SURFACE_SALAMENCE_SPRITE},
-        {"beldum", SURFACE_BELDUM_SPRITE},
-        {"metang", SURFACE_METANG_SPRITE},
-        {"metagross", SURFACE_METAGROSS_SPRITE},
-        {"regirock", SURFACE_REGIROCK_SPRITE},
-        {"regice", SURFACE_REGICE_SPRITE},
-        {"registeel", SURFACE_REGISTEEL_SPRITE},
-        {"latias", SURFACE_LATIAS_SPRITE},
-        {"latios", SURFACE_LATIOS_SPRITE},
-        {"kyogre", SURFACE_KYOGRE_SPRITE},
-        {"groudon", SURFACE_GROUDON_SPRITE},
-        {"rayquaza", SURFACE_RAYQUAZA_SPRITE},
-        {"jirachi", SURFACE_JIRACHI_SPRITE},
-        {"deoxys-normal", SURFACE_DEOXYS_NORMAL_SPRITE},
-
-        /* Sinnoh pokémon (generation 4) */
-        /* ======================== */
-        {"turtwig", SURFACE_TURTWIG_SPRITE},
-        {"grotle", SURFACE_GROTLE_SPRITE},
-        {"torterra", SURFACE_TORTERRA_SPRITE},
-        {"chimchar", SURFACE_CHIMCHAR_SPRITE},
-        {"monferno", SURFACE_MONFERNO_SPRITE},
-        {"infernape", SURFACE_INFERNAPE_SPRITE},
-        {"piplup", SURFACE_PIPLUP_SPRITE},
-        {"prinplup", SURFACE_PRINPLUP_SPRITE},
-        {"empoleon", SURFACE_EMPOLEON_SPRITE},
-        {"starly", SURFACE_STARLY_SPRITE},
-        {"staravia", SURFACE_STARAVIA_SPRITE},
-        {"staraptor", SURFACE_STARAPTOR_SPRITE},
-        {"bidoof", SURFACE_BIDOOF_SPRITE},
-        {"bibarel", SURFACE_BIBAREL_SPRITE},
-        {"kricketot", SURFACE_KRICKETOT_SPRITE},
-        {"kricketune", SURFACE_KRICKETUNE_SPRITE},
-        {"shinx", SURFACE_SHINX_SPRITE},
-        {"luxio", SURFACE_LUXIO_SPRITE},
-        {"luxray", SURFACE_LUXRAY_SPRITE},
-        {"budew", SURFACE_BUDEW_SPRITE},
-        {"roserade", SURFACE_ROSERADE_SPRITE},
-        {"cranidos", SURFACE_CRANIDOS_SPRITE},
-        {"rampardos", SURFACE_RAMPARDOS_SPRITE},
-        {"shieldon", SURFACE_SHIELDON_SPRITE},
-        {"bastiodon", SURFACE_BASTIODON_SPRITE},
-        {"burmy", SURFACE_BURMY_SPRITE},
-        {"wormadam-plant", SURFACE_WORMADAM_PLANT_SPRITE},
-        {"mothim", SURFACE_MOTHIM_SPRITE},
-        {"combee", SURFACE_COMBEE_SPRITE},
-        {"vespiquen", SURFACE_VESPIQUEN_SPRITE},
-        {"pachirisu", SURFACE_PACHIRISU_SPRITE},
-        {"buizel", SURFACE_BUIZEL_SPRITE},
-        {"floatzel", SURFACE_FLOATZEL_SPRITE},
-        {"cherubi", SURFACE_CHERUBI_SPRITE},
-        {"cherrim", SURFACE_CHERRIM_SPRITE},
-        {"shellos", SURFACE_SHELLOS_SPRITE},
-        {"gastrodon", SURFACE_GASTRODON_SPRITE},
-        {"ambipom", SURFACE_AMBIPOM_SPRITE},
-        {"drifloon", SURFACE_DRIFLOON_SPRITE},
-        {"drifblim", SURFACE_DRIFBLIM_SPRITE},
-        {"buneary", SURFACE_BUNEARY_SPRITE},
-        {"lopunny", SURFACE_LOPUNNY_SPRITE},
-        {"mismagius", SURFACE_MISMAGIUS_SPRITE},
-        {"honchkrow", SURFACE_HONCHKROW_SPRITE},
-        {"glameow", SURFACE_GLAMEOW_SPRITE},
-        {"purugly", SURFACE_PURUGLY_SPRITE},
-        {"chingling", SURFACE_CHINGLING_SPRITE},
-        {"stunky", SURFACE_STUNKY_SPRITE},
-        {"skuntank", SURFACE_SKUNTANK_SPRITE},
-        {"bronzor", SURFACE_BRONZOR_SPRITE},
-        {"bronzong", SURFACE_BRONZONG_SPRITE},
-        {"bonsly", SURFACE_BONSLY_SPRITE},
-        {"mime-jr", SURFACE_MIMEJR_SPRITE},
-        {"happiny", SURFACE_HAPPINY_SPRITE},
-        {"chatot", SURFACE_CHATOT_SPRITE},
-        {"spiritomb", SURFACE_SPIRITOMB_SPRITE},
-        {"gible", SURFACE_GIBLE_SPRITE},
-        {"gabite", SURFACE_GABITE_SPRITE},
-        {"garchomp", SURFACE_GARCHOMP_SPRITE},
-        {"munchlax", SURFACE_MUNCHLAX_SPRITE},
-        {"riolu", SURFACE_RIOLU_SPRITE},
-        {"lucario", SURFACE_LUCARIO_SPRITE},
-        {"hippopotas", SURFACE_HIPPOPOTAS_SPRITE},
-        {"hippowdon", SURFACE_HIPPOWDON_SPRITE},
-        {"skorupi", SURFACE_SKORUPI_SPRITE},
-        {"drapion", SURFACE_DRAPION_SPRITE},
-        {"croagunk", SURFACE_CROAGUNK_SPRITE},
-        {"toxicroak", SURFACE_TOXICROAK_SPRITE},
-        {"carnivine", SURFACE_CARNIVINE_SPRITE},
-        {"finneon", SURFACE_FINNEON_SPRITE},
-        {"lumineon", SURFACE_LUMINEON_SPRITE},
-        {"mantyke", SURFACE_MANTYKE_SPRITE},
-        {"snover", SURFACE_SNOVER_SPRITE},
-        {"abomasnow", SURFACE_ABOMASNOW_SPRITE},
-        {"weavile", SURFACE_WEAVILE_SPRITE},
-        {"magnezone", SURFACE_MAGNEZONE_SPRITE},
-        {"lickilicky", SURFACE_LICKILICKY_SPRITE},
-        {"rhyperior", SURFACE_RHYPERIOR_SPRITE},
-        {"tangrowth", SURFACE_TANGROWTH_SPRITE},
-        {"electivire", SURFACE_ELECTIVIRE_SPRITE},
-        {"magmortar", SURFACE_MAGMORTAR_SPRITE},
-        {"togekiss", SURFACE_TOGEKISS_SPRITE},
-        {"yanmega", SURFACE_YANMEGA_SPRITE},
-        {"leafeon", SURFACE_LEAFEON_SPRITE},
-        {"glaceon", SURFACE_GLACEON_SPRITE},
-        {"gliscor", SURFACE_GLISCOR_SPRITE},
-        {"mamoswine", SURFACE_MAMOSWINE_SPRITE},
-        {"porygon-z", SURFACE_PORYGON_Z_SPRITE},
-        {"gallade", SURFACE_GALLADE_SPRITE},
-        {"probopass", SURFACE_PROBOPASS_SPRITE},
-        {"dusknoir", SURFACE_DUSKNOIR_SPRITE},
-        {"froslass", SURFACE_FROSLASS_SPRITE},
-        {"rotom", SURFACE_ROTOM_SPRITE},
-        {"uxie", SURFACE_UXIE_SPRITE},
-        {"mesprit", SURFACE_MESPRIT_SPRITE},
-        {"azelf", SURFACE_AZELF_SPRITE},
-        {"dialga", SURFACE_DIALGA_SPRITE},
-        {"palkia", SURFACE_PALKIA_SPRITE},
-        {"heatran", SURFACE_HEATRAN_SPRITE},
-        {"regigigas", SURFACE_REGIGIGAS_SPRITE},
-        {"giratina-altered", SURFACE_GIRATINA_SPRITE},
-        {"cresselia", SURFACE_CRESSELIA_SPRITE},
-        {"phione", SURFACE_PHIONE_SPRITE},
-        {"manaphy", SURFACE_MANAPHY_SPRITE},
-        {"darkrai", SURFACE_DARKRAI_SPRITE},
-        {"shaymin-land", SURFACE_SHAYMIN_LAND_SPRITE},
-        {"arceus", SURFACE_ARCEUS_SPRITE},
-
-        /* Unova pokémon (generation 5) */
-        /* ======================== */
-        {"victini", SURFACE_VICTINI_SPRITE},
-        {"snivy", SURFACE_SNIVY_SPRITE},
-        {"servine", SURFACE_SERVINE_SPRITE},
-        {"serperior", SURFACE_SERPERIOR_SPRITE},
-        {"tepig", SURFACE_TEPIG_SPRITE},
-        {"pignite", SURFACE_PIGNITE_SPRITE},
-        {"emboar", SURFACE_EMBOAR_SPRITE},
-        {"oshawott", SURFACE_OSHAWOTT_SPRITE},
-        {"dewott", SURFACE_DEWOTT_SPRITE},
-        {"samurott", SURFACE_SAMUROTT_SPRITE},
-        {"patrat", SURFACE_PATRAT_SPRITE},
-        {"watchog", SURFACE_WATCHOG_SPRITE},
-        {"lillipup", SURFACE_LILLIPUP_SPRITE},
-        {"herdier", SURFACE_HERDIER_SPRITE},
-        {"stoutland", SURFACE_STOUTLAND_SPRITE},
-        {"purrloin", SURFACE_PURRLOIN_SPRITE},
-        {"liepard", SURFACE_LIEPARD_SPRITE},
-        {"pansage", SURFACE_PANSAGE_SPRITE},
-        {"simisage", SURFACE_SIMISAGE_SPRITE},
-        {"pansear", SURFACE_PANSEAR_SPRITE},
-        {"simisear", SURFACE_SIMISEAR_SPRITE},
-        {"panpour", SURFACE_PANPOUR_SPRITE},
-        {"simipour", SURFACE_SIMIPOUR_SPRITE},
-        {"munna", SURFACE_MUNNA_SPRITE},
-        {"musharna", SURFACE_MUSHARNA_SPRITE},
-        {"pidove", SURFACE_PIDOVE_SPRITE},
-        {"tranquill", SURFACE_TRANQUILL_SPRITE},
-        {"unfezant", SURFACE_UNFEZANT_SPRITE},
-        {"blitzle", SURFACE_BLITZLE_SPRITE},
-        {"zebstrika", SURFACE_ZEBSTRIKA_SPRITE},
-        {"roggenrola", SURFACE_ROGGENROLA_SPRITE},
-        {"boldore", SURFACE_BOLDORE_SPRITE},
-        {"gigalith", SURFACE_GIGALITH_SPRITE},
-        {"woobat", SURFACE_WOOBAT_SPRITE},
-        {"swoobat", SURFACE_SWOOBAT_SPRITE},
-        {"drilbur", SURFACE_DRILBUR_SPRITE},
-        {"excadrill", SURFACE_EXCADRILL_SPRITE},
-        {"audino", SURFACE_AUDINO_SPRITE},
-        {"timburr", SURFACE_TIMBURR_SPRITE},
-        {"gurdurr", SURFACE_GURDURR_SPRITE},
-        {"conkeldurr", SURFACE_CONKELDURR_SPRITE},
-        {"tympole", SURFACE_TYMPOLE_SPRITE},
-        {"palpitoad", SURFACE_PALPITOAD_SPRITE},
-        {"seismitoad", SURFACE_SEISMITOAD_SPRITE},
-        {"throh", SURFACE_THROH_SPRITE},
-        {"sawk", SURFACE_SAWK_SPRITE},
-        {"sewaddle", SURFACE_SEWADDLE_SPRITE},
-        {"swadloon", SURFACE_SWADLOON_SPRITE},
-        {"leavanny", SURFACE_LEAVANNY_SPRITE},
-        {"venipede", SURFACE_VENIPEDE_SPRITE},
-        {"whirlipede", SURFACE_WHIRLIPEDE_SPRITE},
-        {"scolipede", SURFACE_SCOLIPEDE_SPRITE},
-        {"cottonee", SURFACE_COTTONEE_SPRITE},
-        {"whimsicott", SURFACE_WHIMSICOTT_SPRITE},
-        {"petilil", SURFACE_PETILIL_SPRITE},
-        {"lilligant", SURFACE_LILLIGANT_SPRITE},
-        {"basculin-red-striped", SURFACE_BASCULIN_RED_STRIPED_SPRITE},
-        {"sandile", SURFACE_SANDILE_SPRITE},
-        {"krokorok", SURFACE_KROKOROK_SPRITE},
-        {"krookodile", SURFACE_KROOKODILE_SPRITE},
-        {"darumaka", SURFACE_DARUMAKA_SPRITE},
-        {"darmanitan-standard", SURFACE_DARMANITAN_STANDARD_SPRITE},
-        {"maractus", SURFACE_MARACTUS_SPRITE},
-        {"dwebble", SURFACE_DWEBBLE_SPRITE},
-        {"crustle", SURFACE_CRUSTLE_SPRITE},
-        {"scraggy", SURFACE_SCRAGGY_SPRITE},
-        {"scrafty", SURFACE_SCRAFTY_SPRITE},
-        {"sigilyph", SURFACE_SIGILYPH_SPRITE},
-        {"yamask", SURFACE_YAMASK_SPRITE},
-        {"cofagrigus", SURFACE_COFAGRIGUS_SPRITE},
-        {"tirtouga", SURFACE_TIRTOUGA_SPRITE},
-        {"carracosta", SURFACE_CARRACOSTA_SPRITE},
-        {"archen", SURFACE_ARCHEN_SPRITE},
-        {"archeops", SURFACE_ARCHEOPS_SPRITE},
-        {"trubbish", SURFACE_TRUBBISH_SPRITE},
-        {"garbodor", SURFACE_GARBODOR_SPRITE},
-        {"zorua", SURFACE_ZORUA_SPRITE},
-        {"zoroark", SURFACE_ZOROARK_SPRITE},
-        {"minccino", SURFACE_MINCCINO_SPRITE},
-        {"cinccino", SURFACE_CINCCINO_SPRITE},
-        {"gothita", SURFACE_GOTHITA_SPRITE},
-        {"gothorita", SURFACE_GOTHORITA_SPRITE},
-        {"gothitelle", SURFACE_GOTHITELLE_SPRITE},
-        {"solosis", SURFACE_SOLOSIS_SPRITE},
-        {"duosion", SURFACE_DUOSION_SPRITE},
-        {"reuniclus", SURFACE_REUNICLUS_SPRITE},
-        {"ducklett", SURFACE_DUCKLETT_SPRITE},
-        {"swanna", SURFACE_SWANNA_SPRITE},
-        {"vanillite", SURFACE_VANILLITE_SPRITE},
-        {"vanillish", SURFACE_VANILLISH_SPRITE},
-        {"vanilluxe", SURFACE_VANILLUXE_SPRITE},
-        {"deerling", SURFACE_DEERLING_SPRITE},
-        {"sawsbuck", SURFACE_SAWSBUCK_SPRITE},
-        {"emolga", SURFACE_EMOLGA_SPRITE},
-        {"karrablast", SURFACE_KARRABLAST_SPRITE},
-        {"escavalier", SURFACE_ESCAVALIER_SPRITE},
-        {"foongus", SURFACE_FOONGUS_SPRITE},
-        {"amoonguss", SURFACE_AMOONGUSS_SPRITE},
-        {"frillish", SURFACE_FRILLISH_SPRITE},
-        {"jellicent", SURFACE_JELLICENT_SPRITE},
-        {"alomomola", SURFACE_ALOMOMOLA_SPRITE},
-        {"joltik", SURFACE_JOLTIK_SPRITE},
-        {"galvantula", SURFACE_GALVANTULA_SPRITE},
-        {"ferroseed", SURFACE_FERROSEED_SPRITE},
-        {"ferrothorn", SURFACE_FERROTHORN_SPRITE},
-        {"klink", SURFACE_KLINK_SPRITE},
-        {"klang", SURFACE_KLANG_SPRITE},
-        {"klinklang", SURFACE_KLINKLANG_SPRITE},
-        {"tynamo", SURFACE_TYNAMO_SPRITE},
-        {"eelektrik", SURFACE_EELEKTRIK_SPRITE},
-        {"eelektross", SURFACE_EELEKTROSS_SPRITE},
-        {"elgyem", SURFACE_ELGYEM_SPRITE},
-        {"beheeyem", SURFACE_BEHEEYEM_SPRITE},
-        {"litwick", SURFACE_LITWICK_SPRITE},
-        {"lampent", SURFACE_LAMPENT_SPRITE},
-        {"chandelure", SURFACE_CHANDELURE_SPRITE},
-        {"axew", SURFACE_AXEW_SPRITE},
-        {"fraxure", SURFACE_FRAXURE_SPRITE},
-        {"haxorus", SURFACE_HAXORUS_SPRITE},
-        {"cubchoo", SURFACE_CUBCHOO_SPRITE},
-        {"beartic", SURFACE_BEARTIC_SPRITE},
-        {"cryogonal", SURFACE_CRYOGONAL_SPRITE},
-        {"shelmet", SURFACE_SHELMET_SPRITE},
-        {"accelgor", SURFACE_ACCELGOR_SPRITE},
-        {"stunfisk", SURFACE_STUNFISK_SPRITE},
-        {"mienfoo", SURFACE_MIENFOO_SPRITE},
-        {"mienshao", SURFACE_MIENSHAO_SPRITE},
-        {"druddigon", SURFACE_DRUDDIGON_SPRITE},
-        {"golett", SURFACE_GOLETT_SPRITE},
-        {"golurk", SURFACE_GOLURK_SPRITE},
-        {"pawniard", SURFACE_PAWNIARD_SPRITE},
-        {"bisharp", SURFACE_BISHARP_SPRITE},
-        {"bouffalant", SURFACE_BOUFFALANT_SPRITE},
-        {"rufflet", SURFACE_RUFFLET_SPRITE},
-        {"braviary", SURFACE_BRAVIARY_SPRITE},
-        {"vullaby", SURFACE_VULLABY_SPRITE},
-        {"mandibuzz", SURFACE_MANDIBUZZ_SPRITE},
-        {"heatmor", SURFACE_HEATMOR_SPRITE},
-        {"durant", SURFACE_DURANT_SPRITE},
-        {"deino", SURFACE_DEINO_SPRITE},
-        {"zweilous", SURFACE_ZWEILOUS_SPRITE},
-        {"hydreigon", SURFACE_HYDREIGON_SPRITE},
-        {"larvesta", SURFACE_LARVESTA_SPRITE},
-        {"volcarona", SURFACE_VOLCARONA_SPRITE},
-        {"cobalion", SURFACE_COBALION_SPRITE},
-        {"terrakion", SURFACE_TERRAKION_SPRITE},
-        {"virizion", SURFACE_VIRIZION_SPRITE},
-        {"tornadus-incarnate", SURFACE_TORNADUS_INCARNATE_SPRITE},
-        {"thundurus-incarnate", SURFACE_THUNDURUS_INCARNATE_SPRITE},
-        {"reshiram", SURFACE_RESHIRAM_SPRITE},
-        {"zekrom", SURFACE_ZEKROM_SPRITE},
-        {"landorus-incarnate", SURFACE_LANDORUSINCARNATE_SPRITE},
-        {"kyurem", SURFACE_KYUREM_SPRITE},
-        {"keldeo-ordinary", SURFACE_KELDEOORDINARY_SPRITE},
-        {"meloetta-aria", SURFACE_MELOETTA_ARIA_SPRITE},
-        {"genesect", SURFACE_GENESECT_SPRITE},
-    };
 
   public:
     PokedexAssets();

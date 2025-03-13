@@ -1,12 +1,8 @@
-// Window Settings
-#define WINDOW_HEIGHT 480 // window height in pixels
-#define WINDOW_WIDTH 640  // window width in pixels
-
 #include "AssetManager.h"
 #include "SDL_image.h"
+#include "name_to_id.h"
 #include <filesystem>
 #include <iostream>
-#include <vector>
 
 AssetManager AssetManager::instance;
 
@@ -30,11 +26,6 @@ AssetManager::AssetManager()
                 t_asset sprite_asset(name, path, type, size);
 
                 (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), sprite_asset);
-
-                std::cout << "Created pokemon sprite asset: ID: " << POKEMON_NAMETOID_MAP.at(name)
-                          << ". name: " << name << std::endl;
-
-                totalAssets++;
             }
             else
             {
@@ -45,37 +36,33 @@ AssetManager::AssetManager()
     }
 
     // Pokemon Icons
-    /* for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH)) */
-    /* { */
-    /*     if (std::filesystem::is_regular_file(icon) && icon.path().extension() == ".png") */
-    /*     { // Ensure it's a file */
-    /*         t_assetType type         = POKEMON_ICON; */
-    /*         std::string path         = icon.path().string(); */
-    /*         std::string name         = icon.path().stem().string(); */
-    /*         std::pair<int, int> size = {2, 2}; */
+    for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH))
+    {
+        if (std::filesystem::is_regular_file(icon) && icon.path().extension() == ".png")
+        { // Ensure it's a file
+            t_assetType type         = POKEMON_ICON;
+            std::string path         = icon.path().string();
+            std::string name         = icon.path().stem().string();
+            std::pair<int, int> size = {2, 2};
 
-    /*         if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end()) */
-    /*         { */
-    /*             t_asset icon_asset(name, path, type, size); */
+            if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
+            {
+                t_asset icon_asset(name, path, type, size);
 
-    /*             (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), icon_asset); */
+                (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), icon_asset);
+            }
+            else
+            {
+                std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name
+                          << std::endl;
+            }
+        }
+    }
 
-    /*             std::cout << "Created pokemon icon asset: ID: " << POKEMON_NAMETOID_MAP.at(name)
-     */
-    /*                       << ". name: " << name << std::endl; */
+    for (auto &ast_type : *assetMap)
+        for (auto &ast : ast_type.second)
+            totalAssets++;
 
-    /*             totalAssets++; */
-    /*         } */
-    /*         else */
-    /*         { */
-    /*             std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name */
-    /*                       << std::endl; */
-    /*         } */
-    /*     } */
-    /* } */
-
-    /* currentAssetID   = t_assetID(1); */
-    /* totalAssets      = assetMap->size(); */
     currentAssetType = POKEMON_SPRITES; // POKEMON_SPRITES == 0
 }
 
@@ -113,7 +100,6 @@ void AssetManager::loadAssets()
             auto it = currentAssetCategory.begin();
             std::advance(it, index);
             t_asset *current_asset = &it->second;
-            /* t_asset *current_asset = &currentAssetCategory[currentAssetID]; */
 
             switch (current_asset->type)
             {
@@ -144,7 +130,7 @@ void AssetManager::loadAssets()
             currentAssetType = t_assetType(currentAssetType + 1);
             index            = 0;
 
-            if (currentAssetType >= (*assetMap).size()) // end of out map
+            if (currentAssetType == (*assetMap).size()) // end of out map
             {
                 allAssetsLoaded = true;
             }
@@ -161,7 +147,6 @@ void AssetManager::loadSurface(t_asset &asset)
                   << asset.path.c_str() << ".  SDL Error: " << IMG_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
-    std::cout << "Created tempSurface asset: " << asset.path << std::endl;
 
     SDL_Surface *optimizedSurface =
         SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
