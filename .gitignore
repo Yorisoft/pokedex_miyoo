@@ -50,4 +50,5 @@ Source/union-miyoomini-toolchain/workspace/retrodex/CMakeLists.txt
 Source/union-miyoomini-toolchain/workspace/retrodex/Makefile
 Source/union-miyoomini-toolchain/workspace/retrodex/ToolChain.cmake
 
-
+App/Retrodex/res/assets/pokemons/sprites/rename_files.sh
+Source/union-miyoomini-toolchain/workspace/retrodex/retrodex

@@ -1,6 +1,9 @@
 #ifndef __POKEDEX_ASSETS__
 #define __POKEDEX_ASSETS__
 
+#include "SDL_image.h"
+#include "SDL_mixer.h"
+#include "SDL_ttf.h"
 #include <SDL2/SDL.h>
 #include <string>
 #include <unordered_map>
@@ -16,7 +19,8 @@ class PokedexAssets
         POKEMON_CRY,
         SOUND_EFFECT,
         FONT,
-        ITEMS
+        ITEMS,
+        MISC
     } t_assetType;
 
     typedef struct _asset
@@ -24,7 +28,9 @@ class PokedexAssets
         std::string name;
         std::string path;
         t_assetType type;
-        SDL_Surface *surface = nullptr;
+        SDL_Surface *surface    = nullptr;
+        TTF_Font *font          = nullptr;
+        Mix_Chunk *sound_effect = nullptr;
         SDL_Rect size;
         bool isLoaded = false;
 
@@ -61,49 +67,50 @@ class PokedexAssets
 
         //=================================================MISC================================================================
 
-        /* // MISC */
-        /* SURFACE_APP_ICON, */
-        /* SURFACE_LIST_ITEM_BACKGROUND_DEFAULT, */
-        /* SURFACE_LIST_ITEM_BACKGROUND_SELECTED, */
-        /* SURFACE_POKEMON_GENDER_MALE_ICON, */
-        /* SURFACE_POKEMON_GENDER_FEMALE_ICON, */
+        // MISC
+        SURFACE_APP_ICON,
+        SURFACE_LIST_ITEM_BACKGROUND_DEFAULT,
+        SURFACE_LIST_ITEM_BACKGROUND_SELECTED,
+        SURFACE_POKEMON_GENDER_MALE_ICON,
+        SURFACE_POKEMON_GENDER_FEMALE_ICON,
 
         //=================================================FONTS================================================================
 
-        /* // FONT */
-        /* FONT_POKEMON_DPPT, */
-        /* FONT_POKEMON_ADVANCED_BATTLE, */
+        // FONT
+        FONT_POKEMON_DPPT_S,
+        FONT_POKEMON_DPPT_M,
+        FONT_POKEMON_DPPT_L,
+        FONT_POKEMON_ADVANCED_BATTLE_S,
+        FONT_POKEMON_ADVANCED_BATTLE_M,
+        FONT_POKEMON_ADVANCED_BATTLE_L,
 
         //=================================================SCREEN_ASSETS================================================================
 
-        /* // SPLASH SCREEN */
-        /* SURFACE_SPLASH_SCREEN_BACKGROUND, */
+        // MENU SCREEN
+        SURFACE_MAIN_MENU_BACKGROUND,
 
-        /* // MENU SCREEN */
-        /* SURFACE_MAIN_MENU_BACKGROUND, */
+        // LIST SCREEN
+        SURFACE_POKEDEX_BACKGROUND,
 
-        /* // LIST SCREEN */
-        /* SURFACE_POKEDEX_BACKGROUND, */
+        // POKEMON INFO SCREEEN
+        SURFACE_EVOLUTION_SCREEN_BACKGROUND,
 
-        /* // POKEMON INFO SCREEEN */
-        /* SURFACE_EVOLUTION_SCREEN_BACKGROUND, */
+        // POKEMON STATS SCREEEN
+        SURFACE_STATS_SCREEN_BACKGROUND,
 
-        /* // POKEMON STATS SCREEEN */
-        /* SURFACE_STATS_SCREEN_BACKGROUND, */
+        // POKEMON MOVES SCREEEN
+        SURFACE_MOVES_SCREEN_BACKGROUND,
 
-        /* // POKEMON MOVES SCREEEN */
-        /* SURFACE_MOVES_SCREEN_BACKGROUND, */
+        // POKEMON LOCATION SCREEEN
+        SURFACE_LOCATION_SCREEN_BACKGROUND,
 
-        /* // POKEMON LOCATION SCREEEN */
-        /* SURFACE_LOCATION_SCREEN_BACKGROUND, */
+        // POKEMON EVOLUTION SCREEEN
+        SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_DEFAULT,
+        SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED,
 
-        /* // POKEMON EVOLUTION SCREEEN */
-        /* SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_DEFAULT, */
-        /* SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED, */
-
-        /* // POKEMON SETTINGS SCREEEN */
-        /* SURFACE_SETTING_BACKGROUND, */
-        /* SURFACE_SETTING_LIST_ITEM_BACKGROUND, */
+        // POKEMON SETTINGS SCREEEN
+        SURFACE_SETTING_BACKGROUND,
+        SURFACE_SETTING_LIST_ITEM_BACKGROUND,
 
         //=================================================ENCOUNTER_ICONS================================================================
 

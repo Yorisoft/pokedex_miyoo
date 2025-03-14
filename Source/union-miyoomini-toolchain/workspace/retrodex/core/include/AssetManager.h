@@ -11,8 +11,23 @@ class AssetManager : public PokedexAssets
   private:
     static AssetManager instance;
 
-    const std::string POKEMON_ICONS_PATH   = "res/assets/pokemons/icons/",
+    const std::string MISC_SPRITES_PATH = "res/assets/misc/", FONT_PATH = "res/assets/font/",
+                      POKEMON_ICONS_PATH   = "res/assets/pokemons/icons/",
                       POKEMON_SPRITES_PATH = "res/assets/pokemons/sprites/";
+
+    /* const std::string SOUND_EFFECT_ON_START_PATH = "res/assets/sound_effects/list_start.wav", */
+    /*                   SOUND_EFFECT_ON_EXIT_PATH  = "res/assets/sound_effects/list_back.wav", */
+    /*                   SOUND_EFFECT_UP_DOWN       = "res/assets/sound_effects/up_down.wav", */
+    /*                   FONT_PATH                  =
+     * "res/assets/font/pokemon-dppt/pokemon-dppt.ttf", */
+    /*                   BACKGROUND_IMG_PATH        = "res/assets/misc/pokedexList_background.png",
+     */
+    /*                   SPRITES_IMG_BASE_PATH      = "res/assets/pokemons/sprites/", */
+    /*                   TYPES_IMG_BASE_PATH        = "res/assets/pokemons/types/", */
+    /*                   LIST_BACKGROUND_IMG_PATH_DEFAULT = */
+    /*                       "res/assets/misc/menu_item_background_default.png", */
+    /*                   LIST_BACKGROUND_IMG_PATH_SELECTED = */
+    /*                       "res/assets/misc/menu_item_background_selected.png"; */
 
     int loadedAssets, totalAssets, index;
     bool allAssetsLoaded;

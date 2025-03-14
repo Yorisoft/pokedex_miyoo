@@ -1,5 +1,10 @@
+// Window Settings
+#define WINDOW_HEIGHT 480 // window height in pixels
+#define WINDOW_WIDTH 640  // window width in pixels
+
 #include "AssetManager.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include "name_to_id.h"
 #include <filesystem>
 #include <iostream>
@@ -7,11 +12,14 @@
 AssetManager AssetManager::instance;
 
 AssetManager::AssetManager()
-    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""), currentAssetID(t_assetID(0))
+    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""),
+      currentAssetType(POKEMON_SPRITES), currentAssetID(t_assetID(0))
 {
     assetMap = new t_assetMap();
 
-    // Pokemon Sprites
+    //=================================================LOAD_ASSETS================================================================
+
+    //===================== Pokemon Sprites
     for (const auto &sprite : std::filesystem::directory_iterator(POKEMON_SPRITES_PATH))
     {
         if (std::filesystem::is_regular_file(sprite) && sprite.path().extension() == ".png")
@@ -19,7 +27,7 @@ AssetManager::AssetManager()
             t_assetType type         = POKEMON_SPRITES;
             std::string path         = sprite.path().string();
             std::string name         = sprite.path().stem().string();
-            std::pair<int, int> size = {2, 2};
+            std::pair<int, int> size = {192, 192};
 
             if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
             {
@@ -35,7 +43,7 @@ AssetManager::AssetManager()
         }
     }
 
-    // Pokemon Icons
+    //=====================  Pokemon Icons
     for (const auto &icon : std::filesystem::directory_iterator(POKEMON_ICONS_PATH))
     {
         if (std::filesystem::is_regular_file(icon) && icon.path().extension() == ".png")
@@ -43,7 +51,7 @@ AssetManager::AssetManager()
             t_assetType type         = POKEMON_ICON;
             std::string path         = icon.path().string();
             std::string name         = icon.path().stem().string();
-            std::pair<int, int> size = {2, 2};
+            std::pair<int, int> size = {112, 84};
 
             if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
             {
@@ -59,11 +67,70 @@ AssetManager::AssetManager()
         }
     }
 
+    //=====================
+    std::string path;
+    t_assetType type;
+    std::string name;
+    std::pair<int, int> size;
+
+    //===================== Fonts
+    /* type = FONT; */
+    /* path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf"; */
+    /* name = "pokemon-dppt_l"; */
+    /* size = {34, 0}; // {font_size, blank_value} */
+
+    /* (*assetMap)[type].emplace(FONT_POKEMON_DPPT_L, t_asset(name, path, type, size)); */
+
+    /* /1* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl;
+     * *1/ */
+
+    /* type = FONT; */
+    /* path = FONT_PATH + "pokemon-advanced-battle/pokemon-advanced-battle.ttf"; */
+    /* name = "pokemon-advanced-battle_l"; */
+    /* size = {34, 0}; // {font_size, blank_value} */
+
+    /* (*assetMap)[type].emplace(FONT_POKEMON_ADVANCED_BATTLE_L, t_asset(name, path, type, size));
+     */
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    /* type = MISC; */
+    /* path = MISC_SPRITES_PATH + "menu_background.png"; */
+    /* name = "menu_background.png"; */
+    /* size = {WINDOW_WIDTH, WINDOW_HEIGHT}; */
+
+    /* (*assetMap)[type].emplace(SURFACE_MAIN_MENU_BACKGROUND, t_asset(name, path, type, size)); */
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    //===================== MENU Item Entry Backgrounds
+    /* const int MENU_LIST_ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5); */
+
+    /* type = MISC; */
+    /* path = MISC_SPRITES_PATH + "menu_item_background_default.png"; */
+    /* name = "list_item_background_default"; */
+    /* size = {WINDOW_WIDTH, MENU_LIST_ITEM_HEIGHT}; */
+
+    /* (*assetMap)[type].emplace(SURFACE_LIST_ITEM_BACKGROUND_DEFAULT, */
+    /*                           t_asset(name, path, type, size)); */
+
+    /* /1* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl;
+     * *1/ */
+
+    /* type = MISC; */
+    /* path = MISC_SPRITES_PATH + "menu_item_background_selected.png"; */
+    /* name = "list_item_background_selected"; */
+    /* size = {WINDOW_WIDTH, MENU_LIST_ITEM_HEIGHT}; */
+
+    /* (*assetMap)[type].emplace(SURFACE_LIST_ITEM_BACKGROUND_SELECTED, */
+    /*                           t_asset(name, path, type, size)); */
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    //=================================================COUNT_ASSETS================================================================
     for (auto &ast_type : *assetMap)
         for (auto &ast : ast_type.second)
             totalAssets++;
-
-    currentAssetType = POKEMON_SPRITES; // POKEMON_SPRITES == 0
 }
 
 AssetManager::~AssetManager()
@@ -84,12 +151,13 @@ void AssetManager::loadAssets()
 {
     /* typedef enum _assetType */
     /* { */
-    /*     SOUND_EFFECT, */
-    /*     FONT, */
-    /*     POKEMON_SPRITES, */
-    /*     POKEMON_ICON, */
-    /*     POKEMON_CRY, */
-    /*     ITEMS */
+    /* POKEMON_SPRITES, */
+    /* POKEMON_ICON, */
+    /* POKEMON_CRY, */
+    /* SOUND_EFFECT, */
+    /* FONT, */
+    /* ITEMS, */
+    /* MISC */
     /* } t_assetType; */
 
     if (!allAssetsLoaded)
@@ -106,6 +174,7 @@ void AssetManager::loadAssets()
             case POKEMON_SPRITES:
             case POKEMON_ICON:
             case ITEMS:
+            case MISC:
                 loadSurface(*current_asset);
                 break;
             case SOUND_EFFECT:
@@ -160,22 +229,38 @@ void AssetManager::loadSurface(t_asset &asset)
     SDL_FreeSurface(tempSurface);
     tempSurface = nullptr;
 
-    asset.surface = SDL_CreateRGBSurfaceWithFormat(
-        0, asset.size.w * optimizedSurface->w, asset.size.h * optimizedSurface->h,
-        optimizedSurface->format->BitsPerPixel, optimizedSurface->format->format);
+    /* if (asset.size.w == -1 || asset.size.h == -1) // using -1 to represent fullscreen asset */
+    /* { */
+    /*     asset.surface = SDL_CreateRGBSurfaceWithFormat(0, WINDOW_WIDTH, WINDOW_HEIGHT, */
+    /*                                                    optimizedSurface->format->BitsPerPixel, */
+    /*                                                    optimizedSurface->format->format); */
+    /* } */
+    /* else */
+    /* { */
+    /*     asset.surface = SDL_CreateRGBSurfaceWithFormat( */
+    /*         0, asset.size.w * optimizedSurface->w, asset.size.h * optimizedSurface->h, */
+    /*         optimizedSurface->format->BitsPerPixel, optimizedSurface->format->format); */
+    /* } */
 
-    SDL_Rect assetSurfaceRect = {
-        0,
-        0,
-        asset.surface->w,
-        asset.surface->h,
-    };
-    SDL_BlitScaled(optimizedSurface, NULL, asset.surface, &assetSurfaceRect);
+    asset.surface = SDL_CreateRGBSurfaceWithFormat(0, asset.size.w, asset.size.h,
+                                                   optimizedSurface->format->BitsPerPixel,
+                                                   optimizedSurface->format->format);
+
+    SDL_BlitScaled(optimizedSurface, NULL, asset.surface, NULL);
     SDL_FreeSurface(optimizedSurface);
     optimizedSurface = nullptr;
 }
 
-void AssetManager::loadFont(t_asset &asset) {}
+void AssetManager::loadFont(t_asset &asset)
+{ // Using size.w for font size
+    asset.font = TTF_OpenFont(asset.path.c_str(), asset.size.w);
+    if (asset.font == NULL)
+    {
+        std::cout << "Unable to load font!"
+                  << "name: " << asset.name << " path: " << asset.path
+                  << " SDL_Error:  " << TTF_GetError();
+    }
+}
 
 void AssetManager::loadAudio(t_asset &asset) {}
 
