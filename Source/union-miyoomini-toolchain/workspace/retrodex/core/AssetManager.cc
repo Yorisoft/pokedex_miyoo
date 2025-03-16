@@ -50,6 +50,7 @@ AssetManager::AssetManager()
 
     /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
 
+    //===================== Backgrounds
     type = MISC;
     path = MISC_SPRITES_PATH + "menu_background.png";
     name = "menu_background";
@@ -64,10 +65,49 @@ AssetManager::AssetManager()
 
     (*assetMap)[type].emplace(SURFACE_POKEDEX_BACKGROUND, t_asset(name, path, type, size));
 
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokemon_fr_view_1.png";
+    name = "pokemon_view_1";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
 
-    //===================== MENU Item Entry Backgrounds
+    (*assetMap)[type].emplace(SURFACE_INFO_SCREEN_BACKGROUND, t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokemon_fr_view_2.png";
+    name = "pokemon_view_2";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_STATS_SCREEN_BACKGROUND, t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokemon_fr_view_3.png";
+    name = "pokemon_view_3";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_MOVES_SCREEN_BACKGROUND, t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokemon_fr_view_4.png";
+    name = "pokemon_view_4";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_LOCATION_SCREEN_BACKGROUND, t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokemon_fr_view_5.png";
+    name = "pokemon_view_5";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_EVOLUTION_SCREEN_BACKGROUND, t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "settings_background.png";
+    name = "settings_background";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_SETTING_BACKGROUND, t_asset(name, path, type, size));
+
+    //===================== List Item Backgrounds
     const int MENU_ITEM_HEIGHT    = static_cast<int>(WINDOW_HEIGHT / 5);
     const int POKEDEX_ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
     double heightRatio            = static_cast<double>(POKEDEX_ITEM_HEIGHT) / 22.0;
@@ -88,9 +128,6 @@ AssetManager::AssetManager()
     (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT,
                               t_asset(name, path, type, size));
 
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-
     type = MISC;
     path = MISC_SPRITES_PATH + "menu_item_background_selected.png";
     name = "menu_item_background_selected";
@@ -106,9 +143,6 @@ AssetManager::AssetManager()
 
     (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_SELECTED,
                               t_asset(name, path, type, size));
-
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
 
     //===================== Pokemon Sprites
     for (const auto &sprite : std::filesystem::directory_iterator(POKEMON_SPRITES_PATH))
