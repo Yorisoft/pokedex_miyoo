@@ -669,6 +669,28 @@ const std::unordered_map<std::string, PokedexAssets::t_assetID> POKEMON_NAMETOID
     {"keldeo-ordinary", PokedexAssets::SURFACE_KELDEOORDINARY_SPRITE},
     {"meloetta-aria", PokedexAssets::SURFACE_MELOETTA_ARIA_SPRITE},
     {"genesect", PokedexAssets::SURFACE_GENESECT_SPRITE},
+
+    {"bug", PokedexAssets::SURFACE_BUG_SPRITE},
+    {"dark", PokedexAssets::SURFACE_DARK_SPRITE},
+    {"dragon", PokedexAssets::SURFACE_DRAGON_SPRITE},
+    {"electric", PokedexAssets::SURFACE_ELECTRIC_SPRITE},
+    {"fairy", PokedexAssets::SURFACE_FAIRY_SPRITE},
+    {"fighting", PokedexAssets::SURFACE_FIGHTING_SPRITE},
+    {"fire", PokedexAssets::SURFACE_FIRE_SPRITE},
+    {"flying", PokedexAssets::SURFACE_FLYING_SPRITE},
+    {"ghost", PokedexAssets::SURFACE_GHOST_SPRITE},
+    {"grass", PokedexAssets::SURFACE_GRASS_SPRITE},
+    {"ground", PokedexAssets::SURFACE_GROUND_SPRITE},
+    {"ice", PokedexAssets::SURFACE_ICE_SPRITE},
+    {"normal", PokedexAssets::SURFACE_NORMAL_SPRITE},
+    {"physical", PokedexAssets::SURFACE_PHYSICAL_SPRITE},
+    {"poison", PokedexAssets::SURFACE_POISON_SPRITE},
+    {"psychic", PokedexAssets::SURFACE_PSYCHIC_SPRITE},
+    {"rock", PokedexAssets::SURFACE_ROCK_SPRITE},
+    {"special", PokedexAssets::SURFACE_SPECIAL_SPRITE},
+    {"status", PokedexAssets::SURFACE_STATUS_SPRITE},
+    {"steel", PokedexAssets::SURFACE_STEEL_SPRITE},
+    {"water", PokedexAssets::SURFACE_WATER_SPRITE},
 };
 
 #endif

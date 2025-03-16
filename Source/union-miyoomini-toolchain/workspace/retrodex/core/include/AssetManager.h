@@ -13,7 +13,8 @@ class AssetManager : public PokedexAssets
 
     const std::string MISC_SPRITES_PATH = "res/assets/misc/", FONT_PATH = "res/assets/font/",
                       POKEMON_ICONS_PATH   = "res/assets/pokemons/icons/",
-                      POKEMON_SPRITES_PATH = "res/assets/pokemons/sprites/";
+                      POKEMON_SPRITES_PATH = "res/assets/pokemons/sprites/",
+                      TYPES_SPRITES_PATH   = "res/assets/pokemons/types/";
 
     /* const std::string SOUND_EFFECT_ON_START_PATH = "res/assets/sound_effects/list_start.wav", */
     /*                   SOUND_EFFECT_ON_EXIT_PATH  = "res/assets/sound_effects/list_back.wav", */

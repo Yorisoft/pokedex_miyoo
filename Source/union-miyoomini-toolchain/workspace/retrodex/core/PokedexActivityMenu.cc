@@ -29,71 +29,31 @@ bool PokedexActivityMenu::initSDL()
         }
 
         // FONT
-        fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 46);
-        if (!fontSurface)
-        {
-            throw std::runtime_error(
-                std::string(
-                    "PokedexActivityMenu::initSDL() Unable to load fontSurface! SDL Error:  ") +
-                SDL_GetError());
-        }
+        fontSurface =
+            assetManager->getAsset(AssetManager::FONT, AssetManager::FONT_POKEMON_DPPT_L)->font;
 
         // Background
-        backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
-        if (backgroundSurface == NULL)
-        {
-            throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load "
-                                                 "backgroundSurface! SDL Error:  ") +
-                                     SDL_GetError());
-        };
-        backgroundRect.x = 0;
-        backgroundRect.y = 0;
-        backgroundRect.w = WINDOW_WIDTH;
-        backgroundRect.h = WINDOW_HEIGHT;
+        backgroundSurface =
+            assetManager->getAsset(AssetManager::MISC, AssetManager::SURFACE_MAIN_MENU_BACKGROUND)
+                ->surface;
+        backgroundRect =
+            assetManager->getAsset(AssetManager::MISC, AssetManager::SURFACE_MAIN_MENU_BACKGROUND)
+                ->size;
 
         // List Item Background
-        listEntrySurface_default  = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_DEFAULT);
-        listEntrySurface_selected = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_SELECTED);
-        if (listEntrySurface_default == NULL)
-        {
-            throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load "
-                                                 "listEntrySurface_default! SDL Error:  ") +
-                                     SDL_GetError());
-        };
-        if (listEntrySurface_selected == NULL)
-        {
-            throw std::runtime_error(std::string("PokedexActivityMenu::initSDL() Unable to load "
-                                                 "listEntrySurface_selected! SDL Error:  ") +
-                                     SDL_GetError());
-        };
-        listEntryRect.x = 0;
-        listEntryRect.y = 0;
-        listEntryRect.w = WINDOW_WIDTH;
-        listEntryRect.h = ITEM_HEIGHT;
+        listEntrySurface_default =
+            assetManager
+                ->getAsset(AssetManager::MISC, AssetManager::SURFACE_MENU_ITEM_BACKGROUND_DEFAULT)
+                ->surface;
+        listEntrySurface_selected =
+            assetManager
+                ->getAsset(AssetManager::MISC, AssetManager::SURFACE_MENU_ITEM_BACKGROUND_SELECTED)
+                ->surface;
 
-        // GAME NAME
-        for (const auto &game_name : *dbResults)
-        {
-            SDL_Surface *normal = TTF_RenderUTF8_Solid(fontSurface, game_name[2].c_str(), COLOR);
-            SDL_Surface *highlight =
-                TTF_RenderUTF8_Solid(fontSurface, game_name[2].c_str(), HIGHLIGHT_COLOR);
-            if (normal == NULL)
-            {
-                throw std::runtime_error(
-                    std::string("PokedexActivityMenu::initSDL() Unable to load game_name normal "
-                                "Surface! SDL Error:  ") +
-                    SDL_GetError());
-            };
-            if (highlight == NULL)
-            {
-                throw std::runtime_error(
-                    std::string("PokedexActivityMenu::initSDL() Unable to load game_name highlight "
-                                "Surface! SDL Error:  ") +
-                    SDL_GetError());
-            };
-            cachedTextSurfaces.push_back(normal);
-            cachedHighlightTextSurfaces.push_back(highlight);
-        }
+        listEntryRect =
+            assetManager
+                ->getAsset(AssetManager::MISC, AssetManager::SURFACE_MENU_ITEM_BACKGROUND_DEFAULT)
+                ->size;
     }
     catch (const std::runtime_error &e)
     {
@@ -114,28 +74,6 @@ void PokedexActivityMenu::print_dbResults()
         }
         std::cout << std::endl;
     }
-}
-
-void PokedexActivityMenu::clearCacheSurfaces()
-{
-    if (!cachedTextSurfaces.empty())
-        for (SDL_Surface *surface : cachedTextSurfaces)
-        {
-            if (surface)
-                SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    if (!cachedHighlightTextSurfaces.empty())
-        for (SDL_Surface *surface : cachedHighlightTextSurfaces)
-        {
-            if (surface)
-                SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    cachedTextSurfaces.clear();
-    cachedHighlightTextSurfaces.clear();
 }
 
 void PokedexActivityMenu::onActivate()
@@ -162,39 +100,7 @@ void PokedexActivityMenu::onActivate()
     std::cout << "PokedexActivityMenu::onActivate END \n";
 }
 
-void PokedexActivityMenu::onDeactivate()
-{
-    if (fontSurface)
-        TTF_CloseFont(fontSurface);
-    fontSurface = nullptr;
-
-    if (backgroundSurface)
-        SDL_FreeSurface(backgroundSurface);
-    backgroundSurface = nullptr;
-
-    if (listEntrySurface_default)
-        SDL_FreeSurface(listEntrySurface_default);
-    listEntrySurface_default = nullptr;
-
-    if (listEntrySurface_selected)
-        SDL_FreeSurface(listEntrySurface_selected);
-    listEntrySurface_selected = nullptr;
-
-    for (auto &surface : cachedHighlightTextSurfaces)
-    {
-        if (surface)
-            SDL_FreeSurface(surface);
-        surface = nullptr;
-    }
-    for (auto &surface : cachedTextSurfaces)
-    {
-        if (surface)
-            SDL_FreeSurface(surface);
-        surface = nullptr;
-    }
-
-    game.clear();
-}
+void PokedexActivityMenu::onDeactivate() { game.clear(); }
 
 void PokedexActivityMenu::onLoop()
 {
@@ -209,7 +115,7 @@ void PokedexActivityMenu::onRender(SDL_Surface *surf_display, SDL_Renderer *rend
     {
         SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-        PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
+        SDL_BlitSurface(backgroundSurface, NULL, surf_display, &backgroundRect);
 
         // List Items
         for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++)
@@ -219,6 +125,16 @@ void PokedexActivityMenu::onRender(SDL_Surface *surf_display, SDL_Renderer *rend
                 exit(EXIT_FAILURE);
             }
         }
+
+        // List Items
+        for (int i = 0; i < MAX_VISIBLE_ITEMS && (offset + i) < dbResults->size(); i++)
+        {
+            if (!renderListItems(surf_display, i))
+            {
+                exit(EXIT_FAILURE);
+            }
+        }
+
         needRedraw = false;
     }
 }
@@ -226,26 +142,46 @@ void PokedexActivityMenu::onRender(SDL_Surface *surf_display, SDL_Renderer *rend
 bool PokedexActivityMenu::renderListItems(SDL_Surface *surf_display, int i)
 {
     // List item background
-    listEntryRect.y = (i * ITEM_HEIGHT);
+    SDL_Surface *version =
+        TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[offset + i][2].c_str(), COLOR);
+    if (version == NULL)
+    {
+        std::cout << "Unable to load surface!"
+                  << "name: " << version << " path: " << version
+                  << " SDL_Error:  " << TTF_GetError();
+    }
 
-    int leftBorder    = 15;
-    gameVersionRect.x = leftBorder + (WINDOW_WIDTH / 2) - (cachedTextSurfaces[offset + i]->w / 2);
-    gameVersionRect.y =
-        (i * ITEM_HEIGHT) + (listEntryRect.h / 2) - (cachedTextSurfaces[offset + i]->h / 2) - 10;
-    gameVersionRect.w = cachedTextSurfaces[offset + i]->w;
-    gameVersionRect.h = cachedTextSurfaces[offset + i]->h;
+    SDL_Surface *version_highlight =
+        TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[offset + i][2].c_str(), HIGHLIGHT_COLOR);
+    if (version_highlight == NULL)
+    {
+        std::cout << "Unable to load surface!"
+                  << "name: " << version_highlight << " path: " << version_highlight
+                  << " SDL_Error:  " << TTF_GetError();
+    }
+
+    int leftBorder = 15;
+    versionRect.x  = leftBorder + (WINDOW_WIDTH / 2) - (version->w / 2);
+    versionRect.y  = (i * ITEM_HEIGHT) + (listEntryRect.h / 2) - (version->h / 2) - 10;
+    versionRect.w  = version->w;
+    versionRect.h  = version->h;
+
+    listEntryRect.y = (i * ITEM_HEIGHT);
 
     if (offset + i == selectedIndex)
     {
-        PokeSurface::onDrawScaled(surf_display, listEntrySurface_selected, &listEntryRect);
-        PokeSurface::onDrawScaled(surf_display, cachedHighlightTextSurfaces[offset + i],
-                                  &gameVersionRect);
+        SDL_BlitSurface(listEntrySurface_selected, NULL, surf_display, &listEntryRect);
+        SDL_BlitSurface(version_highlight, NULL, surf_display, &versionRect);
     }
     else
     {
-        PokeSurface::onDrawScaled(surf_display, listEntrySurface_default, &listEntryRect);
-        PokeSurface::onDrawScaled(surf_display, cachedTextSurfaces[offset + i], &gameVersionRect);
+        SDL_BlitSurface(listEntrySurface_default, NULL, surf_display, &listEntryRect);
+        SDL_BlitSurface(version, NULL, surf_display, &versionRect);
     }
+
+    SDL_FreeSurface(version);
+    SDL_FreeSurface(version_highlight);
+
     return true;
 }
 

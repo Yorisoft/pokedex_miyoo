@@ -14,13 +14,14 @@ class PokedexAssets
     // Note to self.. This order defines the order assets should be loaded into map.
     typedef enum _assetType
     {
+        FONT,
+        MISC,
         POKEMON_SPRITES,
         POKEMON_ICON,
+        TYPES,
         POKEMON_CRY,
         SOUND_EFFECT,
-        FONT,
-        ITEMS,
-        MISC
+        ITEMS
     } t_assetType;
 
     typedef struct _asset
@@ -69,8 +70,6 @@ class PokedexAssets
 
         // MISC
         SURFACE_APP_ICON,
-        SURFACE_LIST_ITEM_BACKGROUND_DEFAULT,
-        SURFACE_LIST_ITEM_BACKGROUND_SELECTED,
         SURFACE_POKEMON_GENDER_MALE_ICON,
         SURFACE_POKEMON_GENDER_FEMALE_ICON,
 
@@ -88,9 +87,13 @@ class PokedexAssets
 
         // MENU SCREEN
         SURFACE_MAIN_MENU_BACKGROUND,
+        SURFACE_MENU_ITEM_BACKGROUND_DEFAULT,
+        SURFACE_MENU_ITEM_BACKGROUND_SELECTED,
 
         // LIST SCREEN
         SURFACE_POKEDEX_BACKGROUND,
+        SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT,
+        SURFACE_POKEDEX_ITEM_BACKGROUND_SELECTED,
 
         // POKEMON INFO SCREEEN
         SURFACE_EVOLUTION_SCREEN_BACKGROUND,
@@ -111,6 +114,31 @@ class PokedexAssets
         // POKEMON SETTINGS SCREEEN
         SURFACE_SETTING_BACKGROUND,
         SURFACE_SETTING_LIST_ITEM_BACKGROUND,
+
+        //=================================================POKEMON_TYPES================================================================
+
+        // TYPES SPRITES
+        SURFACE_BUG_SPRITE,
+        SURFACE_DARK_SPRITE,
+        SURFACE_DRAGON_SPRITE,
+        SURFACE_ELECTRIC_SPRITE,
+        SURFACE_FAIRY_SPRITE,
+        SURFACE_FIGHTING_SPRITE,
+        SURFACE_FIRE_SPRITE,
+        SURFACE_FLYING_SPRITE,
+        SURFACE_GHOST_SPRITE,
+        SURFACE_GRASS_SPRITE,
+        SURFACE_GROUND_SPRITE,
+        SURFACE_ICE_SPRITE,
+        SURFACE_NORMAL_SPRITE,
+        SURFACE_PHYSICAL_SPRITE,
+        SURFACE_POISON_SPRITE,
+        SURFACE_PSYCHIC_SPRITE,
+        SURFACE_ROCK_SPRITE,
+        SURFACE_SPECIAL_SPRITE,
+        SURFACE_STATUS_SPRITE,
+        SURFACE_STEEL_SPRITE,
+        SURFACE_WATER_SPRITE,
 
         //=================================================ENCOUNTER_ICONS================================================================
 
@@ -1500,31 +1528,6 @@ class PokedexAssets
         SURFACE_KELDEOORDINARY_ICON       = 647, // Keldeo
         SURFACE_MELOETTAARIA_ICON         = 648, // Meloetta
         SURFACE_GENESECT_ICON             = 649, // Genesect
-
-        //=================================================POKEMON_TYPES================================================================
-
-        /* // TYPES SPRITES */
-        /* SURFACE_BUG_SPRITE, */
-        /* SURFACE_DARK_SPRITE, */
-        /* SURFACE_DRAGON_SPRITE, */
-        /* SURFACE_ELECTRIC_SPRITE, */
-        /* SURFACE_FAIRY_SPRITE, */
-        /* SURFACE_FIGHTING_SPRITE, */
-        /* SURFACE_FIRE_SPRITE, */
-        /* SURFACE_FLYING_SPRITE, */
-        /* SURFACE_GHOST_SPRITE, */
-        /* SURFACE_GRASS_SPRITE, */
-        /* SURFACE_GROUND_SPRITE, */
-        /* SURFACE_ICE_SPRITE, */
-        /* SURFACE_NORMAL_SPRITE, */
-        /* SURFACE_PHYSICAL_SPRITE, */
-        /* SURFACE_POISON_SPRITE, */
-        /* SURFACE_PSYCHIC_SPRITE, */
-        /* SURFACE_ROCK_SPRITE, */
-        /* SURFACE_SPECIAL_SPRITE, */
-        /* SURFACE_STATUS_SPRITE, */
-        /* SURFACE_STEEL_SPRITE, */
-        /* SURFACE_WATER_SPRITE, */
 
         //=================================================POKEMON_CRY================================================================
 

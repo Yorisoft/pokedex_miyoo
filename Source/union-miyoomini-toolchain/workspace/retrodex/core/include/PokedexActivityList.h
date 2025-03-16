@@ -34,13 +34,10 @@ class PokedexActivityList : public PokedexActivity
     std::vector<std::vector<std::string>> *dbResults;
     std::vector<std::string> pokemon;
 
-    std::vector<SDL_Surface *> pokemonIconSurface_cache;
-    std::vector<std::vector<SDL_Surface *>> pokemonTypeSurface_cache;
-    std::vector<std::vector<SDL_Surface *>> pokemonIDNameSurface_cache;
-
-    SDL_Surface *backgroundSurface, *listBackgroundSurface_default, *listBackgroundSurface_selected;
-    SDL_Rect backgroundRect, listBackgroundRect, pokeEntryRect, pokeEntryType1Rect,
-        pokeEntryType2Rect, pokeIDRect, pokeNameRect;
+    SDL_Surface *backgroundSurface, *listBackgroundSurface_default, *listBackgroundSurface_selected,
+        *pokemonSprite, *typeA, *typeB;
+    SDL_Rect backgroundRect, listBackgroundRect, pokeEntryRect, typeARect, typeBRect, pokeIDRect,
+        pokeNameRect;
     Mix_Chunk *se_up_down, *se_on_start, *se_on_exit;
     TTF_Font *fontSurface;
 
@@ -50,7 +47,6 @@ class PokedexActivityList : public PokedexActivity
 
     void print_dbResults();
     bool initSDL();
-    void clearCacheSurfaces();
 
     bool renderListItems(SDL_Surface *surf_display, TTF_Font *font, int i);
     SDL_Rect renderItemBackground(SDL_Surface *surf_display, int i);

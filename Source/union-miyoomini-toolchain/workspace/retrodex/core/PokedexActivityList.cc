@@ -1,5 +1,6 @@
 #include "PokedexActivityList.h"
 #include "PokedexActivityManager.h"
+#include "utils/name_to_id.h"
 
 PokedexActivityList PokedexActivityList::instance;
 
@@ -51,132 +52,33 @@ bool PokedexActivityList::initSDL()
             std::cerr << "Failed to load sound se_up_down: " << Mix_GetError() << std::endl;
         }
 
-        fontSurface = TTF_OpenFont(FONT_PATH.c_str(), 34);
-        if (fontSurface == NULL)
-        {
-            throw std::runtime_error(
-                std::string(
-                    "PokedexActivityList::initSDL() Unable to load fontSurface! SDL Error:  ") +
-                SDL_GetError());
-        }
+        fontSurface =
+            assetManager->getAsset(AssetManager::FONT, AssetManager::FONT_POKEMON_DPPT_M)->font;
 
         // Background Surface
-        backgroundSurface = PokeSurface::onLoadImg(BACKGROUND_IMG_PATH);
-        if (backgroundSurface == NULL)
-        {
-            throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to load "
-                                                 "backgroundSurface! SDL Error:  ") +
-                                     SDL_GetError());
-        };
-        backgroundRect.x = 0;
-        backgroundRect.y = 0;
-        backgroundRect.w = WINDOW_WIDTH;
-        backgroundRect.h = WINDOW_HEIGHT;
+        AssetManager::t_asset *backgroundAsset =
+            assetManager->getAsset(AssetManager::MISC, AssetManager::SURFACE_POKEDEX_BACKGROUND);
+
+        backgroundSurface = backgroundAsset->surface;
+        backgroundRect    = backgroundAsset->size;
 
         // List Item Background Surface
-        listBackgroundSurface_default = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_DEFAULT);
-        if (listBackgroundSurface_default == NULL)
-        {
-            throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to load "
-                                                 "listBackgroundSurface_default! SDL Error:  ") +
-                                     SDL_GetError());
-        };
+        listBackgroundSurface_default =
+            assetManager
+                ->getAsset(AssetManager::MISC,
+                           AssetManager::SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT)
+                ->surface;
 
-        listBackgroundSurface_selected = PokeSurface::onLoadImg(LIST_BACKGROUND_IMG_PATH_SELECTED);
-        if (listBackgroundSurface_selected == NULL)
-        {
-            throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to load "
-                                                 "listBackgroundSurface_selected! SDL Error:  ") +
-                                     SDL_GetError());
-        };
+        listBackgroundSurface_selected =
+            assetManager
+                ->getAsset(AssetManager::MISC,
+                           AssetManager::SURFACE_POKEDEX_ITEM_BACKGROUND_SELECTED)
+                ->surface;
 
-        // Pokemons
-        for (auto &poke : *dbResults)
-        {
-            std::string spritePath       = SPRITES_IMG_BASE_PATH + poke[1] + ".png";
-            SDL_Surface *pokeIconSurface = PokeSurface::onLoadImg(spritePath);
-            if (pokeIconSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to "
-                                                     "load pokeIconSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-            pokemonIconSurface_cache.push_back(pokeIconSurface);
-
-            std::vector<SDL_Surface *> temp;
-            std::string typePath          = TYPES_IMG_BASE_PATH + poke[3] + ".png";
-            SDL_Surface *pokeType1Surface = PokeSurface::onLoadImg(typePath);
-            if (pokeType1Surface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to "
-                                                     "load pokeType1Surface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-            temp.push_back(pokeType1Surface);
-
-            if (poke[4] != "NULL")
-            {
-                typePath                      = TYPES_IMG_BASE_PATH + poke[4] + ".png";
-                SDL_Surface *pokeType2Surface = PokeSurface::onLoadImg(typePath);
-                if (pokeType2Surface == NULL)
-                {
-                    throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to "
-                                                         "load pokeType2Surface! SDL Error:  ") +
-                                             SDL_GetError());
-                };
-                temp.push_back(pokeType2Surface);
-            }
-            pokemonTypeSurface_cache.emplace_back(temp);
-
-            // ID && NAME
-            temp.clear();
-            SDL_Surface *pokeIDSurface =
-                TTF_RenderUTF8_Blended(fontSurface, poke[0].c_str(), COLOR);
-            if (pokeIDSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to "
-                                                     "load pokeIDSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-            temp.push_back(pokeIDSurface);
-
-            std::string name = poke[2];
-            /*for (int i = 0; i < name.size(); i++) {
-                name[i] = std::toupper(name[i]);
-            }*/
-            SDL_Surface *pokeNameSurface = TTF_RenderUTF8_Blended(fontSurface, name.c_str(), COLOR);
-            if (pokeNameSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to "
-                                                     "load pokeNameSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-            temp.push_back(pokeNameSurface);
-
-            // ID && NAME HIGHLIGHTED
-            SDL_Surface *pokeIDSurface_selected =
-                TTF_RenderUTF8_Blended(fontSurface, poke[0].c_str(), HIGHLIGHT_COLOR);
-            if (pokeIDSurface_selected == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivityList::initSDL() Unable to "
-                                                     "load pokeIDSurface_selected! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-            temp.push_back(pokeIDSurface_selected);
-
-            SDL_Surface *pokeNameSurface_selected =
-                TTF_RenderUTF8_Blended(fontSurface, name.c_str(), HIGHLIGHT_COLOR);
-            if (pokeNameSurface_selected == NULL)
-            {
-                throw std::runtime_error(
-                    std::string("PokedexActivityList::initSDL() Unable to load "
-                                "pokeNameSurface_selected! SDL Error:  ") +
-                    SDL_GetError());
-            };
-            temp.push_back(pokeNameSurface_selected);
-
-            pokemonIDNameSurface_cache.emplace_back(temp);
-        }
+        listBackgroundRect = assetManager
+                                 ->getAsset(AssetManager::MISC,
+                                            AssetManager::SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT)
+                                 ->size;
     }
     catch (const std::runtime_error &e)
     {
@@ -199,41 +101,6 @@ void PokedexActivityList::print_dbResults()
     }
 }
 
-void PokedexActivityList::clearCacheSurfaces()
-{
-    if (!pokemonIconSurface_cache.empty())
-        for (SDL_Surface *surface : pokemonIconSurface_cache)
-            if (surface)
-            {
-                SDL_FreeSurface(surface);
-                surface = nullptr;
-            }
-
-    if (!pokemonTypeSurface_cache.empty())
-        for (std::vector<SDL_Surface *> surfaces : pokemonTypeSurface_cache)
-            if (!surfaces.empty())
-                for (SDL_Surface *surface : surfaces)
-                    if (surface)
-                    {
-                        SDL_FreeSurface(surface);
-                        surface = nullptr;
-                    }
-
-    if (!pokemonIDNameSurface_cache.empty())
-        for (std::vector<SDL_Surface *> surfaces : pokemonIDNameSurface_cache)
-            if (!surfaces.empty())
-                for (SDL_Surface *surface : surfaces)
-                    if (surface)
-                    {
-                        SDL_FreeSurface(surface);
-                        surface = nullptr;
-                    }
-
-    pokemonIconSurface_cache.clear();
-    pokemonTypeSurface_cache.clear();
-    pokemonIDNameSurface_cache.clear();
-}
-
 void PokedexActivityList::onActivate()
 {
     std::cout << "PokedexActivityList::onActivate START \n";
@@ -245,7 +112,6 @@ void PokedexActivityList::onActivate()
 
     assetManager = AssetManager::getInstance();
 
-    clearCacheSurfaces();
     if (!initSDL())
     {
         std::cerr << "PokedexActivityList::onActivate - Error in initSDL(), SDL Error: "
@@ -262,49 +128,6 @@ void PokedexActivityList::onActivate()
 
 void PokedexActivityList::onDeactivate()
 {
-    if (backgroundSurface)
-        SDL_FreeSurface(backgroundSurface);
-    backgroundSurface = nullptr;
-
-    if (listBackgroundSurface_default)
-        SDL_FreeSurface(listBackgroundSurface_default);
-    listBackgroundSurface_default = nullptr;
-
-    if (listBackgroundSurface_selected)
-        SDL_FreeSurface(listBackgroundSurface_selected);
-    listBackgroundSurface_default = nullptr;
-
-    for (SDL_Surface *icon : pokemonIconSurface_cache)
-        if (icon)
-        {
-            SDL_FreeSurface(icon);
-            icon = nullptr;
-        }
-
-    for (std::vector<SDL_Surface *> types : pokemonTypeSurface_cache)
-        for (SDL_Surface *type : types)
-            if (type)
-            {
-                SDL_FreeSurface(type);
-                type = nullptr;
-            }
-
-    for (std::vector<SDL_Surface *> ids_names : pokemonIDNameSurface_cache)
-        for (SDL_Surface *id_name : ids_names)
-            if (id_name)
-            {
-                SDL_FreeSurface(id_name);
-                id_name = nullptr;
-            }
-
-    if (fontSurface)
-        TTF_CloseFont(fontSurface);
-    fontSurface = nullptr;
-
-    pokemonIconSurface_cache.clear();
-    pokemonTypeSurface_cache.clear();
-    pokemonIDNameSurface_cache.clear();
-
     pokemon.clear();
 
     selectedIndex = 0, offset = 0;
@@ -315,13 +138,12 @@ void PokedexActivityList::onLoop() { pokemon = (*dbResults)[selectedIndex]; }
 void PokedexActivityList::onRender(SDL_Surface *surf_display, SDL_Renderer *renderer,
                                    SDL_Texture *texture, TTF_Font *font, Mix_Chunk *sEffect)
 {
-    // std::cout << "PokedexActivityList::onRender START \n";
     if (needRedraw)
     {
         // Clear the display surface
         SDL_FillRect(surf_display, NULL, SDL_MapRGBA(surf_display->format, 0, 0, 0, 0));
 
-        PokeSurface::onDrawScaled(surf_display, backgroundSurface, &backgroundRect);
+        SDL_BlitSurface(backgroundSurface, NULL, surf_display, &backgroundRect);
 
         // Render List Items
         for (int i = 0;
@@ -365,22 +187,16 @@ bool PokedexActivityList::renderListItems(SDL_Surface *surf_display, TTF_Font *f
 
 SDL_Rect PokedexActivityList::renderItemBackground(SDL_Surface *surf_display, int i)
 {
-    listBackgroundRect.h = ITEM_HEIGHT;
-    double heightRatio   = static_cast<double>(listBackgroundRect.h) /
-                         static_cast<double>(listBackgroundSurface_default->h);
-
-    listBackgroundRect.x = static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * 0.5));
+    listBackgroundRect.x = static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * .5));
     listBackgroundRect.y = (i * ITEM_HEIGHT + 70);
-    listBackgroundRect.w = static_cast<int>(heightRatio * listBackgroundSurface_default->w);
 
     if (offset + i == selectedIndex)
     {
-        PokeSurface::onDrawScaled(surf_display, listBackgroundSurface_selected,
-                                  &listBackgroundRect);
+        SDL_BlitSurface(listBackgroundSurface_selected, NULL, surf_display, &listBackgroundRect);
     }
     else
     {
-        PokeSurface::onDrawScaled(surf_display, listBackgroundSurface_default, &listBackgroundRect);
+        SDL_BlitSurface(listBackgroundSurface_default, NULL, surf_display, &listBackgroundRect);
     }
 
     return listBackgroundRect;
@@ -390,37 +206,44 @@ bool PokedexActivityList::renderItemSprites(SDL_Surface *surf_display, int i)
 {
     int index = offset + i;
 
-    AssetManager::t_asset *pokemonSpriteAsset = assetManager->getAsset(
-        AssetManager::POKEMON_SPRITES, AssetManager::t_assetID(std::stoi(pokemon[0])));
-
     // pokemon Sprite
+    AssetManager::t_asset *pokemonSpriteAsset =
+        assetManager->getAsset(AssetManager::POKEMON_SPRITES, POKEMON_NAMETOID_MAP.at(pokemon[1]));
+
+    pokemonSprite = pokemonSpriteAsset->surface;
+    pokeEntryRect = pokemonSpriteAsset->size;
+
     pokeEntryRect.x = 50;
     pokeEntryRect.y = 100;
-    pokeEntryRect.w = pokemonSpriteAsset->surface->w;
-    pokeEntryRect.h = pokemonSpriteAsset->surface->h;
 
-    SDL_BlitSurface(pokemonSpriteAsset->surface, NULL, surf_display, &pokeEntryRect);
-    // PokeSurface::onDraw(surf_display, pokemonSpriteAsset->surface, &pokeEntryRect);
+    SDL_BlitSurface(pokemonSprite, NULL, surf_display, &pokeEntryRect);
 
-    // List item types_1
-    pokeEntryType1Rect.x = 20;
-    pokeEntryType1Rect.y = pokeEntryRect.h + 220;
-    pokeEntryType1Rect.w = pokemonTypeSurface_cache[index][0]->w * 2;
-    pokeEntryType1Rect.h = pokemonTypeSurface_cache[index][0]->h * 2;
+    // typeA Sprite
+    AssetManager::t_asset *typeSpriteAsset =
+        assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokemon[3]));
 
-    PokeSurface::onDrawScaled(surf_display, pokemonTypeSurface_cache[index][0],
-                              &pokeEntryType1Rect);
+    typeA     = typeSpriteAsset->surface;
+    typeARect = typeSpriteAsset->size;
 
-    // List item types_2
+    typeARect.x = 20;
+    typeARect.y = pokeEntryRect.h + 220;
+
+    SDL_BlitSurface(typeA, NULL, surf_display, &typeARect);
+
+    // typeB Sprite
     if (pokemon[4] != "NULL")
     {
-        pokeEntryType2Rect.x = 20 + pokeEntryType1Rect.w;
-        pokeEntryType2Rect.y = pokeEntryRect.h + 220;
-        pokeEntryType2Rect.w = pokemonTypeSurface_cache[index][1]->w * 2;
-        pokeEntryType2Rect.h = pokemonTypeSurface_cache[index][1]->h * 2;
+        typeSpriteAsset =
+            assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokemon[4]));
 
-        PokeSurface::onDrawScaled(surf_display, pokemonTypeSurface_cache[index][1],
-                                  &pokeEntryType2Rect);
+        typeB     = typeSpriteAsset->surface;
+        typeBRect = typeSpriteAsset->size;
+
+        // pokemon Sprite
+        typeBRect.x = 20 + typeARect.w;
+        typeBRect.y = pokeEntryRect.h + 220;
+
+        SDL_BlitSurface(typeB, NULL, surf_display, &typeBRect);
     }
 
     return true;
@@ -431,29 +254,77 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface *surf_display, SDL_Rect *r
 {
     int index = offset + i;
 
-    pokeIDRect.x = rect->x + 60;
-    pokeIDRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) -
-                   (pokemonIDNameSurface_cache[index][0]->h / 2) -
-                   5; // -5 to stay above white line in background
-    pokeIDRect.w = pokemonIDNameSurface_cache[index][0]->w;
-    pokeIDRect.h = pokemonIDNameSurface_cache[index][0]->h;
-
-    pokeNameRect.x = pokeIDRect.x + (rect->w / 2) - (pokemonIDNameSurface_cache[index][1]->w / 2);
-    pokeNameRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) -
-                     (pokemonIDNameSurface_cache[index][1]->h / 2) -
-                     5; // -5 to stay above white line in background
-    pokeNameRect.w = pokemonIDNameSurface_cache[index][1]->w;
-    pokeNameRect.h = pokemonIDNameSurface_cache[index][1]->h;
-
     if (offset + i == selectedIndex)
     {
-        PokeSurface::onDraw(surf_display, pokemonIDNameSurface_cache[index][2], &pokeIDRect);
-        PokeSurface::onDraw(surf_display, pokemonIDNameSurface_cache[index][3], &pokeNameRect);
+        SDL_Surface *pokeID_highlight =
+            TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[index][0].c_str(), HIGHLIGHT_COLOR);
+        if (pokeID_highlight == NULL)
+        {
+            std::cout << "Unable to load pokeID_highlight surface!"
+                      << " SDL_Error:  " << TTF_GetError();
+        }
+
+        SDL_Surface *pokeName_highlight =
+            TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[index][2].c_str(), HIGHLIGHT_COLOR);
+        if (pokeName_highlight == NULL)
+        {
+            std::cout << "Unable to load pokeName_highlight surface!"
+                      << " SDL_Error:  " << TTF_GetError();
+        }
+
+        pokeIDRect.x = rect->x + 60;
+        pokeIDRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) - (pokeID_highlight->h / 2) -
+                       5; // -5 to stay above white line in background
+        pokeIDRect.w = pokeID_highlight->w;
+        pokeIDRect.h = pokeID_highlight->h;
+
+        pokeNameRect.x = pokeIDRect.x + (rect->w / 2) - (pokeName_highlight->w / 2);
+        pokeNameRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) - (pokeName_highlight->h / 2) -
+                         5; // -5 to stay above white line in background
+        pokeNameRect.w = pokeName_highlight->w;
+        pokeNameRect.h = pokeName_highlight->h;
+
+        SDL_BlitSurface(pokeID_highlight, NULL, surf_display, &pokeIDRect);
+        SDL_BlitSurface(pokeName_highlight, NULL, surf_display, &pokeNameRect);
+
+        SDL_FreeSurface(pokeID_highlight);
+        SDL_FreeSurface(pokeName_highlight);
     }
     else
     {
-        PokeSurface::onDraw(surf_display, pokemonIDNameSurface_cache[index][0], &pokeIDRect);
-        PokeSurface::onDraw(surf_display, pokemonIDNameSurface_cache[index][1], &pokeNameRect);
+        SDL_Surface *pokeID =
+            TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[index][0].c_str(), COLOR);
+        if (pokeID == NULL)
+        {
+            std::cout << "Unable to load pokeID surface!"
+                      << " SDL_Error:  " << TTF_GetError();
+        }
+
+        SDL_Surface *pokeName =
+            TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[index][2].c_str(), COLOR);
+        if (pokeName == NULL)
+        {
+            std::cout << "Unable to load pokeName surface!"
+                      << " SDL_Error:  " << TTF_GetError();
+        }
+
+        pokeIDRect.x = rect->x + 60;
+        pokeIDRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) - (pokeID->h / 2) -
+                       5; // -5 to stay above white line in background
+        pokeIDRect.w = pokeID->w;
+        pokeIDRect.h = pokeID->h;
+
+        pokeNameRect.x = pokeIDRect.x + (rect->w / 2) - (pokeName->w / 2);
+        pokeNameRect.y = (i * ITEM_HEIGHT + 70) + (rect->h / 2) - (pokeName->h / 2) -
+                         5; // -5 to stay above white line in background
+        pokeNameRect.w = pokeName->w;
+        pokeNameRect.h = pokeName->h;
+
+        SDL_BlitSurface(pokeID, NULL, surf_display, &pokeIDRect);
+        SDL_BlitSurface(pokeName, NULL, surf_display, &pokeNameRect);
+
+        SDL_FreeSurface(pokeID);
+        SDL_FreeSurface(pokeName);
     }
 
     return true;

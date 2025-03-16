@@ -12,12 +12,103 @@
 AssetManager AssetManager::instance;
 
 AssetManager::AssetManager()
-    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""),
-      currentAssetType(POKEMON_SPRITES), currentAssetID(t_assetID(0))
+    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""), currentAssetType(FONT),
+      currentAssetID(t_assetID(0))
 {
     assetMap = new t_assetMap();
 
     //=================================================LOAD_ASSETS================================================================
+    std::string path;
+    t_assetType type;
+    std::string name;
+    std::pair<int, int> size;
+
+    //===================== Fonts
+    type = FONT;
+    path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf";
+    name = "pokemon-dppt_l";
+    size = {46, 0}; // {font_size, blank_value}
+
+    (*assetMap)[type].emplace(FONT_POKEMON_DPPT_L, t_asset(name, path, type, size));
+
+    type = FONT;
+    path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf";
+    name = "pokemon-dppt_m";
+    size = {34, 0}; // {font_size, blank_value}
+
+    (*assetMap)[type].emplace(FONT_POKEMON_DPPT_M, t_asset(name, path, type, size));
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    type = FONT;
+    path = FONT_PATH + "pokemon-advanced-battle/pokemon-advanced-battle.ttf";
+    name = "pokemon-advanced-battle_l";
+    size = {46, 0}; // {font_size, blank_value}
+
+    (*assetMap)[type].emplace(FONT_POKEMON_ADVANCED_BATTLE_L, t_asset(name, path, type, size));
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "menu_background.png";
+    name = "menu_background";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_MAIN_MENU_BACKGROUND, t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokedexList_background.png";
+    name = "pokedex_background";
+    size = {WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_POKEDEX_BACKGROUND, t_asset(name, path, type, size));
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    //===================== MENU Item Entry Backgrounds
+    const int MENU_ITEM_HEIGHT    = static_cast<int>(WINDOW_HEIGHT / 5);
+    const int POKEDEX_ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
+    double heightRatio            = static_cast<double>(POKEDEX_ITEM_HEIGHT) / 22.0;
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "menu_item_background_default.png";
+    name = "menu_item_background_default";
+    size = {WINDOW_WIDTH, MENU_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_MENU_ITEM_BACKGROUND_DEFAULT,
+                              t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokedex_item_background_default.png";
+    name = "pokedex_item_background_default";
+    size = {static_cast<int>(heightRatio * 151), POKEDEX_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT,
+                              t_asset(name, path, type, size));
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "menu_item_background_selected.png";
+    name = "menu_item_background_selected";
+    size = {WINDOW_WIDTH, MENU_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_MENU_ITEM_BACKGROUND_SELECTED,
+                              t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "pokedex_item_background_selected.png";
+    name = "pokedex_item_background_selected";
+    size = {static_cast<int>(heightRatio * 151), POKEDEX_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_SELECTED,
+                              t_asset(name, path, type, size));
+
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
 
     //===================== Pokemon Sprites
     for (const auto &sprite : std::filesystem::directory_iterator(POKEMON_SPRITES_PATH))
@@ -67,67 +158,32 @@ AssetManager::AssetManager()
         }
     }
 
-    //=====================
-    std::string path;
-    t_assetType type;
-    std::string name;
-    std::pair<int, int> size;
+    //=====================  Type Icons
+    for (const auto &pokeType : std::filesystem::directory_iterator(TYPES_SPRITES_PATH))
+    {
+        if (std::filesystem::is_regular_file(pokeType) && pokeType.path().extension() == ".png")
+        { // Ensure it's a file
+            t_assetType type         = TYPES;
+            std::string path         = pokeType.path().string();
+            std::string name         = pokeType.path().stem().string();
+            std::pair<int, int> size = {96, 32};
 
-    //===================== Fonts
-    /* type = FONT; */
-    /* path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf"; */
-    /* name = "pokemon-dppt_l"; */
-    /* size = {34, 0}; // {font_size, blank_value} */
+            if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
+            {
+                t_asset type_asset(name, path, type, size);
 
-    /* (*assetMap)[type].emplace(FONT_POKEMON_DPPT_L, t_asset(name, path, type, size)); */
-
-    /* /1* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl;
-     * *1/ */
-
-    /* type = FONT; */
-    /* path = FONT_PATH + "pokemon-advanced-battle/pokemon-advanced-battle.ttf"; */
-    /* name = "pokemon-advanced-battle_l"; */
-    /* size = {34, 0}; // {font_size, blank_value} */
-
-    /* (*assetMap)[type].emplace(FONT_POKEMON_ADVANCED_BATTLE_L, t_asset(name, path, type, size));
-     */
-
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-
-    /* type = MISC; */
-    /* path = MISC_SPRITES_PATH + "menu_background.png"; */
-    /* name = "menu_background.png"; */
-    /* size = {WINDOW_WIDTH, WINDOW_HEIGHT}; */
-
-    /* (*assetMap)[type].emplace(SURFACE_MAIN_MENU_BACKGROUND, t_asset(name, path, type, size)); */
-
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-
-    //===================== MENU Item Entry Backgrounds
-    /* const int MENU_LIST_ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5); */
-
-    /* type = MISC; */
-    /* path = MISC_SPRITES_PATH + "menu_item_background_default.png"; */
-    /* name = "list_item_background_default"; */
-    /* size = {WINDOW_WIDTH, MENU_LIST_ITEM_HEIGHT}; */
-
-    /* (*assetMap)[type].emplace(SURFACE_LIST_ITEM_BACKGROUND_DEFAULT, */
-    /*                           t_asset(name, path, type, size)); */
-
-    /* /1* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl;
-     * *1/ */
-
-    /* type = MISC; */
-    /* path = MISC_SPRITES_PATH + "menu_item_background_selected.png"; */
-    /* name = "list_item_background_selected"; */
-    /* size = {WINDOW_WIDTH, MENU_LIST_ITEM_HEIGHT}; */
-
-    /* (*assetMap)[type].emplace(SURFACE_LIST_ITEM_BACKGROUND_SELECTED, */
-    /*                           t_asset(name, path, type, size)); */
-
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
+                (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), type_asset);
+            }
+            else
+            {
+                std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name
+                          << std::endl;
+            }
+        }
+    }
 
     //=================================================COUNT_ASSETS================================================================
+
     for (auto &ast_type : *assetMap)
         for (auto &ast : ast_type.second)
             totalAssets++;
@@ -151,13 +207,14 @@ void AssetManager::loadAssets()
 {
     /* typedef enum _assetType */
     /* { */
+    /* FONT, */
+    /* MISC, */
     /* POKEMON_SPRITES, */
     /* POKEMON_ICON, */
+    /* TYPES, */
     /* POKEMON_CRY, */
     /* SOUND_EFFECT, */
-    /* FONT, */
-    /* ITEMS, */
-    /* MISC */
+    /* ITEMS */
     /* } t_assetType; */
 
     if (!allAssetsLoaded)
@@ -175,6 +232,7 @@ void AssetManager::loadAssets()
             case POKEMON_ICON:
             case ITEMS:
             case MISC:
+            case TYPES:
                 loadSurface(*current_asset);
                 break;
             case SOUND_EFFECT:
