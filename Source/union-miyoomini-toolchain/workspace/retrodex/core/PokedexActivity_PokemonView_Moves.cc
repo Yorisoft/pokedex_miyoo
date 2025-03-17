@@ -106,112 +106,6 @@ bool PokedexActivity_PokemonView_Moves::initSDL()
             typeBRect.x = typeARect.x + typeARect.w + 5;
             typeBRect.y = typeARect.y;
         }
-
-        // Moves
-        for (size_t i = 0; i < dbResults->size(); i++)
-        {
-            std::vector<std::string> move = (*dbResults)[i];
-
-            std::string typePath     = TYPE_IMG_BASE_PATH + (*dbResults)[i][2] + ".png";
-            SDL_Surface *typeSurface = PokeSurface::onLoadImg(typePath);
-            if (typeSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
-                                                     "Unable to load typeSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            }
-
-            SDL_Surface *nameSurface =
-                TTF_RenderUTF8_Blended(fontSurface, (*dbResults)[i][1].c_str(), COLOR);
-            if (nameSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
-                                                     "Unable to load nameSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            }
-
-            std::string method         = METHOD_IMG_BASE_PATH + (*dbResults)[i][9] + ".png";
-            SDL_Surface *methodSurface = PokeSurface::onLoadImg(method);
-            if (methodSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
-                                                     "Unable to load methodSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            }
-
-            SDL_Surface *levelSurface = nullptr;
-            if ((*dbResults)[i][9] == "level-up")
-            {
-                levelSurface =
-                    TTF_RenderUTF8_Blended(fontSurface, (*dbResults)[i][8].c_str(), COLOR);
-                if (levelSurface == NULL)
-                {
-                    throw std::runtime_error(
-                        std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load "
-                                    "levelSurface! SDL Error:  ") +
-                        SDL_GetError());
-                }
-            }
-
-            std::string pp         = (*dbResults)[i][3] + '/' + (*dbResults)[i][3];
-            SDL_Surface *ppSurface = TTF_RenderUTF8_Blended(
-                fontSurface, pp.c_str(), offset + i == selectedIndex ? HIGHLIGHT_COLOR : COLOR);
-            if (ppSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
-                                                     "Unable to load ppSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-
-            SDL_Surface *pwrSurface = TTF_RenderUTF8_Blended(
-                fontSurface, ((*dbResults)[i][5] == "NULL" ? "--" : (*dbResults)[i][5]).c_str(),
-                COLOR);
-            if (pwrSurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
-                                                     "Unable to load pwrSurface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-
-            pwrRect = {typeARect.x + 40, typeARect.y + 70, pwrSurface->w, pwrSurface->h};
-
-            SDL_Surface *accrySurface = TTF_RenderUTF8_Blended(
-                fontSurface, ((*dbResults)[i][6] == "NULL" ? "--" : (*dbResults)[i][6]).c_str(),
-                COLOR);
-            if (accrySurface == NULL)
-            {
-                throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
-                                                     "Unable to load accrySurface! SDL Error:  ") +
-                                         SDL_GetError());
-            };
-
-            accryRect = {accryRect.x = pwrRect.x, accryRect.y = (pwrRect.y + pwrRect.h) + 10,
-                         accryRect.w = accrySurface->w, accryRect.h = accrySurface->h};
-
-            std::string summary = cleanString((*dbResults)[i][7]);
-            SDL_Surface *summarySurface =
-                TTF_RenderUTF8_Blended_Wrapped(fontSurface, summary.c_str(), COLOR, 295);
-            if (summarySurface == NULL)
-            {
-                throw std::runtime_error(
-                    std::string("PokedexActivity_PokemonView_Moves::initSDL() Unable to load "
-                                "summarySurface! SDL Error:  ") +
-                    SDL_GetError());
-            };
-
-            summaryRect = {summaryRect.x = 15, summaryRect.y = (WINDOW_HEIGHT / 2) + 50,
-                           summaryRect.w = summarySurface->w, summaryRect.h = summarySurface->h};
-
-            typeSurface_cache.push_back(typeSurface);
-            nameSurface_cache.push_back(nameSurface);
-            methodSurface_cache.push_back(methodSurface);
-            levelSurface_cache.push_back(levelSurface);
-            ppSurface_cache.push_back(ppSurface);
-            pwrSurface_cache.push_back(pwrSurface);
-            /* classSurface_cache.push_back(classSurface); */
-            accrySurface_cache.push_back(accrySurface);
-            summarySurface_cache.push_back(summarySurface);
-        }
     }
     catch (const std::runtime_error &e)
     {
@@ -408,27 +302,29 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface *surf_disp
 {
     // Render Power
     SDL_Surface *power = TTF_RenderText_Solid(fontSurface, move[5].c_str(), COLOR);
+    pwrRect            = {typeARect.x + 40, typeARect.y + 70, power->w, power->h};
+
     SDL_BlitSurface(power, NULL, surf_display, &pwrRect);
 
     // List item Category
     SDL_Surface *category =
         assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(move[4]))->surface;
-
-    classRect.x = pwrRect.x + 70;
-    classRect.y = pwrRect.y;
-    classRect.w = category->w;
-    classRect.h = category->h;
+    classRect = {pwrRect.x + 70, pwrRect.y, category->w, category->h};
 
     SDL_BlitSurface(category, NULL, surf_display, &classRect);
 
     // Render Accuracy
     SDL_Surface *accuracy = TTF_RenderText_Solid(fontSurface, move[6].c_str(), COLOR);
+    accryRect             = {pwrRect.x, (pwrRect.y + pwrRect.h) + 10, accuracy->w, accuracy->h};
+
     SDL_BlitSurface(accuracy, NULL, surf_display, &accryRect);
 
     // Render Effect
     std::string summaryText = cleanString((*dbResults)[offset + i][7]);
     SDL_Surface *summary =
         TTF_RenderUTF8_Solid_Wrapped(fontSurface, summaryText.c_str(), COLOR, 256);
+    summaryRect = {15, (WINDOW_HEIGHT / 2) + 50, summary->w, summary->h};
+
     SDL_BlitSurface(summary, NULL, surf_display, &summaryRect);
 
     return true;
