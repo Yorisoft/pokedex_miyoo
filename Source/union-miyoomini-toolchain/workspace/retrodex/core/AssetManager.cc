@@ -26,24 +26,21 @@ AssetManager::AssetManager()
     //===================== Fonts
     type = FONT;
     path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf";
-    name = "pokemon-dppt_l";
+    name = "pokemon-dppt-m";
+    size = {34, 0}; // {font_size, blank_value}
+
+    (*assetMap)[type].emplace(FONT_POKEMON_DPPT_M, t_asset(name, path, type, size));
+
+    type = FONT;
+    path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf";
+    name = "pokemon-dppt-l";
     size = {46, 0}; // {font_size, blank_value}
 
     (*assetMap)[type].emplace(FONT_POKEMON_DPPT_L, t_asset(name, path, type, size));
 
     type = FONT;
-    path = FONT_PATH + "pokemon-dppt/pokemon-dppt.ttf";
-    name = "pokemon-dppt_m";
-    size = {34, 0}; // {font_size, blank_value}
-
-    (*assetMap)[type].emplace(FONT_POKEMON_DPPT_M, t_asset(name, path, type, size));
-
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-    /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
-
-    type = FONT;
     path = FONT_PATH + "pokemon-advanced-battle/pokemon-advanced-battle.ttf";
-    name = "pokemon-advanced-battle_l";
+    name = "pokemon-advanced-battle-l";
     size = {46, 0}; // {font_size, blank_value}
 
     (*assetMap)[type].emplace(FONT_POKEMON_ADVANCED_BATTLE_L, t_asset(name, path, type, size));
@@ -216,6 +213,29 @@ AssetManager::AssetManager()
         }
     }
 
+    //===================== Encounter
+    for (const auto &encounter : std::filesystem::directory_iterator(ENCOUNTER_ICONS_PATH))
+    {
+        if (std::filesystem::is_regular_file(encounter) && encounter.path().extension() == ".png")
+        { // Ensure it's a file
+            t_assetType type         = MISC;
+            std::string path         = encounter.path().string();
+            std::string name         = encounter.path().stem().string();
+            std::pair<int, int> size = {36, 36};
+
+            if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
+            {
+                t_asset ecounter_asset(name, path, type, size);
+
+                (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), ecounter_asset);
+            }
+            else
+            {
+                std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name
+                          << std::endl;
+            }
+        }
+    }
     //=================================================COUNT_ASSETS================================================================
 
     for (auto &ast_type : *assetMap)

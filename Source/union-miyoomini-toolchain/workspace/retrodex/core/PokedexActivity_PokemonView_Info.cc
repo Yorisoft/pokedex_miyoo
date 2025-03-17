@@ -5,10 +5,10 @@
 PokedexActivity_PokemonView_Info PokedexActivity_PokemonView_Info::instance;
 
 PokedexActivity_PokemonView_Info::PokedexActivity_PokemonView_Info()
-    : needRedraw(true), dbResults(nullptr), pokemon(nullptr), backgroundSurface(nullptr),
-      pokeSprite(nullptr), typeA(nullptr), typeB(nullptr), id(nullptr), nameSurface(nullptr),
-      height(nullptr), weight(nullptr), gender(nullptr), genus(nullptr), flavorText(nullptr),
-      se_poke_cry(nullptr), se_left_right(nullptr), fontSurface(nullptr)
+    : needRedraw(true), dbResults(nullptr), pokemon(nullptr), assetManager(nullptr),
+      backgroundSurface(nullptr), pokeSprite(nullptr), typeA(nullptr), typeB(nullptr), id(nullptr),
+      nameSurface(nullptr), height(nullptr), weight(nullptr), gender(nullptr), genus(nullptr),
+      flavorText(nullptr), se_poke_cry(nullptr), se_left_right(nullptr), fontSurface(nullptr)
 {
 }
 
@@ -71,8 +71,6 @@ bool PokedexActivity_PokemonView_Info::initSDL()
         backgroundRect    = backgroundAsset->size;
 
         // Pokemon Sprite
-        std::string spritePath = SPRITES_IMG_BASE_PATH + PokedexDB::getPokemonIdentifier() + ".png";
-
         AssetManager::t_asset *pokemonSpriteAsset =
             assetManager->getAsset(AssetManager::POKEMON_SPRITES,
                                    POKEMON_NAMETOID_MAP.at(PokedexDB::getPokemonIdentifier()));
@@ -97,7 +95,7 @@ bool PokedexActivity_PokemonView_Info::initSDL()
         if (pokeTypes[1] != "NULL")
         {
             // Pokemnon Type 2
-            AssetManager::t_asset *typeSpriteAsset =
+            typeSpriteAsset =
                 assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokeTypes[1]));
 
             typeB     = typeSpriteAsset->surface;
