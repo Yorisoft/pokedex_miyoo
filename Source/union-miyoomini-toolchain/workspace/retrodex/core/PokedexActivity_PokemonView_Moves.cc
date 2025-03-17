@@ -86,8 +86,9 @@ bool PokedexActivity_PokemonView_Moves::initSDL()
                         pokeName->h};
 
         // Pokemon Types
-        AssetManager::t_asset *typeSpriteAsset = assetManager->getAsset(
-            AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokemon->getTypes()[0]));
+        std::vector<std::string> pokeTypes = pokemon->getTypes();
+        AssetManager::t_asset *typeSpriteAsset =
+            assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokeTypes[0]));
 
         typeA     = typeSpriteAsset->surface;
         typeARect = typeSpriteAsset->size;
@@ -95,10 +96,10 @@ bool PokedexActivity_PokemonView_Moves::initSDL()
         typeARect.x = pokeIconRect.x + pokeIconRect.w;
         typeARect.y = (pokeNameRect.y + pokeNameRect.h) + 5;
 
-        if (pokemon->getTypes().size() > 1)
+        if (pokeTypes[1] != "NULL")
         { // Pokemnon Type 2
-            typeSpriteAsset = assetManager->getAsset(
-                AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokemon->getTypes()[1]));
+            typeSpriteAsset =
+                assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(pokeTypes[1]));
 
             typeB     = typeSpriteAsset->surface;
             typeBRect = typeSpriteAsset->size;
