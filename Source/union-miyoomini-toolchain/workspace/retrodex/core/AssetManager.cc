@@ -12,12 +12,8 @@
 AssetManager AssetManager::instance;
 
 AssetManager::AssetManager()
-    : loadedAssets(0)
-    , index(0)
-    , allAssetsLoaded(false)
-    , file("")
-    , currentAssetType(FONT)
-    , currentAssetID(t_assetID(0))
+    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""), currentAssetType(FONT),
+      currentAssetID(t_assetID(0))
 {
     assetMap = new t_assetMap();
 
@@ -106,7 +102,7 @@ AssetManager::AssetManager()
     name = "settings_background";
     size = {WINDOW_WIDTH, WINDOW_HEIGHT};
 
-    (*assetMap)[type].emplace(SURFACE_SETTING_BACKGROUND, t_asset(name, path, type, size));
+    (*assetMap)[type].emplace(SURFACE_SETTINGS_SCREEN_BACKGROUND, t_asset(name, path, type, size));
 
     //===================== List Item Backgrounds
     const int MENU_ITEM_HEIGHT      = static_cast<int>(WINDOW_HEIGHT / 5);
@@ -114,6 +110,8 @@ AssetManager::AssetManager()
     double heightRatio              = static_cast<double>(POKEDEX_ITEM_HEIGHT) / 22.0;
     const int EVOLUTION_ITEM_WIDTH  = static_cast<int>(WINDOW_WIDTH * 0.5);
     const int EVOLUTION_ITEM_HEIGHT = static_cast<int>((WINDOW_HEIGHT / 3) * 0.7);
+    const int SETTINGS_ITEM_WIDTH   = static_cast<int>(WINDOW_WIDTH * .87);
+    const int SETTINGS_ITEM_HEIGHT  = static_cast<int>(WINDOW_HEIGHT / 9);
 
     type = MISC;
     path = MISC_SPRITES_PATH + "menu_item_background_default.png";
@@ -161,6 +159,14 @@ AssetManager::AssetManager()
     size = {EVOLUTION_ITEM_WIDTH, EVOLUTION_ITEM_HEIGHT};
 
     (*assetMap)[type].emplace(SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED,
+                              t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "setting_item_background.png";
+    name = "setting_item_background";
+    size = {SETTINGS_ITEM_WIDTH, SETTINGS_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_SETTINGS_LIST_ITEM_BACKGROUND,
                               t_asset(name, path, type, size));
 
     //===================== Pokemon Sprites

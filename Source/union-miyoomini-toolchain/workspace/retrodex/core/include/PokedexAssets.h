@@ -37,33 +37,18 @@ class PokedexAssets
 
         // constructor
         _asset() = default;
-        _asset(std::string p)
-            : path(p)
-        {
-        }
-        _asset(std::string p, std::pair<int, int> s)
-            : path(p)
-            , size({0, 0, s.first, s.second})
-        {
-        }
+        _asset(std::string p) : path(p) {}
+        _asset(std::string p, std::pair<int, int> s) : path(p), size({0, 0, s.first, s.second}) {}
         _asset(std::string p, t_assetType t, std::pair<int, int> s)
-            : path(p)
-            , type(t)
-            , size({0, 0, s.first, s.second})
+            : path(p), type(t), size({0, 0, s.first, s.second})
         {
         }
         _asset(std::string n, std::string p, t_assetType t, std::pair<int, int> s)
-            : name(n)
-            , path(p)
-            , type(t)
-            , size({0, 0, s.first, s.second})
+            : name(n), path(p), type(t), size({0, 0, s.first, s.second})
         {
         }
         _asset(std::string p, SDL_Surface *sf, SDL_Rect r, bool loadState)
-            : path(p)
-            , surface(sf)
-            , size(r)
-            , isLoaded(loadState)
+            : path(p), surface(sf), size(r), isLoaded(loadState)
         {
         }
     } t_asset;
@@ -128,8 +113,8 @@ class PokedexAssets
         SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED,
 
         // POKEMON SETTINGS SCREEEN
-        SURFACE_SETTING_BACKGROUND,
-        SURFACE_SETTING_LIST_ITEM_BACKGROUND,
+        SURFACE_SETTINGS_SCREEN_BACKGROUND,
+        SURFACE_SETTINGS_LIST_ITEM_BACKGROUND,
 
         //=================================================POKEMON_TYPES================================================================
 
