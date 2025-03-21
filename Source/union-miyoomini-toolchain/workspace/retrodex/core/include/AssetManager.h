@@ -15,7 +15,8 @@ class AssetManager : public PokedexAssets
                       POKEMON_ICONS_PATH   = "res/assets/pokemons/icons/",
                       POKEMON_SPRITES_PATH = "res/assets/pokemons/sprites/",
                       TYPES_SPRITES_PATH   = "res/assets/pokemons/types/",
-                      ENCOUNTER_ICONS_PATH = "res/assets/pokemons/encounters/";
+                      ENCOUNTER_ICONS_PATH = "res/assets/pokemons/encounters/",
+                      ITEMS_ICONS_PATH     = "res/assets/items/";
 
     /* const std::string SOUND_EFFECT_ON_START_PATH = "res/assets/sound_effects/list_start.wav", */
     /*                   SOUND_EFFECT_ON_EXIT_PATH  = "res/assets/sound_effects/list_back.wav", */

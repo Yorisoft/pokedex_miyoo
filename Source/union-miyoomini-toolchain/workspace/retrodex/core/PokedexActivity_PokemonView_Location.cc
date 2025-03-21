@@ -105,81 +105,6 @@ bool PokedexActivity_PokemonView_Location::initSDL()
             typeBRect.x = typeARect.x + typeARect.w + 5;
             typeBRect.y = typeARect.y;
         }
-
-        // Location
-        /* for (size_t i = 0; i < routes->size(); i++) */
-        /* { */
-        /*     // NAME */
-        /*     std::string location = (*routes)[i][1]; */
-        /*     for (int i = 0; i < location.size(); i++) */
-        /*     { */
-        /*         location[i] = std::toupper(location[i]); */
-        /*     } */
-        /*     SDL_Surface *locationNameSurface = */
-        /*         TTF_RenderUTF8_Blended(fontSurface, location.c_str(), COLOR); */
-        /*     if (locationNameSurface == NULL) */
-        /*     { */
-        /*         throw std::runtime_error( */
-        /*             std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load "
-         */
-        /*                         "locationNameSurface! SDL Error:  ") + */
-        /*             SDL_GetError()); */
-        /*     }; */
-
-        /*     // CONDITION */
-        /*     SDL_Surface *conditionSurface = nullptr; */
-        /*     if ((*routes)[i][7] != "NULL") */
-        /*     { */
-        /*         std::string condition = (*routes)[i][7]; */
-        /*         std::string path      = METHOD_IMG_BASE_PATH + condition + ".png"; */
-        /*         conditionSurface      = PokeSurface::onLoadImg(path); */
-        /*         if (conditionSurface == NULL) */
-        /*         { */
-        /*             throw std::runtime_error( */
-        /*                 std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to "
-         */
-        /*                             "load conditionSurface! SDL Error:  ") + */
-        /*                 SDL_GetError()); */
-        /*         }; */
-        /*     } */
-
-        /*     // METHOD */
-        /*     std::string method = (*routes)[i][2]; */
-        /*     method             = method == "walk" ? "grass" : method; */
-        /*     method             = method == "gift-egg" ? "egg" : method; */
-        /*     method             = method == "surf" ? "water" : method; */
-        /*     std::string path   = METHOD_IMG_BASE_PATH + method + ".png"; */
-
-        /*     SDL_Surface *methodSurface = PokeSurface::onLoadImg(path); */
-        /*     if (methodSurface == NULL) */
-        /*     { */
-        /*         throw std::runtime_error( */
-        /*             std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load "
-         */
-        /*                         "methodSurface! SDL Error:  ") + */
-        /*             SDL_GetError()); */
-        /*     }; */
-
-        /*     // RATE */
-        /*     std::string rate         = (*routes)[i][5] + '%'; */
-        /*     SDL_Surface *rateSurface = TTF_RenderUTF8_Blended(fontSurface, rate.c_str(), COLOR);
-         */
-        /*     if (rateSurface == NULL) */
-        /*     { */
-        /*         throw std::runtime_error( */
-        /*             std::string("PokedexActivity_PokemonView_Location::initSDL() Unable to load "
-         */
-        /*                         "rateSurface! SDL Error:  ") + */
-        /*             SDL_GetError()); */
-        /*     }; */
-
-        /*     locationNameSurface_cache.push_back(locationNameSurface); */
-        /*     methodSurface_cache.push_back(methodSurface); */
-        /*     conditionSurface_cache.push_back(conditionSurface); */
-        /*     rateSurface_cache.push_back(rateSurface); */
-        /* levelSurface_cache.push_back({minLevelSurface, maxLevelSurface}); */
-        /* detailLocationNameSurface_cache.push_back(detailLocationNameSurface); */
-        /* } */
     }
     catch (const std::runtime_error &e)
     {
@@ -250,62 +175,6 @@ void PokedexActivity_PokemonView_Location::onActivate()
 void PokedexActivity_PokemonView_Location::onDeactivate()
 {
     std::cout << "PokedexActivity_PokemonView_Location::onActivate START \n";
-
-    for (SDL_Surface *surface : locationNameSurface_cache)
-        if (surface)
-        {
-            SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    for (SDL_Surface *surface : conditionSurface_cache)
-        if (surface)
-        {
-            SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    for (SDL_Surface *surface : methodSurface_cache)
-        if (surface)
-        {
-            SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    for (SDL_Surface *surface : rateSurface_cache)
-        if (surface)
-        {
-            SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    for (std::pair<SDL_Surface *, SDL_Surface *> surfaces : levelSurface_cache)
-    {
-        if (surfaces.first)
-        {
-            SDL_FreeSurface(surfaces.first);
-            surfaces.first = nullptr;
-        }
-        if (surfaces.second)
-        {
-            SDL_FreeSurface(surfaces.second);
-            surfaces.second = nullptr;
-        }
-    }
-
-    for (SDL_Surface *surface : detailLocationNameSurface_cache)
-        if (surface)
-        {
-            SDL_FreeSurface(surface);
-            surface = nullptr;
-        }
-
-    locationNameSurface_cache.clear();
-    conditionSurface_cache.clear();
-    methodSurface_cache.clear();
-    rateSurface_cache.clear();
-    levelSurface_cache.clear();
-    detailLocationNameSurface_cache.clear();
 
     delete pokemon;
     pokemon = nullptr;
@@ -500,7 +369,9 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
     listEntryRect = {static_cast<int>(surf_display->w - (surf_display->w * 0.45) - 8),
                      65 + (i * (ITEM_HEIGHT + spacing)), static_cast<int>(surf_display->w * 0.45),
                      ITEM_HEIGHT};
-    PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect);
+
+    SDL_BlitSurface(listEntrySurface, NULL, surf_display, &listEntryRect);
+    /* PokeSurface::onDrawScaled(surf_display, listEntrySurface, &listEntryRect); */
 
     if (offset + i == selectedIndex)
     {
@@ -581,7 +452,8 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
     SDL_BlitSurface(methodSurface, NULL, surf_display, &methodRect);
 
     // Render rate
-    SDL_Surface *rate = TTF_RenderUTF8_Solid(fontSurface, route[5].c_str(), COLOR);
+    std::string rateString = route[5] + '%';
+    SDL_Surface *rate      = TTF_RenderUTF8_Solid(fontSurface, rateString.c_str(), COLOR);
     if (rate == NULL)
     {
         std::cerr << "Warning: PokedexActivity_PokemonView_Location::initSDL() Unable to load "

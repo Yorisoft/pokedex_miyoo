@@ -12,8 +12,12 @@
 AssetManager AssetManager::instance;
 
 AssetManager::AssetManager()
-    : loadedAssets(0), index(0), allAssetsLoaded(false), file(""), currentAssetType(FONT),
-      currentAssetID(t_assetID(0))
+    : loadedAssets(0)
+    , index(0)
+    , allAssetsLoaded(false)
+    , file("")
+    , currentAssetType(FONT)
+    , currentAssetID(t_assetID(0))
 {
     assetMap = new t_assetMap();
 
@@ -105,9 +109,11 @@ AssetManager::AssetManager()
     (*assetMap)[type].emplace(SURFACE_SETTING_BACKGROUND, t_asset(name, path, type, size));
 
     //===================== List Item Backgrounds
-    const int MENU_ITEM_HEIGHT    = static_cast<int>(WINDOW_HEIGHT / 5);
-    const int POKEDEX_ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
-    double heightRatio            = static_cast<double>(POKEDEX_ITEM_HEIGHT) / 22.0;
+    const int MENU_ITEM_HEIGHT      = static_cast<int>(WINDOW_HEIGHT / 5);
+    const int POKEDEX_ITEM_HEIGHT   = static_cast<int>(WINDOW_HEIGHT * 0.6 / 5);
+    double heightRatio              = static_cast<double>(POKEDEX_ITEM_HEIGHT) / 22.0;
+    const int EVOLUTION_ITEM_WIDTH  = static_cast<int>(WINDOW_WIDTH * 0.5);
+    const int EVOLUTION_ITEM_HEIGHT = static_cast<int>((WINDOW_HEIGHT / 3) * 0.7);
 
     type = MISC;
     path = MISC_SPRITES_PATH + "menu_item_background_default.png";
@@ -115,14 +121,6 @@ AssetManager::AssetManager()
     size = {WINDOW_WIDTH, MENU_ITEM_HEIGHT};
 
     (*assetMap)[type].emplace(SURFACE_MENU_ITEM_BACKGROUND_DEFAULT,
-                              t_asset(name, path, type, size));
-
-    type = MISC;
-    path = MISC_SPRITES_PATH + "pokedex_item_background_default.png";
-    name = "pokedex_item_background_default";
-    size = {static_cast<int>(heightRatio * 151), POKEDEX_ITEM_HEIGHT};
-
-    (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT,
                               t_asset(name, path, type, size));
 
     type = MISC;
@@ -134,11 +132,35 @@ AssetManager::AssetManager()
                               t_asset(name, path, type, size));
 
     type = MISC;
+    path = MISC_SPRITES_PATH + "pokedex_item_background_default.png";
+    name = "pokedex_item_background_default";
+    size = {static_cast<int>(heightRatio * 151), POKEDEX_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_DEFAULT,
+                              t_asset(name, path, type, size));
+
+    type = MISC;
     path = MISC_SPRITES_PATH + "pokedex_item_background_selected.png";
     name = "pokedex_item_background_selected";
     size = {static_cast<int>(heightRatio * 151), POKEDEX_ITEM_HEIGHT};
 
     (*assetMap)[type].emplace(SURFACE_POKEDEX_ITEM_BACKGROUND_SELECTED,
+                              t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "evolution_item_background_default.png";
+    name = "evolution_item_background_selected";
+    size = {EVOLUTION_ITEM_WIDTH, EVOLUTION_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_DEFAULT,
+                              t_asset(name, path, type, size));
+
+    type = MISC;
+    path = MISC_SPRITES_PATH + "evolution_item_background_selected.png";
+    name = "evolution_item_background_selected";
+    size = {EVOLUTION_ITEM_WIDTH, EVOLUTION_ITEM_HEIGHT};
+
+    (*assetMap)[type].emplace(SURFACE_EVOLUTION_LIST_ITEM_BACKGROUND_SELECTED,
                               t_asset(name, path, type, size));
 
     //===================== Pokemon Sprites
@@ -236,6 +258,31 @@ AssetManager::AssetManager()
             }
         }
     }
+
+    //===================== Items
+    for (const auto &item : std::filesystem::directory_iterator(ITEMS_ICONS_PATH))
+    {
+        if (std::filesystem::is_regular_file(item) && item.path().extension() == ".png")
+        { // Ensure it's a file
+            t_assetType type         = ITEMS;
+            std::string path         = item.path().string();
+            std::string name         = item.path().stem().string();
+            std::pair<int, int> size = {36, 36};
+
+            if (POKEMON_NAMETOID_MAP.find(name) != POKEMON_NAMETOID_MAP.end())
+            {
+                t_asset item_asset(name, path, type, size);
+
+                (*assetMap)[type].emplace(POKEMON_NAMETOID_MAP.at(name), item_asset);
+            }
+            else
+            {
+                std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name
+                          << std::endl;
+            }
+        }
+    }
+
     //=================================================COUNT_ASSETS================================================================
 
     for (auto &ast_type : *assetMap)
@@ -266,9 +313,9 @@ void AssetManager::loadAssets()
     /* POKEMON_SPRITES, */
     /* POKEMON_ICON, */
     /* TYPES, */
+    /* ITEMS, */
     /* POKEMON_CRY, */
     /* SOUND_EFFECT, */
-    /* ITEMS */
     /* } t_assetType; */
 
     if (!allAssetsLoaded)
@@ -354,7 +401,9 @@ void AssetManager::loadSurface(t_asset &asset)
     /*         optimizedSurface->format->BitsPerPixel, optimizedSurface->format->format); */
     /* } */
 
-    asset.surface = SDL_CreateRGBSurfaceWithFormat(0, asset.size.w, asset.size.h,
+    asset.surface = SDL_CreateRGBSurfaceWithFormat(0,
+                                                   asset.size.w,
+                                                   asset.size.h,
                                                    optimizedSurface->format->BitsPerPixel,
                                                    optimizedSurface->format->format);
 
