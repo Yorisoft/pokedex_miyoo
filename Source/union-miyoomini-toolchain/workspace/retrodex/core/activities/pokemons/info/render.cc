@@ -230,7 +230,7 @@ bool PokedexActivity_PokemonView_Info::renderSprites(SDL_Surface *surf_display)
     SDL_BlitSurface(typeA, NULL, surf_display, &typeARect);
 
     // Render Pokemon Type 2
-    if (typeB)
+    if (pokemon->getTypes()[1] != "NULL")
     {
         SDL_BlitSurface(typeB, NULL, surf_display, &typeBRect);
     }
