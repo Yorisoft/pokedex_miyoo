@@ -1,43 +1,5 @@
 #include "PokedexActivity_PokemonView_Stats.h"
-#include "PokedexActivityManager.h"
-#include "utils/name_to_id.h"
-
-PokedexActivity_PokemonView_Stats PokedexActivity_PokemonView_Stats::instance;
-
-PokedexActivity_PokemonView_Stats::PokedexActivity_PokemonView_Stats()
-    : pokemon(nullptr), dbResults(nullptr), backgroundSurface(nullptr), pokeSprite(nullptr),
-      pokeID(nullptr), pokeName(nullptr), abilitySurface(nullptr), h_abilitySurface(nullptr),
-      se_left_right(nullptr), needRedraw(true) {};
-
-PokedexActivity_PokemonView_Stats::~PokedexActivity_PokemonView_Stats()
-{
-    // in order to play sounds asynchrounously with activity,
-    // we cant call Mix_FreeChunk immediately after playing.. should probably make seperate class
-    // for this.
-    if (se_left_right)
-        Mix_FreeChunk(se_left_right);
-    se_left_right = nullptr;
-}
-
-void PokedexActivity_PokemonView_Stats::printPokeInfo()
-{
-    std::vector<unsigned short> stats = pokemon->getBasicStats();
-
-    std::cout << "ID: " << pokemon->getID() << '\n';
-    std::cout << "Name: " << pokemon->getName() << '\n';
-    std::cout << "Types: " << pokemon->getTypes()[0] << " | " << pokemon->getTypes()[1] << '\n';
-    std::cout << "Genus: " << pokemon->getGenus() << '\n';
-
-    std::cout << "Height: " << pokemon->getHeight() << '\"' << '\n';
-    std::cout << "Weight: " << pokemon->getWeight() << " lbs." << '\n';
-    std::cout << "Flavor Text: " << pokemon->getFlavorText() << '\n';
-    std::cout << "HP: " << stats[0] << '\n';
-    std::cout << "Attack: " << stats[1] << '\n';
-    std::cout << "Defense: " << stats[2] << '\n';
-    std::cout << "Special Attack: " << stats[3] << '\n';
-    std::cout << "Special Deffense: " << stats[4] << '\n';
-    std::cout << "Speed: " << stats[5] << '\n';
-}
+#include "name_to_id.h"
 
 bool PokedexActivity_PokemonView_Stats::initSDL()
 {
@@ -115,39 +77,6 @@ bool PokedexActivity_PokemonView_Stats::initSDL()
 
     std::cout << "PokedexActivity_PokemonView_Stats::initSDL END \n";
 }
-
-void PokedexActivity_PokemonView_Stats::onActivate()
-{
-    std::cout << "PokedexActivity_PokemonView_Stats::onActivate START \n";
-
-    // create new pokemon object
-    pokemon = new Pokemon();
-    printPokeInfo();
-
-    statNames = PokedexDB::executeSQL(&SQL_getStatNames);
-
-    assetManager = AssetManager::getInstance();
-
-    if (!initSDL())
-    {
-        std::cout
-            << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: "
-            << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    needRedraw = true;
-
-    std::cout << "PokedexActivity_PokemonView_Stats::onActivate END \n";
-}
-
-void PokedexActivity_PokemonView_Stats::onDeactivate()
-{
-    delete pokemon;
-    pokemon = nullptr;
-}
-
-void PokedexActivity_PokemonView_Stats::onLoop() {}
 
 void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface *surf_display, SDL_Renderer *renderer,
                                                  SDL_Texture *texture, TTF_Font *font,
@@ -234,8 +163,8 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface *surf_display, SDL_
                 if (abilities->size() > 1)
                 {
                     ability          = (*abilities)[1][0] + "    " + (*abilities)[1][1];
-                    h_abilitySurface = TTF_RenderUTF8_Blended_Wrapped(fontSurface, ability.c_str(),
-                                                                      {96, 96, 96}, 620);
+                    h_abilitySurface = TTF_RenderUTF8_Blended_Wrapped(
+                        fontSurface, ability.c_str(), {96, 96, 96}, 620);
                     if (h_abilitySurface == NULL)
                     {
                         std::cout << "Unable to load stat surface!"
@@ -258,50 +187,4 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface *surf_display, SDL_
         }
         needRedraw = false;
     }
-}
-
-void PokedexActivity_PokemonView_Stats::onFreeze() {}
-
-PokedexActivity_PokemonView_Stats *PokedexActivity_PokemonView_Stats::getInstance()
-{
-    return &instance;
-}
-
-void PokedexActivity_PokemonView_Stats::onButtonUp(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Stats::onButtonDown(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Stats::onButtonLeft(SDL_Keycode sym, Uint16 mod)
-{
-    // Play the sound effect
-    Mix_PlayChannel(1, se_left_right, 0);
-
-    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_INFO);
-}
-
-void PokedexActivity_PokemonView_Stats::onButtonRight(SDL_Keycode sym, Uint16 mod)
-{
-    // Play the sound effect
-    Mix_PlayChannel(1, se_left_right, 0);
-
-    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_MOVES);
-    // PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_MOVES);
-}
-
-void PokedexActivity_PokemonView_Stats::onButtonA(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Stats::onButtonB(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::back();
-}
-
-void PokedexActivity_PokemonView_Stats::onButtonR(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Stats::onButtonL(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Stats::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Stats::onButtonStart(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
 }

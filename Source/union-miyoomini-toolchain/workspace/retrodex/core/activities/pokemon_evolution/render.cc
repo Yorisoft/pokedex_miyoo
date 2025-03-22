@@ -1,53 +1,5 @@
 #include "PokedexActivity_PokemonView_Evolution.h"
-#include "PokedexActivityManager.h"
-#include "utils/name_to_id.h"
-
-PokedexActivity_PokemonView_Evolution PokedexActivity_PokemonView_Evolution::instance;
-
-PokedexActivity_PokemonView_Evolution::PokedexActivity_PokemonView_Evolution()
-    : needRedraw(true), selectedIndex(0), offset(0), pokemon(nullptr), backgroundSurface(nullptr),
-      listEntryBackground_default(nullptr), listEntryBackground_selected(nullptr),
-      se_up_down(nullptr), se_left_right(nullptr), assetManager(nullptr)
-{
-}
-
-PokedexActivity_PokemonView_Evolution::~PokedexActivity_PokemonView_Evolution()
-{
-    if (se_up_down)
-        Mix_FreeChunk(se_up_down);
-
-    if (se_left_right)
-        Mix_FreeChunk(se_left_right);
-}
-
-void PokedexActivity_PokemonView_Evolution::printPokeInfo()
-{
-    std::vector<unsigned short> stats = pokemon->getBasicStats();
-
-    std::cout << "ID: " << pokemon->getID() << '\n';
-    std::cout << "Name: " << pokemon->getName() << '\n';
-    std::cout << "Types: " << pokemon->getTypes()[0] << " | " << pokemon->getTypes()[1] << '\n';
-    std::cout << "Genus: " << pokemon->getGenus() << '\n';
-    std::cout << "Evolution Chain ID: " << pokemon->getEvolutionChainID() << '\n';
-    std::cout << "Height: " << pokemon->getHeight() << '\"' << '\n';
-    std::cout << "Weight: " << pokemon->getWeight() << " lbs." << '\n';
-    std::cout << "Flavor Text: " << pokemon->getFlavorText() << '\n';
-    std::cout << "HP: " << stats[0] << '\n';
-    std::cout << "Attack: " << stats[1] << '\n';
-    std::cout << "Deffense: " << stats[2] << '\n';
-    std::cout << "Special Attack: " << stats[3] << '\n';
-    std::cout << "Special Deffense: " << stats[4] << '\n';
-    std::cout << "Speed: " << stats[5] << '\n';
-
-    for (std::vector<std::string> r : *pokemon->getEvolutionChain())
-    {
-        for (auto &c : r)
-        {
-            std::cout << c << '|';
-        }
-        std::cout << std::endl;
-    }
-}
+#include "name_to_id.h"
 
 bool PokedexActivity_PokemonView_Evolution::initSDL()
 {
@@ -126,22 +78,6 @@ void PokedexActivity_PokemonView_Evolution::onActivate()
 
     std::cout << "PokedexActivity_PokemonView_Evolution::onActivate END \n";
 }
-
-void PokedexActivity_PokemonView_Evolution::onDeactivate()
-{
-    std::cout << "PokedexActivity_PokemonView_Evolution::onDeactive START \n";
-
-    delete pokemon;
-    pokemon = nullptr;
-
-    selectedIndex = 0, offset = 0;
-
-    std::cout << "PokedexActivity_PokemonView_Evolution::onDeactive END \n";
-}
-
-void PokedexActivity_PokemonView_Evolution::onLoop() {}
-
-void PokedexActivity_PokemonView_Evolution::onFreeze() {}
 
 void PokedexActivity_PokemonView_Evolution::onRender(SDL_Surface *surf_display,
                                                      SDL_Renderer *renderer, SDL_Texture *texture,
@@ -667,81 +603,4 @@ bool PokedexActivity_PokemonView_Evolution::renderPokeInfo(SDL_Surface *surf_dis
     }
 
     return true;
-}
-
-PokedexActivity_PokemonView_Evolution *PokedexActivity_PokemonView_Evolution::getInstance()
-{
-    return &instance;
-}
-
-void PokedexActivity_PokemonView_Evolution::onButtonUp(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex > 0)
-    {
-        selectedIndex--;
-        evo = (*evoChain)[selectedIndex];
-        if (selectedIndex < offset)
-        {
-            offset--;
-        }
-        // Play the sound effect
-        Mix_PlayChannel(1, se_up_down, 0);
-    }
-}
-
-void PokedexActivity_PokemonView_Evolution::onButtonDown(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex < evoChain->size() - 1)
-    {
-        selectedIndex++;
-        evo = (*evoChain)[selectedIndex];
-        if (selectedIndex - offset >= 3)
-        {
-            offset++;
-        }
-        // Play the sound effect
-        Mix_PlayChannel(1, se_up_down, 0);
-    }
-}
-
-void PokedexActivity_PokemonView_Evolution::onButtonLeft(SDL_Keycode sym, Uint16 mod)
-{
-    // Play the sound effect
-    Mix_PlayChannel(1, se_left_right, 0);
-    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_LOCATION);
-}
-
-void PokedexActivity_PokemonView_Evolution::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Evolution::onButtonA(SDL_Keycode sym, Uint16 mod)
-{
-    std::cout << evo[2] << '\n';
-    PokedexDB::setPokemonID(std::stoi(evo[1]));
-    PokedexDB::setPokemonIdentifier(evo[2]);
-    PokedexDB::setVersionID(std::stoi(evo[22]));
-    PokedexDB::setVersionGroupID(std::stoi(evo[23]));
-    PokedexDB::setGenerationID(std::stoi(evo[24]));
-
-    ////Call next activity
-    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_INFO);
-}
-
-void PokedexActivity_PokemonView_Evolution::onButtonB(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::back();
-}
-
-void PokedexActivity_PokemonView_Evolution::onButtonR(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Evolution::onButtonL(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Evolution::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Evolution::onButtonStart(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
 }

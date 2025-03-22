@@ -1,25 +1,5 @@
 #include "PokedexActivity_PokemonView_Location.h"
-#include "PokedexActivityManager.h"
-#include "utils/name_to_id.h"
-
-PokedexActivity_PokemonView_Location PokedexActivity_PokemonView_Location::instance;
-
-PokedexActivity_PokemonView_Location::PokedexActivity_PokemonView_Location()
-    : selectedIndex(0), offset(0), needRedraw(true), dbResults(nullptr), routes(nullptr),
-      backgroundSurface(nullptr), listEntrySurface(nullptr), pokeIcon(nullptr), pokeName(nullptr),
-      typeA(nullptr), typeB(nullptr), se_left_right(nullptr), se_up_down(nullptr), pokemon(nullptr),
-      assetManager(nullptr)
-{
-}
-
-PokedexActivity_PokemonView_Location::~PokedexActivity_PokemonView_Location()
-{
-    if (se_up_down)
-        Mix_FreeChunk(se_up_down);
-
-    if (se_left_right)
-        Mix_FreeChunk(se_left_right);
-}
+#include "name_to_id.h"
 
 bool PokedexActivity_PokemonView_Location::initSDL()
 {
@@ -80,8 +60,8 @@ bool PokedexActivity_PokemonView_Location::initSDL()
                                                  "Unable to load pokeNameSurface! SDL Error:  ") +
                                      SDL_GetError());
         };
-        pokeNameRect = {(pokeIconRect.x + pokeIconRect.w), pokeIconRect.y + 10, pokeName->w,
-                        pokeName->h};
+        pokeNameRect = {
+            (pokeIconRect.x + pokeIconRect.w), pokeIconRect.y + 10, pokeName->w, pokeName->h};
 
         // Pokemon Types
         std::vector<std::string> pokeTypes = pokemon->getTypes();
@@ -115,83 +95,6 @@ bool PokedexActivity_PokemonView_Location::initSDL()
     std::cout << "PokedexActivity_PokemonView_Location::initSDL END \n";
     return true;
 }
-
-void PokedexActivity_PokemonView_Location::printPokeInfo()
-{
-    std::vector<unsigned short> stats = pokemon->getBasicStats();
-
-    std::cout << "ID: " << pokemon->getID() << '\n';
-    std::cout << "Name: " << pokemon->getName() << '\n';
-    std::cout << "Types: " << pokemon->getTypes()[0] << " | " << pokemon->getTypes()[1] << '\n';
-    std::cout << "Genus: " << pokemon->getGenus() << '\n';
-
-    std::cout << "Height: " << pokemon->getHeight() << '\"' << '\n';
-    std::cout << "Weight: " << pokemon->getWeight() << " lbs." << '\n';
-    std::cout << "Flavor Text: " << pokemon->getFlavorText() << '\n';
-    std::cout << "HP: " << stats[0] << '\n';
-    std::cout << "Attack: " << stats[1] << '\n';
-    std::cout << "Deffense: " << stats[2] << '\n';
-    std::cout << "Special Attack: " << stats[3] << '\n';
-    std::cout << "Special Deffense: " << stats[4] << '\n';
-    std::cout << "Speed: " << stats[5] << '\n';
-
-    for (std::vector<std::string> route : *routes)
-    {
-        for (std::string c : route)
-        {
-            std::cout << c << '|';
-        }
-        std::cout << '\n';
-    }
-    std::cout << "Done printing routes \n ";
-}
-
-void PokedexActivity_PokemonView_Location::onActivate()
-{
-    std::cout << "PokedexActivity_PokemonView_Location::onActivate START \n";
-
-    pokemon = new Pokemon();
-    routes  = pokemon->getRoutes();
-    printPokeInfo();
-
-    // Cant call this here?
-    // route = (*routes)[selectedIndex];
-
-    assetManager = AssetManager::getInstance();
-
-    if (!initSDL())
-    {
-        std::cerr
-            << "PokedexActivity_PokemonView_Stats::onActivate - Error in initSDL(), SDL Error: "
-            << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    needRedraw = true;
-
-    std::cout << "PokedexActivity_PokemonView_Location::onActivate END \n";
-}
-
-void PokedexActivity_PokemonView_Location::onDeactivate()
-{
-    std::cout << "PokedexActivity_PokemonView_Location::onActivate START \n";
-
-    delete pokemon;
-    pokemon = nullptr;
-
-    // pointer comes from PokedexDB
-    // PokedexDB handles its own pointers
-    /* /1* delete routes; *1/ */
-    routes = nullptr;
-
-    selectedIndex = 0, offset = 0;
-
-    route.clear();
-
-    std::cout << "PokedexActivity_PokemonView_Location::onActivate END \n";
-}
-
-void PokedexActivity_PokemonView_Location::onLoop() {}
 
 void PokedexActivity_PokemonView_Location::onRender(SDL_Surface *surf_display,
                                                     SDL_Renderer *renderer, SDL_Texture *texture,
@@ -285,8 +188,8 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface *surf_d
                   << TTF_GetError() << std::endl;
     };
 
-    maxLevelRect = {minLevelRect.x, (minLevelRect.y + minLevelRect.h) + 10, maxLevel->w,
-                    maxLevel->h};
+    maxLevelRect = {
+        minLevelRect.x, (minLevelRect.y + minLevelRect.h) + 10, maxLevel->w, maxLevel->h};
 
     SDL_BlitSurface(maxLevel, NULL, surf_display, &maxLevelRect);
     SDL_FreeSurface(maxLevel);
@@ -308,8 +211,8 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface *surf_d
                   << TTF_GetError() << std::endl;
     };
 
-    detailLocationRect = {15, (WINDOW_HEIGHT / 2) + 60, detailLocationName->w,
-                          detailLocationName->h};
+    detailLocationRect = {
+        15, (WINDOW_HEIGHT / 2) + 60, detailLocationName->w, detailLocationName->h};
     SDL_BlitSurface(detailLocationName, NULL, surf_display, &detailLocationRect);
     SDL_FreeSurface(detailLocationName);
 
@@ -324,8 +227,10 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface *surf_d
     SDL_Surface *methodSurface = methodIconAsset->surface;
 
     int bottomBorder = 37, border = 10;
-    methodRect = {detailLocationRect.x, WINDOW_HEIGHT - methodSurface->h - bottomBorder,
-                  static_cast<int>(methodSurface->w), static_cast<int>(methodSurface->h)};
+    methodRect = {detailLocationRect.x,
+                  WINDOW_HEIGHT - methodSurface->h - bottomBorder,
+                  static_cast<int>(methodSurface->w),
+                  static_cast<int>(methodSurface->h)};
 
     SDL_BlitSurface(methodSurface, NULL, surf_display, &methodRect);
 
@@ -338,7 +243,8 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface *surf_d
 
         conditionRect = {methodRect.x + methodRect.w + border,
                          WINDOW_HEIGHT - condition->h - bottomBorder,
-                         static_cast<int>(condition->w), static_cast<int>(condition->h)};
+                         static_cast<int>(condition->w),
+                         static_cast<int>(condition->h)};
 
         SDL_BlitSurface(condition, NULL, surf_display, &conditionRect);
     }
@@ -367,7 +273,8 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
     // Render list item background/surface
     int spacing   = 18;
     listEntryRect = {static_cast<int>(surf_display->w - (surf_display->w * 0.45) - 8),
-                     65 + (i * (ITEM_HEIGHT + spacing)), static_cast<int>(surf_display->w * 0.45),
+                     65 + (i * (ITEM_HEIGHT + spacing)),
+                     static_cast<int>(surf_display->w * 0.45),
                      ITEM_HEIGHT};
 
     SDL_BlitSurface(listEntrySurface, NULL, surf_display, &listEntryRect);
@@ -387,10 +294,14 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
         const int BORDER_WIDTH = 2;
         SDL_Rect borderRects[] = {
             {listEntryRect.x, listEntryRect.y, listEntryRect.w, BORDER_WIDTH}, // Top
-            {listEntryRect.x, listEntryRect.y + listEntryRect.h - BORDER_WIDTH, listEntryRect.w,
+            {listEntryRect.x,
+             listEntryRect.y + listEntryRect.h - BORDER_WIDTH,
+             listEntryRect.w,
              BORDER_WIDTH},                                                    // Bottom
             {listEntryRect.x, listEntryRect.y, BORDER_WIDTH, listEntryRect.h}, // Left
-            {listEntryRect.x + listEntryRect.w - BORDER_WIDTH, listEntryRect.y, BORDER_WIDTH,
+            {listEntryRect.x + listEntryRect.w - BORDER_WIDTH,
+             listEntryRect.y,
+             BORDER_WIDTH,
              listEntryRect.h} // Right
         };
 
@@ -415,7 +326,8 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
     };
 
     locationNameRect = {listEntryRect.x + (listEntryRect.w / 2) - (locationName->w / 2),
-                        listEntryRect.y, static_cast<int>(locationName->w),
+                        listEntryRect.y,
+                        static_cast<int>(locationName->w),
                         static_cast<int>(locationName->h)};
 
     SDL_BlitSurface(locationName, NULL, surf_display, &locationNameRect);
@@ -429,7 +341,9 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
         SDL_Surface *condition = conditionAsset->surface;
 
         double scaling = 1.5;
-        conditionRect  = {listEntryRect.x, listEntryRect.y, static_cast<int>(condition->w),
+        conditionRect  = {listEntryRect.x,
+                          listEntryRect.y,
+                          static_cast<int>(condition->w),
                           static_cast<int>(condition->h)};
 
         SDL_BlitSurface(condition, NULL, surf_display, &conditionRect);
@@ -447,7 +361,8 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
 
     methodRect = {listEntryRect.x,
                   (listEntryRect.y + listEntryRect.h) - static_cast<int>(methodSurface->h),
-                  static_cast<int>(methodSurface->w), static_cast<int>(methodSurface->h)};
+                  static_cast<int>(methodSurface->w),
+                  static_cast<int>(methodSurface->h)};
 
     SDL_BlitSurface(methodSurface, NULL, surf_display, &methodRect);
 
@@ -462,119 +377,12 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
     };
 
     rateRect = {(listEntryRect.x + listEntryRect.w) - rate->w,
-                (listEntryRect.y + listEntryRect.h) - rate->h, rate->w, rate->h};
+                (listEntryRect.y + listEntryRect.h) - rate->h,
+                rate->w,
+                rate->h};
 
     SDL_BlitSurface(rate, NULL, surf_display, &rateRect);
     SDL_FreeSurface(rate);
 
     return true;
-}
-
-void PokedexActivity_PokemonView_Location::onFreeze() {}
-
-PokedexActivity_PokemonView_Location *PokedexActivity_PokemonView_Location::getInstance()
-{
-    return &instance;
-}
-
-void PokedexActivity_PokemonView_Location::onButtonUp(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex > 0)
-    {
-        selectedIndex--;
-        if (selectedIndex < offset)
-        {
-            offset--;
-        }
-        Mix_PlayChannel(1, se_up_down, 0);
-    }
-}
-
-void PokedexActivity_PokemonView_Location::onButtonDown(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex < routes->size() - 1)
-    {
-        selectedIndex++;
-        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS)
-        {
-            offset++;
-        }
-        Mix_PlayChannel(1, se_up_down, 0);
-    }
-}
-
-void PokedexActivity_PokemonView_Location::onButtonLeft(SDL_Keycode sym, Uint16 mod)
-{
-    Mix_PlayChannel(1, se_left_right, 0);
-    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_MOVES);
-}
-
-void PokedexActivity_PokemonView_Location::onButtonRight(SDL_Keycode sym, Uint16 mod)
-{
-    Mix_PlayChannel(1, se_left_right, 0);
-    PokedexActivityManager::replace(APPSTATE_POKEMON_VIEW_EVOLUTION);
-}
-
-void PokedexActivity_PokemonView_Location::onButtonA(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Location::onButtonB(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::back();
-}
-
-void PokedexActivity_PokemonView_Location::onButtonR(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex < routes->size() - MAX_VISIBLE_ITEMS)
-    {
-        selectedIndex += MAX_VISIBLE_ITEMS;
-        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS)
-        {
-            offset += MAX_VISIBLE_ITEMS;
-            if (offset > routes->size() - MAX_VISIBLE_ITEMS)
-            {
-                offset = routes->size() - MAX_VISIBLE_ITEMS;
-            }
-        }
-    }
-    else
-    {
-        selectedIndex = routes->size() - 1;
-        offset        = routes->size() - MAX_VISIBLE_ITEMS;
-    }
-}
-
-void PokedexActivity_PokemonView_Location::onButtonL(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex >= MAX_VISIBLE_ITEMS)
-    {
-        selectedIndex -= MAX_VISIBLE_ITEMS;
-        if (selectedIndex < offset)
-        {
-            offset -= MAX_VISIBLE_ITEMS;
-            if (offset < 0)
-            {
-                offset = 0;
-            }
-        }
-    }
-    else
-    {
-        selectedIndex = 0;
-        offset        = 0;
-    }
-}
-
-void PokedexActivity_PokemonView_Location::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivity_PokemonView_Location::onButtonStart(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
 }

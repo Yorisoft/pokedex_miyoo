@@ -1,33 +1,5 @@
 #include "PokedexActivityList.h"
-#include "PokedexActivityManager.h"
-#include "utils/name_to_id.h"
-
-PokedexActivityList PokedexActivityList::instance;
-
-PokedexActivityList::PokedexActivityList()
-    : selectedIndex(0), offset(0), needRedraw(true), dbResults(nullptr), backgroundSurface(nullptr),
-      listBackgroundSurface_default(nullptr), listBackgroundSurface_selected(nullptr),
-      se_up_down(nullptr), se_on_start(nullptr), se_on_exit(nullptr), assetManager(nullptr)
-{
-}
-
-PokedexActivityList::~PokedexActivityList()
-{
-    // Cant delete in onDeactivate or auido will be cut short
-    //  deleting here is not best practice, this will only ever be called once,
-    //  onActivate/Deactivate will be called many times.
-    if (se_on_start)
-        Mix_FreeChunk(se_on_start);
-    se_on_start = nullptr;
-
-    if (se_up_down)
-        Mix_FreeChunk(se_up_down);
-    se_up_down = nullptr;
-
-    if (se_on_exit)
-        Mix_FreeChunk(se_on_exit);
-    se_on_exit = nullptr;
-}
+#include "name_to_id.h"
 
 bool PokedexActivityList::initSDL()
 {
@@ -89,52 +61,6 @@ bool PokedexActivityList::initSDL()
     return true;
 }
 
-void PokedexActivityList::print_dbResults()
-{
-    for (auto &row : *dbResults)
-    {
-        for (auto &col : row)
-        {
-            std::cout << col << " | ";
-        }
-        std::cout << std::endl;
-    }
-}
-
-void PokedexActivityList::onActivate()
-{
-    std::cout << "PokedexActivityList::onActivate START \n";
-
-    // Pokemon List DB Results
-    dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
-    pokemon   = (*dbResults)[selectedIndex];
-    print_dbResults();
-
-    assetManager = AssetManager::getInstance();
-
-    if (!initSDL())
-    {
-        std::cerr << "PokedexActivityList::onActivate - Error in initSDL(), SDL Error: "
-                  << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    Mix_PlayChannel(-1, se_on_start, 0);
-
-    needRedraw = true;
-
-    std::cout << "PokedexActivityList::onActivate END \n";
-}
-
-void PokedexActivityList::onDeactivate()
-{
-    pokemon.clear();
-
-    selectedIndex = 0, offset = 0;
-}
-
-void PokedexActivityList::onLoop() { pokemon = (*dbResults)[selectedIndex]; }
-
 void PokedexActivityList::onRender(SDL_Surface *surf_display, SDL_Renderer *renderer,
                                    SDL_Texture *texture, TTF_Font *font, Mix_Chunk *sEffect)
 {
@@ -147,7 +73,8 @@ void PokedexActivityList::onRender(SDL_Surface *surf_display, SDL_Renderer *rend
 
         // Render List Items
         for (int i = 0;
-             i < MAX_VISIBLE_ITEMS && static_cast<std::size_t>(offset + i) < dbResults->size(); i++)
+             i < MAX_VISIBLE_ITEMS && static_cast<std::size_t>(offset + i) < dbResults->size();
+             i++)
         {
             // Render list items
             if (!renderListItems(surf_display, font, i))
@@ -328,129 +255,4 @@ bool PokedexActivityList::renderItemEntry(SDL_Surface *surf_display, SDL_Rect *r
     }
 
     return true;
-}
-
-void PokedexActivityList::onFreeze()
-{
-    // do thing for now..
-}
-
-PokedexActivityList *PokedexActivityList::getInstance() { return &instance; }
-
-void PokedexActivityList::onButtonUp(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex > 0)
-    {
-        selectedIndex--;
-        if (selectedIndex < offset)
-        {
-            offset--;
-        }
-        // Play the sound effect
-        Mix_PlayChannel(-1, se_up_down, 0);
-    }
-}
-
-void PokedexActivityList::onButtonDown(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex < dbResults->size() - 1)
-    {
-        selectedIndex++;
-        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS)
-        {
-            offset++;
-        }
-        // Play the sound effect
-        Mix_PlayChannel(-1, se_up_down, 0);
-    }
-}
-
-void PokedexActivityList::onButtonLeft(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivityList::onButtonRight(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivityList::onButtonA(SDL_Keycode sym, Uint16 mod)
-{
-    ////Set pokemon identifier for PokedexDB
-    PokedexDB::setPokemonID(std::stoi(pokemon[0]));
-    PokedexDB::setPokemonIdentifier(pokemon[1]);
-
-    ////Call next activity
-    PokedexActivityManager::push(APPSTATE_POKEMON_VIEW_INFO);
-}
-
-void PokedexActivityList::onButtonB(SDL_Keycode sym, Uint16 mod)
-{
-    // Play the sound effect
-    Mix_PlayChannel(-1, se_on_exit, 0);
-    // need to find a way to call Mix_CloseChunk() without stopping the audio immediately
-
-    ////Set pokemon identifier for PokedexDB
-    PokedexActivityManager::back();
-}
-
-void PokedexActivityList::onButtonR(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex < dbResults->size() - MAX_VISIBLE_ITEMS)
-    {
-        selectedIndex += MAX_VISIBLE_ITEMS;
-        if (selectedIndex - offset >= MAX_VISIBLE_ITEMS)
-        {
-            offset += MAX_VISIBLE_ITEMS;
-            // Ensure offset doesn't go out of bounds
-            if (offset > dbResults->size() - MAX_VISIBLE_ITEMS)
-            {
-                offset = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
-            }
-        }
-        // Play the sound effect
-        Mix_PlayChannel(-1, se_up_down, 0);
-        // need to find a way to call Mix_CloseChunk() without stopping the audio immediately
-    }
-    else
-    {
-        // If we exceed the last item, set selectedIndex to the last item visible
-        selectedIndex = dbResults->size() - 1;
-        offset        = dbResults->size() - MAX_VISIBLE_ITEMS; // Cap to last visible items
-    }
-}
-
-void PokedexActivityList::onButtonL(SDL_Keycode sym, Uint16 mod)
-{
-    needRedraw = true;
-
-    if (selectedIndex >= MAX_VISIBLE_ITEMS)
-    {
-        selectedIndex -= MAX_VISIBLE_ITEMS;
-        if (selectedIndex < offset)
-        {
-            offset -= MAX_VISIBLE_ITEMS; // Reduce offset accordingly
-            // Ensure offset doesn't go negative
-            if (offset < 0)
-            {
-                offset = 0; // Cap offset to zero
-            }
-        }
-        // Play the sound effect
-        Mix_PlayChannel(-1, se_up_down, 0);
-        // need to find a way to call Mix_CloseChunk() without stopping the audio immediately
-    }
-    else
-    {
-        selectedIndex = 0; // Ensure selectedIndex doesn't go below zero
-        offset        = 0; // Cap offset to zero
-    }
-}
-
-void PokedexActivityList::onButtonSelect(SDL_Keycode sym, Uint16 mod) {}
-
-void PokedexActivityList::onButtonStart(SDL_Keycode sym, Uint16 mod)
-{
-    PokedexActivityManager::push(APPSTATE_POKEDEX_SETTING);
 }
