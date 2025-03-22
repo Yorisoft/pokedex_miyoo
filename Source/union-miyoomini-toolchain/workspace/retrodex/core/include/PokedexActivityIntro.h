@@ -1,37 +1,48 @@
 #ifndef __POKEDEXACTIVITYINTRO_H__
 #define __POKEDEXACTIVITYINTRO_H__
 
+#include "AssetManager.h"
 #include "PokedexActivity.h"
 
-class PokedexActivityIntro : public PokedexActivity {
-private:
+class PokedexActivityIntro : public PokedexActivity
+{
+  private:
     static PokedexActivityIntro instance;
 
-    SDL_Surface* splashSurface;
-
-    int StartTime;        
+    int StartTime;
     Uint8 logoAlpha;
+
+    const std::string SPLASH_ART_PATH = "res/assets/splash/splash.png",
+                      FONT_PATH       = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf";
+
+    const SDL_Color COLOR = {248, 248, 248}, HIGHLIGHT_COLOR = {255, 0, 0};
 
     static const std::string userConfigFile;
     std::map<std::string, int> userSettingMap;
 
-private:
-    PokedexActivityIntro();
-    void loadUserConfig(const std::string&);
+    SDL_Surface *splashSurface, *fileSurface;
+    TTF_Font *fontSurface;
+    AssetManager *assetManager;
 
-public:
+  private:
+    PokedexActivityIntro();
+    void loadUserConfig(const std::string &);
+    bool initSDL();
+
+  public:
     void onActivate();
 
     void onDeactivate();
 
     void onLoop();
 
-    void onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect);
+    void onRender(SDL_Surface *surf_display, SDL_Renderer *renderer, SDL_Texture *texture,
+                  TTF_Font *font, Mix_Chunk *sEffect);
 
     void onFreeze();
 
-public:
-    static PokedexActivityIntro* getInstance();
+  public:
+    static PokedexActivityIntro *getInstance();
 };
 
 #endif
