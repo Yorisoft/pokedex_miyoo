@@ -117,8 +117,12 @@ bool Pokedex::onSDLInit()
         exit(EXIT_FAILURE);
     }
 
-    this->window = SDL_CreateWindow("Pokedex", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                    WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    this->window = SDL_CreateWindow("Pokedex",
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    WINDOW_WIDTH,
+                                    WINDOW_HEIGHT,
+                                    SDL_WINDOW_SHOWN);
     if (!this->window)
     {
         std::cout << "Failed to create window: " << SDL_GetError();
@@ -126,9 +130,8 @@ bool Pokedex::onSDLInit()
         exit(EXIT_FAILURE);
     }
 
-    this->renderer = SDL_CreateRenderer(this->window, -1,
-                                        SDL_RENDERER_ACCELERATED //| SDL_RENDERER_PRESENTVSYNC
-    );
+    this->renderer = SDL_CreateRenderer(
+        this->window, -1, SDL_RENDERER_ACCELERATED /* | SDL_RENDERER_PRESENTVSYNC*/);
     if (!this->renderer)
     {
         std::cout << "Failed to create renderer: " << SDL_GetError();
@@ -136,8 +139,11 @@ bool Pokedex::onSDLInit()
         exit(EXIT_FAILURE);
     }
 
-    this->texture = SDL_CreateTexture(this->renderer, SDL_PIXELFORMAT_RGB565,
-                                      SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
+    this->texture = SDL_CreateTexture(this->renderer,
+                                      SDL_PIXELFORMAT_RGB565,
+                                      SDL_TEXTUREACCESS_STREAMING,
+                                      WINDOW_WIDTH,
+                                      WINDOW_HEIGHT);
     if (!this->texture)
     {
         std::cout << "Failed to create texture: " << SDL_GetError();
@@ -175,7 +181,8 @@ bool Pokedex::onSDLInit()
         exit(EXIT_FAILURE);
     };
 
-    SDL_FillRect(this->screen, &(this->screen)->clip_rect,
+    SDL_FillRect(this->screen,
+                 &(this->screen)->clip_rect,
                  SDL_MapRGB((this->screen)->format, 0x00, 0x00, 0x00));
 
     std::cout << "Pokedex::onSDLInit: END" << std::endl;

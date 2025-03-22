@@ -3,9 +3,9 @@
 #define WINDOW_WIDTH 640  // window width in pixels
 
 #include "AssetManager.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
 #include "name_to_id.h"
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <filesystem>
 #include <iostream>
 

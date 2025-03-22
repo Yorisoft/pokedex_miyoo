@@ -14,10 +14,8 @@ set(SDL2_TTF_LIBRARIES /root/workspace/build/lib/libSDL2_ttf.so)
 set(SDL2_MIXER_LIBRARIES /root/workspace/build/lib/libSDL2_mixer.so)
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/core/include
-	${CMAKE_SOURCE_DIR}/core/include/sqlite
-	${SDL2_INCLUDE_DIRS}
-)
+  ${CMAKE_SOURCE_DIR}/core/utils ${CMAKE_SOURCE_DIR}/core/include
+  ${CMAKE_SOURCE_DIR}/core/include/sqlite ${SDL2_INCLUDE_DIRS})
 
 # Find all .cpp and .cc files in the source directory
 file(GLOB_RECURSE SOURCES "*.cc")
@@ -27,17 +25,19 @@ list(APPEND SOURCES "core/include/sqlite/sqlite3.c")
 add_executable(retrodex ${SOURCES})
 
 # link the libraries based on our above
-target_link_libraries(retrodex 
-	${SDL2_LIBRARIES} 
-	${SDL2_IMAGE_LIBRARIES} 
-	${SDL2_TTF_LIBRARIES} 
-	${SDL2_MIXER_LIBRARIES} 
-	${CMAKE_DL_LIBS} 
-	dl
-	pthread 
-	stdc++fs # why do I need this even when specifying c++ standard 17
+target_link_libraries(
+  retrodex
+  ${SDL2_LIBRARIES}
+  ${SDL2_IMAGE_LIBRARIES}
+  ${SDL2_TTF_LIBRARIES}
+  ${SDL2_MIXER_LIBRARIES}
+  ${CMAKE_DL_LIBS}
+  dl
+  pthread
+  stdc++fs # why do I need this even when specifying c++ standard 17
 )
 
-set_target_properties(retrodex PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set_target_properties(retrodex PROPERTIES RUNTIME_OUTPUT_DIRECTORY
+                                          "${CMAKE_BINARY_DIR}/bin")
 
 install(TARGETS retrodex DESTINATION bin)

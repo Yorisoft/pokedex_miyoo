@@ -82,8 +82,8 @@ bool PokedexActivity_PokemonView_Moves::initSDL()
                                      SDL_GetError());
         }
 
-        pokeNameRect = {(pokeIconRect.x + pokeIconRect.w), pokeIconRect.y + 10, pokeName->w,
-                        pokeName->h};
+        pokeNameRect = {
+            (pokeIconRect.x + pokeIconRect.w), pokeIconRect.y + 10, pokeName->w, pokeName->h};
 
         // Pokemon Types
         std::vector<std::string> pokeTypes = pokemon->getTypes();
@@ -222,7 +222,8 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     // Render List Entry Surface
     int spacing   = 18;
     listEntryRect = {static_cast<int>(WINDOW_WIDTH - (WINDOW_WIDTH * 0.45) - 8),
-                     65 + (int(i) * (ITEM_HEIGHT + spacing)), static_cast<int>(WINDOW_WIDTH * 0.45),
+                     65 + (int(i) * (ITEM_HEIGHT + spacing)),
+                     static_cast<int>(WINDOW_WIDTH * 0.45),
                      ITEM_HEIGHT};
     SDL_BlitSurface(listEntrySurface, NULL, surf_display, &listEntryRect);
 
@@ -240,10 +241,14 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
         const int BORDER_WIDTH = 2;
         SDL_Rect borderRects[] = {
             {listEntryRect.x, listEntryRect.y, listEntryRect.w, BORDER_WIDTH}, // Top
-            {listEntryRect.x, listEntryRect.y + listEntryRect.h - BORDER_WIDTH, listEntryRect.w,
+            {listEntryRect.x,
+             listEntryRect.y + listEntryRect.h - BORDER_WIDTH,
+             listEntryRect.w,
              BORDER_WIDTH},                                                    // Bottom
             {listEntryRect.x, listEntryRect.y, BORDER_WIDTH, listEntryRect.h}, // Left
-            {listEntryRect.x + listEntryRect.w - BORDER_WIDTH, listEntryRect.y, BORDER_WIDTH,
+            {listEntryRect.x + listEntryRect.w - BORDER_WIDTH,
+             listEntryRect.y,
+             BORDER_WIDTH,
              listEntryRect.h} // Right
         };
 
@@ -257,7 +262,9 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     SDL_Surface *type =
         assetManager->getAsset(AssetManager::TYPES, POKEMON_NAMETOID_MAP.at(move[2]))->surface;
 
-    typeRect = {listEntryRect.x, listEntryRect.y, static_cast<int>(type->w * 1.5),
+    typeRect = {listEntryRect.x,
+                listEntryRect.y,
+                static_cast<int>(type->w * 1.5),
                 static_cast<int>(type->h * 1.5)};
 
     SDL_BlitSurface(type, NULL, surf_display, &typeRect);
@@ -273,8 +280,8 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     SDL_Surface *method =
         assetManager->getAsset(AssetManager::MISC, POKEMON_NAMETOID_MAP.at(move[9]))->surface;
 
-    methodRect = {listEntryRect.x, (listEntryRect.y + listEntryRect.h) - method->h, method->w,
-                  method->h};
+    methodRect = {
+        listEntryRect.x, (listEntryRect.y + listEntryRect.h) - method->h, method->w, method->h};
     SDL_BlitSurface(method, NULL, surf_display, &methodRect);
 
     // Render level
@@ -283,7 +290,8 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
         SDL_Surface *learnLevel = TTF_RenderText_Solid(fontSurface, move[8].c_str(), COLOR);
         levelRect               = {methodRect.x + methodRect.w,
                                    (listEntryRect.y + listEntryRect.h) - learnLevel->h,
-                                   static_cast<int>(method->w), static_cast<int>(method->h)};
+                                   static_cast<int>(method->w),
+                                   static_cast<int>(method->h)};
 
         SDL_BlitSurface(learnLevel, NULL, surf_display, &levelRect);
     }
@@ -291,7 +299,9 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     // Render PP
     SDL_Surface *pp = TTF_RenderText_Solid(fontSurface, move[3].c_str(), COLOR);
     ppRect          = {(listEntryRect.x + listEntryRect.w) - pp->w,
-                       (listEntryRect.y + listEntryRect.h) - pp->h, pp->w, pp->h};
+                       (listEntryRect.y + listEntryRect.h) - pp->h,
+                       pp->w,
+                       pp->h};
 
     SDL_BlitSurface(pp, NULL, surf_display, &ppRect);
 
@@ -323,7 +333,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface *surf_disp
     // Render Effect
     std::string summaryText = cleanString((*dbResults)[offset + i][7]);
     SDL_Surface *summary =
-        TTF_RenderUTF8_Solid_Wrapped(fontSurface, summaryText.c_str(), COLOR, 256);
+        TTF_RenderUTF8_Blended_Wrapped(fontSurface, summaryText.c_str(), COLOR, 256);
     summaryRect = {15, (WINDOW_HEIGHT / 2) + 50, summary->w, summary->h};
 
     SDL_BlitSurface(summary, NULL, surf_display, &summaryRect);

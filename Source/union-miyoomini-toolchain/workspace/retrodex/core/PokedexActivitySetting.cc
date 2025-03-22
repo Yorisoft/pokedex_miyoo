@@ -38,9 +38,9 @@ bool PokedexActivitySetting::initSDL()
             0, WINDOW_WIDTH, ITEM_HEIGHT, DEPTH, SDL_PIXELFORMAT_RGBA32);
         if (!listEntrySurface_default)
         {
-            throw std::runtime_error(std::string("PokedexActivitySetting::initSDL() Unable to load "
-                                                 "backgroundSurface_default! SDL Error:  ") +
-                                     SDL_GetError());
+            std::cerr << "Warning: PokedexActivitySetting::initSDL() Unable to load "
+                         "optionNameSurface_selected Surface ! SDL Error:  "
+                      << TTF_GetError() << std::endl;
         }
 
         listEntrySurface_selected =
