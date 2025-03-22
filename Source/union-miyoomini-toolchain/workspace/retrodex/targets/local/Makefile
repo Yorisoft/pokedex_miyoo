@@ -2,100 +2,138 @@ BUILD_DIR = build
 BINARY_OUTPUT = bin
 TARGET_NAME = retrodex
 
+# Core directories
+CORE_DIR = core
+UTILS_DIR = $(CORE_DIR)/utils
+ACTIVITIES_DIR = $(CORE_DIR)/activities
+SQLITE_DIR = $(CORE_DIR)/include/sqlite
+
+# Compiler flags
+CXX = /usr/bin/c++
+CXXFLAGS = -I$(CORE_DIR)/include -I$(UTILS_DIR) -I$(SQLITE_DIR) -I/usr/include/SDL2 -g -std=gnu++17
+LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+# Source groupings
+ACTIVITIES_SOURCES = \
+    $(ACTIVITIES_DIR)/PokedexActivity.cc \
+    $(ACTIVITIES_DIR)/PokedexActivityEvent.cc \
+    $(ACTIVITIES_DIR)/PokedexActivityManager.cc \
+    $(ACTIVITIES_DIR)/intro/PokedexActivityIntro.cc \
+    $(ACTIVITIES_DIR)/list/PokedexActivityList.cc \
+    $(ACTIVITIES_DIR)/menu/PokedexActivityMenu.cc \
+    $(ACTIVITIES_DIR)/pokemon_evolution/PokedexActivity_PokemonView_Evolution.cc \
+    $(ACTIVITIES_DIR)/pokemon_info/PokedexActivity_PokemonView_Info.cc \
+    $(ACTIVITIES_DIR)/pokemon_location/PokedexActivity_PokemonView_Location.cc \
+    $(ACTIVITIES_DIR)/pokemon_moves/PokedexActivity_PokemonView_Moves.cc \
+    $(ACTIVITIES_DIR)/pokemon_stats/PokedexActivity_PokemonView_Stats.cc \
+    $(ACTIVITIES_DIR)/setting/PokedexActivitySetting.cc
+
+UTILS_SOURCES = \
+    $(UTILS_DIR)/AssetManager.cc \
+    $(UTILS_DIR)/PokeSurface.cc \
+    $(UTILS_DIR)/PokedexAssets.cc \
+    $(UTILS_DIR)/PokedexDB.cc \
+    $(UTILS_DIR)/Pokemon.cc \
+    $(UTILS_DIR)/SQLstatements.cc
+
+SQLITE_SOURCE = $(SQLITE_DIR)/sqlite3.c
+
+# Root-level source file
+ROOT_SOURCE = Pokedex.cc
+
+all: rebuild
+
 rebuild: clean cmake_configure build
 
 clean:
-	rm -rfv $(BUILD_DIR)/*  # Or just rm -rf build if the build dir is dedicated
+	rm -rfv $(BUILD_DIR)/*
 
 cmake_configure: clean
 	cd $(BUILD_DIR) && cmake ..
 
 build: cmake_configure
-	ls && \
 	cd $(BUILD_DIR) && make
 
 run:
 	cp -v $(BUILD_DIR)/$(BINARY_OUTPUT)/$(TARGET_NAME) . && \
-	./$(TARGET_NAME)
+    ./$(TARGET_NAME)
 
-# Individual Files
-# Requires running build once
-Pokedex.cc:
-	/usr/bin/c++ -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/Pokedex.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/Pokedex.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+# Explicit rule for Pokedex.cc
+Pokedex:
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ROOT_SOURCE).o -c $(ROOT_SOURCE)
 
-AssetManager:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/AssetManager.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/AssetManager.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
-PokeSurface:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokeSurface.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokeSurface.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
+# Individual targets for activities
 PokedexActivity:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivity.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivity.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/PokedexActivity.cc.o -c $(ACTIVITIES_DIR)/PokedexActivity.cc
 
 PokedexActivityEvent:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivityEvent.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivityEvent.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
-PokedexActivityIntro:
-	/usr/bin/c++ -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivityIntro.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivityIntro.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
-PokedexActivityList:
-	/usr/bin/c++ -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivityList.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivityList.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/PokedexActivityEvent.cc.o -c $(ACTIVITIES_DIR)/PokedexActivityEvent.cc
 
 PokedexActivityManager:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivityManager.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivityManager.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/PokedexActivityManager.cc.o -c $(ACTIVITIES_DIR)/PokedexActivityManager.cc
+
+PokedexActivityIntro:
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/intro/PokedexActivityIntro.cc.o -c $(ACTIVITIES_DIR)/intro/PokedexActivityIntro.cc
+
+PokedexActivityList:
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/list/PokedexActivityList.cc.o -c $(ACTIVITIES_DIR)/list/PokedexActivityList.cc
 
 PokedexActivityMenu:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivityMenu.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivityMenu.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
-
-PokedexActivitySetting:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivitySetting.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivitySetting.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/menu/PokedexActivityMenu.cc.o -c $(ACTIVITIES_DIR)/menu/PokedexActivityMenu.cc
 
 PokedexActivity_PokemonView_Evolution:
-	/usr/bin/c++ -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivity_PokemonView_Evolution.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivity_PokemonView_Evolution.cc && \
-	g++ -Wall build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/pokemon_evolution/PokedexActivity_PokemonView_Evolution.cc.o -c $(ACTIVITIES_DIR)/pokemon_evolution/PokedexActivity_PokemonView_Evolution.cc
 
 PokedexActivity_PokemonView_Info:
-	/usr/bin/c++ -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivity_PokemonView_Info.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivity_PokemonView_Info.cc && \
-	g++ -Wall build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/pokemon_info/PokedexActivity_PokemonView_Info.cc.o -c $(ACTIVITIES_DIR)/pokemon_info/PokedexActivity_PokemonView_Info.cc
 
 PokedexActivity_PokemonView_Location:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivity_PokemonView_Location.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivity_PokemonView_Location.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/pokemon_location/PokedexActivity_PokemonView_Location.cc.o -c $(ACTIVITIES_DIR)/pokemon_location/PokedexActivity_PokemonView_Location.cc
 
 PokedexActivity_PokemonView_Moves:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivity_PokemonView_Moves.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivity_PokemonView_Moves.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/pokemon_moves/PokedexActivity_PokemonView_Moves.cc.o -c $(ACTIVITIES_DIR)/pokemon_moves/PokedexActivity_PokemonView_Moves.cc
 
 PokedexActivity_PokemonView_Stats:
-	/usr/bin/c++ -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexActivity_PokemonView_Stats.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexActivity_PokemonView_Stats.cc && \
-	g++ -Wall build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/pokemon_stats/PokedexActivity_PokemonView_Stats.cc.o -c $(ACTIVITIES_DIR)/pokemon_stats/PokedexActivity_PokemonView_Stats.cc
+
+PokedexActivitySetting:
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/setting/PokedexActivitySetting.cc.o -c $(ACTIVITIES_DIR)/setting/PokedexActivitySetting.cc
+
+# Individual targets for utils
+AssetManager:
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(UTILS_DIR)/AssetManager.cc.o -c $(UTILS_DIR)/AssetManager.cc
+
+PokeSurface:
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(UTILS_DIR)/PokeSurface.cc.o -c $(UTILS_DIR)/PokeSurface.cc
 
 PokedexAssets:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexAssets.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexAssets.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(UTILS_DIR)/PokedexAssets.cc.o -c $(UTILS_DIR)/PokedexAssets.cc
 
 PokedexDB:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/PokedexDB.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/PokedexDB.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(UTILS_DIR)/PokedexDB.cc.o -c $(UTILS_DIR)/PokedexDB.cc
 
 Pokemon:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/Pokemon.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/Pokemon.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(UTILS_DIR)/Pokemon.cc.o -c $(UTILS_DIR)/Pokemon.cc
 
 SQLstatements:
-	/usr/bin/c++  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -std=gnu++17 -o build/CMakeFiles/retrodex.dir/core/SQLstatements.cc.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/SQLstatements.cc && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(UTILS_DIR)/SQLstatements.cc.o -c $(UTILS_DIR)/SQLstatements.cc
 
+# Special case for SQLite
 sqlite3:
-	/usr/bin/cc  -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/utils -I/home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite -I/usr/include/SDL2 -g -o build/CMakeFiles/retrodex.dir/core/include/sqlite/sqlite3.c.o -c /home/yorisoft/code/my-gh/pokedex_miyoo/Source/union-miyoomini-toolchain/workspace/retrodex/core/include/sqlite/sqlite3.c && \
-	g++ -Wall  build/CMakeFiles/retrodex.dir/*.o build/CMakeFiles/retrodex.dir/core/*.o build/CMakeFiles/retrodex.dir/core/include/sqlite/*.o  -o build/bin/retrodex -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	/usr/bin/cc -I$(CORE_DIR)/include -I$(UTILS_DIR) -I$(SQLITE_DIR) -I/usr/include/SDL2 -g \
+    -o $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(SQLITE_SOURCE).o -c $(SQLITE_SOURCE)
+
+# Linking rule
+$(TARGET_NAME):
+	g++ -Wall $(BUILD_DIR)/CMakeFiles/retrodex.dir/*.o \
+    $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(CORE_DIR)/*.o \
+    $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(ACTIVITIES_DIR)/*/*.o \
+    $(BUILD_DIR)/CMakeFiles/retrodex.dir/$(SQLITE_DIR)/*.o \
+    -o $(BUILD_DIR)/$(BINARY_OUTPUT)/$(TARGET_NAME) $(LDFLAGS)
+
+.PHONY: all rebuild clean cmake_configure build run sqlite3 Pokedex \
+		PokedexActivity PokedexActivityEvent PokedexActivityManager PokedexActivityIntro \
+        PokedexActivityList PokedexActivityMenu PokedexActivity_PokemonView_Evolution \
+        PokedexActivity_PokemonView_Info PokedexActivity_PokemonView_Location \
+        PokedexActivity_PokemonView_Moves PokedexActivity_PokemonView_Stats PokedexActivitySetting \
+        AssetManager PokeSurface PokedexAssets PokedexDB Pokemon SQLstatements
