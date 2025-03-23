@@ -45,6 +45,20 @@ AssetManager::AssetManager()
 
     (*assetMap)[type].emplace(FONT_POKEMON_ADVANCED_BATTLE_L, t_asset(name, path, type, size));
 
+    type = FONT;
+    path = FONT_PATH + "lanapixel/lanapixel.ttf";
+    name = "lanapixel-m";
+    size = {34, 0}; // {font_size, blank_value}
+
+    (*assetMap)[type].emplace(FONT_LANA_PIXEL_M, t_asset(name, path, type, size));
+
+    type = FONT;
+    path = FONT_PATH + "lanapixel/lanapixel.ttf";
+    name = "lanapixel-l";
+    size = {46, 0}; // {font_size, blank_value}
+
+    (*assetMap)[type].emplace(FONT_LANA_PIXEL_L, t_asset(name, path, type, size));
+
     /* std::cout << "Could not find asset in NAMETOID table. Asset Name: " << name << std::endl; */
 
     //===================== Backgrounds

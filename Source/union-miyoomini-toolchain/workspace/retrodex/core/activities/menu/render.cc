@@ -1,5 +1,52 @@
 #include "PokedexActivityMenu.h"
 
+bool PokedexActivityMenu::initSDL()
+{
+    try
+    {
+        // AUDIO
+        se_up_down = Mix_LoadWAV(SOUND_UP_DOWN_PATH.c_str());
+        if (!se_up_down)
+        {
+            std::cerr << "Failed to load sound sound_up_down: " << Mix_GetError() << std::endl;
+        }
+
+        // FONT
+        fontSurface =
+            assetManager->getAsset(AssetManager::FONT, AssetManager::FONT_POKEMON_DPPT_L)->font;
+
+        // Background
+        backgroundSurface =
+            assetManager->getAsset(AssetManager::MISC, AssetManager::SURFACE_MAIN_MENU_BACKGROUND)
+                ->surface;
+        backgroundRect =
+            assetManager->getAsset(AssetManager::MISC, AssetManager::SURFACE_MAIN_MENU_BACKGROUND)
+                ->size;
+
+        // List Item Background
+        listEntrySurface_default =
+            assetManager
+                ->getAsset(AssetManager::MISC, AssetManager::SURFACE_MENU_ITEM_BACKGROUND_DEFAULT)
+                ->surface;
+        listEntrySurface_selected =
+            assetManager
+                ->getAsset(AssetManager::MISC, AssetManager::SURFACE_MENU_ITEM_BACKGROUND_SELECTED)
+                ->surface;
+
+        listEntryRect =
+            assetManager
+                ->getAsset(AssetManager::MISC, AssetManager::SURFACE_MENU_ITEM_BACKGROUND_DEFAULT)
+                ->size;
+    }
+    catch (const std::runtime_error &e)
+    {
+        std::cerr << e.what() << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 void PokedexActivityMenu::onRender(SDL_Surface *surf_display, SDL_Renderer *renderer,
                                    SDL_Texture *texture, TTF_Font *font, Mix_Chunk *sEffect)
 {
@@ -35,7 +82,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface *surf_display, int i)
 {
     // List item background
     SDL_Surface *version =
-        TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[offset + i][2].c_str(), COLOR);
+        TTF_RenderUTF8_Blended(fontSurface, (*dbResults)[offset + i][2].c_str(), COLOR);
     if (version == NULL)
     {
         std::cout << "Unable to load surface!"
@@ -44,7 +91,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface *surf_display, int i)
     }
 
     SDL_Surface *version_highlight =
-        TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[offset + i][2].c_str(), HIGHLIGHT_COLOR);
+        TTF_RenderUTF8_Blended(fontSurface, (*dbResults)[offset + i][2].c_str(), HIGHLIGHT_COLOR);
     if (version_highlight == NULL)
     {
         std::cout << "Unable to load surface!"
