@@ -82,6 +82,9 @@ class PokedexAssets
         FONT_POKEMON_ADVANCED_BATTLE_S,
         FONT_POKEMON_ADVANCED_BATTLE_M,
         FONT_POKEMON_ADVANCED_BATTLE_L,
+        FONT_LANA_PIXEL_S,
+        FONT_LANA_PIXEL_M,
+        FONT_LANA_PIXEL_L,
 
         //=================================================SCREEN_ASSETS================================================================
 
