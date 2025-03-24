@@ -1,8 +1,8 @@
 #ifndef __POKEDEXACTIVITY_SETTING__
 #define __POKEDEXACTIVITY_SETTING__
 
-#include "AssetManager.h"
-#include "PokedexActivity.h"
+#include "AssetManager.hpp"
+#include "PokedexActivity.hpp"
 #include <variant>
 
 class PokedexActivitySetting : public PokedexActivity

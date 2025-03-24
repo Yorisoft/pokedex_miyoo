@@ -1,59 +1,62 @@
-#ifndef __POKEDEXACTIVITY_POKEMONVIEW_LOCATION__
-#define __POKEDEXACTIVITY_POKEMONVIEW_LOCATION__
+#ifndef __POKEDEXACTIVITY_POKEMONVIEW_MOVES__
+#define __POKEDEXACTIVITY_POKEMONVIEW_MOVES__
 
-#include "AssetManager.h"
-#include "PokedexActivity.h"
-#include "Pokemon.h"
+#include "AssetManager.hpp"
+#include "PokedexActivity.hpp"
+#include "Pokemon.hpp"
 
-class PokedexActivity_PokemonView_Location : public PokedexActivity
+class PokedexActivity_PokemonView_Moves : public PokedexActivity
 {
   private:
-    static PokedexActivity_PokemonView_Location instance;
+    static PokedexActivity_PokemonView_Moves instance;
 
-    const int ITEM_HEIGHT = static_cast<int>(WINDOW_HEIGHT * 0.7 / 5);
+    const int ITEM_HEIGHT = (static_cast<int>(WINDOW_HEIGHT * 0.7 / 5));
+    const SDL_Color COLOR = {64, 64, 64}, HIGHLIGHT_COLOR = {255, 0, 0};
 
     const std::string SOUND_LEFT_RIGHT_PATH = "res/assets/sound_effects/left_right.wav",
                       SOUND_UP_DOWN_PATH    = "res/assets/sound_effects/up_down.wav",
                       FONT_PATH             = "res/assets/font/pokemon-dppt/pokemon-dppt.ttf",
-                      BACKGROUND_IMG_PATH   = "res/assets/misc/pokemon_fr_view_4.png",
+                      BACKGROUND_IMG_PATH   = "res/assets/misc/pokemon_fr_view_3.png",
                       TYPE_IMG_BASE_PATH    = "res/assets/pokemons/types/",
                       METHOD_IMG_BASE_PATH  = "res/assets/pokemons/encounters/",
                       ICON_IMG_BASE_PATH    = "res/assets/pokemons/icons/";
-
-    const SDL_Color COLOR = {64, 64, 64}, HIGHLIGHT_COLOR{255, 0, 0};
-
-    int selectedIndex, offset;
-
-    bool needRedraw;
-
-    std::vector<std::vector<std::string>> *dbResults;
-    std::vector<std::vector<std::string>> *routes;
-    std::vector<std::string> route;
-
-    std::vector<SDL_Surface *> locationNameSurface_cache;
-    std::vector<SDL_Surface *> conditionSurface_cache;
-    std::vector<SDL_Surface *> methodSurface_cache;
-    std::vector<SDL_Surface *> rateSurface_cache;
-    std::vector<std::pair<SDL_Surface *, SDL_Surface *>> levelSurface_cache;
-    std::vector<SDL_Surface *> detailLocationNameSurface_cache;
-
-    SDL_Surface *backgroundSurface, *listEntrySurface, *pokeIcon, *pokeName, *typeA, *typeB;
-    SDL_Rect backgroundRect, listEntryRect, pokeIconRect, pokeNameRect, typeARect, typeBRect,
-        locationNameRect, methodRect, conditionRect, rateRect, minLevelRect, maxLevelRect,
-        detailLocationRect;
-    Mix_Chunk *se_left_right, *se_up_down;
-    TTF_Font *fontSurface;
 
     Pokemon *pokemon;
 
     AssetManager *assetManager;
 
-  private:
-    bool initSDL();
-    void printPokeInfo();
+    int selectedIndex, offset;
+    bool needRedraw;
 
-    bool renderListItems(SDL_Surface *surf_display, SDL_Renderer *renderer, TTF_Font *font, int i);
+    std::vector<std::vector<std::string>> *dbResults;
+    std::vector<std::string> move;
+
+    std::vector<SDL_Surface *> typeSurface_cache;
+    std::vector<SDL_Surface *> nameSurface_cache;
+    std::vector<SDL_Surface *> methodSurface_cache;
+    std::vector<SDL_Surface *> levelSurface_cache;
+    std::vector<SDL_Surface *> ppSurface_cache;
+    std::vector<SDL_Surface *> pwrSurface_cache;
+    std::vector<SDL_Surface *> classSurface_cache;
+    std::vector<SDL_Surface *> accrySurface_cache;
+    std::vector<SDL_Surface *> summarySurface_cache;
+
+    SDL_Surface *backgroundSurface, *listEntrySurface, *pokeIcon, *pokeName, *typeA, *typeB;
+    SDL_Rect backgroundRect, listEntryRect, typeRect, nameRect, methodRect, levelRect, ppRect,
+        pwrRect, pokeIconRect, pokeNameRect, typeARect, typeBRect, classRect, accryRect,
+        summaryRect;
+    Mix_Chunk *se_left_right, *se_up_down;
+    TTF_Font *fontSurface;
+
+    PokedexActivity_PokemonView_Moves();
+    ~PokedexActivity_PokemonView_Moves();
+
+    bool initSDL();
+    void print_dbResults();
+
     bool renderItemDetails(SDL_Surface *surf_display, TTF_Font *font, int i);
+    bool renderListItems(SDL_Surface *surf_display, SDL_Renderer *renderer, TTF_Font *font, int i);
+    std::string cleanString(std::string str);
 
     void onButtonUp(SDL_Keycode, Uint16);
     void onButtonDown(SDL_Keycode, Uint16);
@@ -67,9 +70,6 @@ class PokedexActivity_PokemonView_Location : public PokedexActivity
     void onButtonStart(SDL_Keycode, Uint16);
 
   public:
-    PokedexActivity_PokemonView_Location();
-    ~PokedexActivity_PokemonView_Location();
-
     void onActivate();
     void onDeactivate();
     void onLoop();
@@ -77,6 +77,6 @@ class PokedexActivity_PokemonView_Location : public PokedexActivity
                   TTF_Font *font, Mix_Chunk *sEffect);
     void onFreeze();
 
-    static PokedexActivity_PokemonView_Location *getInstance();
+    static PokedexActivity_PokemonView_Moves *getInstance();
 };
 #endif

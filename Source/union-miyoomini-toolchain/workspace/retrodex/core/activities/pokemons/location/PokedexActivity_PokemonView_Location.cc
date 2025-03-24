@@ -1,6 +1,6 @@
-#include "PokedexActivity_PokemonView_Location.h"
-#include "PokedexActivityManager.h"
-#include "name_to_id.h"
+#include "PokedexActivity_PokemonView_Location.hpp"
+#include "PokedexActivityManager.hpp"
+#include "name_to_id.hpp"
 
 PokedexActivity_PokemonView_Location PokedexActivity_PokemonView_Location::instance;
 

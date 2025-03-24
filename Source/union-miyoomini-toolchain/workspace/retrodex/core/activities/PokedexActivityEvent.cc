@@ -1,4 +1,4 @@
-#include "PokedexActivityEvent.h"
+#include "PokedexActivityEvent.hpp"
 
 PokedexActivityEvent::PokedexActivityEvent() {}
 

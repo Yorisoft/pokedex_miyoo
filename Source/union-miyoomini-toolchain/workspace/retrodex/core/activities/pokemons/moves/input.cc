@@ -1,5 +1,5 @@
-#include "PokedexActivityManager.h"
-#include "PokedexActivity_PokemonView_Moves.h"
+#include "PokedexActivityManager.hpp"
+#include "PokedexActivity_PokemonView_Moves.hpp"
 
 void PokedexActivity_PokemonView_Moves::onButtonUp(SDL_Keycode sym, Uint16 mod)
 {

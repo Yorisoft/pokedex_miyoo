@@ -1,4 +1,4 @@
-#include "PokedexActivityIntro.h"
+#include "PokedexActivityIntro.hpp"
 
 bool PokedexActivityIntro::initSDL()
 {

@@ -1,10 +1,10 @@
 #ifndef _POKEDEX_H_
 #define _POKEDEX_H_
 
-#include "PokeSurface.h"
-#include "PokedexActivityEvent.h"
-#include "PokedexActivityManager.h"
-#include <AssetManager.h>
+#include "AssetManager.hpp"
+#include "PokeSurface.hpp"
+#include "PokedexActivityEvent.hpp"
+#include "PokedexActivityManager.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>

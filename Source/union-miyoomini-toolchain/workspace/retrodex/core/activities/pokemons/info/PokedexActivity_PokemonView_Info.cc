@@ -1,4 +1,4 @@
-#include "PokedexActivity_PokemonView_Info.h"
+#include "PokedexActivity_PokemonView_Info.hpp"
 
 PokedexActivity_PokemonView_Info PokedexActivity_PokemonView_Info::instance;
 

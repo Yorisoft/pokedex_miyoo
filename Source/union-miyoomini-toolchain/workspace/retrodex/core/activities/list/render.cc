@@ -1,5 +1,5 @@
-#include "PokedexActivityList.h"
-#include "name_to_id.h"
+#include "PokedexActivityList.hpp"
+#include "name_to_id.hpp"
 
 bool PokedexActivityList::initSDL()
 {

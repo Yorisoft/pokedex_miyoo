@@ -1,5 +1,5 @@
-#include "PokedexActivityIntro.h"
-#include "PokedexActivityManager.h"
+#include "PokedexActivityIntro.hpp"
+#include "PokedexActivityManager.hpp"
 #include <filesystem>
 #include <fstream>
 

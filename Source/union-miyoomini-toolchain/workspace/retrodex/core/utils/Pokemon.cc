@@ -1,7 +1,10 @@
-#include "Pokemon.h"
+#include "Pokemon.hpp"
 
 Pokemon::Pokemon()
 {
+    SQLStatementStore *sql = SQLStatementStore::getInstance();
+    std::string query;
+
     std::vector<std::vector<std::string>> *results;
 
     this->genderRates = new std::vector<double>();
@@ -10,38 +13,46 @@ Pokemon::Pokemon()
     this->evoChain    = new std::vector<std::vector<std::string>>();
 
     // set id
-    results = PokedexDB::executeSQL(&SQL_getPokeRegionalID);
+    query   = sql->getQuery("get_pokemon_regional_id");
+    results = PokedexDB::executeSQL(&query);
     setID(std::stoi((*results)[0][0]));
     // set regionalID
     setRegionalID(std::stoi((*results)[0][1]));
 
     // set name;
-    results = PokedexDB::executeSQL(&SQL_getPokeName);
+    query   = sql->getQuery("get_pokemon_name");
+    results = PokedexDB::executeSQL(&query);
     setName((*results)[0][1]);
 
     // set types;
-    results = PokedexDB::executeSQL(&SQL_getPokeTypes);
+    query   = sql->getQuery("get_pokemon_types");
+    results = PokedexDB::executeSQL(&query);
     setTypes((*results)[0]);
 
     // set genus;
-    results = PokedexDB::executeSQL(&SQL_getPokeGenus);
+    query   = sql->getQuery("get_pokemon_genus");
+    results = PokedexDB::executeSQL(&query);
     setGenus((*results)[0][1]);
 
     // set height & weight;
-    results = PokedexDB::executeSQL(&SQL_getPokeHW);
+    query   = sql->getQuery("get_pokemon_hw");
+    results = PokedexDB::executeSQL(&query);
     setHeight(std::stoi((*results)[0][0]));
     setWeight(std::stoi((*results)[0][1]));
 
     // set flavor text;
-    results = PokedexDB::executeSQL(&SQL_getPokeFlavorText);
+    query   = sql->getQuery("get_pokemon_flavortext");
+    results = PokedexDB::executeSQL(&query);
     setFlavorText((*results)[0][0]);
 
     // set gender Rates;
-    results = PokedexDB::executeSQL(&SQL_getPokeGenderRates);
+    query   = sql->getQuery("get_pokemon_gender_rate");
+    results = PokedexDB::executeSQL(&query);
     setGenderRates(std::stoi((*results)[0][0]));
 
     // set stats;
-    results                            = PokedexDB::executeSQL(&SQL_getPokeStats);
+    query                              = sql->getQuery("get_pokemon_stats");
+    results                            = PokedexDB::executeSQL(&query);
     std::vector<unsigned short> *stats = new std::vector<unsigned short>();
     for (std::vector<std::string> stat : *results)
     {
@@ -51,21 +62,25 @@ Pokemon::Pokemon()
     delete stats;
 
     // //set abilities;
-    results = PokedexDB::executeSQL(&SQL_getPokeAbilities);
+    query   = sql->getQuery("get_pokemon_abilities");
+    results = PokedexDB::executeSQL(&query);
     setAbilities(*results);
 
     // set routes;
-    results = PokedexDB::executeSQL(&SQL_getPokeRoutes);
+    query   = sql->getQuery("get_pokemon_routes");
+    results = PokedexDB::executeSQL(&query);
     setRoutes(*results);
 
     // set evoChainID;
-    results = PokedexDB::executeSQL(&SQL_getPokeEvoID);
+    query   = sql->getQuery("get_pokemon_evo_chain_id");
+    results = PokedexDB::executeSQL(&query);
     setEvolutionChainID(std::stoi((*results)[0][0]));
 
     PokedexDB::setEvoChainID(getEvolutionChainID());
 
     // set evoChain;
-    results = PokedexDB::executeSQL(&SQL_getPokeEvoChain);
+    query   = sql->getQuery("get_pokemon_evo_chain");
+    results = PokedexDB::executeSQL(&query);
     setEvolutionChain(*results);
 }
 

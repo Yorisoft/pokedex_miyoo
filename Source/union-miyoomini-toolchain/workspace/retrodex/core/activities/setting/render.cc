@@ -1,4 +1,4 @@
-#include "PokedexActivitySetting.h"
+#include "PokedexActivitySetting.hpp"
 #include <algorithm>
 
 bool PokedexActivitySetting::initSDL()

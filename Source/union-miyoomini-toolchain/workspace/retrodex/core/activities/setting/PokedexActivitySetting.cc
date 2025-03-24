@@ -1,5 +1,5 @@
-#include "PokedexActivitySetting.h"
-#include "PokedexActivityManager.h"
+#include "PokedexActivitySetting.hpp"
+#include "PokedexActivityManager.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -18,7 +18,6 @@ PokedexActivitySetting::PokedexActivitySetting()
 
 PokedexActivitySetting::~PokedexActivitySetting() {}
 
-
 void PokedexActivitySetting::onActivate()
 {
     std::cout << "PokedexActivitySetting::onActivate START \n";
@@ -30,7 +29,9 @@ void PokedexActivitySetting::onActivate()
     settings->push_back("AUDIO");
 
     // SETTING OPTIONS: languages
-    languages = PokedexDB::executeSQL(&SQL_getLanguageVersion);
+    SQLStatementStore *sql = SQLStatementStore::getInstance();
+    std::string query      = sql->getQuery("get_language_versions");
+    languages              = PokedexDB::executeSQL(&query);
 
     // TODO - COMMENT OUT WHEN DONE TESTING
     // languages->insert(languages->begin(), { "0", "SELECT" });
@@ -190,6 +191,5 @@ void PokedexActivitySetting::onLoop()
     /// set selected setting/settingOption END
 }
 void PokedexActivitySetting::onFreeze() {}
-
 
 PokedexActivitySetting *PokedexActivitySetting::getInstance() { return &instance; }

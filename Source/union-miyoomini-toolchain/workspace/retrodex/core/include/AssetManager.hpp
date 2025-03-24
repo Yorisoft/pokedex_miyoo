@@ -1,7 +1,7 @@
 #ifndef __ASSET_MANAGER__
 #define __ASSET_MANAGER__
 
-#include "PokedexAssets.h"
+#include "PokedexAssets.hpp"
 
 class AssetManager : public PokedexAssets
 {

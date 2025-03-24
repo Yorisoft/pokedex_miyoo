@@ -1,4 +1,3 @@
-#include "PokedexAssets.h"
+#include "PokedexAssets.hpp"
 
-PokedexAssets::PokedexAssets(){
-}
+PokedexAssets::PokedexAssets() {}

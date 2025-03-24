@@ -1,9 +1,9 @@
 #ifndef __POKEDEXACTIVITY_POKEMONVIEW_STATS__
 #define __POKEDEXACTIVITY_POKEMONVIEW_STATS__
 
-#include "AssetManager.h"
-#include "PokedexActivity.h"
-#include "Pokemon.h"
+#include "AssetManager.hpp"
+#include "PokedexActivity.hpp"
+#include "Pokemon.hpp"
 
 class PokedexActivity_PokemonView_Stats : public PokedexActivity
 {

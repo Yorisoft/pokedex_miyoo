@@ -1,4 +1,3 @@
-#include "PokedexActivity.h"
+#include "PokedexActivity.hpp"
 
-PokedexActivity::PokedexActivity() {
-}
+PokedexActivity::PokedexActivity() {}

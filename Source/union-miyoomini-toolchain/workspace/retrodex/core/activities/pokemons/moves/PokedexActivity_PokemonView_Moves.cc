@@ -1,4 +1,4 @@
-#include "PokedexActivity_PokemonView_Moves.h"
+#include "PokedexActivity_PokemonView_Moves.hpp"
 
 PokedexActivity_PokemonView_Moves PokedexActivity_PokemonView_Moves::instance;
 
@@ -37,8 +37,12 @@ void PokedexActivity_PokemonView_Moves::onActivate()
 {
     std::cout << "PokedexActivity_PokemonView_Moves::onActivate START \n";
 
-    pokemon   = new Pokemon();
-    dbResults = PokedexDB::executeSQL(&SQL_getPokeMovesDetail);
+    pokemon = new Pokemon();
+
+    SQLStatementStore *sql = SQLStatementStore::getInstance();
+    std::string query      = sql->getQuery("get_pokemon_moves_detailed");
+
+    dbResults = PokedexDB::executeSQL(&query);
     print_dbResults();
 
     move = (*dbResults)[selectedIndex];

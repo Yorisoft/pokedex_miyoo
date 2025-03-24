@@ -1,7 +1,7 @@
 #ifndef __NAME_TO_ID__
 #define __NAME_TO_ID__
 
-#include "PokedexAssets.h"
+#include "PokedexAssets.hpp"
 #include <string>
 #include <unordered_map>
 

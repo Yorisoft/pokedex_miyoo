@@ -4,7 +4,7 @@
 #define DEPTH 16            // window depth in pixels
 #define MAX_VISIBLE_ITEMS 5 // Set the maximum number of visible
 
-#include "Pokedex.h"
+#include "Pokedex.hpp"
 #include <iomanip>
 #include <iostream>
 #include <sqlite/sqlite3.h>

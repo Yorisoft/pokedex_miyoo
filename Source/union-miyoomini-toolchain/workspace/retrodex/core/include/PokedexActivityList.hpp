@@ -1,8 +1,8 @@
 #ifndef __POKEDEXACTIVITYLIST_H__
 #define __POKEDEXACTIVITYLIST_H__
 
-#include "AssetManager.h"
-#include "PokedexActivity.h"
+#include "AssetManager.hpp"
+#include "PokedexActivity.hpp"
 
 class PokedexActivityList : public PokedexActivity
 {
