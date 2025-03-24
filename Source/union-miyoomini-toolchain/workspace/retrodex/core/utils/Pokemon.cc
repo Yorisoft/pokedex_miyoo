@@ -1,5 +1,4 @@
 #include "Pokemon.hpp"
-#include "SQLStatementStore.hpp"
 
 Pokemon::Pokemon()
 {

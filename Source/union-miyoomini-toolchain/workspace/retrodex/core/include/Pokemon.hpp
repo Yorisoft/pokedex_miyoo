@@ -2,7 +2,7 @@
 #define POKEMON_H
 
 #include "PokedexDB.hpp"
-#include "SQLstatements.hpp"
+#include "SQLStatementStore.hpp"
 #include <cmath>
 #include <iomanip>
 #include <sstream>
