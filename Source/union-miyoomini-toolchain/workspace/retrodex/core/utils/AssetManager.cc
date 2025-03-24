@@ -2,8 +2,8 @@
 #define WINDOW_HEIGHT 480 // window height in pixels
 #define WINDOW_WIDTH 640  // window width in pixels
 
-#include "AssetManager.h"
-#include "name_to_id.h"
+#include "AssetManager.hpp"
+#include "name_to_id.hpp"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <filesystem>

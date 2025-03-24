@@ -1,4 +1,4 @@
-#include "SQLstatements.h"
+#include "SQLstatements.hpp"
 
 // God bless ChatGPT for providing this.. this.. work of art.
 const std::string SQL_getGameVersions = R"(
@@ -240,7 +240,8 @@ const std::string SQL_getPokeStats = R"(
       AND pgi.version_id = :version_id;
 )";
 
-// Query hard coded to retrieve information in english, dont think support for other languages exist in the db. 
+// Query hard coded to retrieve information in english, dont think support for other languages exist
+// in the db.
 const std::string SQL_getPokeRoutes = R"(
     SELECT 
         v.identifier AS version_name,

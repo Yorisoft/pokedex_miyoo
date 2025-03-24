@@ -1,4 +1,5 @@
-#include "PokedexActivityList.h"
+#include "PokedexActivityList.hpp"
+#include "SQLStatementStore.hpp"
 
 PokedexActivityList PokedexActivityList::instance;
 
@@ -44,8 +45,10 @@ void PokedexActivityList::onActivate()
     std::cout << "PokedexActivityList::onActivate START \n";
 
     // Pokemon List DB Results
-    dbResults = PokedexDB::executeSQL(&SQL_getNameAndID);
-    pokemon   = (*dbResults)[selectedIndex];
+    SQLStatementStore *sql = SQLStatementStore::getInstance();
+    std::string query      = sql->getQuery("get_pokemon_name_id");
+    dbResults              = PokedexDB::executeSQL(&query);
+    pokemon                = (*dbResults)[selectedIndex];
     print_dbResults();
 
     assetManager = AssetManager::getInstance();

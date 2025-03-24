@@ -1,5 +1,6 @@
-#include "PokedexActivityMenu.h"
-#include "PokedexActivityManager.h"
+#include "PokedexActivityMenu.hpp"
+#include "PokedexActivityManager.hpp"
+#include "SQLStatementStore.hpp"
 
 PokedexActivityMenu PokedexActivityMenu::instance;
 
@@ -35,8 +36,10 @@ void PokedexActivityMenu::onActivate()
 
     needRedraw = true;
 
-    dbResults = PokedexDB::executeSQL(&SQL_getGameVersions);
-    game      = (*dbResults)[selectedIndex];
+    SQLStatementStore *sql = SQLStatementStore::getInstance();
+    std::string query      = sql->getQuery("get_filtered_versions");
+    dbResults              = PokedexDB::executeSQL(&query);
+    game                   = (*dbResults)[selectedIndex];
     print_dbResults();
 
     assetManager = AssetManager::getInstance();

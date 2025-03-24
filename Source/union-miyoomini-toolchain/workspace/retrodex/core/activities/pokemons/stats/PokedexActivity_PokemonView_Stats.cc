@@ -1,4 +1,5 @@
-#include "PokedexActivity_PokemonView_Stats.h"
+#include "PokedexActivity_PokemonView_Stats.hpp"
+#include "SQLStatementStore.hpp"
 
 PokedexActivity_PokemonView_Stats PokedexActivity_PokemonView_Stats::instance;
 
@@ -45,7 +46,9 @@ void PokedexActivity_PokemonView_Stats::onActivate()
     pokemon = new Pokemon();
     printPokeInfo();
 
-    statNames = PokedexDB::executeSQL(&SQL_getStatNames);
+    SQLStatementStore *sql = SQLStatementStore::getInstance();
+    std::string query      = sql->getQuery("get_stat_names");
+    statNames              = PokedexDB::executeSQL(&query);
 
     assetManager = AssetManager::getInstance();
 

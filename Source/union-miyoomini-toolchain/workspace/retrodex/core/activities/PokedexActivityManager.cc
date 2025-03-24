@@ -1,45 +1,56 @@
-#include "PokedexActivityManager.h"
+#include "PokedexActivityManager.hpp"
 
-#include "PokedexActivityIntro.h"
-#include "PokedexActivityList.h"
-#include "PokedexActivityMenu.h"
-#include "PokedexActivitySetting.h"
-#include "PokedexActivity_PokemonView_Info.h"
-#include "PokedexActivity_PokemonView_Stats.h"
-#include "PokedexActivity_PokemonView_Moves.h"
-#include "PokedexActivity_PokemonView_Location.h"
-#include "PokedexActivity_PokemonView_Evolution.h"
+#include "PokedexActivityIntro.hpp"
+#include "PokedexActivityList.hpp"
+#include "PokedexActivityMenu.hpp"
+#include "PokedexActivitySetting.hpp"
+#include "PokedexActivity_PokemonView_Evolution.hpp"
+#include "PokedexActivity_PokemonView_Info.hpp"
+#include "PokedexActivity_PokemonView_Location.hpp"
+#include "PokedexActivity_PokemonView_Moves.hpp"
+#include "PokedexActivity_PokemonView_Stats.hpp"
 
-PokedexActivity* PokedexActivityManager::activity = 0;
-std::stack<PokedexActivity*> PokedexActivityManager::sceneStack;
+PokedexActivity *PokedexActivityManager::activity = 0;
+std::stack<PokedexActivity *> PokedexActivityManager::sceneStack;
 
-void PokedexActivityManager::onEvent(SDL_Event* event) {
-    if (activity) {
+void PokedexActivityManager::onEvent(SDL_Event *event)
+{
+    if (activity)
+    {
         activity->onEvent(event);
     }
 }
 
-void PokedexActivityManager::onKeyHold(const Uint8* currentKeyStates, SDL_Event* event) {
-    if (activity) {
+void PokedexActivityManager::onKeyHold(const Uint8 *currentKeyStates, SDL_Event *event)
+{
+    if (activity)
+    {
         activity->onKeyHold(currentKeyStates, event);
     }
 }
 
-void PokedexActivityManager::onLoop() {
-    if (activity) {
+void PokedexActivityManager::onLoop()
+{
+    if (activity)
+    {
         activity->onLoop();
     }
 }
 
-void PokedexActivityManager::onRender(SDL_Surface* surf_display, SDL_Renderer* renderer, SDL_Texture* texture, TTF_Font* font, Mix_Chunk* sEffect) {
-    if (activity) {
+void PokedexActivityManager::onRender(SDL_Surface *surf_display, SDL_Renderer *renderer,
+                                      SDL_Texture *texture, TTF_Font *font, Mix_Chunk *sEffect)
+{
+    if (activity)
+    {
         activity->onRender(surf_display, renderer, texture, font, sEffect);
     }
 }
 
-void PokedexActivityManager::setActiveState(int AppStateID) {
+void PokedexActivityManager::setActiveState(int AppStateID)
+{
     // Change state to be the desired activity
-    switch (AppStateID) {
+    switch (AppStateID)
+    {
     case 0:
         activity = 0;
         break;
@@ -75,15 +86,18 @@ void PokedexActivityManager::setActiveState(int AppStateID) {
     }
 
     // push back current activity
-    if (activity && activity != 0) {
+    if (activity && activity != 0)
+    {
         sceneStack.push(activity);
         sceneStack.top()->onActivate();
     }
 }
 
-void PokedexActivityManager::push(int AppStateID) {
+void PokedexActivityManager::push(int AppStateID)
+{
     std::cout << "PokedexActivityManager::push()  START" << std::endl;
-    if (!sceneStack.empty()) {
+    if (!sceneStack.empty())
+    {
         sceneStack.top()->onFreeze();
     }
 
@@ -91,38 +105,45 @@ void PokedexActivityManager::push(int AppStateID) {
     std::cout << "PokedexActivityManager::push()  END" << std::endl;
 }
 
-void PokedexActivityManager::back() {
+void PokedexActivityManager::back()
+{
     std::cout << "PokedexActivityManager::back()  START" << std::endl;
-    PokedexActivity* current = sceneStack.top();
+    PokedexActivity *current = sceneStack.top();
     // Call onDeactivate() before popping to ensure proper cleanup
-    if (current) {
+    if (current)
+    {
         current->onDeactivate();
-        //current = nullptr;
+        // current = nullptr;
     }
     sceneStack.pop();
 
     activity = sceneStack.empty() ? nullptr : sceneStack.top();
-    if (!activity) {
+    if (!activity)
+    {
         std::cout << "activity  empty. Nothing to go back to." << std::endl;
         return;
     }
 
-    //current->onDeactivate();
-    //delete current;
+    // current->onDeactivate();
+    // delete current;
 
-    if (!sceneStack.empty()) {
+    if (!sceneStack.empty())
+    {
         std::cout << "!sceneStack.empty(). Calling activity->onActivate()." << std::endl;
         activity->onActivate();
     }
     std::cout << "PokedexActivityManager::back()  END" << std::endl;
 }
 
-void PokedexActivityManager::replace(int AppStateID) {
+void PokedexActivityManager::replace(int AppStateID)
+{
     std::cout << "PokedexActivityManager::replace() START" << std::endl;
 
-    if (!sceneStack.empty()) {
-        PokedexActivity* current = sceneStack.top();
-        if (current) {
+    if (!sceneStack.empty())
+    {
+        PokedexActivity *current = sceneStack.top();
+        if (current)
+        {
             current->onDeactivate();
             sceneStack.pop();
             // delete current;
@@ -134,6 +155,4 @@ void PokedexActivityManager::replace(int AppStateID) {
     std::cout << "PokedexActivityManager::replace() END" << std::endl;
 }
 
-PokedexActivity* PokedexActivityManager::getActiveState() {
-    return activity;
-}
+PokedexActivity *PokedexActivityManager::getActiveState() { return activity; }

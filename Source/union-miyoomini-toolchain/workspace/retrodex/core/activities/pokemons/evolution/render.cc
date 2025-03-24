@@ -1,5 +1,5 @@
-#include "PokedexActivity_PokemonView_Evolution.h"
-#include "name_to_id.h"
+#include "PokedexActivity_PokemonView_Evolution.hpp"
+#include "name_to_id.hpp"
 
 bool PokedexActivity_PokemonView_Evolution::initSDL()
 {

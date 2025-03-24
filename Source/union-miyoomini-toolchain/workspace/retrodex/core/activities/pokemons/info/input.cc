@@ -1,5 +1,5 @@
-#include "PokedexActivityManager.h"
-#include "PokedexActivity_PokemonView_Info.h"
+#include "PokedexActivityManager.hpp"
+#include "PokedexActivity_PokemonView_Info.hpp"
 
 void PokedexActivity_PokemonView_Info::onButtonUp(SDL_Keycode sym, Uint16 mod) {}
 

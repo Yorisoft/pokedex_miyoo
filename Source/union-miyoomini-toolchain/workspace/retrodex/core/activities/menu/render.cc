@@ -1,4 +1,4 @@
-#include "PokedexActivityMenu.h"
+#include "PokedexActivityMenu.hpp"
 
 bool PokedexActivityMenu::initSDL()
 {
