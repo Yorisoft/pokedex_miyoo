@@ -1,5 +1,4 @@
 #include "PokedexActivity_PokemonView_Stats.hpp"
-#include "SQLStatementStore.hpp"
 
 PokedexActivity_PokemonView_Stats PokedexActivity_PokemonView_Stats::instance;
 

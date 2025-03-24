@@ -1,5 +1,4 @@
 #include "PokedexActivity_PokemonView_Moves.hpp"
-#include "SQLStatementStore.hpp"
 
 PokedexActivity_PokemonView_Moves PokedexActivity_PokemonView_Moves::instance;
 

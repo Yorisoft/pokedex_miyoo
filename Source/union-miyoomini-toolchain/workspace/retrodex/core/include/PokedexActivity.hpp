@@ -4,7 +4,7 @@
 #include "PokeSurface.hpp"
 #include "PokedexActivityEvent.hpp"
 #include "PokedexDB.hpp"
-#include "SQLstatements.hpp"
+#include "SQLStatementStore.hpp"
 #include <iomanip>
 #include <map>
 #include <sstream>

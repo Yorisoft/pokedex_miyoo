@@ -1,6 +1,5 @@
 #include "PokedexActivityMenu.hpp"
 #include "PokedexActivityManager.hpp"
-#include "SQLStatementStore.hpp"
 
 PokedexActivityMenu PokedexActivityMenu::instance;
 

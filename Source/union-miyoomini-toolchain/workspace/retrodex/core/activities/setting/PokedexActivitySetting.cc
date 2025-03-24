@@ -1,6 +1,5 @@
 #include "PokedexActivitySetting.hpp"
 #include "PokedexActivityManager.hpp"
-#include "SQLStatementStore.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
