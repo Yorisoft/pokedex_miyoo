@@ -4,11 +4,37 @@
 <img align="center" width="400" src="https://github.com/user-attachments/assets/7080b6cd-66a1-4a10-88d9-bf5364bdd3cc"/>
 </p>
 
+<p align="center">
+
+<!-- Project status -->
+<img src="https://img.shields.io/badge/status-work%20in%20progress-orange?style=for-the-badge" />
+
+<!-- Platform -->
+<img src="https://img.shields.io/badge/platform-Miyoo%20Mini%20%7C%20OnionOS-8A2BE2?style=for-the-badge" />
+
+<!-- Toolchain -->
+<img src="https://img.shields.io/badge/toolchain-union--miyoomini-lightgrey?style=for-the-badge" />
+
+</p>
+
+<p align="center">
+
+<!-- C++ -->
+<img src="https://img.shields.io/badge/C%2B%2B-17-blue?logo=c%2B%2B&logoColor=white&style=for-the-badge" />
+
+<!-- SDL2 -->
+<img src="https://img.shields.io/badge/graphics-SDL2-success?logo=sdl&logoColor=white&style=for-the-badge" />
+
+<!-- SQLite -->
+<img src="https://img.shields.io/badge/database-SQLite-blue?logo=sqlite&logoColor=white&style=for-the-badge" />
+
+</p>
+
+
 </br>
 </br>
 
 <p align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </p>
-
 
 ### PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
