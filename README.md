@@ -1,5 +1,13 @@
 #  <img align="center" width="400" src="https://github.com/user-attachments/assets/98177822-b80d-4bb4-838e-54ce235cdd4e"/>
 
+</br>
+</br>
+
+<h1 align="center"> 🌟 Don't Forget To STAR The Project 🌟 </h1>
+
+</br>
+</br>
+
 <p align="center">
 <img align="center" width="400" src="https://github.com/user-attachments/assets/7080b6cd-66a1-4a10-88d9-bf5364bdd3cc"/>
 </p>
@@ -31,8 +39,8 @@
 </br>
 </br>
 
-<h3 align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </h3>
 
+<h3 align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </h3>
 
 </br>
 
