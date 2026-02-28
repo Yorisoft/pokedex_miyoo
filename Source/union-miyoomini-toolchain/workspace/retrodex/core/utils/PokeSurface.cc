@@ -15,15 +15,29 @@ SDL_Surface *PokeSurface::onLoadImg(std::string &file)
         exit(EXIT_FAILURE);
     }
 
-    optimizedSurface = SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
+    // Create RGB565 surface pre-filled with magenta (color key)
+    SDL_Surface* rgb565 = SDL_CreateRGBSurfaceWithFormat(
+        0, tempSurface->w, tempSurface->h, 16, SDL_PIXELFORMAT_RGB565);
+    
+    // Fill with magenta
+    SDL_FillRect(rgb565, NULL, SDL_MapRGB(rgb565->format, 255, 0, 255));
+    
+    // Blit the original onto it (alpha pixels won't overwrite magenta)
+    SDL_BlitSurface(tempSurface, NULL, rgb565, NULL);
+    
+    // Set magenta as color key
+    SDL_SetColorKey(rgb565, SDL_TRUE, SDL_MapRGB(rgb565->format, 255, 0, 255));
+    
     SDL_FreeSurface(tempSurface);
-    if (optimizedSurface == NULL)
-    {
-        std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    return rgb565;
 
-    return optimizedSurface;
+    // if (optimizedSurface == NULL)
+    // {
+    //     std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
+    //     exit(EXIT_FAILURE);
+    // }
+
+    // return optimizedSurface;
 }
 
 SDL_Surface *PokeSurface::onLoadImg(const std::string &file)
@@ -39,15 +53,58 @@ SDL_Surface *PokeSurface::onLoadImg(const std::string &file)
         exit(EXIT_FAILURE);
     }
 
-    optimizedSurface = SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
+   // Create RGB565 surface pre-filled with magenta (color key)
+   SDL_Surface* rgb565 = SDL_CreateRGBSurfaceWithFormat(
+       0, tempSurface->w, tempSurface->h, 16, SDL_PIXELFORMAT_RGB565);
+   
+   // Fill with magenta
+   SDL_FillRect(rgb565, NULL, SDL_MapRGB(rgb565->format, 255, 0, 255));
+   
+   // Blit the original onto it (alpha pixels won't overwrite magenta)
+   SDL_BlitSurface(tempSurface, NULL, rgb565, NULL);
+   
+   // Set magenta as color key
+   SDL_SetColorKey(rgb565, SDL_TRUE, SDL_MapRGB(rgb565->format, 255, 0, 255));
+   
+   SDL_FreeSurface(tempSurface);
+   return rgb565;
+
+    // if (optimizedSurface == NULL)
+    // {
+    //     std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
+    //     exit(EXIT_FAILURE);
+    // }
+
+    // return optimizedSurface;
+}
+
+SDL_Surface* PokeSurface::onLoadImgScaled(const std::string &file, int targetW, int targetH)
+{
+    SDL_Surface* tempSurface = IMG_Load(file.c_str());
+    if (!tempSurface) { /* error handling */ }
+
+    // Create intermediate RGB565
+    SDL_Surface* rgb565 = SDL_CreateRGBSurfaceWithFormat(
+        0, tempSurface->w, tempSurface->h, 16, SDL_PIXELFORMAT_RGB565);
+    SDL_FillRect(rgb565, NULL, SDL_MapRGB(rgb565->format, 255, 0, 255));
+    SDL_BlitSurface(tempSurface, NULL, rgb565, NULL);
     SDL_FreeSurface(tempSurface);
-    if (optimizedSurface == NULL)
-    {
-        std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
+
+    // If no scaling needed
+    if (rgb565->w == targetW && rgb565->h == targetH) {
+        SDL_SetColorKey(rgb565, SDL_TRUE, SDL_MapRGB(rgb565->format, 255, 0, 255));
+        return rgb565;
     }
 
-    return optimizedSurface;
+    // Scale to target
+    SDL_Surface* scaled = SDL_CreateRGBSurfaceWithFormat(
+        0, targetW, targetH, 16, SDL_PIXELFORMAT_RGB565);
+    SDL_FillRect(scaled, NULL, SDL_MapRGB(scaled->format, 255, 0, 255));
+    SDL_BlitScaled(rgb565, NULL, scaled, NULL);
+    SDL_FreeSurface(rgb565);
+
+    SDL_SetColorKey(scaled, SDL_TRUE, SDL_MapRGB(scaled->format, 255, 0, 255));
+    return scaled;
 }
 
 SDL_Surface *PokeSurface::onLoadBMP(std::string &file)
@@ -63,15 +120,30 @@ SDL_Surface *PokeSurface::onLoadBMP(std::string &file)
         exit(EXIT_FAILURE);
     }
 
-    optimizedSurface = SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
-    SDL_FreeSurface(tempSurface);
-    if (optimizedSurface == NULL)
-    {
-        std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    }
+   // Create RGB565 surface pre-filled with magenta (color key)
+   SDL_Surface* rgb565 = SDL_CreateRGBSurfaceWithFormat(
+       0, tempSurface->w, tempSurface->h, 16, SDL_PIXELFORMAT_RGB565);
+   
+   // Fill with magenta
+   SDL_FillRect(rgb565, NULL, SDL_MapRGB(rgb565->format, 255, 0, 255));
+   
+   // Blit the original onto it (alpha pixels won't overwrite magenta)
+   SDL_BlitSurface(tempSurface, NULL, rgb565, NULL);
+   SDL_FreeSurface(tempSurface);
+   
+   // Set magenta as color key
+   SDL_SetColorKey(rgb565, SDL_TRUE, SDL_MapRGB(rgb565->format, 255, 0, 255));
+   
+   return rgb565;
 
-    return optimizedSurface;
+
+    // if (optimizedSurface == NULL)
+    // {
+    //     std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
+    //     exit(EXIT_FAILURE);
+    // }
+
+    // return optimizedSurface;
 }
 
 SDL_Surface *PokeSurface::onLoadBMP(const std::string &file)
@@ -87,15 +159,30 @@ SDL_Surface *PokeSurface::onLoadBMP(const std::string &file)
         exit(EXIT_FAILURE);
     }
 
-    optimizedSurface = SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
-    SDL_FreeSurface(tempSurface);
-    if (optimizedSurface == NULL)
-    {
-        std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    }
+   // Create RGB565 surface pre-filled with magenta (color key)
+   SDL_Surface* rgb565 = SDL_CreateRGBSurfaceWithFormat(
+       0, tempSurface->w, tempSurface->h, 16, SDL_PIXELFORMAT_RGB565);
+   
+   // Fill with magenta
+   SDL_FillRect(rgb565, NULL, SDL_MapRGB(rgb565->format, 255, 0, 255));
+   
+   // Blit the original onto it (alpha pixels won't overwrite magenta)
+   SDL_BlitSurface(tempSurface, NULL, rgb565, NULL);
+   SDL_FreeSurface(tempSurface);
+   
+   // Set magenta as color key
+   SDL_SetColorKey(rgb565, SDL_TRUE, SDL_MapRGB(rgb565->format, 255, 0, 255));
+   
+   return rgb565;
 
-    return optimizedSurface;
+
+    // if (optimizedSurface == NULL)
+    // {
+    //     std::cout << "Unable to optimize image! SDL Error: " << SDL_GetError() << std::endl;
+    //     exit(EXIT_FAILURE);
+    // }
+
+    // return optimizedSurface;
 }
 
 bool PokeSurface::onDraw(SDL_Surface *destinationSurface, SDL_Surface *sourceSurface,

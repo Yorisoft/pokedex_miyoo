@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV TZ=America/New_York
@@ -8,7 +8,6 @@ RUN apt-get -y update && apt-get -y install \
 	bc \
 	build-essential \
 	bzip2 \
-	bzr \
 	cmake \
 	cmake-curses-gui \
 	cpio \

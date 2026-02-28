@@ -15,6 +15,8 @@ class PokeSurface
 
     static SDL_Surface *onLoadImg(const std::string &file);
 
+    static SDL_Surface* onLoadImgScaled(const std::string &file, int targetW, int targetH);
+
     static SDL_Surface *onLoadBMP(std::string &file);
 
     static SDL_Surface *onLoadBMP(const std::string &file);

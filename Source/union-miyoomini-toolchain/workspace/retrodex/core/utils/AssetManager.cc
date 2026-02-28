@@ -4,6 +4,7 @@
 
 #include "AssetManager.hpp"
 #include "name_to_id.hpp"
+#include "PokeSurface.hpp"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <filesystem>
@@ -388,48 +389,7 @@ void AssetManager::loadAssets()
 
 void AssetManager::loadSurface(t_asset &asset)
 {
-    SDL_Surface *tempSurface = IMG_Load(asset.path.c_str());
-    if (!tempSurface)
-    {
-        std::cout << "AssetManager::loadAssets() Unable to load tempSurface! File: "
-                  << asset.path.c_str() << ".  SDL Error: " << IMG_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    SDL_Surface *optimizedSurface =
-        SDL_ConvertSurfaceFormat(tempSurface, SDL_PIXELFORMAT_RGBA32, 0);
-    if (!optimizedSurface)
-    {
-        std::cout << "AssetManager::loadAssets() Unable to create surface for "
-                     "optimizedSurface! SDL Error: "
-                  << IMG_GetError() << std::endl;
-        exit(EXIT_FAILURE);
-    }
-    SDL_FreeSurface(tempSurface);
-    tempSurface = nullptr;
-
-    /* if (asset.size.w == -1 || asset.size.h == -1) // using -1 to represent fullscreen asset */
-    /* { */
-    /*     asset.surface = SDL_CreateRGBSurfaceWithFormat(0, WINDOW_WIDTH, WINDOW_HEIGHT, */
-    /*                                                    optimizedSurface->format->BitsPerPixel, */
-    /*                                                    optimizedSurface->format->format); */
-    /* } */
-    /* else */
-    /* { */
-    /*     asset.surface = SDL_CreateRGBSurfaceWithFormat( */
-    /*         0, asset.size.w * optimizedSurface->w, asset.size.h * optimizedSurface->h, */
-    /*         optimizedSurface->format->BitsPerPixel, optimizedSurface->format->format); */
-    /* } */
-
-    asset.surface = SDL_CreateRGBSurfaceWithFormat(0,
-                                                   asset.size.w,
-                                                   asset.size.h,
-                                                   optimizedSurface->format->BitsPerPixel,
-                                                   optimizedSurface->format->format);
-
-    SDL_BlitScaled(optimizedSurface, NULL, asset.surface, NULL);
-    SDL_FreeSurface(optimizedSurface);
-    optimizedSurface = nullptr;
+    asset.surface = PokeSurface::onLoadImgScaled(asset.path, asset.size.w, asset.size.h);
 }
 
 void AssetManager::loadFont(t_asset &asset)
