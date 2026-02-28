@@ -6,9 +6,6 @@
 
 <p align="center">
 
-<!-- Project status -->
-<img src="https://img.shields.io/badge/status-work%20in%20progress-orange?style=for-the-badge" />
-
 <!-- Platform -->
 <img src="https://img.shields.io/badge/platform-Miyoo%20Mini%20%7C%20OnionOS-8A2BE2?style=for-the-badge" />
 
@@ -34,11 +31,11 @@
 </br>
 </br>
 
-<p align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </p>
+<h3 align="center">This app was made from scratch for the MiyooMini devices running OnionOS. The goal is to design a pokedex that targets generations 1 - 5.  </h3>
 
-### PLEASE READ! This is not yet stable - this is a work in progress - there are bugs - install at your own peril.
 
 </br>
+
 
 ## Install on Miyoo Mini
 
@@ -51,7 +48,8 @@
 
 </br>
 
-## Install locally
+## Build from source:
+### Compile for host ( PC )
 
 1. Install cmake: \
    `apt-get install cmake`
@@ -88,7 +86,7 @@
 
 </br>
 
-## Compiling on union-miyoomini-toolchain
+### Compiling on union-miyoomini-toolchain ( MiyooMini )
 
 1. Clone, navigate to `Source/union-miyoomini-toolchain`, and start the docker container for the union-miyoomini-toolchain. 
    - Read the `README.md` located in the `Source/union-miyoomini-toolchain` directory for instructions on how to get started with union-miyoomini-toolchain, or refer to their GitHub README. [union-miyoomini-toolchain repo](https://github.com/MiyooMini/union-toolchain/tree/main)
@@ -117,16 +115,17 @@ Copy `retrodex` executable to App/Retrodex for testing.
 # tree
 .
 ├── App
-│   └── Retrodex
+│   └── Retrodex
 └── Source
     └── union-miyoomini-toolchain
-       ├── support
-       └── workspace
-           └── retrodex
-              ├── build
-              ├── include
-              ├── res -> symlink
-              └── target
+       ├── support
+       └── workspace
+           └── retrodex
+              ├── build
+              ├── core
+              ├── include
+              ├── res -> symlink
+              └── target
                    └── local
                    └── miyoo
 ```
