@@ -72,7 +72,7 @@ void PokedexActivityIntro::onLoop()
             std::string loadedAssetName = assetManager->getFile().c_str();
             /* std::cout << "Current File: " << assetManager->getFile().c_str() << std::endl; */
 
-            fileSurface = TTF_RenderUTF8_Blended_Wrapped(
+            fileSurface = PokeSurface::renderTextWrappedRGB565(
                 fontSurface, loadedAssetName.c_str(), COLOR, WINDOW_WIDTH);
             if (!fileSurface)
             {

@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 
 class PokeSurface
@@ -16,6 +17,9 @@ class PokeSurface
     static SDL_Surface *onLoadImg(const std::string &file);
 
     static SDL_Surface* onLoadImgScaled(const std::string &file, int targetW, int targetH);
+
+    static SDL_Surface* renderTextWrappedRGB565(TTF_Font* font, const char* text,
+                                             SDL_Color color, int wrapLength);
 
     static SDL_Surface *onLoadBMP(std::string &file);
 

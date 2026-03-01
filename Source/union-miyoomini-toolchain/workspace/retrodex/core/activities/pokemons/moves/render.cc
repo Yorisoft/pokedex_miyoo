@@ -52,7 +52,7 @@ bool PokedexActivity_PokemonView_Moves::initSDL()
         pokeIconRect.y = 55;
 
         // Pokemon Name
-        pokeName = TTF_RenderUTF8_Blended(fontSurface, pokemon->getName().c_str(), COLOR);
+        pokeName = TTF_RenderUTF8_Solid(fontSurface, pokemon->getName().c_str(), COLOR);
         if (pokeName == NULL)
         {
             throw std::runtime_error(std::string("PokedexActivity_PokemonView_Moves::initSDL() "
@@ -199,7 +199,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     /* PokeSurface::onDrawScaled(surf_display, typeSurface_cache[i + offset], &typeRect); */
 
     // Render Move Name
-    SDL_Surface *moveName = TTF_RenderUTF8_Blended(fontSurface, move[1].c_str(), COLOR);
+    SDL_Surface *moveName = TTF_RenderUTF8_Solid(fontSurface, move[1].c_str(), COLOR);
 
     nameRect = {typeRect.x + typeRect.w + 10, typeRect.y + 5, moveName->w, moveName->h};
     SDL_BlitSurface(moveName, NULL, surf_display, &nameRect);
@@ -215,7 +215,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     // Render level
     if (move[9] == "level-up")
     {
-        SDL_Surface *learnLevel = TTF_RenderUTF8_Blended(fontSurface, move[8].c_str(), COLOR);
+        SDL_Surface *learnLevel = TTF_RenderUTF8_Solid(fontSurface, move[8].c_str(), COLOR);
         levelRect               = {methodRect.x + methodRect.w,
                                    (listEntryRect.y + listEntryRect.h) - learnLevel->h,
                                    static_cast<int>(method->w),
@@ -225,7 +225,7 @@ bool PokedexActivity_PokemonView_Moves::renderListItems(SDL_Surface *surf_displa
     }
 
     // Render PP
-    SDL_Surface *pp = TTF_RenderUTF8_Blended(fontSurface, move[3].c_str(), COLOR);
+    SDL_Surface *pp = TTF_RenderUTF8_Solid(fontSurface, move[3].c_str(), COLOR);
     ppRect          = {(listEntryRect.x + listEntryRect.w) - pp->w,
                        (listEntryRect.y + listEntryRect.h) - pp->h,
                        pp->w,
@@ -240,7 +240,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface *surf_disp
                                                           int i)
 {
     // Render Power
-    SDL_Surface *power = TTF_RenderUTF8_Blended(fontSurface, move[5].c_str(), COLOR);
+    SDL_Surface *power = TTF_RenderUTF8_Solid(fontSurface, move[5].c_str(), COLOR);
     pwrRect            = {typeARect.x + 40, typeARect.y + 70, power->w, power->h};
 
     SDL_BlitSurface(power, NULL, surf_display, &pwrRect);
@@ -253,7 +253,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface *surf_disp
     SDL_BlitSurface(category, NULL, surf_display, &classRect);
 
     // Render Accuracy
-    SDL_Surface *accuracy = TTF_RenderUTF8_Blended(fontSurface, move[6].c_str(), COLOR);
+    SDL_Surface *accuracy = TTF_RenderUTF8_Solid(fontSurface, move[6].c_str(), COLOR);
     accryRect             = {pwrRect.x, (pwrRect.y + pwrRect.h) + 10, accuracy->w, accuracy->h};
 
     SDL_BlitSurface(accuracy, NULL, surf_display, &accryRect);
@@ -261,7 +261,7 @@ bool PokedexActivity_PokemonView_Moves::renderItemDetails(SDL_Surface *surf_disp
     // Render Effect
     std::string summaryText = cleanString((*dbResults)[offset + i][7]);
     SDL_Surface *summary =
-        TTF_RenderUTF8_Blended_Wrapped(fontSurface, summaryText.c_str(), COLOR, 256);
+        PokeSurface::renderTextWrappedRGB565(fontSurface, summaryText.c_str(), COLOR, 256);
     summaryRect = {15, (WINDOW_HEIGHT / 2) + 50, summary->w, summary->h};
 
     SDL_BlitSurface(summary, NULL, surf_display, &summaryRect);

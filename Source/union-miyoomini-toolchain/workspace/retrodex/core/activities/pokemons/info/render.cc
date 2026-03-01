@@ -69,7 +69,7 @@ bool PokedexActivity_PokemonView_Info::initSDL()
         }
 
         // Pokemon ID
-        id = TTF_RenderUTF8_Blended(fontSurface, pokeID.c_str(), {96, 96, 96});
+        id = TTF_RenderUTF8_Solid(fontSurface, pokeID.c_str(), {96, 96, 96});
         if (!id)
         {
             std::cout << "Unable to load id surface!"
@@ -83,7 +83,7 @@ bool PokedexActivity_PokemonView_Info::initSDL()
 
         // Pokemon Name
         std::string pokeName = pokemon->getName();
-        nameSurface          = TTF_RenderUTF8_Blended(fontSurface, pokeName.c_str(), {96, 96, 96});
+        nameSurface          = TTF_RenderUTF8_Solid(fontSurface, pokeName.c_str(), {96, 96, 96});
         if (!nameSurface)
         {
             std::cout << "Unable to load name surface!"
@@ -99,14 +99,14 @@ bool PokedexActivity_PokemonView_Info::initSDL()
         std::string pokeHeight = pokemon->getHeight();
         std::string pokeWeight = pokemon->getWeight();
 
-        height = TTF_RenderUTF8_Blended(fontSurface, pokeHeight.c_str(), {96, 96, 96});
+        height = TTF_RenderUTF8_Solid(fontSurface, pokeHeight.c_str(), {96, 96, 96});
         if (!height)
         {
             std::cout << "Unable to load height surface!"
                       << " SDL_Error:  " << TTF_GetError();
         };
 
-        weight = TTF_RenderUTF8_Blended(fontSurface, pokeWeight.c_str(), {96, 96, 96});
+        weight = TTF_RenderUTF8_Solid(fontSurface, pokeWeight.c_str(), {96, 96, 96});
         if (weight == NULL)
         {
             std::cout << "Unable to load weight surface!"
@@ -129,7 +129,7 @@ bool PokedexActivity_PokemonView_Info::initSDL()
         iss << (*genderRates)[1] << "/" << (*genderRates)[0];
         std::string genderRatesStr = iss.str();
 
-        gender = TTF_RenderUTF8_Blended(fontSurface, genderRatesStr.c_str(), {96, 96, 96});
+        gender = TTF_RenderUTF8_Solid(fontSurface, genderRatesStr.c_str(), {96, 96, 96});
         if (!gender)
         {
             std::cout << "Unable to load gender surface!"
@@ -143,7 +143,7 @@ bool PokedexActivity_PokemonView_Info::initSDL()
 
         // Pokemon Genus
         std::string pokeGenus = pokemon->getGenus();
-        genus = TTF_RenderUTF8_Blended(fontSurface, pokeGenus.c_str(), {96, 96, 96});
+        genus = TTF_RenderUTF8_Solid(fontSurface, pokeGenus.c_str(), {96, 96, 96});
         if (!genus)
         {
             std::cout << "Unable to load genus surface!"
@@ -158,7 +158,7 @@ bool PokedexActivity_PokemonView_Info::initSDL()
         // Pokemon Flavor Text
         std::string pokeFlavorText = pokemon->getFlavorText();
         flavorText =
-            TTF_RenderUTF8_Blended_Wrapped(fontSurface, pokeFlavorText.c_str(), {96, 96, 96}, 620);
+            PokeSurface::renderTextWrappedRGB565(fontSurface, pokeFlavorText.c_str(), {96, 96, 96}, 620);
         if (flavorText == NULL)
         {
             std::cout << "Unable to load flavorText surface!"

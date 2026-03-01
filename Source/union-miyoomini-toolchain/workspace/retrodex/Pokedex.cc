@@ -174,7 +174,7 @@ bool Pokedex::onSDLInit()
         exit(EXIT_FAILURE);
     }
 
-    fpsSurface = TTF_RenderUTF8_Blended(font, "0", {0, 128, 0});
+    fpsSurface = TTF_RenderUTF8_Solid(font, "0", {0, 128, 0});
     if (fpsSurface == nullptr)
     {
         std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError() << std::endl;
@@ -262,7 +262,7 @@ void Pokedex::renderFPS()
             fpsSurface = nullptr;
         }
 
-        fpsSurface = TTF_RenderUTF8_Blended(font, iss.str().c_str(), {0, 128, 0});
+        fpsSurface = TTF_RenderUTF8_Solid(font, iss.str().c_str(), {0, 128, 0});
         if (fpsSurface == nullptr)
         {
             std::cout << "Unable to render text! SDL Error: fpsSurface " << TTF_GetError()
