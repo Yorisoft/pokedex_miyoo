@@ -53,7 +53,7 @@ bool PokedexActivity_PokemonView_Location::initSDL()
         pokeIconRect.y = 55;
 
         // Pokemon Name
-        pokeName = TTF_RenderUTF8_Blended(fontSurface, pokemon->getName().c_str(), COLOR);
+        pokeName = TTF_RenderUTF8_Solid(fontSurface, pokemon->getName().c_str(), COLOR);
         if (pokeName == NULL)
         {
             throw std::runtime_error(std::string("PokedexActivity_PokemonView_Location::initSDL() "
@@ -203,7 +203,7 @@ bool PokedexActivity_PokemonView_Location::renderItemDetails(SDL_Surface *surf_d
     }
 
     SDL_Surface *detailLocationName =
-        TTF_RenderUTF8_Blended_Wrapped(fontSurface, location.c_str(), COLOR, 295);
+        PokeSurface::renderTextWrappedRGB565(fontSurface, location.c_str(), COLOR, 295);
     if (detailLocationName == NULL)
     {
         std::cerr << "Warning: PokedexActivity_PokemonView_Location::initSDL() Unable to load "
@@ -317,7 +317,7 @@ bool PokedexActivity_PokemonView_Location::renderListItems(SDL_Surface *surf_dis
     {
         locationString[i] = std::toupper(locationString[i]);
     }
-    SDL_Surface *locationName = TTF_RenderUTF8_Blended(fontSurface, locationString.c_str(), COLOR);
+    SDL_Surface *locationName = TTF_RenderUTF8_Solid(fontSurface, locationString.c_str(), COLOR);
     if (locationName == NULL)
     {
         std::cerr << "Warning: PokedexActivity_PokemonView_Location::initSDL() Unable to load "

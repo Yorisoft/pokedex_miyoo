@@ -82,7 +82,7 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface *surf_display, TTF_Font
 
         // Render Setting Name
         SDL_Surface *optionNameSurface_selected =
-            TTF_RenderUTF8_Blended(fontSurface, (*settings)[i + offset].c_str(), HIGHLIGHTED_COLOR);
+            TTF_RenderUTF8_Solid(fontSurface, (*settings)[i + offset].c_str(), HIGHLIGHTED_COLOR);
         if (!optionNameSurface_selected)
         {
             std::cerr << "Warning: PokedexActivitySetting::renderListItems() Unable to load "
@@ -106,7 +106,7 @@ bool PokedexActivitySetting::renderListItems(SDL_Surface *surf_display, TTF_Font
 
         // Render Setting Name
         SDL_Surface *optionNameSurface_default =
-            TTF_RenderUTF8_Blended(fontSurface, (*settings)[i + offset].c_str(), COLOR);
+            TTF_RenderUTF8_Solid(fontSurface, (*settings)[i + offset].c_str(), COLOR);
         if (optionNameSurface_default == NULL)
         {
             std::cerr << "Warning: PokedexActivitySetting::renderListItems() Unable to load "
@@ -160,7 +160,7 @@ bool PokedexActivitySetting::renderSettingOptions(SDL_Surface *surf_display, SDL
         if (offset + i == selectedSettingIndex)
         {
             SDL_Surface *settingOptionsSurface_selected =
-                TTF_RenderUTF8_Blended(fontSurface, selectedSetting.c_str(), HIGHLIGHTED_COLOR);
+                TTF_RenderUTF8_Solid(fontSurface, selectedSetting.c_str(), HIGHLIGHTED_COLOR);
             if (settingOptionsSurface_selected == NULL)
             {
                 std::cerr
@@ -180,7 +180,7 @@ bool PokedexActivitySetting::renderSettingOptions(SDL_Surface *surf_display, SDL
         else
         {
             SDL_Surface *settingOptionsSurface_default =
-                TTF_RenderUTF8_Blended(fontSurface, selectedSetting.c_str(), COLOR);
+                TTF_RenderUTF8_Solid(fontSurface, selectedSetting.c_str(), COLOR);
             if (settingOptionsSurface_default == NULL)
             {
                 std::cerr

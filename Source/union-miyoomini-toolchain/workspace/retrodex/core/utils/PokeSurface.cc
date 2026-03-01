@@ -107,6 +107,25 @@ SDL_Surface* PokeSurface::onLoadImgScaled(const std::string &file, int targetW, 
     return scaled;
 }
 
+SDL_Surface* PokeSurface::renderTextWrappedRGB565(TTF_Font* font, const char* text,
+                                                   SDL_Color color, int wrapLength)
+{
+    // Render with Blended_Wrapped (creates RGBA32)
+    SDL_Surface* blended = TTF_RenderUTF8_Blended_Wrapped(font, text, color, wrapLength);
+    if (!blended) return nullptr;
+    // Create RGB565 surface pre-filled with BLACK (color key)
+    SDL_Surface* rgb565 = SDL_CreateRGBSurfaceWithFormat(
+        0, blended->w, blended->h, 16, SDL_PIXELFORMAT_RGB565);
+    // Use BLACK as background instead of magenta
+    SDL_FillRect(rgb565, NULL, SDL_MapRGB(rgb565->format, 0, 0, 0));
+    
+    SDL_BlitSurface(blended, NULL, rgb565, NULL);
+    SDL_FreeSurface(blended);
+    // Set BLACK as color key
+    SDL_SetColorKey(rgb565, SDL_TRUE, SDL_MapRGB(rgb565->format, 0, 0, 0));
+    return rgb565;
+}
+
 SDL_Surface *PokeSurface::onLoadBMP(std::string &file)
 {
     SDL_Surface *tempSurface      = NULL;

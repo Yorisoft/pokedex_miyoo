@@ -82,7 +82,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface *surf_display, int i)
 {
     // List item background
     SDL_Surface *version =
-        TTF_RenderUTF8_Blended(fontSurface, (*dbResults)[offset + i][2].c_str(), COLOR);
+        TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[offset + i][2].c_str(), COLOR);
     if (version == NULL)
     {
         std::cout << "Unable to load surface!"
@@ -91,7 +91,7 @@ bool PokedexActivityMenu::renderListItems(SDL_Surface *surf_display, int i)
     }
 
     SDL_Surface *version_highlight =
-        TTF_RenderUTF8_Blended(fontSurface, (*dbResults)[offset + i][2].c_str(), HIGHLIGHT_COLOR);
+        TTF_RenderUTF8_Solid(fontSurface, (*dbResults)[offset + i][2].c_str(), HIGHLIGHT_COLOR);
     if (version_highlight == NULL)
     {
         std::cout << "Unable to load surface!"

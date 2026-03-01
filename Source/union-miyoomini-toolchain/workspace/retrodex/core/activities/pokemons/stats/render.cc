@@ -145,7 +145,7 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface *surf_display, SDL_
             {
                 std::string ability = (*abilities)[0][0] + "    " + (*abilities)[0][1];
                 abilitySurface =
-                    TTF_RenderUTF8_Blended_Wrapped(fontSurface, ability.c_str(), {96, 96, 96}, 520);
+                    PokeSurface::renderTextWrappedRGB565(fontSurface, ability.c_str(), {96, 96, 96}, 520);
                 if (!abilitySurface)
                 {
                     std::cout << "Unable to load stat surface!"
@@ -163,7 +163,7 @@ void PokedexActivity_PokemonView_Stats::onRender(SDL_Surface *surf_display, SDL_
                 if (abilities->size() > 1)
                 {
                     ability          = (*abilities)[1][0] + "    " + (*abilities)[1][1];
-                    h_abilitySurface = TTF_RenderUTF8_Blended_Wrapped(
+                    h_abilitySurface = PokeSurface::renderTextWrappedRGB565(
                         fontSurface, ability.c_str(), {96, 96, 96}, 620);
                     if (h_abilitySurface == NULL)
                     {
